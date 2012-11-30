@@ -38,6 +38,7 @@
     <string name="authority">com.walkernation.db.locationsprovider</string>
     <!-- Account login stuff -->
     <string name="ACCOUNT_TYPE">org.c99.SyncProviderDemo.account</string>
+    <string name="server">Server Address::</string>
     <string name="username">Username:</string>
     <string name="username_hint">efudd</string>
     <string name="password">Password:</string>

@@ -10,6 +10,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Base class for all activities 
+ * 
+ * @author Michael A. Walker
+ *
+ */
 public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 

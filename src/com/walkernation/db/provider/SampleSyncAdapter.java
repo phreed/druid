@@ -11,27 +11,43 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.util.Log;
 
+/**
+ * This is the SyncAdapater class that synchronizes the Local ContentProvider
+ * with a remote data store.
+ * <p>
+ * Currently this is only a STUB implementation.
+ * 
+ * @author Michael A. Walker
+ * @Date 2012-11-23
+ */
 public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 
-	public final static String LOG_TAG = SampleSyncAdapter.class.getCanonicalName();
+	// logging variable
+	public final static String LOG_TAG = SampleSyncAdapter.class
+			.getCanonicalName();
 
+	// variables for communicating with system accessible components (Accounts
+	// and ContentProviders)
 	private AccountManager mAccountManager;
-	private ContentResolver mContentResolver;
 
+	// private ContentResolver mContentResolver;
+	// private ContentProviderClient mContentProivderClient;
+
+	// constructor
 	public SampleSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 
 		mAccountManager = AccountManager.get(context);
-		mContentResolver = context.getContentResolver();
+		// mContentResolver = context.getContentResolver();
 	}
 
+	// This is where the actual sync occurs
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
@@ -52,6 +68,7 @@ public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 	}
 
+	// handle any exceptions....
 	private void handleException(String authtoken, Exception e,
 			SyncResult syncResult) {
 		if (e instanceof AuthenticatorException) {
@@ -79,6 +96,4 @@ public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 			Log.e(LOG_TAG, "JSONException", e);
 		}
 	}
-
-	// ...
 }
