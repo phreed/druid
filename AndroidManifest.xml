@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="ui.ListLocationsActivity"
+            android:name="ui.location.ListLocationsActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ui.EditLocationActivityty" >
+        <activity android:name="ui.location.EditLocationActivityty" >
         </activity>
-        <activity android:name="ui.ViewLocationActivityty" >
+        <activity android:name="ui.location.ViewLocationActivityty" >
         </activity>
-        <activity android:name="ui.CreateLocationActivity" >
+        <activity android:name="ui.location.CreateLocationActivity" >
         </activity>
         <activity android:name=".provider.LoginActivity" >
         </activity>

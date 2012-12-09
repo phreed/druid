@@ -1,4 +1,4 @@
-package com.walkernation.db.ui;
+package com.walkernation.db.ui.location;
 
 import android.app.Activity;
 import android.app.AlertDialog;

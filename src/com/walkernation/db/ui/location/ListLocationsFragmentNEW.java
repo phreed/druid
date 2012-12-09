@@ -1,4 +1,4 @@
-package com.walkernation.db.ui;
+package com.walkernation.db.ui.location;
 
 /**
  * @author Michael A. Walker
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 import android.app.Activity;
+import android.content.ContentProviderClient;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,17 +34,16 @@ import com.walkernation.db.R.bool;
 import com.walkernation.db.R.id;
 import com.walkernation.db.R.layout;
 import com.walkernation.db.orm.LocationData;
-import com.walkernation.db.orm.LocationResolver;
 import com.walkernation.db.provider.ContentDescriptor;
 import com.walkernation.db.provider.LocationDataArrayAdapter;
 import com.walkernation.db.provider.LocationDataDBAdaptor;
 
-public class ListLocationsFragment extends ListFragment {
+public class ListLocationsFragmentNEW extends ListFragment {
 
 	// URI for access to the ContentProvider
 	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 	// TAG for logging
-	private static final String LOG_TAG = ListLocationsFragment.class
+	private static final String LOG_TAG = ListLocationsFragmentNEW.class
 			.getCanonicalName();
 
 	// fragment that stores the 'data'
@@ -162,8 +162,8 @@ public class ListLocationsFragment extends ListFragment {
 			// could push this to the constructor by passing context, or
 			// something,
 			// but this works fine for now
-			// mRetainedFragment.setClient(getActivity().getContentResolver()
-			// .acquireContentProviderClient(uri));
+			mRetainedFragment.setClient(getActivity().getContentResolver()
+					.acquireContentProviderClient(uri));
 			// create the custom array adapter that will make the custom row
 			// layouts
 			mRetainedFragment.setAA(new LocationDataArrayAdapter(getActivity(),
@@ -213,9 +213,6 @@ public class ListLocationsFragment extends ListFragment {
 	}
 
 	public static class RetainedFragment extends Fragment {
-		// NEW custom resolver (container around C.P.C.
-		LocationResolver r;
-
 		// URI to connect to the ContentProvider of the LocationData(s)
 		final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 		private static final String LOG_TAG = RetainedFragment.class
@@ -231,15 +228,16 @@ public class ListLocationsFragment extends ListFragment {
 		// Provider that is much more efficient when connecting to the SAME
 		// Content
 		// Provider over and over.
-		// ContentProviderClient client;
+		ContentProviderClient client;
 
 		public RetainedFragment() {
 			Log.d(LOG_TAG, "constructor");
-
-			r = new LocationResolver(getActivity(), uri);
-
 			locationData = new ArrayList<LocationData>();
 
+		}
+
+		public void setClient(ContentProviderClient cli) {
+			client = cli;
 		}
 
 		public ArrayList<LocationData> getArray() {
@@ -254,10 +252,11 @@ public class ListLocationsFragment extends ListFragment {
 		synchronized public void updateLocationLocationData() {
 			Log.d(LOG_TAG, "updateLocationLocationData");
 			try {
+
+				Cursor allRows;
+				allRows = client.query(uri, null, null, null, null);
 				locationData.clear();
-				ArrayList<LocationData> currentList = r.query(null, null, null,
-						null);
-				locationData.addAll(currentList);
+				locationData.addAll(getArrayList(allRows));
 				aa.notifyDataSetChanged();
 			} catch (RemoteException e) {
 				Log.e(LOG_TAG,
@@ -289,6 +288,29 @@ public class ListLocationsFragment extends ListFragment {
 			setRetainInstance(true);
 		}
 
+		/**
+		 * Convert Cursor to ArrayList &lt; LocationData &gt;
+		 * 
+		 * @param cursor
+		 * @return
+		 */
+		private static ArrayList<LocationData> getArrayList(Cursor cursor) {
+			// create container to return.
+			ArrayList<LocationData> rValue = new ArrayList<LocationData>();
+			// return empty container if cursor is empty
+			if (cursor.getCount() == 0) {
+				return rValue;
+			}
+			// get all the LocationData(s) from the cursor and put in the
+			// ArrayList
+			cursor.moveToFirst();
+			do {
+				rValue.add(LocationDataDBAdaptor
+						.getLocationDataFromCursor(cursor));
+			} while (cursor.moveToNext());
+
+			return rValue;
+		}
 	}
 
 }

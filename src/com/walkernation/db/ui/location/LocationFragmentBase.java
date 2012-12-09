@@ -1,4 +1,4 @@
-package com.walkernation.db.ui;
+package com.walkernation.db.ui.location;
 
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
