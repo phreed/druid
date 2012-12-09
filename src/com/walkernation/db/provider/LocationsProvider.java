@@ -1,5 +1,7 @@
 package com.walkernation.db.provider;
 
+import com.walkernation.db.orm.LocationData;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;

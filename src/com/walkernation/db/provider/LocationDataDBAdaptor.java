@@ -2,6 +2,9 @@ package com.walkernation.db.provider;
 
 import java.util.ArrayList;
 
+import com.walkernation.db.orm.LocationData;
+
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -278,15 +281,16 @@ public class LocationDataDBAdaptor {
 	 * 
 	 * @param cursor
 	 *            passed in cursor
-	 * @return ArrayList\<LocationData\> The set of LocationData  
+	 * @return ArrayList\<LocationData\> The set of LocationData
 	 */
 	public static ArrayList<LocationData> getLocationDataArrayListFromCursor(
 			Cursor cursor) {
 		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
 		if (cursor != null) {
-			while (cursor.moveToNext() == true) {
+			cursor.moveToFirst();
+			do {
 				rValue.add(getLocationDataFromCursor(cursor));
-			}
+			} while (cursor.moveToNext() == true);
 		}
 		return rValue;
 	}
