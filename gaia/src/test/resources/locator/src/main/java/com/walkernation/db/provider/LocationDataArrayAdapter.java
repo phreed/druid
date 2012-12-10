@@ -1,8 +1,8 @@
-package com.walkernation.db.provider;
+package main.java.com.walkernation.db.provider;
 
 import java.util.List;
 
-
+import main.java.com.walkernation.db.orm.LocationData;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.walkernation.db.R;
-import com.walkernation.db.orm.LocationData;
 
 public class LocationDataArrayAdapter extends ArrayAdapter<LocationData> {
 

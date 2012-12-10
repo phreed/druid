@@ -1,4 +1,4 @@
-package com.walkernation.db.provider.sync;
+package main.java.com.walkernation.db.provider.sync;
 
 import java.io.IOException;
 

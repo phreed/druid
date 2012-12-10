@@ -1,10 +1,9 @@
-package com.walkernation.db.orm;
+package main.java.com.walkernation.db.orm;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import com.walkernation.db.provider.LocationDataDBAdaptor;
-
+import main.java.com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.app.Activity;
 import android.content.ContentProvider;
 import android.content.ContentProviderClient;

@@ -1,25 +1,11 @@
-package com.walkernation.db.orm;
+package main.java.com.walkernation.db.orm;
 
-import java.io.FileNotFoundException;
 import java.io.Serializable;
-import java.util.ArrayList;
 
-import com.walkernation.db.provider.LocationDataDBAdaptor;
-
-import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentProviderClient;
-import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
+import main.java.com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.content.ContentValues;
-import android.content.OperationApplicationException;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Parcel;
-import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
-import android.os.RemoteException;
 
 public class LocationData implements Parcelable, Serializable {
 

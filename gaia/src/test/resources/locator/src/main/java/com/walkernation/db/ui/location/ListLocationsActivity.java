@@ -1,13 +1,10 @@
-package com.walkernation.db.ui.location;
-
-
-import com.walkernation.db.R;
-import com.walkernation.db.R.id;
-import com.walkernation.db.R.layout;
+package main.java.com.walkernation.db.ui.location;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import com.walkernation.db.R;
 
 // "FragmentActivity" is the Activity Version needed for support library 
 public class ListLocationsActivity extends LocationActivityBase {

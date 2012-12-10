@@ -1,5 +1,7 @@
-package com.walkernation.db.ui.location;
+package main.java.com.walkernation.db.ui.location;
 
+import main.java.com.walkernation.db.orm.LocationData;
+import main.java.com.walkernation.db.provider.ContentDescriptor;
 import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,11 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.walkernation.db.R;
-import com.walkernation.db.R.bool;
-import com.walkernation.db.R.id;
-import com.walkernation.db.R.layout;
-import com.walkernation.db.orm.LocationData;
-import com.walkernation.db.provider.ContentDescriptor;
 
 public class CreateLocationFragment extends LocationFragmentBase {
 

@@ -1,5 +1,6 @@
-package com.walkernation.db.ui.location;
+package main.java.com.walkernation.db.ui.location;
 
+import main.java.com.walkernation.db.orm.LocationData;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,11 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.walkernation.db.R;
-import com.walkernation.db.R.bool;
-import com.walkernation.db.R.id;
-import com.walkernation.db.R.layout;
-import com.walkernation.db.R.string;
-import com.walkernation.db.orm.LocationData;
 
 public class ViewLocationFragment extends LocationFragmentBase {
 	// LOG TAG, handles refactoring changes

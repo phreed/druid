@@ -1,4 +1,4 @@
-package com.walkernation.db.ui.location;
+package main.java.com.walkernation.db.ui.location;
 
 public interface OnOpenWindowInterface {
 	public void openEditLocationFragment(int index);

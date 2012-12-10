@@ -1,8 +1,4 @@
-package com.walkernation.db.ui.location;
-
-import com.walkernation.db.R;
-import com.walkernation.db.R.bool;
-import com.walkernation.db.R.id;
+package main.java.com.walkernation.db.ui.location;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,11 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.walkernation.db.R;
+
 /**
- * Base class for all activities 
+ * Base class for all activities
  * 
  * @author Michael A. Walker
- *
+ * 
  */
 public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {

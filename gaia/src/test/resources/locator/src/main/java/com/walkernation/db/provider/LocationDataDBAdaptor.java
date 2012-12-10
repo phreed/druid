@@ -1,10 +1,8 @@
-package com.walkernation.db.provider;
+package main.java.com.walkernation.db.provider;
 
 import java.util.ArrayList;
 
-import com.walkernation.db.orm.LocationData;
-
-
+import main.java.com.walkernation.db.orm.LocationData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

@@ -1,5 +1,7 @@
-package com.walkernation.db.ui.location;
+package main.java.com.walkernation.db.ui.location;
 
+import main.java.com.walkernation.db.orm.LocationData;
+import main.java.com.walkernation.db.provider.ContentDescriptor;
 import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,16 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.walkernation.db.R;
-import com.walkernation.db.R.bool;
-import com.walkernation.db.R.id;
-import com.walkernation.db.R.layout;
-import com.walkernation.db.orm.LocationData;
-import com.walkernation.db.provider.ContentDescriptor;
 
 /****
  * 
  * This is an attempt to come close to an easily 'base' template for
- * ListFragment. 
+ * ListFragment.
  * 
  * @author Michael A. Walker
  * 
@@ -34,16 +31,16 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 	// constant, changes with class name
 	public final static String LOG_TAG = LocationFragmentFoundation.class
 			.getCanonicalName();
-	
+
 	// constant, description of the URI to talk to
 	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
 	// for which 'location' to be operating on
 	int index;
-	
+
 	// interface for the fragment to talk to the activity.
 	OnOpenWindowInterface mOpener;
-	
+
 	/**
 	 * BEGIN FRAGMENT SPECIFIC UI VARIABLES
 	 */
@@ -58,7 +55,7 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 
 	/**
 	 * 
-	 * Start BOILERPLATE methods with no changes needed 
+	 * Start BOILERPLATE methods with no changes needed
 	 * 
 	 */
 
@@ -85,15 +82,15 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 					+ " must implement OnOpenWindowListener");
 		}
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		return createViewForFragment(inflater, container, savedInstanceState);
-		
+
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -101,22 +98,22 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 		setupUI();
 
 	}
-	
+
 	/**
 	 * 
-	 * ONLY DIFFERENCES IN THIS CLASS 
+	 * ONLY DIFFERENCES IN THIS CLASS
 	 * 
 	 */
-	
-	private View createViewForFragment(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState){
+
+	private View createViewForFragment(LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
 		View rValue = inflater.inflate(R.layout.location_creation_fragment,
 				container, false);
 		container.setBackgroundColor(Color.CYAN);
 		return rValue;
 	}
-	
-	private void setupUI(){
+
+	private void setupUI() {
 		userIdET = (EditText) getView().findViewById(
 				R.id.location_create_edittext_userID);
 		latitudeET = (EditText) getView().findViewById(
@@ -187,8 +184,5 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 			}
 		});
 	}
-	
-
-
 
 }
