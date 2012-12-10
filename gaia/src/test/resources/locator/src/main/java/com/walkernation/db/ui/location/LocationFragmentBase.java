@@ -1,8 +1,5 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
 
-import main.java.com.walkernation.db.orm.LocationData;
-import main.java.com.walkernation.db.provider.ContentDescriptor;
-import main.java.com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -11,6 +8,9 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.provider.ContentDescriptor;
+import com.walkernation.db.provider.LocationDataDBAdaptor;
 
 public class LocationFragmentBase extends Fragment {
 	// LOG TAG, handles refactoring changes

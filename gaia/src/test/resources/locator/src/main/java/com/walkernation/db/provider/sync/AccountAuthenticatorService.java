@@ -1,4 +1,4 @@
-package main.java.com.walkernation.db.provider.sync;
+package com.walkernation.db.provider.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

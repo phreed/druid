@@ -1,4 +1,4 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
 
 /**
  * @author Michael A. Walker
@@ -10,11 +10,12 @@ package main.java.com.walkernation.db.ui.location;
  */
 import java.util.ArrayList;
 
-import main.java.com.walkernation.db.orm.LocationData;
-import main.java.com.walkernation.db.orm.LocationResolver;
-import main.java.com.walkernation.db.provider.ContentDescriptor;
-import main.java.com.walkernation.db.provider.LocationDataArrayAdapter;
+import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.orm.LocationResolver;
+import com.walkernation.db.provider.ContentDescriptor;
+import com.walkernation.db.provider.LocationDataArrayAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -146,7 +147,7 @@ public class ListLocationsFragment extends ListFragment {
 
 		// If not retained (or first time running), we need to create it.
 		if (mRetainedFragment == null) {
-			mRetainedFragment = new RetainedFragment();
+			mRetainedFragment = new RetainedFragment(getActivity());
 			// Tell it who it is working with.
 			mRetainedFragment.setTargetFragment(this, 0);
 			fm.beginTransaction().add(mRetainedFragment, RetainmentFragmentTag)
@@ -227,14 +228,15 @@ public class ListLocationsFragment extends ListFragment {
 		// Provider over and over.
 		// ContentProviderClient client;
 
-		public RetainedFragment() {
+		public RetainedFragment(Activity context) {
 			Log.d(LOG_TAG, "constructor");
 
-			r = new LocationResolver(getActivity(), uri);
+			r = new LocationResolver(context, uri);
 
 			locationData = new ArrayList<LocationData>();
 
 		}
+		
 
 		public ArrayList<LocationData> getArray() {
 			return locationData;

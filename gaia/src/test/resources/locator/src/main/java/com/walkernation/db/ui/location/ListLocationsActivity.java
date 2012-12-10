@@ -1,4 +1,5 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
+
 
 import android.os.Bundle;
 import android.util.Log;
