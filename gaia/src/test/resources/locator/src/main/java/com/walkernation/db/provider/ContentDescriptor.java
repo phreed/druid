@@ -1,4 +1,4 @@
-package main.java.com.walkernation.db.provider;
+package com.walkernation.db.provider;
 
 import android.content.UriMatcher;
 import android.net.Uri;

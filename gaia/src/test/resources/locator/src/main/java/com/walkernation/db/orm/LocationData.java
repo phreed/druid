@@ -1,8 +1,8 @@
-package main.java.com.walkernation.db.orm;
+package com.walkernation.db.orm;
 
 import java.io.Serializable;
 
-import main.java.com.walkernation.db.provider.LocationDataDBAdaptor;
+import com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;

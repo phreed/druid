@@ -1,4 +1,4 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.walkernation.db.R;
 
+
 /**
  * Base class for all activities
  * 
@@ -23,7 +24,7 @@ public class LocationActivityBase extends FragmentActivity implements
 
 	boolean promptOnBackPressed = false;
 	ListLocationsFragment fragment;
-	private static final String LOG_TAG = ListLocationsActivity.class
+	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
 
