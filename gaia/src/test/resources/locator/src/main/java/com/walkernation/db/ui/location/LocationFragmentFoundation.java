@@ -21,7 +21,7 @@ import com.walkernation.db.provider.ContentDescriptor;
 /****
  * 
  * This is an attempt to come close to an easily 'base' template for
- * ListFragment.
+ * Location Fragments (Non ListFragment ones).
  * 
  * @author Michael A. Walker
  * 
