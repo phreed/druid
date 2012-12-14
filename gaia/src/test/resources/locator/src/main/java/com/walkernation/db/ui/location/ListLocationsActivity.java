@@ -20,10 +20,10 @@ public class ListLocationsActivity extends LocationActivityBase {
 		// set the Layout of main Activity.
 		// (contains only the fragment holder)
 		setContentView(R.layout.main);
-		ListLocationsFragment fragment;
+		ListLocationsFragmentNewSubClass fragment;
 		String imageFragmentTag = "imageFragmentTag";
 		if (savedInstanceState == null) {
-			fragment = new ListLocationsFragment();
+			fragment = new ListLocationsFragmentNewSubClass();
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.locations, fragment, imageFragmentTag).commit();
 		}
@@ -35,7 +35,7 @@ public class ListLocationsActivity extends LocationActivityBase {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			// ignore it
 			event.startTracking();
-			return true;
+			return true;		
 		}
 		return super.onKeyLongPress(keyCode, event);
 	}
