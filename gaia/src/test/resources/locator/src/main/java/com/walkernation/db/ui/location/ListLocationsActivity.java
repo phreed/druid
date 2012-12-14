@@ -20,10 +20,10 @@ public class ListLocationsActivity extends LocationActivityBase {
 		// set the Layout of main Activity.
 		// (contains only the fragment holder)
 		setContentView(R.layout.main);
-		ListLocationsFragmentNewSubClass fragment;
+		LocationListFragment fragment;
 		String imageFragmentTag = "imageFragmentTag";
 		if (savedInstanceState == null) {
-			fragment = new ListLocationsFragmentNewSubClass();
+			fragment = new LocationListFragment();
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.locations, fragment, imageFragmentTag).commit();
 		}

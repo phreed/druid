@@ -18,10 +18,10 @@ import com.walkernation.db.orm.LocationData;
 import com.walkernation.db.provider.LocationDataArrayAdapter;
 import com.walkernation.db.provider.LocationDataDBAdaptor;
 
-public class ListLocationsFragmentNewSubClass extends
-		ListLocationsFragmentRetained {
+public class LocationListFragment extends
+		LocationListFragmentBase {
 
-	static final String LOG_TAG = ListLocationsFragmentNewSubClass.class
+	static final String LOG_TAG = LocationListFragment.class
 			.getCanonicalName();
 
 	@Override

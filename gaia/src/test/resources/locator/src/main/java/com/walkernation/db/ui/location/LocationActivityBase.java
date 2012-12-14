@@ -22,7 +22,7 @@ public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
 	boolean promptOnBackPressed = false;
-	ListLocationsFragmentNewSubClass fragment;
+	LocationListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
@@ -206,7 +206,7 @@ public class LocationActivityBase extends FragmentActivity implements
 			Fragment test = getSupportFragmentManager().findFragmentByTag(
 					"imageFragmentTag");
 			if (test != null) {
-				ListLocationsFragmentNewSubClass t = (ListLocationsFragmentNewSubClass) test;
+				LocationListFragment t = (LocationListFragment) test;
 				t.updateLocationLocationData();
 			}
 

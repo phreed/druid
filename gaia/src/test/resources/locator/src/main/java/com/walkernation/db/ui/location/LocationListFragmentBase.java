@@ -25,7 +25,7 @@ import com.walkernation.db.orm.LocationData;
 import com.walkernation.db.provider.ContentDescriptor;
 import com.walkernation.db.provider.LocationDataArrayAdapter;
 
-abstract public class ListLocationsFragmentRetained extends ListFragment {
+abstract public class LocationListFragmentBase extends ListFragment {
 
 	/**
 	 * 
@@ -37,7 +37,7 @@ abstract public class ListLocationsFragmentRetained extends ListFragment {
 	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
 	// TAG for logging
-	static final String LOG_TAG = ListLocationsFragmentRetained.class
+	static final String LOG_TAG = LocationListFragmentBase.class
 			.getCanonicalName();
 
 	// boolean mDualPane;
