@@ -1,4 +1,4 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
 
 /**
  * @author Michael A. Walker
@@ -10,9 +10,6 @@ package main.java.com.walkernation.db.ui.location;
  */
 import java.util.ArrayList;
 
-import main.java.com.walkernation.db.orm.LocationData;
-import main.java.com.walkernation.db.provider.ContentDescriptor;
-import main.java.com.walkernation.db.provider.LocationDataArrayAdapter;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -23,6 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.provider.ContentDescriptor;
+import com.walkernation.db.provider.LocationDataArrayAdapter;
 
 abstract public class ListLocationsFragmentRetained extends ListFragment {
 

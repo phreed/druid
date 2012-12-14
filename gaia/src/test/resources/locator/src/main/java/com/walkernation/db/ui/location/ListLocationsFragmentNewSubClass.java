@@ -1,10 +1,7 @@
-package main.java.com.walkernation.db.ui.location;
+package com.walkernation.db.ui.location;
 
 import java.util.ArrayList;
 
-import main.java.com.walkernation.db.orm.LocationData;
-import main.java.com.walkernation.db.provider.LocationDataArrayAdapter;
-import main.java.com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +14,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.walkernation.db.R;
+import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.provider.LocationDataArrayAdapter;
+import com.walkernation.db.provider.LocationDataDBAdaptor;
 
 public class ListLocationsFragmentNewSubClass extends
 		ListLocationsFragmentRetained {

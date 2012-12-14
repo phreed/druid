@@ -33,7 +33,6 @@ public class ListLocationsActivity extends LocationActivityBase {
 	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// ignore it
 			event.startTracking();
 			return true;		
 		}

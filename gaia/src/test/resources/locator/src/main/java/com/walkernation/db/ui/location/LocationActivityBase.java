@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.walkernation.db.R;
 
-
 /**
  * Base class for all activities
  * 
@@ -23,7 +22,7 @@ public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
 	boolean promptOnBackPressed = false;
-	ListLocationsFragment fragment;
+	ListLocationsFragmentNewSubClass fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
@@ -207,8 +206,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			Fragment test = getSupportFragmentManager().findFragmentByTag(
 					"imageFragmentTag");
 			if (test != null) {
-				ListLocationsFragment t = (ListLocationsFragment) test;
-				t.mRetainedFragment.updateLocationLocationData();
+				ListLocationsFragmentNewSubClass t = (ListLocationsFragmentNewSubClass) test;
+				t.updateLocationLocationData();
 			}
 
 		} else {
