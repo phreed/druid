@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="010" android:versionName="0.1.0-SNAPSHOT" package="com.walkernation.db">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.walkernation.db"
+    android:versionCode="010"
+    android:versionName="0.1.0-SNAPSHOT" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15"/>
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+    <!-- START PERMISSIONS FOR APPLICATIONS WITH SYNC ADAPTERS -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <!-- END PERMISSIONS FOR APPLICATIONS WITH SYNC ADAPTERS -->
 
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
 
-    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
-        <activity android:label="@string/title_activity_main" android:name=".ui.location.ListLocationsActivity">
+        <!-- THIS IS THE LIST VIEW ACTIVITY -->
+        <activity
+            android:name=".ui.location.ListLocationsActivity"
+            android:label="@string/title_activity_main" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.location.CreateLocationActivity"/>
-        <activity android:name=".ui.location.ViewLocationActivity"/>
-        <activity android:name=".ui.location.EditLocationActivity"/>
-
-        <provider android:authorities="@string/authority" android:name=".provider.LocationsProvider" tools:ignore="ExportedContentProvider">
+        <!-- THIS IS THE CREATION ACTIVITY -->
+        <activity android:name=".ui.location.CreateLocationActivity" >
+        </activity>
+        <!-- THIS IS THE SINGLE VIEW ACTIVITY -->
+        <activity android:name=".ui.location.ViewLocationActivity" >
+        </activity>
+        <!-- THIS IS THE EDIT ACTIVITY -->
+        <activity android:name=".ui.location.EditLocationActivity" >
+        </activity>
+        <!-- THIS IS THE ACTUAL CONTENT PROVIDER -->
+        <provider
+            android:name=".provider.LocationsProvider"
+            android:authorities="@string/authority"
+            tools:ignore="ExportedContentProvider" >
         </provider>
-
-        <service android:exported="true" android:name=".provider.AccountAuthenticatorService" android:process=":auth">
+        <!-- THIS IS THE SYNC ADAPTOR ACCESS SERVICE -->
+        <service
+            android:name=".provider.AccountAuthenticatorService"
+            android:exported="true"
+            android:process=":auth" >
             <intent-filter>
-                <action android:name="android.accounts.sync.AccountAuthenticator"/>
+                <action android:name="android.accounts.sync.AccountAuthenticator" />
             </intent-filter>
 
-            <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator"/>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
         </service>
-
-        <activity android:name=".provider.sync.LoginActivity">
+        <!-- THIS IS THE SYNC ADAPTOR LOGIN ACTIVITY -->
+        <activity android:name=".provider.sync.LoginActivity" >
         </activity>
     </application>
 
