@@ -38,7 +38,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 	Button mLoginButton;
 
 	/**************************************************************
-	 * TODO: Not sure why these are here.... figure out why...
+	 * Examples of constants for message passing on the AsyncTask
 	 *************************************************************/
 	public final static String PARAM_AUTHTOKEN_TYPE = "";
 	public final static String PARAM_ACCOUNT_TYPE = "";

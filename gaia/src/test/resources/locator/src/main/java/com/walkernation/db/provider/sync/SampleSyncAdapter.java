@@ -36,9 +36,6 @@ public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 	// and ContentProviders)
 	private AccountManager mAccountManager;
 
-	// private ContentResolver mContentResolver;
-	// private ContentProviderClient mContentProivderClient;
-
 	// constructor
 	public SampleSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
