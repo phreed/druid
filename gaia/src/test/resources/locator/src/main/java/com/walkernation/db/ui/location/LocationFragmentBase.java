@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.orm.LocationResolver;
 import com.walkernation.db.provider.ContentDescriptor;
 import com.walkernation.db.provider.LocationDataDBAdaptor;
 
@@ -18,6 +19,8 @@ public class LocationFragmentBase extends Fragment {
 			.getCanonicalName();
 	// URI to ContentProvider's info
 	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
+
+	LocationResolver resolver;
 
 	final static String[] columnProjection = {
 			ContentDescriptor.Location.Cols.ID,
@@ -37,6 +40,7 @@ public class LocationFragmentBase extends Fragment {
 		mContentProviderClient = getActivity().getContentResolver()
 				.acquireContentProviderClient(uri);
 
+		resolver = new LocationResolver(getActivity());
 	}
 
 	@Override
@@ -57,19 +61,22 @@ public class LocationFragmentBase extends Fragment {
 	 */
 	public LocationData getLocationDataForUserID(int userID)
 			throws RemoteException {
-		LocationData rValue = null;
+		// LocationData rValue = null;
 
-		Cursor locationToDisplay;
-		String[] whereArgs = new String[] { String.valueOf(userID) };
-		locationToDisplay = mContentProviderClient.query(uri, columnProjection,
-				"user_id=?", whereArgs, null);
+		return resolver.getLocationOfUser(userID);
 
-		if (locationToDisplay.moveToFirst() == true) {
-			rValue = LocationDataDBAdaptor
-					.getLocationDataFromCursor(locationToDisplay);
-		}
+		// Cursor locationToDisplay;
+		// String[] whereArgs = new String[] { String.valueOf(userID) };
+		// locationToDisplay = mContentProviderClient.query(uri,
+		// columnProjection,
+		// "user_id=?", whereArgs, null);
+		//
+		// if (locationToDisplay.moveToFirst() == true) {
+		// rValue = LocationDataDBAdaptor
+		// .getLocationDataFromCursor(locationToDisplay);
+		// }
 
-		return rValue;
+		// return rValue;
 	}
 
 	/**
