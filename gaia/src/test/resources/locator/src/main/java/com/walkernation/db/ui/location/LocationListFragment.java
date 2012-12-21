@@ -18,11 +18,9 @@ import com.walkernation.db.orm.LocationData;
 import com.walkernation.db.provider.LocationDataArrayAdapter;
 import com.walkernation.db.provider.LocationDataDBAdaptor;
 
-public class LocationListFragment extends
-		LocationListFragmentBase {
+public class LocationListFragment extends LocationListFragmentBase {
 
-	static final String LOG_TAG = LocationListFragment.class
-			.getCanonicalName();
+	static final String LOG_TAG = LocationListFragment.class.getCanonicalName();
 
 	@Override
 	public View onCreateViewCustom(LayoutInflater inflater,
@@ -43,7 +41,7 @@ public class LocationListFragment extends
 		Log.d(LOG_TAG, "updateLocationLocationData");
 		try {
 			locationData.clear();
-			Cursor cursor = r.query(uri, null, null, null, null);
+			Cursor cursor = cr.query(uri, null, null, null, null);
 			ArrayList<LocationData> currentList = LocationDataDBAdaptor
 					.getLocationDataArrayListFromCursor(cursor);
 			locationData.addAll(currentList);
@@ -96,7 +94,7 @@ public class LocationListFragment extends
 
 	@Override
 	public void onCreateCustom() {
-		r = getActivity().getContentResolver();
+		cr = getActivity().getContentResolver();
 
 		locationData = new ArrayList<LocationData>();
 	}
