@@ -1,5 +1,7 @@
 package com.walkernation.db.provider.sync;
 
+import java.util.Locale;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -70,8 +72,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 	// start the background threaded action to authenticate the user
 	public void loginButtonPressed(View v) {
 		Log.d(LOG_TAG, "onCreate() called");
-		String user = mUsername.getText().toString().trim().toLowerCase();
-		String password = mPassword.getText().toString().trim().toLowerCase();
+		String user = mUsername.getText().toString().trim()
+				.toLowerCase(Locale.ENGLISH);
+		String password = mPassword.getText().toString().trim()
+				.toLowerCase(Locale.ENGLISH);
 
 		if (user.length() > 0 && password.length() > 0) {
 			LoginTask t = new LoginTask(LoginActivity.this);

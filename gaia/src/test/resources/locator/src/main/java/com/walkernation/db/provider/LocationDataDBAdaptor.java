@@ -19,20 +19,16 @@ public class LocationDataDBAdaptor {
 
 	private static final String DATABASE_NAME = "myDatabase.db";
 	static final String DATABASE_TABLE_1 = "main_table";
-	private static final int DATABASE_VERSION = 2;
+	static final int DATABASE_VERSION = 2;
 
 	// the index (key) column name for use in where clauses.
-	public static final String KEY_ID = "_id";
+	public static final String KEY_ID = ContentDescriptor.Location.Cols.ID;
 
 	// The name and column index of each column in your database
-	public static final String LAT_NAME = "latitude";
-	public static final String LONG_NAME = "longitude";
-	public static final String HEIGHT_NAME = "height";
-	public static final String USER_ID_NAME = "user_id";
-
-	// the names and order of ALL columns, including internal use ones
-	public static final String[] ALL_COLUMN_NAMES = { KEY_ID, LAT_NAME,
-			LONG_NAME, HEIGHT_NAME, USER_ID_NAME };
+	public static final String LAT_NAME = ContentDescriptor.Location.Cols.LAT_NAME;
+	public static final String LONG_NAME = ContentDescriptor.Location.Cols.LONG_NAME;
+	public static final String HEIGHT_NAME = ContentDescriptor.Location.Cols.HEIGHT_NAME;
+	public static final String USER_ID_NAME = ContentDescriptor.Location.Cols.USER_ID_NAME;
 
 	// the names and order of the public columns
 	public static final String[] COLUMN_NAMES = { LAT_NAME, LONG_NAME,
@@ -215,7 +211,8 @@ public class LocationDataDBAdaptor {
 	 */
 	public Cursor getAllLocations() {
 		Log.d(LOG_TAG, "getAllLocations()");
-		return db.query(DATABASE_TABLE_1, ALL_COLUMN_NAMES, null, null, null,
+		return db.query(DATABASE_TABLE_1,
+				ContentDescriptor.Location.ALL_COLUMN_NAMES, null, null, null,
 				null, null);
 	}
 

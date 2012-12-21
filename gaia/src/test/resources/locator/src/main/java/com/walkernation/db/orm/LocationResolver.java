@@ -3,12 +3,10 @@ package com.walkernation.db.orm;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.content.res.AssetFileDescriptor;
@@ -17,27 +15,31 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
+import com.walkernation.db.provider.ContentDescriptor;
+import com.walkernation.db.provider.LocationDataDBAdaptor;
+
 /**
  * encapsulation of the ContentProviderClient for a single URI
+ * <p>
+ * Uses ContentResolver instead of ContentProviderClient or other mechanism to
+ * simplify code and to make this object thread safe.
  * 
- * @author rangerz
+ * @author Michael A. Walker
  * 
  */
 public class LocationResolver {
 
-	private ContentProviderClient cpc;
-	private Uri uri = null; // TODO ??? fix this to right 'uri' & make final
-							// static ???
+	private ContentResolver cr;
+	private Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
-	public LocationResolver(Activity activity, Uri uri) {
-		this.uri = uri;
-		cpc = activity.getContentResolver().acquireContentProviderClient(uri);
+	public LocationResolver(Activity activity) {
+		cr = activity.getContentResolver();
 	}
 
 	public ContentProviderResult[] applyBatch(
 			ArrayList<ContentProviderOperation> operations)
 			throws RemoteException, OperationApplicationException {
-		return cpc.applyBatch(operations);
+		return cr.applyBatch(ContentDescriptor.AUTHORITY, operations);
 	}
 
 	public int bulkInsert(ArrayList<LocationData> locations)
@@ -48,41 +50,36 @@ public class LocationResolver {
 			values[index] = locationData.getCV();
 			++index;
 		}
-		return cpc.bulkInsert(uri, values);
+		return cr.bulkInsert(uri, values);
 	}
 
 	public int delete(String selection, String[] selectionArgs)
 			throws RemoteException {
-		return cpc.delete(uri, selection, selectionArgs);
-	}
-
-	public ContentProvider getLocalContentProvider() {
-		// TODO decide if this should be provided or not... maybe not
-		return cpc.getLocalContentProvider();
+		return cr.delete(uri, selection, selectionArgs);
 	}
 
 	public String getType() throws RemoteException {
-		return cpc.getType(uri);
+		return cr.getType(uri);
 	}
 
 	public Uri insert(LocationData locationData) throws RemoteException {
-		return cpc.insert(uri, locationData.getCV());
+		return cr.insert(uri, locationData.getCV());
 	}
 
-	public AssetFileDescriptor openAssetFile(Uri uri, String mode)
+	public AssetFileDescriptor openAssetFileDescriptor(Uri uri, String mode)
 			throws RemoteException, FileNotFoundException {
-		return cpc.openAssetFile(uri, mode);
+		return cr.openAssetFileDescriptor(uri, mode);
 	}
 
-	public ParcelFileDescriptor openFile(Uri uri, String mode)
+	public ParcelFileDescriptor openFileDescriptor(Uri uri, String mode)
 			throws RemoteException, FileNotFoundException {
-		return cpc.openFile(uri, mode);
+		return cr.openFileDescriptor(uri, mode);
 	}
 
 	public ArrayList<LocationData> query(String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) throws RemoteException {
 		// query the C.P.
-		Cursor result = cpc.query(uri, projection, selection, selectionArgs,
+		Cursor result = cr.query(uri, projection, selection, selectionArgs,
 				sortOrder);
 		// make return object
 		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
@@ -93,13 +90,26 @@ public class LocationResolver {
 		return rValue;
 	}
 
-	public boolean release() {
-		return cpc.release();
-	}
-
 	public int update(LocationData values, String selection,
 			String[] selectionArgs) throws RemoteException {
-		return cpc.update(uri, values.getCV(), selection, selectionArgs);
+		return cr.update(uri, values.getCV(), selection, selectionArgs);
 	}
 
+	public ArrayList<LocationData> getAllLocations() throws RemoteException {
+		return query(null, null, null, null);
+	}
+
+	public LocationData getLocationOfUser(long userID) throws RemoteException {
+		LocationData rValue = null;
+
+		ArrayList<LocationData> list = query(
+				ContentDescriptor.Location.ORM_COLUMN_NAMES,
+				ContentDescriptor.Location.Cols.USER_ID_NAME + " = ?",
+				new String[] { "" + userID }, null);
+
+		if (list.size() > 0) {
+			rValue = list.get(0);
+		}
+		return rValue;
+	}
 }

@@ -5,7 +5,14 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * @author Vladimir Vivien (http://vladimirvivien.com/)
+ * @author Michael A. Walker
+ *         <p>
+ *         based on the work by Vladimir Vivien (http://vladimirvivien.com/),
+ *         which provides a very logical organization of the meta-data of the
+ *         Database and Content Provider
+ *         <p>
+ *         This note might be moved to a 'Special Thanks' section once one is
+ *         created and moved out of future test code.
  */
 public class ContentDescriptor {
 	// utility variables
@@ -19,10 +26,12 @@ public class ContentDescriptor {
 	// register identifying URIs for Restaurant entity
 	// the TOKEN value is associated with each URI registered
 	private static UriMatcher buildUriMatcher() {
+
+		// add default 'no match' result to matcher
 		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-		final String authority = AUTHORITY;
-		matcher.addURI(authority, Location.PATH, Location.PATH_TOKEN);
-		matcher.addURI(authority, Location.PATH_FOR_ID,
+		// add in single and
+		matcher.addURI(AUTHORITY, Location.PATH, Location.PATH_TOKEN);
+		matcher.addURI(AUTHORITY, Location.PATH_FOR_ID,
 				Location.PATH_FOR_ID_TOKEN);
 
 		return matcher;
@@ -36,23 +45,29 @@ public class ContentDescriptor {
 		public static final String NAME = "main_table";
 
 		// define a URI paths to access entity
-		// BASE_URI/restaurants - for list of restaurants
-		// BASE_URI/restaurants/* - retreive specific restaurant by id
-		// the toke value are used to register path in matcher (see above)
+		// BASE_URI/restaurants - for list of locations
+		// BASE_URI/restaurants/* - retrieve specific location by id
+		// the token value are used to register path in matcher (see above)
 		public static final String PATH = "locations";
 		public static final int PATH_TOKEN = 100;
 		public static final String PATH_FOR_ID = "location/*";
 		public static final int PATH_FOR_ID_TOKEN = 200;
 
 		// URI for all content stored as Restaurant entity
-		// BASE_URI + PATH ==>
-		// "content://com.favrestaurant.contentprovider/restaurants";
 		public static final Uri CONTENT_URI = BASE_URI.buildUpon()
 				.appendPath(PATH).build();
 
 		// define content mime type for entity
 		public static final String CONTENT_TYPE_DIR = "com.walkernation.cursor.dir/com.walkernation.db";
 		public static final String CONTENT_ITEM_TYPE = "com.walkernation.cursor.item/com.walkernation.db";
+
+		// the names and order of ALL columns, including internal use ones
+		public static final String[] ORM_COLUMN_NAMES = { Cols.LAT_NAME,
+				Cols.LONG_NAME, Cols.HEIGHT_NAME, Cols.USER_ID_NAME };
+		// the names and order of ALL columns, including internal use ones
+		public static final String[] ALL_COLUMN_NAMES = { Cols.ID,
+				Cols.LAT_NAME, Cols.LONG_NAME, Cols.HEIGHT_NAME,
+				Cols.USER_ID_NAME };
 
 		// a static class to store columns in entity
 		public static class Cols {
