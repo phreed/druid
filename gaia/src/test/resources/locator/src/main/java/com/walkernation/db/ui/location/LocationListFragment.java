@@ -2,7 +2,6 @@ package com.walkernation.db.ui.location;
 
 import java.util.ArrayList;
 
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +14,13 @@ import android.widget.ListView;
 
 import com.walkernation.db.R;
 import com.walkernation.db.orm.LocationData;
+import com.walkernation.db.orm.LocationResolver;
 import com.walkernation.db.provider.LocationDataArrayAdapter;
-import com.walkernation.db.provider.LocationDataDBAdaptor;
 
 public class LocationListFragment extends LocationListFragmentBase {
 
 	static final String LOG_TAG = LocationListFragment.class.getCanonicalName();
+	LocationResolver locationResolver;
 
 	@Override
 	public View onCreateViewCustom(LayoutInflater inflater,
@@ -41,9 +41,10 @@ public class LocationListFragment extends LocationListFragmentBase {
 		Log.d(LOG_TAG, "updateLocationLocationData");
 		try {
 			locationData.clear();
-			Cursor cursor = cr.query(uri, null, null, null, null);
-			ArrayList<LocationData> currentList = LocationDataDBAdaptor
-					.getLocationDataArrayListFromCursor(cursor);
+
+			ArrayList<LocationData> currentList = locationResolver
+					.getAllLocations();
+
 			locationData.addAll(currentList);
 			aa.notifyDataSetChanged();
 		} catch (Exception e) {
@@ -94,8 +95,7 @@ public class LocationListFragment extends LocationListFragmentBase {
 
 	@Override
 	public void onCreateCustom() {
-		cr = getActivity().getContentResolver();
-
+		locationResolver = new LocationResolver(getActivity());
 		locationData = new ArrayList<LocationData>();
 	}
 

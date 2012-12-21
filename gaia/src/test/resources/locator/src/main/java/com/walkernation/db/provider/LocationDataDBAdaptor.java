@@ -1,8 +1,5 @@
 package com.walkernation.db.provider;
 
-import java.util.ArrayList;
-
-import com.walkernation.db.orm.LocationData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,21 +15,15 @@ public class LocationDataDBAdaptor {
 			.getCanonicalName();
 
 	private static final String DATABASE_NAME = "myDatabase.db";
-	static final String DATABASE_TABLE_1 = "main_table";
+	static final String DATABASE_TABLE_1 = ContentDescriptor.Location.TABLE_NAME;
 	static final int DATABASE_VERSION = 2;
 
-	// the index (key) column name for use in where clauses.
-	public static final String KEY_ID = ContentDescriptor.Location.Cols.ID;
-
-	// The name and column index of each column in your database
-	public static final String LAT_NAME = ContentDescriptor.Location.Cols.LAT_NAME;
-	public static final String LONG_NAME = ContentDescriptor.Location.Cols.LONG_NAME;
-	public static final String HEIGHT_NAME = ContentDescriptor.Location.Cols.HEIGHT_NAME;
-	public static final String USER_ID_NAME = ContentDescriptor.Location.Cols.USER_ID_NAME;
-
-	// the names and order of the public columns
-	public static final String[] COLUMN_NAMES = { LAT_NAME, LONG_NAME,
-			HEIGHT_NAME, USER_ID_NAME };
+	// The SHORT name of each column in your table
+	private static final String KEY_ID = ContentDescriptor.Location.Cols.ID;
+	private static final String LAT_NAME = ContentDescriptor.Location.Cols.LAT_NAME;
+	private static final String LONG_NAME = ContentDescriptor.Location.Cols.LONG_NAME;
+	private static final String HEIGHT_NAME = ContentDescriptor.Location.Cols.HEIGHT_NAME;
+	private static final String USER_ID_NAME = ContentDescriptor.Location.Cols.USER_ID_NAME;
 
 	// SQL Statement to create a new database.
 	private static final String DATABASE_CREATE = "create table "
@@ -51,7 +42,7 @@ public class LocationDataDBAdaptor {
 	// Database open/upgrade helper
 	private myDbHelper dbHelper;
 	// if the DB is in memory or to file.
-	public boolean MEMORY_ONLY_DB = false;
+	private boolean MEMORY_ONLY_DB = false;
 
 	/**
 	 * constructor that accepts the context to be associated with
@@ -182,18 +173,6 @@ public class LocationDataDBAdaptor {
 	}
 
 	/**
-	 * Insert a LocationDataobject into the DB.
-	 * 
-	 * @param location
-	 *            data to add to DB
-	 * @return the index in the table
-	 */
-	public long insertLocation(LocationData location) {
-		Log.d(LOG_TAG, "insertLocation(LocationData)");
-		return db.insert(DATABASE_TABLE_1, null, LocationDataToCV(location));
-	}
-
-	/**
 	 * Insert a LocationData ContentValues into the DB.
 	 * 
 	 * @param location
@@ -202,111 +181,6 @@ public class LocationDataDBAdaptor {
 	public long insertLocation(ContentValues location) {
 		Log.d(LOG_TAG, "insertLocation(CV)");
 		return db.insert(DATABASE_TABLE_1, null, location);
-	}
-
-	/**
-	 * Get all the Locations stored in the DB
-	 * 
-	 * @return the Cursor results
-	 */
-	public Cursor getAllLocations() {
-		Log.d(LOG_TAG, "getAllLocations()");
-		return db.query(DATABASE_TABLE_1,
-				ContentDescriptor.Location.ALL_COLUMN_NAMES, null, null, null,
-				null, null);
-	}
-
-	/**
-	 * get the LocationData at the specified row
-	 * 
-	 * @param rowIndex
-	 *            row to get
-	 * @return LocationData of the row
-	 * @throws SQLException
-	 * 
-	 *             TODO: decide to return default LocationData, 'null', or
-	 *             SQLException for when rowIndex isn't there
-	 */
-	public LocationData getLocation(long rowIndex) throws SQLException {
-		Log.d(LOG_TAG, "getLocation(), row = " + rowIndex);
-
-		Cursor cursor = db.query(true, DATABASE_TABLE_1, COLUMN_NAMES, KEY_ID
-				+ "=" + rowIndex, null, null, null, null, null);
-
-		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-			throw new SQLException("No LocationData item found for row: "
-					+ rowIndex);
-		}
-
-		// long latitude = cursor.getLong(cursor.getColumnIndex(LAT_NAME));
-		// long longitude = cursor.getLong(cursor.getColumnIndex(LONG_NAME));
-		// long height = cursor.getLong(cursor.getColumnIndex(HEIGHT_NAME));
-		// long user_id = cursor.getLong(cursor.getColumnIndex(USER_ID_NAME));
-		//
-		// LocationData location = new LocationData(latitude, longitude, height,
-		// user_id);
-
-		// return location;
-
-		return getLocationDataFromCursor(cursor);
-	}
-
-	/**
-	 * Get the first LocationData from the passed in cursor.
-	 * 
-	 * @param cursor
-	 *            passed in cursor
-	 * @return LocationData object
-	 */
-	public static LocationData getLocationDataFromCursor(Cursor cursor) {
-
-		long latitude = cursor.getLong(cursor.getColumnIndex(LAT_NAME));
-		long longitude = cursor.getLong(cursor.getColumnIndex(LONG_NAME));
-		long height = cursor.getLong(cursor.getColumnIndex(HEIGHT_NAME));
-		long user_id = cursor.getLong(cursor.getColumnIndex(USER_ID_NAME));
-
-		LocationData location = new LocationData(latitude, longitude, height,
-				user_id);
-
-		return location;
-	}
-
-	/**
-	 * Get all of the LocationData from the passed in cursor.
-	 * 
-	 * @param cursor
-	 *            passed in cursor
-	 * @return ArrayList\<LocationData\> The set of LocationData
-	 */
-	public static ArrayList<LocationData> getLocationDataArrayListFromCursor(
-			Cursor cursor) {
-		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
-		if (cursor != null) {
-			cursor.moveToFirst();
-			do {
-				rValue.add(getLocationDataFromCursor(cursor));
-			} while (cursor.moveToNext() == true);
-		}
-		return rValue;
-	}
-
-	/**
-	 * Update a location in the DB.
-	 * 
-	 * @param rowIndex
-	 *            which row to update
-	 * @param location
-	 *            LocationData to put data
-	 * @return if update was successful
-	 */
-	public boolean updateLocation(long rowIndex, LocationData location) {
-		Log.d(LOG_TAG, "updateLocation(), row = " + rowIndex);
-		// new CV to put into DB
-		ContentValues updatedValues = LocationDataToCV(location);
-		// which row to update
-		String where = KEY_ID + "=" + rowIndex;
-		// update the row in the DB
-		return db.update(DATABASE_TABLE_1, updatedValues, where, null) > 0;
 	}
 
 	/**
@@ -322,72 +196,6 @@ public class LocationDataDBAdaptor {
 		return db.update(DATABASE_TABLE_1, values, whereClause, whereArgs);
 	}
 
-	/**
-	 * get appropriate ContentValues for this DB from LocationData object
-	 * 
-	 * @param data
-	 * @return
-	 */
-	public static ContentValues LocationDataToCV(LocationData data) {
-		ContentValues rValue = new ContentValues();
-
-		/*
-		 * this is how you would check objects that are being stored ========>
-		 * if (data.<member> != null) { rValue.put(<key>, data.<data_member>);}
-		 */
-
-		rValue.put(LAT_NAME, data.latitude);
-		rValue.put(LONG_NAME, data.longitude);
-		rValue.put(HEIGHT_NAME, data.height);
-		rValue.put(USER_ID_NAME, data.userID);
-
-		return rValue;
-	}
-
-	/**
-	 * Get LocationData object from ContentValues object
-	 * 
-	 * @param cv
-	 * @return
-	 */
-	// I'm not even sure this is used/usable, but here in case it is...
-	public static LocationData CvToLocationData(final ContentValues cv) {
-		// set default values
-		long latitude = 0;
-		long longitude = 0;
-		long height = 0;
-		long userid = 0;
-
-		// // can only do this because all 4 are long, but nice
-		// // might be useful for VERY large objects, with lots of similar
-		// // data type, make an iterator for loop for each data type
-		// // will require a string[] of col names for that type
-		// for (String cvColName : COLUMN_NAMES) {
-		//
-		// if (cv.containsKey(cvColName)) {
-		// latitude = cv.getAsLong(cvColName);
-		// }
-		// }
-
-		// check if CV contains keys, and if so, assign values
-		if (cv.containsKey(LAT_NAME)) {
-			latitude = cv.getAsLong(LAT_NAME);
-		}
-		if (cv.containsKey(LONG_NAME)) {
-			longitude = cv.getAsLong(LONG_NAME);
-		}
-		if (cv.containsKey(HEIGHT_NAME)) {
-			height = cv.getAsLong(HEIGHT_NAME);
-		}
-		if (cv.containsKey(USER_ID_NAME)) {
-			userid = cv.getAsLong(USER_ID_NAME);
-		}
-		// construct the returned object
-		LocationData rValue = new LocationData(latitude, longitude, height,
-				userid);
-		return rValue;
-	}
-
 	@Override
 	protected void finalize() throws Throwable {
 		try {
@@ -396,6 +204,10 @@ public class LocationDataDBAdaptor {
 			Log.d(LOG_TAG, "exception on finalize():" + e.getMessage());
 		}
 		super.finalize();
+	}
+
+	public boolean isMemoryOnlyDB() {
+		return MEMORY_ONLY_DB;
 	}
 
 	/**

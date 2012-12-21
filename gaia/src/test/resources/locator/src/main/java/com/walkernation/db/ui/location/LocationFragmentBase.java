@@ -1,17 +1,16 @@
 package com.walkernation.db.ui.location;
 
-import android.content.ContentProviderClient;
-import android.content.ContentValues;
-import android.database.Cursor;
+import java.util.ArrayList;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
 import com.walkernation.db.orm.LocationData;
 import com.walkernation.db.orm.LocationResolver;
 import com.walkernation.db.provider.ContentDescriptor;
-import com.walkernation.db.provider.LocationDataDBAdaptor;
 
 public class LocationFragmentBase extends Fragment {
 	// LOG TAG, handles refactoring changes
@@ -30,15 +29,12 @@ public class LocationFragmentBase extends Fragment {
 			ContentDescriptor.Location.Cols.HEIGHT_NAME };
 
 	// Client to ContentProivder
-	private ContentProviderClient mContentProviderClient;
+	// private ContentProviderClient mContentProviderClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(LOG_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		// obtain the client
-		mContentProviderClient = getActivity().getContentResolver()
-				.acquireContentProviderClient(uri);
 
 		resolver = new LocationResolver(getActivity());
 	}
@@ -46,8 +42,6 @@ public class LocationFragmentBase extends Fragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		// release the client
-		mContentProviderClient.release();
 	}
 
 	/**
@@ -61,22 +55,9 @@ public class LocationFragmentBase extends Fragment {
 	 */
 	public LocationData getLocationDataForUserID(int userID)
 			throws RemoteException {
-		// LocationData rValue = null;
 
 		return resolver.getLocationOfUser(userID);
 
-		// Cursor locationToDisplay;
-		// String[] whereArgs = new String[] { String.valueOf(userID) };
-		// locationToDisplay = mContentProviderClient.query(uri,
-		// columnProjection,
-		// "user_id=?", whereArgs, null);
-		//
-		// if (locationToDisplay.moveToFirst() == true) {
-		// rValue = LocationDataDBAdaptor
-		// .getLocationDataFromCursor(locationToDisplay);
-		// }
-
-		// return rValue;
 	}
 
 	/**
@@ -88,8 +69,9 @@ public class LocationFragmentBase extends Fragment {
 	 * @throws RemoteException
 	 */
 	public int deleteAllLocationsWithUserID(int userID) throws RemoteException {
-		String[] selectionArgs = { String.valueOf(userID) };
-		return mContentProviderClient.delete(uri, "user_id = ?", selectionArgs);
+		// String[] selectionArgs = { String.valueOf(userID) };
+		return resolver.deleteLocationOfUserID(userID);
+		// return resolver.delete("user_id = ?", selectionArgs);
 	}
 
 	/**
@@ -99,7 +81,7 @@ public class LocationFragmentBase extends Fragment {
 	 * @throws RemoteException
 	 */
 	public int deleteAllLocations() throws RemoteException {
-		return mContentProviderClient.delete(uri, null, null);
+		return resolver.delete(null, null);
 	}
 
 	/**
@@ -111,7 +93,7 @@ public class LocationFragmentBase extends Fragment {
 	 * @throws RemoteException
 	 */
 	public Uri insertNewLocation(LocationData location) throws RemoteException {
-		return mContentProviderClient.insert(uri, location.getCV());
+		return resolver.insert(location);
 	}
 
 	/**
@@ -123,13 +105,10 @@ public class LocationFragmentBase extends Fragment {
 	 * @return The number of values that were inserted.
 	 * @throws RemoteException
 	 */
-	public int bulkInsertNewLocations(LocationData[] locations)
+	public int bulkInsertNewLocations(ArrayList<LocationData> locations)
 			throws RemoteException {
-		ContentValues[] insertValues = new ContentValues[locations.length];
-		for (int i = 0; i < insertValues.length; i++) {
-			insertValues[i] = locations[i].getCV();
-		}
-		return mContentProviderClient.bulkInsert(uri, insertValues);
+
+		return resolver.bulkInsert(locations);
 	}
 
 	/**
@@ -143,8 +122,7 @@ public class LocationFragmentBase extends Fragment {
 			throws RemoteException {
 		String selection = "user_id = ?";
 		String[] selectionArgs = { String.valueOf(location.userID) };
-		return mContentProviderClient.update(uri, location.getCV(), selection,
-				selectionArgs);
+		return resolver.update(location, selection, selectionArgs);
 	}
 
 	/**
@@ -158,9 +136,9 @@ public class LocationFragmentBase extends Fragment {
 	 * @return Cursor to the matching query.
 	 * @throws RemoteException
 	 */
-	public Cursor queryLocationContentProvider(String[] columnProjection,
-			String selection, String[] selectionArgs, String sortOrder)
-			throws RemoteException {
+	public ArrayList<LocationData> queryLocationContentProvider(
+			String[] columnProjection, String selection,
+			String[] selectionArgs, String sortOrder) throws RemoteException {
 		// switch out 'null' columns for defined projection.
 		String[] columns = null;
 		if (columnProjection == null) {
@@ -168,16 +146,7 @@ public class LocationFragmentBase extends Fragment {
 		} else {
 			columns = columnProjection;
 		}
-		return mContentProviderClient.query(uri, columns, selection,
-				selectionArgs, sortOrder);
+		return resolver.query(columns, selection, selectionArgs, sortOrder);
 	}
 
-	/**
-	 * Get the ContentProviderClient for any custom one-off interactions.
-	 * 
-	 * @return the ContentProviderClient to the ContentProvider
-	 */
-	public ContentProviderClient getContentProviderClient() {
-		return mContentProviderClient;
-	}
 }

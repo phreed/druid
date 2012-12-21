@@ -16,7 +16,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 import com.walkernation.db.provider.ContentDescriptor;
-import com.walkernation.db.provider.LocationDataDBAdaptor;
 
 /**
  * encapsulation of the ContentProviderClient for a single URI
@@ -53,6 +52,11 @@ public class LocationResolver {
 		return cr.bulkInsert(uri, values);
 	}
 
+	public int deleteLocationOfUserID(long userID) throws RemoteException {
+		String[] selectionArgs = new String[] { String.valueOf(userID) };
+		return cr.delete(uri, "user_id=?", selectionArgs);
+	}
+
 	public int delete(String selection, String[] selectionArgs)
 			throws RemoteException {
 		return cr.delete(uri, selection, selectionArgs);
@@ -84,7 +88,7 @@ public class LocationResolver {
 		// make return object
 		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
 		// convert cursor to reutrn object
-		rValue.addAll(LocationDataDBAdaptor
+		rValue.addAll(LocationCreator
 				.getLocationDataArrayListFromCursor(result));
 		// return 'return object'
 		return rValue;

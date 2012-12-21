@@ -42,7 +42,7 @@ public class ContentDescriptor {
 	// Here we define Restaurant
 	public static class Location {
 		// an identifying name for entity
-		public static final String NAME = "main_table";
+		public static final String TABLE_NAME = "main_table";
 
 		// define a URI paths to access entity
 		// BASE_URI/restaurants - for list of locations

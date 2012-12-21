@@ -143,7 +143,7 @@ abstract public class LocationListFragmentBase extends ListFragment {
 	 */
 
 	// NEW custom resolver (container around C.P.C.
-	public ContentResolver cr;
+	public ContentResolver r;
 
 	// Collection<T> which stores the ListView's LocationData(s)
 	ArrayList<LocationData> locationData;

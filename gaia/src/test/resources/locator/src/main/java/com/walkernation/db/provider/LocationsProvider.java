@@ -55,7 +55,7 @@ public class LocationsProvider extends ContentProvider {
 		switch (match) {
 		case ALLROWS: {
 			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-			builder.setTables(ContentDescriptor.Location.NAME);
+			builder.setTables(ContentDescriptor.Location.TABLE_NAME);
 			return builder.query(mDB.getDB(), projection, selection,
 					selectionArgs, null, null, sortOrder);
 		}

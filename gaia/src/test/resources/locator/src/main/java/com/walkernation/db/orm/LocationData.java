@@ -2,7 +2,6 @@ package com.walkernation.db.orm;
 
 import java.io.Serializable;
 
-import com.walkernation.db.provider.LocationDataDBAdaptor;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -32,7 +31,7 @@ public class LocationData implements Parcelable, Serializable {
 
 	public ContentValues getCV() {
 		// use the LocationDataDBAdaptor class to simplify creation
-		return LocationDataDBAdaptor.LocationDataToCV(this);
+		return LocationCreator.getCVfromLocation(this);
 	}
 
 	public LocationData clone() {
@@ -68,4 +67,5 @@ public class LocationData implements Parcelable, Serializable {
 		longitude = in.readLong();
 		height = in.readLong();
 	}
+
 }
