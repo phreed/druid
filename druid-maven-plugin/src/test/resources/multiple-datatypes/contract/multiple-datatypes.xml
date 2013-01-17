@@ -1,0 +1,31 @@
+<!-- Simplified version of a contract with two identical relationships(relational DB tables) 
+     that will be used in testing of generated code consistency, ability to have multiple
+     tables in a single Database and Content Provider. Will also allow testing of 
+     generation of UI code to handle these Java primitive types(including String) -->
+
+<content-provider name="multidata">
+  <sponsor name="walkernation.multidata"/>
+
+  <relation name="dataOne">
+    <field type="BYTE" name="byteData" default="0" />            <!--  8 bit Integer-->
+    <field type="SHORT" name="shortData" default="0" />          <!-- 16 bit Integer-->
+    <field type="INT" name="intData" default="0"/>               <!-- 32 bit Integer-->
+    <field type="LONG" name="longData" default="0" />            <!-- 64 bit Integer-->
+    <field type="FLOAT" name="floatData" default="0" />          <!-- 32 bit Real-->
+    <field type="DOUBLE" name="doubleData" default="0.0" />      <!-- 64 bit Real-->
+    <field type="TEXT" name="stringData" default="" />           <!-- String-->
+    <field type="BOOLEAN" name="booleanData" default="false" />  <!-- Boolean t/f-->
+  </relation>
+
+  <relation name="dataTwo">
+    <field type="BYTE" name="byteData" default="0" />            <!--  8 bit Integer-->
+    <field type="SHORT" name="shortData" default="0" />          <!-- 16 bit Integer-->
+    <field type="INT" name="intData" default="0"/>               <!-- 32 bit Integer-->
+    <field type="LONG" name="longData" default="0" />            <!-- 64 bit Integer-->
+    <field type="FLOAT" name="floatData" default="0" />          <!-- 32 bit Real-->
+    <field type="DOUBLE" name="doubleData" default="0.0" />      <!-- 64 bit Real-->
+    <field type="TEXT" name="stringData" default="" />           <!-- String-->
+    <field type="BOOLEAN" name="booleanData" default="false" />  <!-- Boolean t/f-->
+  </relation>
+
+</content-provider>
