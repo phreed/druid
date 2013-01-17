@@ -15,13 +15,22 @@ import android.provider.BaseColumns;
  *         created and moved out of future test code.
  */
 public class ContentDescriptor {
-	// utility variables
-	public static final String AUTHORITY = "com.walkernation.db.locationsprovider";
+
+	/**
+	 * Project Related Constants
+	 */
+
+	public static final String ORGANIZATIONAL_NAME = "com.walkernation";
+	public static final String PROJECT_NAME = "db";
+	public static final String PROVIDER_NAME = "locationsprovider";
+
+	/**
+	 * ConentProvider Related Constants
+	 */
+	public static final String AUTHORITY = ORGANIZATIONAL_NAME + "."
+			+ PROJECT_NAME + "." + PROVIDER_NAME;
 	private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 	public static final UriMatcher URI_MATCHER = buildUriMatcher();
-
-	private ContentDescriptor() {
-	};
 
 	// register identifying URIs for Restaurant entity
 	// the TOKEN value is associated with each URI registered
@@ -57,11 +66,18 @@ public class ContentDescriptor {
 		public static final Uri CONTENT_URI = BASE_URI.buildUpon()
 				.appendPath(PATH).build();
 
-		// define content mime type for entity
-		public static final String CONTENT_TYPE_DIR = "com.walkernation.cursor.dir/com.walkernation.db";
-		public static final String CONTENT_ITEM_TYPE = "com.walkernation.cursor.item/com.walkernation.db";
+		// TODO figure out why 'db' is here...
+		// might have been convention of example code I used previously
+		// or might have some actual meaning
+		private final static String MIME_TYPE_END = "db";
 
-		// the names and order of ALL columns, including internal use ones
+		// define the MIME type of data in the content provider
+		public static final String CONTENT_TYPE_DIR = ORGANIZATIONAL_NAME
+				+ ".cursor.dir/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
+		public static final String CONTENT_ITEM_TYPE = ORGANIZATIONAL_NAME
+				+ ".cursor.item/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
+
+		// the names and order of ALL columns, excluding internal use ones
 		public static final String[] ORM_COLUMN_NAMES = { Cols.LAT_NAME,
 				Cols.LONG_NAME, Cols.HEIGHT_NAME, Cols.USER_ID_NAME };
 		// the names and order of ALL columns, including internal use ones
