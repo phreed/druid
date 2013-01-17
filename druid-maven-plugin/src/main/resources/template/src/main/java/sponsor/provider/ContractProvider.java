@@ -72,7 +72,7 @@ public class LocationsProvider extends ContentProvider {
 	@Override
 	public Uri insert(Uri uri, ContentValues value) {
 		Log.d(LOG_TAG, "insert()");
-		long rowID = mDB.insertLocation(value);
+		long rowID = mDB.insert(ContentDescriptor.Location.TABLE_NAME, value);
 		if (rowID > -1) {
 			Uri insertedID = ContentUris.withAppendedId(
 					ContentDescriptor.Location.CONTENT_URI, rowID);
@@ -86,7 +86,8 @@ public class LocationsProvider extends ContentProvider {
 	public int delete(Uri uri, String whereClause, String[] whereArgs) {
 		Log.d(LOG_TAG, "delete()");
 		matchURI(uri, whereClause);
-		int count = mDB.delete(whereClause, whereArgs);
+		int count = mDB.delete(ContentDescriptor.Location.TABLE_NAME,
+				whereClause, whereArgs);
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}
@@ -113,7 +114,8 @@ public class LocationsProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 		case ALLROWS:
 
-			count = mDB.update(values, whereClause, whereArgs);
+			count = mDB.update(ContentDescriptor.Location.TABLE_NAME, values,
+					whereClause, whereArgs);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);

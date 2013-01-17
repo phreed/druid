@@ -16,7 +16,7 @@ public class LocationDataDBAdaptor {
 
 	private static final String DATABASE_NAME = "myDatabase.db";
 	static final String DATABASE_TABLE_1 = ContentDescriptor.Location.TABLE_NAME;
-	static final int DATABASE_VERSION = 2;
+	static final int DATABASE_VERSION = 9;
 
 	// The SHORT name of each column in your table
 	private static final String KEY_ID = ContentDescriptor.Location.Cols.ID;
@@ -100,7 +100,7 @@ public class LocationDataDBAdaptor {
 	 *            row to remove from DB
 	 * @return if the row was removed
 	 */
-	public int delete(long _id) {
+	public int delete(final String table, long _id) {
 		Log.d(LOG_TAG, "delete(" + _id + ") ");
 		return db.delete(DATABASE_TABLE_1, KEY_ID + " = " + _id, null);
 	}
@@ -115,9 +115,10 @@ public class LocationDataDBAdaptor {
 	 * @param whereArgs
 	 * @return
 	 */
-	public int delete(final String whereClause, final String[] whereArgs) {
+	public int delete(final String table, final String whereClause,
+			final String[] whereArgs) {
 		Log.d(LOG_TAG, "delete(" + whereClause + ") ");
-		return db.delete(DATABASE_TABLE_1, whereClause, whereArgs);
+		return db.delete(table, whereClause, whereArgs);
 	}
 
 	/**
@@ -129,13 +130,14 @@ public class LocationDataDBAdaptor {
 	 * @param sortOrder
 	 * @return
 	 */
-	public Cursor query(final String[] projection, final String selection,
-			final String[] selectionArgs, final String sortOrder) {
+	public Cursor query(final String table, final String[] projection,
+			final String selection, final String[] selectionArgs,
+			final String sortOrder) {
 		Log.d(LOG_TAG, "query: " + projection.toString() + ", " + selection
 				+ ", " + selectionArgs.toString() + ", " + sortOrder);
 
-		Cursor query = db.query(DATABASE_TABLE_1, projection, selection,
-				selectionArgs, null, null, sortOrder);
+		Cursor query = db.query(table, projection, selection, selectionArgs,
+				null, null, sortOrder);
 		return query;
 	}
 
@@ -173,14 +175,14 @@ public class LocationDataDBAdaptor {
 	}
 
 	/**
-	 * Insert a LocationData ContentValues into the DB.
+	 * Insert a ContentValues into the DB.
 	 * 
 	 * @param location
 	 * @return
 	 */
-	public long insertLocation(ContentValues location) {
+	public long insert(final String table, final ContentValues cv) {
 		Log.d(LOG_TAG, "insertLocation(CV)");
-		return db.insert(DATABASE_TABLE_1, null, location);
+		return db.insert(table, null, cv);
 	}
 
 	/**
@@ -191,9 +193,9 @@ public class LocationDataDBAdaptor {
 	 * @param whereArgs
 	 * @return
 	 */
-	public int update(ContentValues values, String whereClause,
-			String[] whereArgs) {
-		return db.update(DATABASE_TABLE_1, values, whereClause, whereArgs);
+	public int update(final String table, final ContentValues values,
+			final String whereClause, final String[] whereArgs) {
+		return db.update(table, values, whereClause, whereArgs);
 	}
 
 	@Override
