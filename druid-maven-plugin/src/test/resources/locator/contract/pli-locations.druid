@@ -1,0 +1,30 @@
+<!-- Simplified version of the Transapps PLI contract, showing the new way to
+     handle custom field subsets in terse serialization. -->
+
+<content-provider name="pli">
+  <sponsor name="transapps.pli"/>
+
+  <relation name="locations">
+    <field type="TEXT" name="name" default="" />
+    <field type="LONG" name="lat" default="0" />
+    <field type="LONG" name="lon" default="0"/>
+    <field type="LONG" name="altitude" default="0" />
+    <field type="LONG" name="accuracy" default="0" />
+    <field type="TIMESTAMP" name="created" default="now"/>
+    <field type="TIMESTAMP" name="modified" default="now"/>
+    <field type="LONG" name="hops" default="0" />
+    <field type="BLOB" name="deltalocations" />
+    
+    <key name="update">
+      <ref field="name"/>
+    </key>
+    
+    <message encoding="terse">
+      <field ref="name" />
+      <field ref="lat" type="INTEGER" />
+      <field ref="lon" type="INTEGER" />
+      <field ref="created" />
+      <field ref="deltalocations" />
+    </message>
+  </relation>
+</content-provider>
