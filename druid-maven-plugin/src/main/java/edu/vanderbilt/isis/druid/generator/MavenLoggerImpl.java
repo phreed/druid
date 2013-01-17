@@ -1,4 +1,4 @@
-package edu.vanderbilt.isis.ammo.plugins;
+package edu.vanderbilt.isis.druid.generator;
 
 import org.apache.maven.plugin.logging.Log;
 import org.slf4j.Logger;

@@ -2,7 +2,7 @@ package edu.vanderbilt.isis.druid;
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
-import org.antlr.stringtemplate.*;
+import org.stringtemplate.v4.ST;
 
 import java.io.*;
 import edu.vanderbilt.isis.druid.TParser.a_return;
@@ -211,12 +211,12 @@ class Main {
 
                     // It produces a jguru string template.
                     //
-                    StringTemplate st = gen.toDOT(t, new CommonTreeAdaptor());
+                    // ST st = gen.toDOT(t, new CommonTreeAdaptor());
 
                     // Create the output file and write the dot spec to it
                     //
                     FileWriter outputStream = new FileWriter(outputName);
-                    outputStream.write(st.toString());
+                    // outputStream.write(st.toString());
                     outputStream.close();
 
                     // Invoke dot to generate a .png file

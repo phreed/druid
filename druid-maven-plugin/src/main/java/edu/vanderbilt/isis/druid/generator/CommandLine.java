@@ -9,7 +9,7 @@ documentation in whole or in part, in any manner and for any
 purpose whatsoever, and to have or authorize others to do so.
  */
 
-package edu.vanderbilt.isis.ammo.generator;
+package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,20 +157,8 @@ public class CommandLine {
                 that.setSkeleton(param[1]);
                 continue;
             }
-            if (keyMatch("schema", key)) {
-                that.setSchema(param[1]);
-                continue;
-            }
-            if (keyMatch("provider", key)) {
-                that.setProvider(param[1]);
-                continue;
-            }
-            if (keyMatch("serializer", key)) {
-                that.setSerializer(param[1]);
-                continue;
-            }
             if (keyMatch("mkdir", key)) {
-                that.setSponsored(param[1]);
+                that.setMakeDir(param[1]);
                 continue;
             }
             if (keyMatch("template", key)) {
@@ -185,10 +173,6 @@ public class CommandLine {
             if (keyMatch("output", key)) {
             	final File outputDir = new File(param[1]);
                 that.setOutputDir(outputDir);
-                continue;
-            }
-            if (keyMatch("suffix", key)) {
-                that.setSuffix(param[1]);
                 continue;
             }
         }

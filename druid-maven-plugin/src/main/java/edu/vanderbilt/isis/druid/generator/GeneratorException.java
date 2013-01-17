@@ -1,4 +1,4 @@
-package edu.vanderbilt.isis.ammo.generator;
+package edu.vanderbilt.isis.druid.generator;
 
 
 public class GeneratorException extends Exception {

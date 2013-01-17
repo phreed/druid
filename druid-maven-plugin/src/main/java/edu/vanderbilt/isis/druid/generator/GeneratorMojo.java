@@ -1,12 +1,10 @@
-package edu.vanderbilt.isis.ammo.plugins;
+package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-
-import edu.vanderbilt.isis.ammo.generator.Generator;
-import edu.vanderbilt.isis.ammo.generator.GeneratorException;
+;
 
 /**
  * Goal which generates code for Ammo enabled applications.
@@ -15,7 +13,7 @@ import edu.vanderbilt.isis.ammo.generator.GeneratorException;
  * 
  * @phase generate-sources
  */
-public class GenerateMojo extends AbstractMojo {
+public class GeneratorMojo extends AbstractMojo {
 
 	public void execute() throws MojoExecutionException {
 		final Generator generator = new Generator(new MavenLoggerImpl(

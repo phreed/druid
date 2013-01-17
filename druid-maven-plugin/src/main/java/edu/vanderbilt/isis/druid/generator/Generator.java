@@ -1,4 +1,4 @@
-package edu.vanderbilt.isis.ammo.generator;
+package edu.vanderbilt.isis.druid.generator;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -577,10 +577,16 @@ public class Generator {
 			logger.error("template file path is not found {}", this.templateFile);
 			return false;
 			}
-			stg = new STGroupFile(this.templateFile.getCanonicalPath(), "US-ASCII", '<', '>');
-		} else if ((this.templateFile == null || !this.templateFile.isFile())
+			try {
+				stg = new STGroupFile(this.templateFile.getCanonicalPath(), "US-ASCII", '<', '>');
+			} catch (IOException ex) {
+				logger.error("not a file even though you checked it {}", this.templateFile);
+			}
+		} 
+		return false;
+		// else if ((this.templateFile == null || !this.templateFile.isFile())
 			// grab the default templateGroupFile
-
+/*
 			templateGroup = TemplateGroup.CONTENT_PROVIDER;
 			final URL url = this.getClass().getResource(
 					TemplateGroup.CONTENT_PROVIDER.path);
@@ -677,10 +683,12 @@ public class Generator {
 			logger.error("could not open configuration", ioe);
 			return false;
 		}
+		*/
 
 		/**
 		 * Build from templates based on contract
 		 */
+				/*
 		final Element de = contractXml.getDocumentElement();
 		final Contract contract = Contract.newInstance(de);
 		logger.trace("contract {}", contract);
@@ -911,5 +919,21 @@ public class Generator {
 			return false;
 		}
 		return true;
+		*/
+	}
+
+	public void setSkeleton(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSchema(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setMakeDir(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }
