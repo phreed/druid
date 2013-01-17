@@ -18,7 +18,7 @@ public class LocationsProvider extends ContentProvider {
 	// Local backend DB
 	LocationDataDBAdaptor mDB;
 
-	// shorten variable names from C.D. for easier readability
+	// shorten variable names for easier readability
 	public final static Uri CONTENT_URI = ContentDescriptor.DataTypeOne.CONTENT_URI;
 	public static String AUTHORITY = ContentDescriptor.AUTHORITY;
 	private static final int DATA_ONE_ALL_ROWS = ContentDescriptor.DataTypeOne.PATH_TOKEN;
@@ -87,6 +87,10 @@ public class LocationsProvider extends ContentProvider {
 
 	}
 
+	/*
+	 * Private query that does the actual query based on the table
+	 */
+
 	private Cursor query(final Uri uri, final String tableName,
 			final String[] projection, final String selection,
 			final String[] selectionArgs, final String sortOrder) {
@@ -103,7 +107,6 @@ public class LocationsProvider extends ContentProvider {
 
 		final int match = uriMatcher.match(uri);
 		switch (match) {
-		case DATA_ONE_SINGLE_ROW:
 		case DATA_ONE_ALL_ROWS: {
 			long rowID = mDB.insert(ContentDescriptor.DataTypeOne.TABLE_NAME,
 					value);
@@ -116,8 +119,6 @@ public class LocationsProvider extends ContentProvider {
 			}
 			return null;
 		}
-
-		case DATA_TWO_SINGLE_ROW:
 		case DATA_TWO_ALL_ROWS: {
 			long rowID = mDB.insert(ContentDescriptor.DataTypeTwo.TABLE_NAME,
 					value);
@@ -131,8 +132,14 @@ public class LocationsProvider extends ContentProvider {
 			return null;
 		}
 
+		case DATA_TWO_SINGLE_ROW:
+		case DATA_ONE_SINGLE_ROW: {
+			throw new IllegalArgumentException(
+					"Unsupported URI, unable to insert into specific row: "
+							+ uri);
+		}
 		default:
-			return null;
+			throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
 
 	}
@@ -170,6 +177,10 @@ public class LocationsProvider extends ContentProvider {
 
 	}
 
+	/*
+	 * Private method to both attempt the delete command, and then to notify of
+	 * the changes
+	 */
 	private int deleteAndNotify(final Uri uri, final String tableName,
 			final String whereClause, final String[] whereArgs) {
 		int count = mDB.delete(tableName, whereClause, whereArgs);
@@ -209,6 +220,10 @@ public class LocationsProvider extends ContentProvider {
 		}
 	}
 
+	/*
+	 * private update function that updates based on parameters, then notifies
+	 * change
+	 */
 	private int updateAndNotify(final Uri uri, final String tableName,
 			final ContentValues values, final String whereClause,
 			final String[] whereArgs) {
