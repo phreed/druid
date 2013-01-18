@@ -87,13 +87,13 @@ public class ContentDescriptor {
 				ColumnNames.BYTE_NAME, ColumnNames.SHORT_NAME,
 				ColumnNames.INT_NAME, ColumnNames.LONG_NAME,
 				ColumnNames.FLOAT_NAME, ColumnNames.DOUBLE_NAME,
-				ColumnNames.CHAR_NAME, ColumnNames.STRING_NAME, };
+				ColumnNames.STRING_NAME, ColumnNames.BOOLEAN_NAME };
 		// the names and order of ALL columns, including internal use ones
 		public static final String[] ALL_COLUMN_NAMES = { ColumnNames.ID,
 				ColumnNames.BYTE_NAME, ColumnNames.SHORT_NAME,
 				ColumnNames.INT_NAME, ColumnNames.LONG_NAME,
 				ColumnNames.FLOAT_NAME, ColumnNames.DOUBLE_NAME,
-				ColumnNames.CHAR_NAME, ColumnNames.STRING_NAME, };
+				ColumnNames.STRING_NAME, ColumnNames.BOOLEAN_NAME };
 
 		// a static class to store columns in entity
 		public static class ColumnNames {
@@ -115,11 +115,13 @@ public class ContentDescriptor {
 			// // flags that track true/false conditions
 			// public static final String BOOLEAN_NAME = "BOOLEAN_NAME";
 			// single 16-bit Unicode character
-			public static final String CHAR_NAME = "CHAR NAME";
+			// public static final String CHAR_NAME = "CHAR NAME";
 			// // array of 8-bit signed two's complement integers
 			// public static final String BYTE_ARRAY_NAME = "BYTE_ARRAY_NAME";
 			// Java String class data
 			public static final String STRING_NAME = "STRING_VARIABLE";
+
+			public static final String BOOLEAN_NAME = "BOOLEAN_NAME";
 
 			/**
 			 * these two are commented out for now to focus on the others
@@ -170,13 +172,13 @@ public class ContentDescriptor {
 				ColumnNames.BYTE_NAME, ColumnNames.SHORT_NAME,
 				ColumnNames.INT_NAME, ColumnNames.LONG_NAME,
 				ColumnNames.FLOAT_NAME, ColumnNames.DOUBLE_NAME,
-				ColumnNames.CHAR_NAME, ColumnNames.STRING_NAME, };
+				ColumnNames.STRING_NAME, ColumnNames.BOOLEAN_NAME };
 		// the names and order of ALL columns, including internal use ones
 		public static final String[] ALL_COLUMN_NAMES = { ColumnNames.ID,
 				ColumnNames.BYTE_NAME, ColumnNames.SHORT_NAME,
 				ColumnNames.INT_NAME, ColumnNames.LONG_NAME,
 				ColumnNames.FLOAT_NAME, ColumnNames.DOUBLE_NAME,
-				ColumnNames.CHAR_NAME, ColumnNames.STRING_NAME, };
+				ColumnNames.STRING_NAME, ColumnNames.BOOLEAN_NAME };
 
 		// a static class to store columns in entity
 		public static class ColumnNames {
@@ -198,11 +200,13 @@ public class ContentDescriptor {
 			// // flags that track true/false conditions
 			// public static final String BOOLEAN_NAME = "BOOLEAN_NAME";
 			// single 16-bit Unicode character
-			public static final String CHAR_NAME = "CHAR NAME";
+			// public static final String CHAR_NAME = "CHAR NAME";
 			// // array of 8-bit signed two's complement integers
 			// public static final String BYTE_ARRAY_NAME = "BYTE_ARRAY_NAME";
 			// Java String class data
 			public static final String STRING_NAME = "STRING_VARIABLE";
+
+			public static final String BOOLEAN_NAME = "BOOLEAN_NAME";
 
 			/**
 			 * these two are commented out for now to focus on the others

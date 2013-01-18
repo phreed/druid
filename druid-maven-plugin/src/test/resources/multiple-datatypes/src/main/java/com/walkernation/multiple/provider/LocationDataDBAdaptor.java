@@ -30,6 +30,7 @@ public class LocationDataDBAdaptor {
 	private static final String ONE_LONG_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
 	private static final String ONE_FLOAT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
 	private static final String ONE_DOUBLE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_STRING_NAME = ContentDescriptor.DataTypeOne.ColumnNames.STRING_NAME;
 	private static final String ONE_BOOLEAN_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
 
 	// for DataTypeTwo
@@ -41,6 +42,7 @@ public class LocationDataDBAdaptor {
 	private static final String TWO_LONG_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
 	private static final String TWO_FLOAT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
 	private static final String TWO_DOUBLE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_STRING_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.STRING_NAME;
 	private static final String TWO_BOOLEAN_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
 
 	// SQL Statement to create a new database.
@@ -53,6 +55,7 @@ public class LocationDataDBAdaptor {
 			+ ONE_LONG_NAME + " INTEGER," //
 			+ ONE_FLOAT_NAME + " REAL," //
 			+ ONE_DOUBLE_NAME + " REAL," //
+			+ ONE_STRING_NAME + " TEXT," //
 			+ ONE_BOOLEAN_NAME + " INTEGER" // will store as 0 or 1, and convert
 			+ " );"; // end table
 
@@ -66,6 +69,7 @@ public class LocationDataDBAdaptor {
 			+ TWO_LONG_NAME + " INTEGER," //
 			+ TWO_FLOAT_NAME + " REAL," //
 			+ TWO_DOUBLE_NAME + " REAL," //
+			+ TWO_STRING_NAME + " TEXT," //
 			+ TWO_BOOLEAN_NAME + " INTEGER" // will store as 0 or 1, and convert
 			+ " );"; // end table
 

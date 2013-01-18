@@ -13,7 +13,7 @@
     <field type="LONG" name="longData" default="0" />            <!-- 64 bit Integer-->
     <field type="FLOAT" name="floatData" default="0" />          <!-- 32 bit Real-->
     <field type="DOUBLE" name="doubleData" default="0.0" />      <!-- 64 bit Real-->
-    <field type="TEXT" name="stringData" default="" />           <!-- String-->
+    <field type="TEXT" name="stringData" default="null" />           <!-- String-->
     <field type="BOOLEAN" name="booleanData" default="false" />  <!-- Boolean t/f-->
   </relation>
 
@@ -24,7 +24,7 @@
     <field type="LONG" name="longData" default="0" />            <!-- 64 bit Integer-->
     <field type="FLOAT" name="floatData" default="0" />          <!-- 32 bit Real-->
     <field type="DOUBLE" name="doubleData" default="0.0" />      <!-- 64 bit Real-->
-    <field type="TEXT" name="stringData" default="" />           <!-- String-->
+    <field type="TEXT" name="stringData" default="null" />           <!-- String-->
     <field type="BOOLEAN" name="booleanData" default="false" />  <!-- Boolean t/f-->
   </relation>
 
