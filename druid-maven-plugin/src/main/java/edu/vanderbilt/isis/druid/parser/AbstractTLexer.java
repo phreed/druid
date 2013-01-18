@@ -1,8 +1,7 @@
-package edu.vanderbilt.isis.druid;
+package edu.vanderbilt.isis.druid.parser;
 
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.Lexer;
-import org.antlr.runtime.RecognizerSharedState;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Lexer;
 
 /**
 
@@ -27,25 +26,14 @@ public abstract class AbstractTLexer
     public AbstractTLexer() {
     }
 
-    /**
-     * Create a new instance of the lexer using the given character stream as
-     * the input to lex into tokens.
-     *
-     * @param input A valid character stream that contains the ruleSrc code you
-     *              wish to compile (or lex at least)
-     */
-    public AbstractTLexer(CharStream input) {
-        this(input, new RecognizerSharedState());
-    }
-
-    /**
+      /**
      * Internal constructor for ANTLR - do not use.
      *
      * @param input The character stream we are going to lex
      * @param state The shared state object, shared between all lexer comonents
      */
-    public AbstractTLexer(CharStream input, RecognizerSharedState state) {
-        super(input,state);
+    public AbstractTLexer(CharStream input) {
+        super(input);
     }
 
 }

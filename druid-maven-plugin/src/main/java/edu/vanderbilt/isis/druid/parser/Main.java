@@ -1,17 +1,18 @@
-package edu.vanderbilt.isis.druid;
+package edu.vanderbilt.isis.druid.parser;
 
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
-import org.stringtemplate.v4.ST;
+import java.io.File;
 
-import java.io.*;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+
+import edu.vanderbilt.isis.druid.TLexer;
+import edu.vanderbilt.isis.druid.TParser;
 import edu.vanderbilt.isis.druid.TParser.a_return;
+import edu.vanderbilt.isis.druid.TTree;
 
 
 /**
- * Test driver program for the ANTLR3 Maven Architype demo
- *
- * @author Jim Idle (jimi@temporal-wave.com)
+ * Test driver program for the ANTLR3 Maven Archetype demo
  */
 class Main {
 
@@ -116,7 +117,7 @@ class Main {
             //
             try
             {
-                // First create a file stream using the povided file/path
+                // First create a file stream using the provided file/path
                 // and tell the lexer that that is the character source.
                 // You can also use text that you have already read of course
                 // by using the string stream.
@@ -166,7 +167,7 @@ class Main {
 
                 // Pick up the generic tree
                 //
-                Tree t = (Tree)psrReturn.getTree();
+                Tree tree = (Tree)psrReturn.getTree();
 
                 // NOw walk it with the generic tree walker, which does nothing but
                 // verify the tree really.
@@ -174,7 +175,7 @@ class Main {
                 try
                 {
                     if (parser.getNumberOfSyntaxErrors() == 0) {
-                        TTree walker = new TTree(new CommonTreeNodeStream(t));
+                        TTree walker = new TTree(new CommonTreeNodeStream(tree));
                         System.out.println("    AST Walk Start\n");
                         pStart = System.currentTimeMillis();
                         walker.a();
@@ -193,7 +194,7 @@ class Main {
 
                     // Now stringify it if you want to...
                     //
-                    // System.out.println(t.toStringTree());
+                    System.out.println(tree.toStringTree());
 
                     // Use the ANLTR built in dot generator
                     //
@@ -211,12 +212,13 @@ class Main {
 
                     // It produces a jguru string template.
                     //
-                    // ST st = gen.toDOT(t, new CommonTreeAdaptor());
+                    final TreeAdaptor adaptor = new CommonTreeAdaptor();                        
+                    gen.toDOT(tree, adaptor);
 
                     // Create the output file and write the dot spec to it
                     //
                     FileWriter outputStream = new FileWriter(outputName);
-                    // outputStream.write(st.toString());
+                    outputStream.write(st.toString());
                     outputStream.close();
 
                     // Invoke dot to generate a .png file
