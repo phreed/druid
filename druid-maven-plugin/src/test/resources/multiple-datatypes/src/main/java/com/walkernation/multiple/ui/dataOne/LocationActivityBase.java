@@ -68,8 +68,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != ViewLocationFragment.class) {
-				ViewLocationFragment details = ViewLocationFragment
+			if (test != null && test.getClass() != ViewDataOneFragment.class) {
+				ViewDataOneFragment details = ViewDataOneFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -78,11 +78,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				ViewLocationFragment details = (ViewLocationFragment) getSupportFragmentManager()
+				ViewDataOneFragment details = (ViewDataOneFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null || details.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					details = ViewLocationFragment.newInstance(index);
+					details = ViewDataOneFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -226,8 +226,8 @@ public class LocationActivityBase extends FragmentActivity implements
 
 	public static Intent newViewLocationIntent(Activity activity, int index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ViewLocationActivity.class);
-		intent.putExtra(ViewLocationFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, ViewOpenDataActivity.class);
+		intent.putExtra(ViewDataOneFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 

@@ -15,11 +15,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.walkernation.db.R;
-import com.walkernation.multiple.orm.LocationData;
+import com.walkernation.multiple.orm.DataOneData;
 
-public class ViewLocationFragment extends LocationFragmentBase {
+public class ViewDataOneFragment extends LocationFragmentBase {
 	// LOG TAG, handles refactoring changes
-	private static final String LOG_TAG = ViewLocationFragment.class
+	private static final String LOG_TAG = ViewDataOneFragment.class
 			.getCanonicalName();
 
 	public final static String rowIdentifyerTAG = "index";
@@ -28,10 +28,14 @@ public class ViewLocationFragment extends LocationFragmentBase {
 
 	public final static String LOCATION = "location";
 
-	TextView userIdTV;
-	TextView latitudeTV;
-	TextView longitudeTV;
-	TextView heightTV;
+	TextView byteNameTV;
+	TextView shortNameTV;
+	TextView intNameTV;
+	TextView longNameTV;
+	TextView floatNameTV;
+	TextView doubleNameTV;
+	TextView stringNameTV;
+	TextView booleanTV;
 
 	// LocationData locationData;
 	Button editButton;
@@ -54,8 +58,8 @@ public class ViewLocationFragment extends LocationFragmentBase {
 		}
 	};
 
-	public static ViewLocationFragment newInstance(int index) {
-		ViewLocationFragment f = new ViewLocationFragment();
+	public static ViewDataOneFragment newInstance(int index) {
+		ViewDataOneFragment f = new ViewDataOneFragment();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
@@ -87,10 +91,15 @@ public class ViewLocationFragment extends LocationFragmentBase {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		userIdTV = (TextView) getView().findViewById(R.id.userID);
-		latitudeTV = (TextView) getView().findViewById(R.id.latitude);
-		longitudeTV = (TextView) getView().findViewById(R.id.longitude);
-		heightTV = (TextView) getView().findViewById(R.id.height);
+		byteNameTV = (TextView) getView().findViewById(R.id.byteName);
+		shortNameTV = (TextView) getView().findViewById(R.id.shortName);
+		intNameTV = (TextView) getView().findViewById(R.id.intName);
+		longNameTV = (TextView) getView().findViewById(R.id.longName);
+		floatNameTV = (TextView) getView().findViewById(R.id.floatName);
+		doubleNameTV = (TextView) getView().findViewById(R.id.doubleName);
+		stringNameTV = (TextView) getView().findViewById(R.id.stringName);
+		booleanTV = (TextView) getView().findViewById(R.id.booleanName);
+
 		editButton = (Button) getView().findViewById(
 				R.id.button_location_view_to_edit);
 		deleteButton = (Button) getView().findViewById(
@@ -102,20 +111,24 @@ public class ViewLocationFragment extends LocationFragmentBase {
 	}
 
 	public void setUiToLocationData(int getUniqueKey) {
-		LocationData location = null;
-		try {
-			location = getLocationDataForUserID(getUniqueKey);
-		} catch (RemoteException e) {
+		DataOneData dataOneData = null;
+		try { // TODO fix this to pull the right value by '_id' or something...
+			dataOneData = null;// = getLocationDataForUserID(getUniqueKey);
+		} catch (Exception e) {
 			Log.e(LOG_TAG, "RemoteException Caught => " + e.getMessage());
 			e.printStackTrace();
 		}
-		if (location == null) {
+		if (dataOneData == null) {
 			getView().setVisibility(View.GONE);
 		} else { // else it just displays empty screen
-			userIdTV.setText(String.valueOf(location.userID));
-			latitudeTV.setText(String.valueOf(location.latitude));
-			longitudeTV.setText(String.valueOf(location.longitude));
-			heightTV.setText(String.valueOf(location.height));
+			byteNameTV.setText(String.valueOf(dataOneData.byteName));
+			shortNameTV.setText(String.valueOf(dataOneData.shortName));
+			intNameTV.setText(String.valueOf(dataOneData.intName));
+			longNameTV.setText(String.valueOf(dataOneData.longName));
+			floatNameTV.setText(String.valueOf(dataOneData.floatName));
+			doubleNameTV.setText(String.valueOf(dataOneData.doubleName));
+			stringNameTV.setText(String.valueOf(dataOneData.stringName));
+			booleanTV.setText(String.valueOf(dataOneData.booleanName));
 		}
 	}
 

@@ -2,7 +2,7 @@ package com.walkernation.multiple.ui.dataOne;
 
 import android.os.Bundle;
 
-public class ViewLocationActivity extends LocationActivityBase {
+public class ViewOpenDataActivity extends LocationActivityBase {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -11,9 +11,9 @@ public class ViewLocationActivity extends LocationActivityBase {
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
 			int index = getIntent().getExtras().getInt(
-					ViewLocationFragment.rowIdentifyerTAG);
+					ViewDataOneFragment.rowIdentifyerTAG);
 
-			ViewLocationFragment details = ViewLocationFragment
+			ViewDataOneFragment details = ViewDataOneFragment
 					.newInstance(index);
 
 			details.setArguments(getIntent().getExtras());

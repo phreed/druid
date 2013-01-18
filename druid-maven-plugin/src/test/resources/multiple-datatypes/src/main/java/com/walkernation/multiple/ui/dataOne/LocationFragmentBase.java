@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.walkernation.multiple.orm.LocationData;
 import com.walkernation.multiple.orm.LocationResolver;
+import com.walkernation.multiple.orm.MultipleResolver;
 import com.walkernation.multiple.provider.ContentDescriptor;
 
 public class LocationFragmentBase extends Fragment {
@@ -19,7 +20,7 @@ public class LocationFragmentBase extends Fragment {
 	// URI to ContentProvider's info
 	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
-	LocationResolver resolver;
+	MultipleResolver resolver;
 
 	final static String[] columnProjection = {
 			ContentDescriptor.Location.Cols.ID,
@@ -36,7 +37,7 @@ public class LocationFragmentBase extends Fragment {
 		Log.d(LOG_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		resolver = new LocationResolver(getActivity());
+		resolver = new MultipleResolver(getActivity());
 	}
 
 	@Override
