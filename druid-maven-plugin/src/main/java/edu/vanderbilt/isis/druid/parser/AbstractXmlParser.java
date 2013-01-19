@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.TokenStream;
  *
  * @author Jim Idle - Temporal Wave LLC - jimi@temporal-wave.com
  */
-public abstract class AbstractTParser extends Parser
+public abstract class AbstractXmlParser extends Parser
 
 {
     /**
@@ -22,7 +22,7 @@ public abstract class AbstractTParser extends Parser
      * 
      * @param input The stream of tokens that will be pulled from the lexer
      */
-    protected AbstractTParser(TokenStream input) {
+    protected AbstractXmlParser(TokenStream input) {
         super(input);
     }
    
