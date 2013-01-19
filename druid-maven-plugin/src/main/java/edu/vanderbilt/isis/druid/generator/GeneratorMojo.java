@@ -17,10 +17,10 @@ public class GeneratorMojo extends AbstractMojo {
 
 	public void execute() throws MojoExecutionException {
 		final Generator generator = new Generator(new MavenLoggerImpl(
-				this.getLog(), "ammogen"));
-		generator.setMkdir(this.mkdir);
-		generator.setTemplate(this.template);
+				this.getLog(), "ammogen"));;
+		generator.setTemplateKey(this.templateKey);
 		generator.setTemplateFile(this.templateFile);
+		generator.setTemplateFileManifest(this.templateFileManifest);
 
 		generator.setContractPath(this.contract);
 		generator.setOutputDir(this.outputPath);
@@ -45,15 +45,6 @@ public class GeneratorMojo extends AbstractMojo {
 	 */
 	private File contract = new File("contract.xml");
 
-	/**
-	 * template : the name of template to be used to generate the output.
-	 * <p>
-	 * This is used to select the group template file.
-	 * 
-	 * @parameter expression="${generate.template}"
-	 *            default-value="content-provider-schema"
-	 */
-	private String template = null;
 
 	/**
 	 * templateFile : the file containing the string-templates to be used
@@ -69,6 +60,26 @@ public class GeneratorMojo extends AbstractMojo {
 	 */
 	private File templateFile = null;
 	
+	 /**
+     * templateKey : the name of template to be used to generate the output.
+     * <p>
+     * This is used to select the group template file.
+     * 
+     * @parameter expression="${generate.template.key}"
+     *            default-value="content-descriptor"
+     */
+    private String templateKey = "content-descriptor";
+
+    /**
+    * templateFileManifest : the name of template to be used to generate the output.
+    * <p>
+    * This is used to select the group template file.
+    * 
+    * @parameter expression="${generate.template.filemap}"
+    *            default-value="template-manifest.stg"
+    */
+    private File templateFileManifest = new File("template-manifest.stg");
+	
 	/**
 	 * skeleton : has the skeleton target been requested?
 	 * <p>
@@ -79,16 +90,6 @@ public class GeneratorMojo extends AbstractMojo {
 	 * @parameter expression="${generate.skeleton}" default-value="false"
 	 */
 	private boolean skeleton = false;
-
-	/**
-	 * mkdir : should the package directory hierarchy be constructed?
-	 * <p>
-	 * Java classes are generally placed in a chain of directories which mimic
-	 * the java package to which the class belongs.
-	 * 
-	 * @parameter expression="${generate.mkdir}" default-value="false"
-	 */
-	private boolean mkdir = true;
 
 	/**
 	 * outputPath : the base path for the generated files.

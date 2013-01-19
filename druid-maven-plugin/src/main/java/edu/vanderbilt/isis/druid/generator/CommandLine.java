@@ -51,7 +51,6 @@ public class CommandLine {
                         .append("skeleton=false ")
                         .append("schema=false ")
                         .append("provider=false ")
-                        .append("mkdir=true ")
                         .append("template=content-provider-schema ")
                         .append("contract=/home/me/contract.xml ")
                         .append("output=/tmp/  ")
@@ -157,12 +156,8 @@ public class CommandLine {
                 that.setSkeleton(param[1]);
                 continue;
             }
-            if (keyMatch("mkdir", key)) {
-                that.setMakeDir(param[1]);
-                continue;
-            }
             if (keyMatch("template", key)) {
-                that.setTemplate(param[1]);
+                that.setTemplateKey(param[1]);
                 continue;
             }
             if (keyMatch("contract", key)) {
