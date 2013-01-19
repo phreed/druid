@@ -25,49 +25,7 @@ public class LocationCreator {
 		return rValue;
 	}
 
-	/**
-	 * Get LocationData object from ContentValues object
-	 * 
-	 * @param cv
-	 * @return
-	 */
-	// I'm not even sure this is used/usable, but here in case it is...
-	public static LocationData CvToLocationData(final ContentValues cv) {
-		// set default values
-		long latitude = 0;
-		long longitude = 0;
-		long height = 0;
-		long userid = 0;
-
-		// // can only do this because all 4 are long, but nice
-		// // might be useful for VERY large objects, with lots of similar
-		// // data type, make an iterator for loop for each data type
-		// // will require a string[] of col names for that type
-		// for (String cvColName : COLUMN_NAMES) {
-		//
-		// if (cv.containsKey(cvColName)) {
-		// latitude = cv.getAsLong(cvColName);
-		// }
-		// }
-
-		// check if CV contains keys, and if so, assign values
-		if (cv.containsKey(ContentDescriptor.Location.Cols.LAT_NAME)) {
-			latitude = cv.getAsLong(ContentDescriptor.Location.Cols.LAT_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.LONG_NAME)) {
-			longitude = cv.getAsLong(ContentDescriptor.Location.Cols.LONG_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.HEIGHT_NAME)) {
-			height = cv.getAsLong(ContentDescriptor.Location.Cols.HEIGHT_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.USER_ID_NAME)) {
-			userid = cv.getAsLong(ContentDescriptor.Location.Cols.USER_ID_NAME);
-		}
-		// construct the returned object
-		LocationData rValue = new LocationData(latitude, longitude, height,
-				userid);
-		return rValue;
-	}
+	
 
 	/**
 	 * Get all of the LocationData from the passed in cursor.

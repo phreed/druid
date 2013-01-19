@@ -1,4 +1,4 @@
-package com.walkernation.db.provider;
+package com.walkernation.multiple.provider;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,24 +15,62 @@ public class LocationDataDBAdaptor {
 			.getCanonicalName();
 
 	private static final String DATABASE_NAME = "myDatabase.db";
-	static final String DATABASE_TABLE_1 = ContentDescriptor.Location.TABLE_NAME;
+
 	static final int DATABASE_VERSION = 10;
 
-	// The SHORT name of each column in your table
-	private static final String KEY_ID = ContentDescriptor.Location.Cols.ID;
-	private static final String LAT_NAME = ContentDescriptor.Location.Cols.LAT_NAME;
-	private static final String LONG_NAME = ContentDescriptor.Location.Cols.LONG_NAME;
-	private static final String HEIGHT_NAME = ContentDescriptor.Location.Cols.HEIGHT_NAME;
-	private static final String USER_ID_NAME = ContentDescriptor.Location.Cols.USER_ID_NAME;
+	/**
+	 * Short Constant names (to improve readability)
+	 */
+	// for DataTypeOne
+	private static final String DATA_ONE_TABLE_NAME = ContentDescriptor.DataTypeOne.TABLE_NAME;
+	private static final String ONE_KEY_ID = ContentDescriptor.DataTypeOne.ColumnNames.ID;
+	private static final String ONE_BYTE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_SHORT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_INT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_LONG_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_FLOAT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_DOUBLE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_STRING_NAME = ContentDescriptor.DataTypeOne.ColumnNames.STRING_NAME;
+	private static final String ONE_BOOLEAN_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+
+	// for DataTypeTwo
+	private static final String DATA_TWO_TABLE_NAME = ContentDescriptor.DataTypeTwo.TABLE_NAME;
+	private static final String TWO_KEY_ID = ContentDescriptor.DataTypeTwo.ColumnNames.ID;
+	private static final String TWO_BYTE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_SHORT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_INT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_LONG_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_FLOAT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_DOUBLE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_STRING_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.STRING_NAME;
+	private static final String TWO_BOOLEAN_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
 
 	// SQL Statement to create a new database.
-	private static final String DATABASE_CREATE = "create table "
-			+ DATABASE_TABLE_1 + " (" // start table
-			+ KEY_ID + " integer primary key autoincrement, " // setup inc.
-			+ LAT_NAME + " INTEGER," //
-			+ LONG_NAME + " INTEGER," //
-			+ HEIGHT_NAME + " INTEGER," //
-			+ USER_ID_NAME + " INTEGER" //
+	private static final String TABLE_DATA_ONE_CREATE = "create table "
+			+ DATA_ONE_TABLE_NAME + " (" // start table
+			+ ONE_KEY_ID + " integer primary key autoincrement, " // setup inc.
+			+ ONE_BYTE_NAME + " INTEGER," //
+			+ ONE_SHORT_NAME + " INTEGER," //
+			+ ONE_INT_NAME + " INTEGER," //
+			+ ONE_LONG_NAME + " INTEGER," //
+			+ ONE_FLOAT_NAME + " REAL," //
+			+ ONE_DOUBLE_NAME + " REAL," //
+			+ ONE_STRING_NAME + " TEXT," //
+			+ ONE_BOOLEAN_NAME + " INTEGER" // will store as 0 or 1, and convert
+			+ " );"; // end table
+
+	// SQL Statement to create a new database.
+	private static final String TABLE_DATA_TWO_CREATE = "create table "
+			+ DATA_TWO_TABLE_NAME + " (" // start table
+			+ TWO_KEY_ID + " integer primary key autoincrement, " // setup inc.
+			+ TWO_BYTE_NAME + " INTEGER," //
+			+ TWO_SHORT_NAME + " INTEGER," //
+			+ TWO_INT_NAME + " INTEGER," //
+			+ TWO_LONG_NAME + " INTEGER," //
+			+ TWO_FLOAT_NAME + " REAL," //
+			+ TWO_DOUBLE_NAME + " REAL," //
+			+ TWO_STRING_NAME + " TEXT," //
+			+ TWO_BOOLEAN_NAME + " INTEGER" // will store as 0 or 1, and convert
 			+ " );"; // end table
 
 	// Variable to hold the database instance.
@@ -77,6 +115,17 @@ public class LocationDataDBAdaptor {
 	}
 
 	/**
+	 * Insert a LocationData ContentValues into the DB.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public long insert(final String table, final ContentValues location) {
+		Log.d(LOG_TAG, "insertLocation(CV)");
+		return db.insert(table, null, location);
+	}
+
+	/**
 	 * open the DB Get Memory or File version of DB, and write/read access or
 	 * just read access if that is all that is possible.
 	 * 
@@ -91,18 +140,6 @@ public class LocationDataDBAdaptor {
 			db = dbHelper.getReadableDatabase();
 		}
 		return this;
-	}
-
-	/**
-	 * Remove a row of the DB where the rowIndex matches.
-	 * 
-	 * @param rowIndex
-	 *            row to remove from DB
-	 * @return if the row was removed
-	 */
-	public int delete(final String table, long _id) {
-		Log.d(LOG_TAG, "delete(" + _id + ") ");
-		return db.delete(DATABASE_TABLE_1, KEY_ID + " = " + _id, null);
 	}
 
 	/**
@@ -138,6 +175,7 @@ public class LocationDataDBAdaptor {
 
 		Cursor query = db.query(table, projection, selection, selectionArgs,
 				null, null, sortOrder);
+
 		return query;
 	}
 
@@ -163,26 +201,6 @@ public class LocationDataDBAdaptor {
 	public void endTransaction() {
 		Log.d(LOG_TAG, "endTransaction()");
 		db.endTransaction();
-	}
-
-	/**
-	 * Get the underlying Database.
-	 * 
-	 * @return
-	 */
-	SQLiteDatabase getDB() {
-		return db;
-	}
-
-	/**
-	 * Insert a ContentValues into the DB.
-	 * 
-	 * @param location
-	 * @return
-	 */
-	public long insert(final String table, final ContentValues cv) {
-		Log.d(LOG_TAG, "insertLocation(CV)");
-		return db.insert(table, null, cv);
 	}
 
 	/**
@@ -227,8 +245,9 @@ public class LocationDataDBAdaptor {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d(LOG_TAG, "" + DATABASE_CREATE);
-			db.execSQL(DATABASE_CREATE);
+			Log.d(LOG_TAG, "DBHelper: creation of new database.");
+			db.execSQL(TABLE_DATA_ONE_CREATE);
+			db.execSQL(TABLE_DATA_TWO_CREATE);
 		}
 
 		@Override
@@ -240,12 +259,17 @@ public class LocationDataDBAdaptor {
 			// **** Upgrade DB ****
 			// TODO: migrate data?? from old DB to new DB
 			// drop old DB
-			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_1);
+			db.execSQL("DROP TABLE IF EXISTS " + DATA_ONE_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA_TWO_CREATE);
 			// Create a new one.
 			onCreate(db);
 
 		}
 
+	}
+
+	public SQLiteDatabase getDB() {
+		return db;
 	}
 
 }
