@@ -15,7 +15,7 @@ import android.widget.ListView;
 import com.walkernation.db.R;
 import com.walkernation.multiple.orm.LocationData;
 import com.walkernation.multiple.orm.LocationResolver;
-import com.walkernation.multiple.provider.LocationDataArrayAdapter;
+import com.walkernation.multiple.provider.DataOneArrayAdapter;
 
 public class LocationListFragment extends LocationListFragmentBase {
 
@@ -58,7 +58,7 @@ public class LocationListFragment extends LocationListFragmentBase {
 	public void onActivityCreatedCustom(Bundle savedInstanceState) {
 		// create the custom array adapter that will make the custom row
 		// layouts
-		aa = new LocationDataArrayAdapter(getActivity(),
+		aa = new DataOneArrayAdapter(getActivity(),
 				R.layout.location_listview_custom_row, locationData);
 
 		// update the back end data.
@@ -111,6 +111,6 @@ public class LocationListFragment extends LocationListFragmentBase {
 	private ArrayList<LocationData> locationData;
 	// Custom ArrayAdapter that allows the rows of the ListView to show
 	// customized layouts
-	private LocationDataArrayAdapter aa;
+	private DataOneArrayAdapter aa;
 
 }

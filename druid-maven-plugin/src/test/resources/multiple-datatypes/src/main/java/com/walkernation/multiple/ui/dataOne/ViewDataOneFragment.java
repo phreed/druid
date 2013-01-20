@@ -205,4 +205,9 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 		return getArguments().getInt(rowIdentifyerTAG, 0);
 	}
 
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mOpener = null;
+	}
 }

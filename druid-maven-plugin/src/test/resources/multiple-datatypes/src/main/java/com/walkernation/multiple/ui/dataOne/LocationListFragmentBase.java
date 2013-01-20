@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -20,10 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import com.walkernation.multiple.orm.LocationData;
-import com.walkernation.multiple.provider.ContentDescriptor;
-import com.walkernation.multiple.provider.LocationDataArrayAdapter;
 
 abstract public class LocationListFragmentBase extends ListFragment {
 
@@ -33,15 +28,12 @@ abstract public class LocationListFragmentBase extends ListFragment {
 	 * 
 	 */
 
-	// URI for access to the ContentProvider
-	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
-
 	// TAG for logging
 	static final String LOG_TAG = LocationListFragmentBase.class
 			.getCanonicalName();
 
 	// boolean mDualPane;
-	int mCurCheckPosition = 0;
+//	int mCurCheckPosition = 0;
 	OnOpenWindowInterface mOpener;
 
 	/**
@@ -149,7 +141,7 @@ abstract public class LocationListFragmentBase extends ListFragment {
 	ArrayList<LocationData> locationData;
 	// Custom ArrayAdapter that allows the rows of the ListView to show
 	// customized layouts
-	LocationDataArrayAdapter aa;
+	DataOneArrayAdapter aa;
 
 	/**
 	 * 

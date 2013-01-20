@@ -23,7 +23,7 @@ import android.widget.ListView;
 
 import com.walkernation.multiple.orm.LocationData;
 import com.walkernation.multiple.provider.ContentDescriptor;
-import com.walkernation.multiple.provider.LocationDataArrayAdapter;
+import com.walkernation.multiple.provider.DataOneArrayAdapter;
 
 abstract public class LocationListFragmentBase extends ListFragment {
 
@@ -149,7 +149,7 @@ abstract public class LocationListFragmentBase extends ListFragment {
 	ArrayList<LocationData> locationData;
 	// Custom ArrayAdapter that allows the rows of the ListView to show
 	// customized layouts
-	LocationDataArrayAdapter aa;
+	DataOneArrayAdapter aa;
 
 	/**
 	 * 

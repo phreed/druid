@@ -2,6 +2,7 @@ package com.walkernation.multiple.ui.dataOne;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +14,51 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.walkernation.db.R;
-import com.walkernation.multiple.orm.LocationData;
-import com.walkernation.multiple.orm.LocationResolver;
-import com.walkernation.multiple.provider.LocationDataArrayAdapter;
+import com.walkernation.multiple.orm.DataOneData;
+import com.walkernation.multiple.orm.MultipleResolver;
+import com.walkernation.multiple.provider.DataOneArrayAdapter;
 
 public class LocationListFragment extends LocationListFragmentBase {
 
 	static final String LOG_TAG = LocationListFragment.class.getCanonicalName();
-	LocationResolver locationResolver;
+
+	OnOpenWindowInterface mOpener;
+	MultipleResolver resolver;
+	ArrayList<DataOneData> dataOneData;
+
+	@Override
+	public void onAttach(Activity activity) {
+		Log.d(LOG_TAG, "onAttach start");
+		super.onAttach(activity);
+		try {
+			mOpener = (OnOpenWindowInterface) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnOpenWindowListener" + e.getMessage());
+		}
+		Log.d(LOG_TAG, "onAttach end");
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mOpener = null;
+	}
+
+	/**
+	 * The system calls this when creating the fragment. Within your
+	 * implementation, you should initialize essential components of the
+	 * fragment that you want to retain when the fragment is paused or stopped,
+	 * then resumed.
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		Log.d(LOG_TAG, "onCreate");
+		super.onCreate(savedInstanceState);
+		resolver = new MultipleResolver(getActivity());
+		dataOneData = new ArrayList<DataOneData>();
+		setRetainInstance(true);
+	}
 
 	@Override
 	public View onCreateViewCustom(LayoutInflater inflater,
@@ -40,12 +78,12 @@ public class LocationListFragment extends LocationListFragmentBase {
 	public void updateLocationLocationData() {
 		Log.d(LOG_TAG, "updateLocationLocationData");
 		try {
-			locationData.clear();
+			dataOneData.clear();
 
 			ArrayList<LocationData> currentList = locationResolver
 					.getAllLocations();
 
-			locationData.addAll(currentList);
+			dataOneData.addAll(currentList);
 			aa.notifyDataSetChanged();
 		} catch (Exception e) {
 			Log.e(LOG_TAG,
@@ -58,7 +96,7 @@ public class LocationListFragment extends LocationListFragmentBase {
 	public void onActivityCreatedCustom(Bundle savedInstanceState) {
 		// create the custom array adapter that will make the custom row
 		// layouts
-		aa = new LocationDataArrayAdapter(getActivity(),
+		aa = new DataOneArrayAdapter(getActivity(),
 				R.layout.location_listview_custom_row, locationData);
 
 		// update the back end data.
@@ -90,13 +128,12 @@ public class LocationListFragment extends LocationListFragmentBase {
 
 	@Override
 	public void onListItemClickCustom(ListView l, View v, int position, long id) {
-		mOpener.openViewLocationFragment((int) locationData.get(position).userID);
+		mOpener.openViewLocationFragment((dataOneData.get(position))._id);
 	}
 
 	@Override
 	public void onCreateCustom() {
-		locationResolver = new LocationResolver(getActivity());
-		locationData = new ArrayList<LocationData>();
+
 	}
 
 	/**
@@ -105,12 +142,6 @@ public class LocationListFragment extends LocationListFragmentBase {
 	 * 
 	 */
 
-	// NEW custom resolver (container around C.P.C.
-
-	// Collection<T> which stores the ListView's LocationData(s)
-	private ArrayList<LocationData> locationData;
-	// Custom ArrayAdapter that allows the rows of the ListView to show
-	// customized layouts
-	private LocationDataArrayAdapter aa;
+	private DataOneArrayAdapter aa;
 
 }
