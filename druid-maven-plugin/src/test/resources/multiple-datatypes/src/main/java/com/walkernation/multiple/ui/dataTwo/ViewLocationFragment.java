@@ -102,7 +102,7 @@ public class ViewLocationFragment extends LocationFragmentBase {
 	}
 
 	public void setUiToLocationData(int getUniqueKey) {
-		LocationData location = null;
+		LocationData location = mOpener.getMultipleResolver().
 		try {
 			location = getLocationDataForUserID(getUniqueKey);
 		} catch (RemoteException e) {

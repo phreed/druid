@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.walkernation.db.R;
+import com.walkernation.multiple.orm.MultipleResolver;
 
 /**
  * Base class for all activities
@@ -21,11 +23,19 @@ import com.walkernation.db.R;
 public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
+	MultipleResolver resolver;
+
 	boolean promptOnBackPressed = false;
 	LocationListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		resolver = new MultipleResolver(this);
+		super.onCreate(arg0);
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -56,6 +66,10 @@ public class LocationActivityBase extends FragmentActivity implements
 			mDualPane = false;
 			return false;
 		}
+	}
+
+	public MultipleResolver getMultipleResolver() {
+		return resolver;
 	}
 
 	public void openViewLocationFragment(int index) {

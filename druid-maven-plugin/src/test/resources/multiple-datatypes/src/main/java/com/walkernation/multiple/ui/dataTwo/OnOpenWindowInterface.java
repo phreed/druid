@@ -1,6 +1,11 @@
 package com.walkernation.multiple.ui.dataTwo;
 
+import com.walkernation.multiple.orm.MultipleResolver;
+
 public interface OnOpenWindowInterface {
+	
+	public MultipleResolver getMultipleResolver();
+	
 	public void openEditLocationFragment(int index);
 
 	public void openViewLocationFragment(int index);
