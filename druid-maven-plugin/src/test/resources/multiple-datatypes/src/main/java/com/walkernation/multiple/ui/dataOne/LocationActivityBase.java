@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.walkernation.db.R;
+import com.walkernation.multiple.orm.MultipleResolver;
 
 /**
  * Base class for all activities
@@ -21,11 +23,20 @@ import com.walkernation.db.R;
 public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
+	// custom resolver to interact with ContentProivder
+	MultipleResolver mResolver;
+
 	boolean promptOnBackPressed = false;
 	LocationListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		mResolver = new MultipleResolver(this);
+		super.onCreate(arg0);
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -98,7 +109,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newViewLocationIntent(this, index);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -143,7 +155,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newEditLocationIntent(this, index);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -194,7 +207,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newCreateLocationIntent(this);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -211,10 +225,17 @@ public class LocationActivityBase extends FragmentActivity implements
 			}
 
 		} else {
+
+			/*
+			 * Don't need to do anything, just close the currect activity ontop
+			 * of the list
+			 */
+			// finish();
+
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newListLocationIntent(this);
-			startActivity(intent);
+			// Intent intent = newListLocationIntent(this);
+			// startActivity(intent);
 		}
 	}
 
@@ -248,5 +269,10 @@ public class LocationActivityBase extends FragmentActivity implements
 		Intent intent = new Intent();
 		intent.setClass(activity, CreateLocationActivity.class);
 		return intent;
+	}
+
+	@Override
+	public MultipleResolver getMultipleResolver() {
+		return mResolver;
 	}
 }

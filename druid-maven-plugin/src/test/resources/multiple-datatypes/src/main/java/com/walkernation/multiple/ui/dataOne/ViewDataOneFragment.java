@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.walkernation.db.R;
 import com.walkernation.multiple.orm.DataOneData;
@@ -37,10 +38,12 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 	TextView stringNameTV;
 	TextView booleanTV;
 
-	// LocationData locationData;
+	// buttons for edit and delete
 	Button editButton;
 	Button deleteButton;
 
+	// on-click listener, calls appropriate methods on user click on buttons
+	// TODO what pattern is this... ?
 	OnClickListener myOnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -69,6 +72,8 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 		return f;
 	}
 
+	// this fragment was attached to an activity
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -80,6 +85,8 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 		}
 	}
 
+	// this fragment is being created.
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,6 +94,17 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 
 	}
 
+	// this fragment is creating its view before it can be modified
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.location_view_fragment,
+				container, false);
+		container.setBackgroundColor(Color.CYAN);
+		return view;
+	}
+
+	// this fragment is modifying its view before display
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -107,11 +125,21 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 
 		editButton.setOnClickListener(myOnClickListener);
 		deleteButton.setOnClickListener(myOnClickListener);
-		setUiToLocationData(getUniqueKey());
+
+		try {
+			setUiToDataOneData(getUniqueKey());
+		} catch (RemoteException e) {
+			Toast.makeText(getActivity(),
+					"Error retrieving information from local data store.",
+					Toast.LENGTH_LONG).show();
+			Log.e(LOG_TAG, "Error getting DataOne data from C.P.");
+			// e.printStackTrace();
+		}
 	}
 
-	public void setUiToLocationData(int getUniqueKey) {
-		DataOneData dataOneData = null;
+	public void setUiToDataOneData(int getUniqueKey) throws RemoteException {
+		DataOneData dataOneData = mOpener.getMultipleResolver()
+				.getDataOneDataViaRowID(getUniqueKey);
 		try { // TODO fix this to pull the right value by '_id' or something...
 			dataOneData = null;// = getLocationDataForUserID(getUniqueKey);
 		} catch (Exception e) {
@@ -132,10 +160,12 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 		}
 	}
 
+	// action to be performed when the edit button is pressed
 	private void editButtonPressed() {
 		mOpener.openEditLocationFragment(getUniqueKey());
 	}
 
+	// action to be performed when the delete button is pressed
 	private void deleteButtonPressed() {
 		String message;
 
@@ -152,7 +182,7 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								try {
-									deleteAllLocationsWithUserID(getUniqueKey());
+									resolver.deleteAllDataOne(getUniqueKey());
 								} catch (RemoteException e) {
 									Log.e(LOG_TAG, "RemoteException Caught => "
 											+ e.getMessage());
@@ -169,15 +199,6 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 						})
 				.setNegativeButton(R.string.location_view_deletion_dialog_no,
 						null).show();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_view_fragment,
-				container, false);
-		container.setBackgroundColor(Color.CYAN);
-		return view;
 	}
 
 	public int getUniqueKey() {
