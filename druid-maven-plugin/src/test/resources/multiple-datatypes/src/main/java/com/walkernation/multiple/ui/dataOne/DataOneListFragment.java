@@ -98,7 +98,7 @@ public class DataOneListFragment extends ListFragment {
 
 		Log.d(LOG_TAG, "onActivityCreated");
 		aa = new DataOneArrayAdapter(getActivity(),
-				R.layout.location_listview_custom_row, dataOneData);
+				R.layout.data_one_listview_custom_row, dataOneData);
 
 		// update the back end data.
 		updateLocationLocationData();

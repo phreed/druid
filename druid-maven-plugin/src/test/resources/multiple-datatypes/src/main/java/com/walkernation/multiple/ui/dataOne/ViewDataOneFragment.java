@@ -142,8 +142,7 @@ public class ViewDataOneFragment extends Fragment {
 	}
 
 	public void setUiToDataOneData(int getUniqueKey) throws RemoteException {
-		DataOneData dataOneData = mOpener.getMultipleResolver()
-				.getDataOneDataViaRowID(getUniqueKey);
+		DataOneData dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey);
 		try { // TODO fix this to pull the right value by '_id' or something...
 			dataOneData = null;// = getLocationDataForUserID(getUniqueKey);
 		} catch (Exception e) {

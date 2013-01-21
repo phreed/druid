@@ -12,7 +12,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.walkernation.db.R;
-import com.walkernation.multiple.orm.MultipleResolver;
 
 /**
  * Base class for all activities
@@ -23,9 +22,6 @@ import com.walkernation.multiple.orm.MultipleResolver;
 public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
-	// custom resolver to interact with ContentProivder
-	MultipleResolver mResolver;
-
 	boolean promptOnBackPressed = false;
 	DataOneListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
@@ -34,7 +30,6 @@ public class LocationActivityBase extends FragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle arg0) {
-		mResolver = new MultipleResolver(this);
 		super.onCreate(arg0);
 	}
 
@@ -271,8 +266,4 @@ public class LocationActivityBase extends FragmentActivity implements
 		return intent;
 	}
 
-	@Override
-	public MultipleResolver getMultipleResolver() {
-		return mResolver;
-	}
 }
