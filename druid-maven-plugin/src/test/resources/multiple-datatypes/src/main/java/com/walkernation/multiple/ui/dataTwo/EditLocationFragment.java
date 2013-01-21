@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.walkernation.db.R;
 import com.walkernation.multiple.orm.LocationData;
@@ -23,10 +24,14 @@ public class EditLocationFragment extends LocationFragmentBase {
 			.getCanonicalName();
 	final static public String rowIdentifyerTAG = "index";
 
-	EditText userIdTV;
-	EditText latitudeTV;
-	EditText longitudeTV;
-	EditText heightTV;
+	EditText byteNameET;
+	EditText shortNameET;
+	EditText intNameET;
+	EditText longNameET;
+	EditText floatNameET;
+	EditText doubleNameET;
+	EditText stringNameET;
+	ToggleButton booleanNameTB;
 
 	Button saveButton;
 	Button resetButton;
@@ -90,11 +95,15 @@ public class EditLocationFragment extends LocationFragmentBase {
 		cancelButton = (Button) getView().findViewById(
 				R.id.edit_location_button_cancel);
 		// Get the EditTexts
-		userIdTV = (EditText) getView().findViewById(R.id.userID);
-		userIdTV.setKeyListener(null);
-		latitudeTV = (EditText) getView().findViewById(R.id.latitude);
-		longitudeTV = (EditText) getView().findViewById(R.id.longitude);
-		heightTV = (EditText) getView().findViewById(R.id.height);
+		byteNameET = (EditText) getView().findViewById(R.id.byteName);
+		// byteNameET.setKeyListener(null); // disable changing
+		shortNameET = (EditText) getView().findViewById(R.id.shortName);
+		longNameET = (EditText) getView().findViewById(R.id.longName);
+		floatNameET = (EditText) getView().findViewById(R.id.floatName);
+		doubleNameET = (EditText) getView().findViewById(R.id.doubleName);
+		stringNameET = (EditText) getView().findViewById(R.id.stringName);
+		booleanNameTB = (ToggleButton) getView().findViewById(
+				R.id.booleanNameToggleButton);
 		// set the EditTexts to this Location's Values
 		setValuesToDefault();
 		// setup the onClick callback methods
@@ -169,7 +178,7 @@ public class EditLocationFragment extends LocationFragmentBase {
 	public boolean setValuesToDefault() {
 		LocationData location;
 		try {
-			location = getLocationDataForUserID(getUniqueKey());
+			location = (getUniqueKey());
 		} catch (RemoteException e) {
 			Log.d(LOG_TAG, "" + e.getMessage());
 			e.printStackTrace();
@@ -178,7 +187,7 @@ public class EditLocationFragment extends LocationFragmentBase {
 
 		if (location != null) {
 			// set the EditTexts to the current values
-			userIdTV.setText(String.valueOf(location.userID));
+			byteNameET.setText(String.valueOf(location.userID));
 			latitudeTV.setText(String.valueOf(location.latitude));
 			longitudeTV.setText(String.valueOf(location.longitude));
 			heightTV.setText(String.valueOf(location.height));

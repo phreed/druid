@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,14 @@ import android.widget.Toast;
 
 import com.walkernation.db.R;
 import com.walkernation.multiple.orm.DataOneData;
+import com.walkernation.multiple.orm.MultipleResolver;
 
-public class ViewDataOneFragment extends LocationFragmentBase {
+public class ViewDataOneFragment extends Fragment {
 	// LOG TAG, handles refactoring changes
 	private static final String LOG_TAG = ViewDataOneFragment.class
 			.getCanonicalName();
 
+	private MultipleResolver resolver;
 	public final static String rowIdentifyerTAG = "index";
 
 	private OnOpenWindowInterface mOpener;
@@ -79,6 +82,7 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 		super.onAttach(activity);
 		try {
 			mOpener = (OnOpenWindowInterface) activity;
+			resolver = new MultipleResolver(activity);
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnOpenWindowListener");
@@ -209,5 +213,6 @@ public class ViewDataOneFragment extends LocationFragmentBase {
 	public void onDetach() {
 		super.onDetach();
 		mOpener = null;
+		resolver = null;
 	}
 }
