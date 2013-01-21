@@ -1,9 +1,10 @@
-package com.walkernation.multiple.ui.dataTwo;
+package com.walkernation.multiple.ui.dataOne;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,27 +14,41 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.walkernation.db.R;
-import com.walkernation.multiple.orm.LocationData;
+import com.walkernation.multiple.orm.DataOneData;
+import com.walkernation.multiple.orm.MultipleResolver;
 
-public class EditLocationFragment extends LocationFragmentBase {
+public class DataOneEditFragment extends Fragment {
 
-	final static public String LOG_TAG = EditLocationFragment.class
+	final static public String LOG_TAG = DataOneEditFragment.class
 			.getCanonicalName();
+	// variable for passing around row index
 	final static public String rowIdentifyerTAG = "index";
 
-	EditText userIdTV;
-	EditText latitudeTV;
-	EditText longitudeTV;
-	EditText heightTV;
+	// EditText(s) used
+	EditText byteNameET;
+	EditText shortNameET;
+	EditText intNameET;
+	EditText longNameET;
+	EditText floatNameET;
+	EditText doubleNameET;
+	EditText stringNameET;
+	ToggleButton booleanNameTB;
 
+	// Button(s) used
 	Button saveButton;
 	Button resetButton;
 	Button cancelButton;
 
+	// parent Activity
 	OnOpenWindowInterface mOpener;
+	// custom ContentResolver wrapper.
+	MultipleResolver resolver;
 
+	// listener to button presses.
+	// TODO determine/label pattern.
 	OnClickListener myOnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -53,8 +68,8 @@ public class EditLocationFragment extends LocationFragmentBase {
 		}
 	};
 
-	public static EditLocationFragment newInstance(int index) {
-		EditLocationFragment f = new EditLocationFragment();
+	public static DataOneEditFragment newInstance(int index) {
+		DataOneEditFragment f = new DataOneEditFragment();
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
 		args.putInt(rowIdentifyerTAG, index);
@@ -67,10 +82,18 @@ public class EditLocationFragment extends LocationFragmentBase {
 		super.onAttach(activity);
 		try {
 			mOpener = (OnOpenWindowInterface) activity;
+			resolver = new MultipleResolver(activity);
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnOpenWindowListener");
 		}
+	}
+
+	@Override
+	public void onDetach() {
+		mOpener = null;
+		resolver = null;
+		super.onDetach();
 	}
 
 	@Override
@@ -90,17 +113,21 @@ public class EditLocationFragment extends LocationFragmentBase {
 		cancelButton = (Button) getView().findViewById(
 				R.id.edit_location_button_cancel);
 		// Get the EditTexts
-		userIdTV = (EditText) getView().findViewById(R.id.userID);
-		userIdTV.setKeyListener(null);
-		latitudeTV = (EditText) getView().findViewById(R.id.latitude);
-		longitudeTV = (EditText) getView().findViewById(R.id.longitude);
-		heightTV = (EditText) getView().findViewById(R.id.height);
-		// set the EditTexts to this Location's Values
-		setValuesToDefault();
+		byteNameET = (EditText) getView().findViewById(R.id.byteName);
+		// byteNameET.setKeyListener(null); // disable changing
+		shortNameET = (EditText) getView().findViewById(R.id.shortName);
+		longNameET = (EditText) getView().findViewById(R.id.longName);
+		floatNameET = (EditText) getView().findViewById(R.id.floatName);
+		doubleNameET = (EditText) getView().findViewById(R.id.doubleName);
+		stringNameET = (EditText) getView().findViewById(R.id.stringName);
+		booleanNameTB = (ToggleButton) getView().findViewById(
+				R.id.booleanNameToggleButton);
 		// setup the onClick callback methods
 		saveButton.setOnClickListener(myOnClickListener);
 		resetButton.setOnClickListener(myOnClickListener);
 		cancelButton.setOnClickListener(myOnClickListener);
+		// set the EditTexts to this Location's Values
+		setValuesToDefault();
 	}
 
 	@Override
@@ -118,10 +145,10 @@ public class EditLocationFragment extends LocationFragmentBase {
 
 	public void doSaveButtonClick() {
 		Toast.makeText(getActivity(), "Updated.", Toast.LENGTH_SHORT).show();
-		LocationData location = makeLocationDataFromUI();
+		DataOneData location = makeLocationDataFromUI();
 		if (location != null) {
 			try {
-				updateLocationWithUserID(location);
+				resolver.updateDataOneWithID(location);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -137,23 +164,34 @@ public class EditLocationFragment extends LocationFragmentBase {
 		}
 	}
 
-	public LocationData makeLocationDataFromUI() {
-		LocationData rValue = null;
+	public DataOneData makeLocationDataFromUI() {
 
-		Editable longStr = longitudeTV.getText();
-		Editable latStr = latitudeTV.getText();
-		Editable heightStr = heightTV.getText();
+		// local Editables
+		Editable byteEditable = byteNameET.getText();
+		Editable shortEditable = shortNameET.getText();
+		Editable intEditable = intNameET.getText();
+		Editable longEditable = longNameET.getText();
+		Editable floatEditable = floatNameET.getText();
+		Editable doubleEditable = doubleNameET.getText();
+		Editable stringEditable = doubleNameET.getText();
+		Editable booleanEditable = doubleNameET.getText();
 
-		if ((longStr.length() > 0) && (longStr.length() > 0)
-				&& (longStr.length() > 0)) {
-			long userID = getUniqueKey();
-			long longitude = Long.valueOf(longStr.toString());
-			long latitude = Long.valueOf(latStr.toString());
-			long height = Long.valueOf(heightStr.toString());
-			rValue = new LocationData(latitude, longitude, height, userID);
-		}
+		// pull values from Editables
+		byte byteNameValue = (byte) (Integer.valueOf(byteEditable.toString()) % 128);
+		short shortNameValue = Short.valueOf(shortEditable.toString());
+		int intNameValue = Integer.valueOf(intEditable.toString());
+		long longNameValue = Long.valueOf(longEditable.toString());
+		float floatNameValue = Float.valueOf(floatEditable.toString());
+		double doubleNameValue = Double.valueOf(doubleEditable.toString());
+		String stringNameValue = stringEditable.toString();
+		boolean booleanNameValue = (Integer.valueOf(booleanEditable.toString()) == 0) ? false
+				: true;
 
-		return rValue;
+		// return new DataOneData object with
+		return new DataOneData(getUniqueKey(), byteNameValue, shortNameValue,
+				intNameValue, longNameValue, floatNameValue, doubleNameValue,
+				stringNameValue, booleanNameValue);
+
 	}
 
 	public void doCancelButtonClick() {
@@ -167,21 +205,25 @@ public class EditLocationFragment extends LocationFragmentBase {
 	}
 
 	public boolean setValuesToDefault() {
-		LocationData location;
+		DataOneData dataOneData;
 		try {
-			location = getLocationDataForUserID(getUniqueKey());
+			dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey());
 		} catch (RemoteException e) {
 			Log.d(LOG_TAG, "" + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 
-		if (location != null) {
+		if (dataOneData != null) {
 			// set the EditTexts to the current values
-			userIdTV.setText(String.valueOf(location.userID));
-			latitudeTV.setText(String.valueOf(location.latitude));
-			longitudeTV.setText(String.valueOf(location.longitude));
-			heightTV.setText(String.valueOf(location.height));
+			byteNameET.setText(String.valueOf(dataOneData.byteName));
+			shortNameET.setText(String.valueOf(dataOneData.shortName));
+			intNameET.setText(String.valueOf(dataOneData.intName));
+			longNameET.setText(String.valueOf(dataOneData.longName));
+			floatNameET.setText(String.valueOf(dataOneData.floatName));
+			doubleNameET.setText(String.valueOf(dataOneData.doubleName));
+			stringNameET.setText(dataOneData.stringName);
+			booleanNameTB.setChecked(dataOneData.booleanName);
 			return true;
 		}
 		return false;

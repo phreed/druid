@@ -2,7 +2,7 @@ package com.walkernation.multiple.ui.dataOne;
 
 import android.os.Bundle;
 
-public class ViewOpenDataActivity extends LocationActivityBase {
+public class DataOneEditActivity extends LocationActivityBase {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -11,15 +11,16 @@ public class ViewOpenDataActivity extends LocationActivityBase {
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
 			int index = getIntent().getExtras().getInt(
-					ViewDataOneFragment.rowIdentifyerTAG);
+					DataOneEditFragment.rowIdentifyerTAG);
 
-			ViewDataOneFragment details = ViewDataOneFragment
+			DataOneEditFragment editor = DataOneEditFragment
 					.newInstance(index);
 
-			details.setArguments(getIntent().getExtras());
+			editor.setArguments(getIntent().getExtras());
 
 			getSupportFragmentManager().beginTransaction()
-					.add(android.R.id.content, details).commit();
+					.add(android.R.id.content, editor).commit();
 		}
 	}
+
 }

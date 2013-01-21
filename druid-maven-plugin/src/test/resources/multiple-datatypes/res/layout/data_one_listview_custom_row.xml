@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/user_id"
+        android:id="@+id/shortName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -14,30 +14,30 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/latitude"
+        android:id="@+id/intName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_id"
+        android:layout_below="@+id/shortName"
         android:paddingLeft="10dp"
         android:text="latitude"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/longitude"
+        android:id="@+id/longName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_id"
-        android:layout_toRightOf="@+id/latitude"
+        android:layout_below="@+id/shortName"
+        android:layout_toRightOf="@+id/intName"
         android:paddingLeft="10dp"
         android:text="longitude"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/height"
+        android:id="@+id/stringName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_id"
-        android:layout_toRightOf="@+id/longitude"
+        android:layout_below="@+id/shortName"
+        android:layout_toRightOf="@+id/longName"
         android:paddingLeft="10dp"
         android:text="Height"
         android:textSize="16sp" />

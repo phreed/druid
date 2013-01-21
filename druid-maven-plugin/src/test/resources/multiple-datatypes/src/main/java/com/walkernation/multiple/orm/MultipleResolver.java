@@ -172,4 +172,55 @@ public class MultipleResolver {
 		return queryDataTwoData(null, null, null, null);
 	}
 
+	public DataOneData getDataOneDataViaRowID(final int rowID)
+			throws RemoteException {
+		String[] selectionArgs = { String.valueOf(rowID) };
+		ArrayList<DataOneData> results = queryDataOneData(null,
+				ContentDescriptor.DataTypeOne.ColumnNames.ID + "=",
+				selectionArgs, null);
+		if (results.size() > 0) {
+			return results.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public DataTwoData getDataTwoDataViaRowID(final int rowID)
+			throws RemoteException {
+		String[] selectionArgs = { String.valueOf(rowID) };
+		ArrayList<DataTwoData> results = queryDataTwoData(null,
+				ContentDescriptor.DataTypeOne.ColumnNames.ID + "=",
+				selectionArgs, null);
+		if (results.size() > 0) {
+			return results.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public int deleteDataTwoOfID(long userID) throws RemoteException {
+		String[] selectionArgs = new String[] { String.valueOf(userID) };
+		return deleteDataTwo("_id=?", selectionArgs);
+	}
+
+	public int deleteAllDataOne(long userID) throws RemoteException {
+		return deleteDataOne(null, null);
+	}
+
+	public int deleteAllDataTwo(long userID) throws RemoteException {
+		return deleteDataTwo(null, null);
+	}
+
+	public int updateDataOneWithID(DataOneData dataOne) throws RemoteException {
+		String selection = "user_id = ?";
+		String[] selectionArgs = { String.valueOf(dataOne._id) };
+		return updateDataOneData(dataOne, selection, selectionArgs);
+	}
+
+	public int updateDataTwoWithID(DataOneData dataTwo) throws RemoteException {
+		String selection = "user_id = ?";
+		String[] selectionArgs = { String.valueOf(dataTwo._id) };
+		return updateDataOneData(dataTwo, selection, selectionArgs);
+	}
+
 }

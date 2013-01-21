@@ -5,167 +5,180 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <!-- This first TextView is aligned to the parent at the TOP RIGHT -->
-
-    <TextView
-        android:id="@+id/labelByte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_alignParentTop="true"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_latitude"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" >
 
-    <!-- The rest of the labels are aligned to the bottom & rigth of the one above -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/labelShort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelByte"
-        android:layout_below="@+id/labelByte"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_longitude"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!-- This first TextView is aligned to the parent at the TOP RIGHT -->
 
-    <TextView
-        android:id="@+id/labelInt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelShort"
-        android:layout_below="@+id/labelShort"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_height"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelByte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_latitude"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelLong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelInt"
-        android:layout_below="@+id/labelInt"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_userid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!-- The rest of the labels are aligned to the bottom & rigth of the one above -->
 
-    <TextView
-        android:id="@+id/labelFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelLong"
-        android:layout_below="@+id/labelLong"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_userid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelByte"
+                android:layout_below="@+id/labelByte"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_longitude"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelDouble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelFloat"
-        android:layout_below="@+id/labelFloat"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_userid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelShort"
+                android:layout_below="@+id/labelShort"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_height"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelDouble"
-        android:layout_below="@+id/labelDouble"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_userid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelInt"
+                android:layout_below="@+id/labelInt"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_userid"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelBoolean"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelString"
-        android:layout_below="@+id/labelString"
-        android:layout_gravity="left"
-        android:text="@string/location_view_label_userid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelFloat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelLong"
+                android:layout_below="@+id/labelLong"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_userid"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <!-- These are the diplayed values -->
-    <!-- First one  is aligned to top right of parent -->
+            <TextView
+                android:id="@+id/labelDouble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelFloat"
+                android:layout_below="@+id/labelFloat"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_userid"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/byteName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/location_view_edittext_userid_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/labelString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelDouble"
+                android:layout_below="@+id/labelDouble"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_userid"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <!-- following are aligned below value above and to right of parent -->
+            <TextView
+                android:id="@+id/labelBoolean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/labelString"
+                android:layout_below="@+id/labelString"
+                android:layout_gravity="left"
+                android:text="@string/location_view_label_userid"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/shortName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/byteName"
-        android:text="@string/location_view_edittext_latitude_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!-- These are the diplayed values -->
+            <!-- First one  is aligned to top right of parent -->
 
-    <TextView
-        android:id="@+id/intName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/shortName"
-        android:text="@string/location_view_edittext_longitude_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/byteName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/location_view_edittext_userid_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/longName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/intName"
-        android:text="@string/location_view_edittext_height_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!-- following are aligned below value above and to right of parent -->
 
-    <TextView
-        android:id="@+id/floatName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/longName"
-        android:text="@string/location_view_edittext_height_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/shortName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/byteName"
+                android:text="@string/location_view_edittext_latitude_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/doubleName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/floatName"
-        android:text="@string/location_view_edittext_height_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/intName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/shortName"
+                android:text="@string/location_view_edittext_longitude_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/stringName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/doubleName"
-        android:text="@string/location_view_edittext_height_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/longName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/intName"
+                android:text="@string/location_view_edittext_height_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/booleanName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/stringName"
-        android:text="@string/location_view_edittext_height_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/floatName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/longName"
+                android:text="@string/location_view_edittext_height_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <TextView
+                android:id="@+id/doubleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/floatName"
+                android:text="@string/location_view_edittext_height_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/stringName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/doubleName"
+                android:text="@string/location_view_edittext_height_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/booleanName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/stringName"
+                android:text="@string/location_view_edittext_height_default_value"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
+    </ScrollView>
     <!-- BUTTONS, aligned to bottom right and left of parent -->
 
     <Button

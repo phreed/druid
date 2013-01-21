@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -22,10 +23,15 @@ public class LocationActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
 	boolean promptOnBackPressed = false;
-	LocationListFragment fragment;
+	DataOneListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		super.onCreate(arg0);
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -68,8 +74,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != ViewDataOneFragment.class) {
-				ViewDataOneFragment details = ViewDataOneFragment
+			if (test != null && test.getClass() != DataOneViewFragment.class) {
+				DataOneViewFragment details = DataOneViewFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -78,11 +84,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				ViewDataOneFragment details = (ViewDataOneFragment) getSupportFragmentManager()
+				DataOneViewFragment details = (DataOneViewFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null || details.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					details = ViewDataOneFragment.newInstance(index);
+					details = DataOneViewFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -98,7 +104,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newViewLocationIntent(this, index);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -112,8 +119,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != EditLocationFragment.class) {
-				EditLocationFragment editor = EditLocationFragment
+			if (test != null && test.getClass() != DataOneEditFragment.class) {
+				DataOneEditFragment editor = DataOneEditFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -123,11 +130,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				EditLocationFragment editor = (EditLocationFragment) getSupportFragmentManager()
+				DataOneEditFragment editor = (DataOneEditFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (editor == null || editor.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					editor = EditLocationFragment.newInstance(index);
+					editor = DataOneEditFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -143,7 +150,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newEditLocationIntent(this, index);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -163,8 +171,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != CreateLocationFragment.class) {
-				CreateLocationFragment details = CreateLocationFragment
+			if (test != null && test.getClass() != DataOneCreateFragment.class) {
+				DataOneCreateFragment details = DataOneCreateFragment
 						.newInstance();
 
 				// Execute a transaction, replacing any existing
@@ -174,11 +182,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				CreateLocationFragment details = (CreateLocationFragment) getSupportFragmentManager()
+				DataOneCreateFragment details = (DataOneCreateFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null) {
 					// Make new fragment to show this selection.
-					details = CreateLocationFragment.newInstance();
+					details = DataOneCreateFragment.newInstance();
 
 				}
 				// Execute a transaction, replacing any existing
@@ -194,7 +202,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
 			Intent intent = newCreateLocationIntent(this);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
+			// startActivity(intent);
 		}
 	}
 
@@ -206,15 +215,22 @@ public class LocationActivityBase extends FragmentActivity implements
 			Fragment test = getSupportFragmentManager().findFragmentByTag(
 					"imageFragmentTag");
 			if (test != null) {
-				LocationListFragment t = (LocationListFragment) test;
+				DataOneListFragment t = (DataOneListFragment) test;
 				t.updateLocationLocationData();
 			}
 
 		} else {
+
+			/*
+			 * Don't need to do anything, just close the currect activity ontop
+			 * of the list
+			 */
+			// finish();
+
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newListLocationIntent(this);
-			startActivity(intent);
+			// Intent intent = newListLocationIntent(this);
+			// startActivity(intent);
 		}
 	}
 
@@ -226,27 +242,28 @@ public class LocationActivityBase extends FragmentActivity implements
 
 	public static Intent newViewLocationIntent(Activity activity, int index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ViewOpenDataActivity.class);
-		intent.putExtra(ViewDataOneFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, DataOneViewActivity.class);
+		intent.putExtra(DataOneViewFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
 	public static Intent newEditLocationIntent(Activity activity, int index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, EditLocationActivity.class);
-		intent.putExtra(EditLocationFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, DataOneEditActivity.class);
+		intent.putExtra(DataOneEditFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
 	public static Intent newListLocationIntent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ListLocationsActivity.class);
+		intent.setClass(activity, DataOneListActivity.class);
 		return intent;
 	}
 
 	public static Intent newCreateLocationIntent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, CreateLocationActivity.class);
+		intent.setClass(activity, DataOneCreateActivity.class);
 		return intent;
 	}
+
 }

@@ -19,6 +19,7 @@ public class DataOneCreator {
 		 * if (data.<member> != null) { rValue.put(<key>, data.<data_member>);}
 		 */
 
+		rValue.put(ContentDescriptor.DataTypeOne.ColumnNames.ID, data._id);
 		rValue.put(ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME,
 				data.byteName);
 		rValue.put(ContentDescriptor.DataTypeOne.ColumnNames.SHORT_NAME,
@@ -67,6 +68,7 @@ public class DataOneCreator {
 	 */
 	public static DataOneData getDataOneDataFromCursor(Cursor cursor) {
 
+		int _id = 0;
 		byte byteName = 0;
 		short shortName = 0;
 		int intName = 0;
@@ -80,6 +82,9 @@ public class DataOneCreator {
 			throw new UnsupportedOperationException(
 					"Tried to read from empty Cursor.");
 		}
+
+		_id = cursor.getShort(cursor
+				.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.ID));
 
 		/*
 		 * How to get a single byte stored (in a short's location) (wasteful of
@@ -127,7 +132,7 @@ public class DataOneCreator {
 			booleanName = true;
 		}
 
-		return new DataOneData(byteName, shortName, intName, longName,
+		return new DataOneData(_id, byteName, shortName, intName, longName,
 				floatName, doubleName, stringName, booleanName);
 
 	}

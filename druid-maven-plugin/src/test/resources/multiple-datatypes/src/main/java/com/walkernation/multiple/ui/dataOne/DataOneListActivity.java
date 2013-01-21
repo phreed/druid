@@ -8,8 +8,8 @@ import android.view.KeyEvent;
 import com.walkernation.db.R;
 
 // "FragmentActivity" is the Activity Version needed for support library 
-public class ListLocationsActivity extends LocationActivityBase {
-	private static final String LOG_TAG = ListLocationsActivity.class
+public class DataOneListActivity extends LocationActivityBase {
+	private static final String LOG_TAG = DataOneListActivity.class
 			.getCanonicalName();
 
 	@Override
@@ -20,10 +20,10 @@ public class ListLocationsActivity extends LocationActivityBase {
 		// set the Layout of main Activity.
 		// (contains only the fragment holder)
 		setContentView(R.layout.main);
-		LocationListFragment fragment;
+		DataOneListFragment fragment;
 		String imageFragmentTag = "imageFragmentTag";
 		if (savedInstanceState == null) {
-			fragment = new LocationListFragment();
+			fragment = new DataOneListFragment();
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.locations, fragment, imageFragmentTag).commit();
 		}

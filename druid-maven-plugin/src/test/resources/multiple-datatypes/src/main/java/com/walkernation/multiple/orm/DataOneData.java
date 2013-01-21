@@ -13,6 +13,7 @@ public class DataOneData implements Serializable, Parcelable {
 	 */
 	private static final long serialVersionUID = -1320113528675037131L;
 
+	public int _id;
 	public byte byteName;
 	public short shortName;
 	public int intName;
@@ -23,6 +24,7 @@ public class DataOneData implements Serializable, Parcelable {
 	public boolean booleanName;
 
 	public DataOneData() {
+		_id = 0; // TODO change to negative 1?
 		byteName = 0;
 		shortName = 0;
 		intName = 0;
@@ -33,19 +35,19 @@ public class DataOneData implements Serializable, Parcelable {
 		booleanName = false;
 	}
 
-	public DataOneData(final byte _byteName, final short _shortName,
-			final int _intName, final long _longName, final float _floatName,
-			final double _doubleName, final String _stringName,
-			final boolean _booleanName) {
-
-		byteName = _byteName;
-		shortName = _shortName;
-		intName = _intName;
-		longName = _longName;
-		floatName = _floatName;
-		doubleName = _doubleName;
-		stringName = _stringName;
-		booleanName = _booleanName;
+	public DataOneData(final int _id, final byte byteName,
+			final short shortName, final int intName, final long longName,
+			final float floatName, final double doubleName,
+			final String stringName, final boolean booleanName) {
+		this._id = _id;
+		this.byteName = byteName;
+		this.shortName = shortName;
+		this.intName = intName;
+		this.longName = longName;
+		this.floatName = floatName;
+		this.doubleName = doubleName;
+		this.stringName = stringName;
+		this.booleanName = booleanName;
 
 	}
 
@@ -54,7 +56,7 @@ public class DataOneData implements Serializable, Parcelable {
 	}
 
 	public DataOneData clone() {
-		return new DataOneData(byteName, shortName, intName, longName,
+		return new DataOneData(_id, byteName, shortName, intName, longName,
 				floatName, doubleName, stringName, booleanName);
 	}
 
@@ -67,6 +69,7 @@ public class DataOneData implements Serializable, Parcelable {
 	// the order of input & reading have to be EXACT
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(_id);
 		dest.writeByte(byteName);
 		dest.writeInt(shortName);
 		dest.writeInt(intName);
@@ -92,6 +95,7 @@ public class DataOneData implements Serializable, Parcelable {
 	// create a DataOne object from the parcelable data
 	// the order of input & reading have to be EXACT
 	private DataOneData(Parcel in) {
+		_id = in.readInt();
 		byteName = in.readByte();
 		shortName = (short) in.readInt();
 		intName = in.readInt();
