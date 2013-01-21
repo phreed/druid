@@ -74,8 +74,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != ViewDataOneFragment.class) {
-				ViewDataOneFragment details = ViewDataOneFragment
+			if (test != null && test.getClass() != DataOneViewFragment.class) {
+				DataOneViewFragment details = DataOneViewFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -84,11 +84,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				ViewDataOneFragment details = (ViewDataOneFragment) getSupportFragmentManager()
+				DataOneViewFragment details = (DataOneViewFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null || details.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					details = ViewDataOneFragment.newInstance(index);
+					details = DataOneViewFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -119,8 +119,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != EditLocationFragment.class) {
-				EditLocationFragment editor = EditLocationFragment
+			if (test != null && test.getClass() != DataOneEditFragment.class) {
+				DataOneEditFragment editor = DataOneEditFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -130,11 +130,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				EditLocationFragment editor = (EditLocationFragment) getSupportFragmentManager()
+				DataOneEditFragment editor = (DataOneEditFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (editor == null || editor.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					editor = EditLocationFragment.newInstance(index);
+					editor = DataOneEditFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -171,8 +171,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != CreateLocationFragment.class) {
-				CreateLocationFragment details = CreateLocationFragment
+			if (test != null && test.getClass() != DataOneCreateFragment.class) {
+				DataOneCreateFragment details = DataOneCreateFragment
 						.newInstance();
 
 				// Execute a transaction, replacing any existing
@@ -182,11 +182,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				CreateLocationFragment details = (CreateLocationFragment) getSupportFragmentManager()
+				DataOneCreateFragment details = (DataOneCreateFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null) {
 					// Make new fragment to show this selection.
-					details = CreateLocationFragment.newInstance();
+					details = DataOneCreateFragment.newInstance();
 
 				}
 				// Execute a transaction, replacing any existing
@@ -242,27 +242,27 @@ public class LocationActivityBase extends FragmentActivity implements
 
 	public static Intent newViewLocationIntent(Activity activity, int index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ViewOpenDataActivity.class);
-		intent.putExtra(ViewDataOneFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, DataOneViewActivity.class);
+		intent.putExtra(DataOneViewFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
 	public static Intent newEditLocationIntent(Activity activity, int index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, EditLocationActivity.class);
-		intent.putExtra(EditLocationFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, DataOneEditActivity.class);
+		intent.putExtra(DataOneEditFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
 	public static Intent newListLocationIntent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ListLocationsActivity.class);
+		intent.setClass(activity, DataOneListActivity.class);
 		return intent;
 	}
 
 	public static Intent newCreateLocationIntent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, CreateLocationActivity.class);
+		intent.setClass(activity, DataOneCreateActivity.class);
 		return intent;
 	}
 

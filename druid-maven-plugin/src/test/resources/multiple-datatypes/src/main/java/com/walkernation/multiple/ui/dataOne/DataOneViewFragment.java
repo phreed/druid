@@ -20,9 +20,9 @@ import com.walkernation.db.R;
 import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 
-public class ViewDataOneFragment extends Fragment {
+public class DataOneViewFragment extends Fragment {
 	// LOG TAG, handles refactoring changes
-	private static final String LOG_TAG = ViewDataOneFragment.class
+	private static final String LOG_TAG = DataOneViewFragment.class
 			.getCanonicalName();
 
 	private MultipleResolver resolver;
@@ -64,8 +64,8 @@ public class ViewDataOneFragment extends Fragment {
 		}
 	};
 
-	public static ViewDataOneFragment newInstance(int index) {
-		ViewDataOneFragment f = new ViewDataOneFragment();
+	public static DataOneViewFragment newInstance(int index) {
+		DataOneViewFragment f = new DataOneViewFragment();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();

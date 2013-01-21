@@ -20,9 +20,9 @@ import com.walkernation.db.R;
 import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 
-public class EditLocationFragment extends Fragment {
+public class DataOneEditFragment extends Fragment {
 
-	final static public String LOG_TAG = EditLocationFragment.class
+	final static public String LOG_TAG = DataOneEditFragment.class
 			.getCanonicalName();
 	// variable for passing around row index
 	final static public String rowIdentifyerTAG = "index";
@@ -68,8 +68,8 @@ public class EditLocationFragment extends Fragment {
 		}
 	};
 
-	public static EditLocationFragment newInstance(int index) {
-		EditLocationFragment f = new EditLocationFragment();
+	public static DataOneEditFragment newInstance(int index) {
+		DataOneEditFragment f = new DataOneEditFragment();
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
 		args.putInt(rowIdentifyerTAG, index);

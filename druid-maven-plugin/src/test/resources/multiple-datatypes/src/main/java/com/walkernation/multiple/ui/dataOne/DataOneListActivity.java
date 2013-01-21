@@ -8,8 +8,8 @@ import android.view.KeyEvent;
 import com.walkernation.db.R;
 
 // "FragmentActivity" is the Activity Version needed for support library 
-public class ListLocationsActivity extends LocationActivityBase {
-	private static final String LOG_TAG = ListLocationsActivity.class
+public class DataOneListActivity extends LocationActivityBase {
+	private static final String LOG_TAG = DataOneListActivity.class
 			.getCanonicalName();
 
 	@Override

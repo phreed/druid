@@ -19,9 +19,9 @@ import com.walkernation.db.R;
 import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 
-public class CreateLocationFragment extends Fragment {
+public class DataOneCreateFragment extends Fragment {
 
-	public final static String LOG_TAG = CreateLocationFragment.class
+	public final static String LOG_TAG = DataOneCreateFragment.class
 			.getCanonicalName();
 
 	// EditText(s) used
@@ -44,8 +44,8 @@ public class CreateLocationFragment extends Fragment {
 
 	public final static String LOCATION = "location";
 
-	public static CreateLocationFragment newInstance() {
-		CreateLocationFragment f = new CreateLocationFragment();
+	public static DataOneCreateFragment newInstance() {
+		DataOneCreateFragment f = new DataOneCreateFragment();
 		return f;
 	}
 

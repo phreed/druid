@@ -3,7 +3,7 @@ package com.walkernation.multiple.ui.dataOne;
 
 import android.os.Bundle;
 
-public class CreateLocationActivity extends LocationActivityBase {
+public class DataOneCreateActivity extends LocationActivityBase {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -11,7 +11,7 @@ public class CreateLocationActivity extends LocationActivityBase {
 
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
-			CreateLocationFragment creator = CreateLocationFragment
+			DataOneCreateFragment creator = DataOneCreateFragment
 					.newInstance();
 
 			creator.setArguments(getIntent().getExtras());
