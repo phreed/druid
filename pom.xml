@@ -24,6 +24,13 @@
       </dependency>
 
       <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>3.0.4</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>ST4</artifactId>
         <version>4.0.7</version>
