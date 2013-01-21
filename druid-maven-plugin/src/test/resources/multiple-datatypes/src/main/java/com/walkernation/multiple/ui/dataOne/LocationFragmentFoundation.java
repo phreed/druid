@@ -34,7 +34,6 @@ public class LocationFragmentFoundation extends LocationFragmentBase {
 			.getCanonicalName();
 
 	// constant, description of the URI to talk to
-	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
 	// for which 'location' to be operating on
 	int index;

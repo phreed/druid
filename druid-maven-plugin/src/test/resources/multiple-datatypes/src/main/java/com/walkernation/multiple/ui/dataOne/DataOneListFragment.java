@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,9 @@ import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 import com.walkernation.multiple.provider.DataOneArrayAdapter;
 
-public class LocationListFragment extends LocationListFragmentBase {
+public class DataOneListFragment extends ListFragment {
 
-	static final String LOG_TAG = LocationListFragment.class.getCanonicalName();
+	static final String LOG_TAG = DataOneListFragment.class.getCanonicalName();
 
 	OnOpenWindowInterface mOpener;
 	MultipleResolver resolver;
@@ -61,8 +62,8 @@ public class LocationListFragment extends LocationListFragmentBase {
 	}
 
 	@Override
-	public View onCreateViewCustom(LayoutInflater inflater,
-			ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.location_listview, container,
 				false);
 		// get the ListView that will be displayed
@@ -74,14 +75,12 @@ public class LocationListFragment extends LocationListFragmentBase {
 		return view;
 	}
 
-	@Override
 	public void updateLocationLocationData() {
 		Log.d(LOG_TAG, "updateLocationLocationData");
 		try {
 			dataOneData.clear();
 
-			ArrayList<LocationData> currentList = locationResolver
-					.getAllLocations();
+			ArrayList<DataOneData> currentList = resolver.getAllDataOneData();
 
 			dataOneData.addAll(currentList);
 			aa.notifyDataSetChanged();
@@ -93,11 +92,13 @@ public class LocationListFragment extends LocationListFragmentBase {
 	}
 
 	@Override
-	public void onActivityCreatedCustom(Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		// create the custom array adapter that will make the custom row
 		// layouts
+
+		Log.d(LOG_TAG, "onActivityCreated");
 		aa = new DataOneArrayAdapter(getActivity(),
-				R.layout.location_listview_custom_row, locationData);
+				R.layout.location_listview_custom_row, dataOneData);
 
 		// update the back end data.
 		updateLocationLocationData();
@@ -127,13 +128,9 @@ public class LocationListFragment extends LocationListFragmentBase {
 	}
 
 	@Override
-	public void onListItemClickCustom(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d(LOG_TAG, "onListItemClick");
 		mOpener.openViewLocationFragment((dataOneData.get(position))._id);
-	}
-
-	@Override
-	public void onCreateCustom() {
-
 	}
 
 	/**

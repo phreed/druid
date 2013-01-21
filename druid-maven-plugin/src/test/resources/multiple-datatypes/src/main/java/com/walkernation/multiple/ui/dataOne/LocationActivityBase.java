@@ -27,7 +27,7 @@ public class LocationActivityBase extends FragmentActivity implements
 	MultipleResolver mResolver;
 
 	boolean promptOnBackPressed = false;
-	LocationListFragment fragment;
+	DataOneListFragment fragment;
 	private static final String LOG_TAG = LocationActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
@@ -220,7 +220,7 @@ public class LocationActivityBase extends FragmentActivity implements
 			Fragment test = getSupportFragmentManager().findFragmentByTag(
 					"imageFragmentTag");
 			if (test != null) {
-				LocationListFragment t = (LocationListFragment) test;
+				DataOneListFragment t = (DataOneListFragment) test;
 				t.updateLocationLocationData();
 			}
 
