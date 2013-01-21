@@ -2,9 +2,10 @@ package com.walkernation.multiple.ui.dataOne;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,28 +13,34 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 import com.walkernation.db.R;
-import com.walkernation.multiple.orm.LocationData;
-import com.walkernation.multiple.provider.ContentDescriptor;
+import com.walkernation.multiple.orm.DataOneData;
+import com.walkernation.multiple.orm.MultipleResolver;
 
-public class CreateLocationFragment extends LocationFragmentBase {
+public class CreateLocationFragment extends Fragment {
 
 	public final static String LOG_TAG = CreateLocationFragment.class
 			.getCanonicalName();
-	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
 
-	EditText userIdET;
-	EditText latitudeET;
-	EditText longitudeET;
-	EditText heightET;
+	// EditText(s) used
+	EditText byteNameET;
+	EditText shortNameET;
+	EditText intNameET;
+	EditText longNameET;
+	EditText floatNameET;
+	EditText doubleNameET;
+	EditText stringNameET;
+	ToggleButton booleanNameTB;
 
 	Button buttonCreate;
 	Button buttonClear;
 	Button buttonCancel;
 
-	int index;
+	// int index;
 	OnOpenWindowInterface mOpener;
+	MultipleResolver resolver;
 
 	public final static String LOCATION = "location";
 
@@ -55,6 +62,7 @@ public class CreateLocationFragment extends LocationFragmentBase {
 		super.onAttach(activity);
 		try {
 			mOpener = (OnOpenWindowInterface) activity;
+			resolver = new MultipleResolver(activity);
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnOpenWindowListener");
@@ -62,17 +70,27 @@ public class CreateLocationFragment extends LocationFragmentBase {
 	}
 
 	@Override
+	public void onDetach() {
+		mOpener = null;
+		resolver = null;
+		super.onDetach();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		userIdET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_userID);
-		latitudeET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_latitude);
-		longitudeET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_longitude);
-		heightET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_height);
+		// Get the EditTexts
+		byteNameET = (EditText) getView().findViewById(R.id.byteNameCreate);
+		// byteNameET.setKeyListener(null); // disable changing
+		shortNameET = (EditText) getView().findViewById(R.id.shortNameCreate);
+		longNameET = (EditText) getView().findViewById(R.id.longNameCreate);
+		floatNameET = (EditText) getView().findViewById(R.id.floatNameCreate);
+		doubleNameET = (EditText) getView().findViewById(R.id.doubleNameCreate);
+		stringNameET = (EditText) getView().findViewById(R.id.stringNameCreate);
+		booleanNameTB = (ToggleButton) getView().findViewById(
+				R.id.booleanNameToggleButtonCreate);
+
 		buttonClear = (Button) getView().findViewById(
 				R.id.location_create_button_reset);
 		buttonCancel = (Button) getView().findViewById(
@@ -81,13 +99,15 @@ public class CreateLocationFragment extends LocationFragmentBase {
 				R.id.location_create_button_save);
 
 		buttonClear.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				userIdET.setText("");
-				latitudeET.setText("");
-				longitudeET.setText("");
-				heightET.setText("");
+				byteNameET.setText("");
+				shortNameET.setText("");
+				longNameET.setText("");
+				floatNameET.setText("");
+				doubleNameET.setText("");
+				stringNameET.setText("");
+				booleanNameTB.setChecked(false);
 			}
 		});
 
@@ -108,24 +128,43 @@ public class CreateLocationFragment extends LocationFragmentBase {
 
 			@Override
 			public void onClick(View v) {
-				int userID = Integer.valueOf(userIdET.getText().toString());
-				int latitude = Integer.valueOf(latitudeET.getText().toString());
-				int longitude = Integer.valueOf(longitudeET.getText()
-						.toString());
-				int hieght = Integer.valueOf(heightET.getText().toString());
+				// local Editables
+				Editable byteEditable = byteNameET.getText();
+				Editable shortEditable = shortNameET.getText();
+				Editable intEditable = intNameET.getText();
+				Editable longEditable = longNameET.getText();
+				Editable floatEditable = floatNameET.getText();
+				Editable doubleEditable = doubleNameET.getText();
+				Editable stringEditable = doubleNameET.getText();
+				Editable booleanEditable = doubleNameET.getText();
 
-				LocationData location = new LocationData(latitude, longitude,
-						hieght, userID);
+				// pull values from Editables
+				byte byteNameValue = (byte) (Integer.valueOf(byteEditable
+						.toString()) % 128);
+				short shortNameValue = Short.valueOf(shortEditable.toString());
+				int intNameValue = Integer.valueOf(intEditable.toString());
+				long longNameValue = Long.valueOf(longEditable.toString());
+				float floatNameValue = Float.valueOf(floatEditable.toString());
+				double doubleNameValue = Double.valueOf(doubleEditable
+						.toString());
+				String stringNameValue = stringEditable.toString();
+				boolean booleanNameValue = (Integer.valueOf(booleanEditable
+						.toString()) == 0) ? false : true;
+
+				// new DataOneData object with above info
+				DataOneData newData = new DataOneData(-1, byteNameValue,
+						shortNameValue, intNameValue, longNameValue,
+						floatNameValue, doubleNameValue, stringNameValue,
+						booleanNameValue);
+				// insert it through Resolver to be put into ContentProvider
 				try {
-					insertNewLocation(location);
+					resolver.insert(newData);
 				} catch (RemoteException e) {
 					Log.e(LOG_TAG,
 							"Caught RemoteException => " + e.getMessage());
 					e.printStackTrace();
 				}
-
-				// Toast.makeText(getActivity(), "Created...(not really)",
-				// Toast.LENGTH_SHORT).show();
+				// return back to proper state
 				if (getResources().getBoolean(R.bool.isTablet) == true) {
 					// put
 					mOpener.openViewLocationFragment(0);

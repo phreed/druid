@@ -134,7 +134,7 @@
                 android:inputType="number" />
 
             <EditText
-                android:id="@+id/DoubleNameCreate"
+                android:id="@+id/doubleNameCreate"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
