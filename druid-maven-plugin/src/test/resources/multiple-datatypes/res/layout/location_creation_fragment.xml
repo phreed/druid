@@ -5,78 +5,167 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/location_create_edittext_userID"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_alignParentTop="true"
-        android:inputType="number" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" >
 
-    <EditText
-        android:id="@+id/location_create_edittext_latitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_userID"
-        android:inputType="number" />
+        <!-- labels -->
 
-    <EditText
-        android:id="@+id/location_create_edittext_longitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_latitude"
-        android:inputType="number" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/location_create_edittext_height"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_longitude"
-        android:inputType="number" />
+            <TextView
+                android:id="@+id/location_create_view_label_byteName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/byteNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="byteName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelHeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_height"
-        android:layout_alignBottom="@+id/location_create_edittext_height"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_height" />
+            <TextView
+                android:id="@+id/location_create_view_label_short"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/shortNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="shortName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelLongitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_longitude"
-        android:layout_alignBottom="@+id/location_create_edittext_longitude"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_longitude" />
+            <TextView
+                android:id="@+id/location_create_view_label_int"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/intNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="intName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelLatitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_latitude"
-        android:layout_alignBottom="@+id/location_create_edittext_latitude"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_latitude" />
+            <TextView
+                android:id="@+id/location_create_view_label_long"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/longNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="longName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/labelUserID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_userID"
-        android:layout_alignBottom="@+id/location_create_edittext_userID"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_userid" />
+            <TextView
+                android:id="@+id/location_create_view_label_floatName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/floatNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="floatName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/location_create_view_label_doubleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/DoubleNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="doubleName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/location_create_view_label_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/stringNameCreate"
+                android:layout_alignParentLeft="true"
+                android:text="string"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/location_create_view_label_booleanName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/booleanNameToggleButtonCreate"
+                android:layout_alignParentLeft="true"
+                android:text="booleanName:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <!-- EditText(s) -->
+
+            <EditText
+                android:id="@+id/byteNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/shortNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/byteNameCreate"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/intNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/shortNameCreate"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/longNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/intNameCreate"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/floatNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/longNameCreate"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/DoubleNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/floatNameCreate"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/stringNameCreate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/DoubleNameCreate"
+                android:inputType="number" />
+
+            <ToggleButton
+                android:id="@+id/booleanNameToggleButtonCreate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/stringNameCreate"
+                android:textOff="False"
+                android:textOn="True" />
+        </RelativeLayout>
+    </ScrollView>
+    <!-- Button(s) -->
 
     <Button
         android:id="@+id/location_create_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="32dp"
@@ -86,7 +175,7 @@
         android:id="@+id/location_create_button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/location_create_button_save"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/location_create_button_label_clear" />
 
@@ -94,7 +183,7 @@
         android:id="@+id/location_create_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/location_create_button_reset"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="21dp"
         android:text="@string/location_create_button_label_cancel" />
