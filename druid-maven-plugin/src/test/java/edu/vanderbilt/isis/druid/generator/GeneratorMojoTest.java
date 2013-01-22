@@ -29,7 +29,7 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
      */
     public void testSomething() throws Exception
     {
-        final File pom = getTestFile("src/test/resources/unit/project-to-test/pom.xml");
+        final File pom = getTestFile("src/test/resources/unit/druid-maven-plugin-generate-test/plugin-config.xml");
         assertNotNull(pom);
         assertTrue(pom.exists());
 

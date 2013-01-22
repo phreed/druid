@@ -55,14 +55,14 @@ public class GeneratorMojo extends AbstractMojo {
 	
 	
 	/**
-	 * contract : what is the file expressing the data contract.
+	 * contractFile : what is the file expressing the data contract.
 	 * <p>
 	 * This file provides the file name and its path.
 	 * 
-	 * @parameter expression="${generate.contract}"
+	 * @parameter expression="${generate.contractFile}"
 	 *            default-value="contract.xml""
 	 */
-	private File contract = new File("contract.xml");
+	private File contractFile = new File("contract.xml");
 
 
 	/**
@@ -111,14 +111,14 @@ public class GeneratorMojo extends AbstractMojo {
 	private boolean skeleton = false;
 
 	/**
-	 * outputPath : the base path for the generated files.
+	 * outputFile : the base path for the generated files.
 	 * <p>
 	 * This indicates where the generated files should be placed.
 	 * 
-	 * @parameter expression="${generate.outputPath}"
+	 * @parameter expression="${generate.outputFile}"
 	 *            default-value="${basedir}/target/generated-sources/ammogen"
 	 */
-	private File outputPath = new File("gen");
+	private File outputFile = new File("gen");
 
 	/**
 	 * Satisfy the maven execution request.
@@ -157,15 +157,15 @@ public class GeneratorMojo extends AbstractMojo {
                            */
        
 		final Generator generator = new Generator(new MavenLoggerImpl(
-				this.getLog(), "ammogen"));
+				this.getLog(), "druid"));
 
         generator.setTemplateFile(this.templateFile);
         
 		generator.setTemplateKey(this.templateKey);
 		generator.setTemplateFileManifest(this.templateFileManifest);
 
-		generator.setContractPath(this.contract);
-		generator.setOutputDir(this.outputPath);
+		generator.setContractPath(this.contractFile);
+		generator.setOutputDir(this.outputFile);
 
 		generator.setSkeleton(this.skeleton);
 
