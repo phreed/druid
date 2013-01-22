@@ -1,4 +1,4 @@
-PATH(rootDir, isSkeleton, sponsor, name) ::= "<sponsor>/<name>Creator.java"
+PATH(directory, isSkeleton, name) ::= "<directory>/<name>Creator.java"
 
 BODY(contract) ::= <<
 package com.walkernation.db.orm;
@@ -10,9 +10,9 @@ import com.walkernation.db.provider.ContentDescriptor;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-public class LocationCreator {
+public class <contract.root.name.bactrian>Creator {
 
-	public static ContentValues getCVfromLocation(final LocationData data) {
+	public static ContentValues getCVfrom<contract.root.name.bactrian>(final <contract.root.name.bactrian>Data data) {
 		ContentValues rValue = new ContentValues();
 
 		/*
@@ -20,22 +20,22 @@ public class LocationCreator {
 		 * if (data.[member> != null) { rValue.put([key>, data.[data_member>);}
 		 */
 
-		rValue.put(ContentDescriptor.Location.Cols.LAT_NAME, data.latitude);
-		rValue.put(ContentDescriptor.Location.Cols.LONG_NAME, data.longitude);
-		rValue.put(ContentDescriptor.Location.Cols.HEIGHT_NAME, data.height);
-		rValue.put(ContentDescriptor.Location.Cols.USER_ID_NAME, data.userID);
+		rValue.put(ContentDescriptor.<contract.root.name.bactrian>.Cols.LAT_NAME, data.latitude);
+		rValue.put(ContentDescriptor.<contract.root.name.bactrian>.Cols.LONG_NAME, data.longitude);
+		rValue.put(ContentDescriptor.<contract.root.name.bactrian>.Cols.HEIGHT_NAME, data.height);
+		rValue.put(ContentDescriptor.<contract.root.name.bactrian>.Cols.USER_ID_NAME, data.userID);
 
 		return rValue;
 	}
 
 	/**
-	 * Get LocationData object from ContentValues object
+	 * Get <contract.root.name.bactrian>Data object from ContentValues object
 	 * 
 	 * @param cv
 	 * @return
 	 */
 	// I'm not even sure this is used/usable, but here in case it is...
-	public static LocationData CvToLocationData(final ContentValues cv) {
+	public static <contract.bascontract.root.name.bactrian>Data CvTo<contract.root.name.bactrian>Data(final ContentValues cv) {
 		// set default values
 		long latitude = 0;
 		long longitude = 0;
@@ -54,62 +54,62 @@ public class LocationCreator {
 		// }
 
 		// check if CV contains keys, and if so, assign values
-		if (cv.containsKey(ContentDescriptor.Location.Cols.LAT_NAME)) {
-			latitude = cv.getAsLong(ContentDescriptor.Location.Cols.LAT_NAME);
+		if (cv.containsKey(ContentDescriptor.<contract.root.name.bactrian>.Cols.LAT_NAME)) {
+			latitude = cv.getAsLong(ContentDescriptor.<contract.root.name.bactrian>.Cols.LAT_NAME);
 		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.LONG_NAME)) {
-			longitude = cv.getAsLong(ContentDescriptor.Location.Cols.LONG_NAME);
+		if (cv.containsKey(ContentDescriptor.<contract.root.name.bactrian>.Cols.LONG_NAME)) {
+			longitude = cv.getAsLong(ContentDescriptor.<contract.root.name.bactrian>.Cols.LONG_NAME);
 		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.HEIGHT_NAME)) {
-			height = cv.getAsLong(ContentDescriptor.Location.Cols.HEIGHT_NAME);
+		if (cv.containsKey(ContentDescriptor.<contract.root.name.bactrian>.Cols.HEIGHT_NAME)) {
+			height = cv.getAsLong(ContentDescriptor.<contract.root.name.bactrian>.Cols.HEIGHT_NAME);
 		}
-		if (cv.containsKey(ContentDescriptor.Location.Cols.USER_ID_NAME)) {
-			userid = cv.getAsLong(ContentDescriptor.Location.Cols.USER_ID_NAME);
+		if (cv.containsKey(ContentDescriptor.<contract.root.name.bactrian>.Cols.USER_ID_NAME)) {
+			userid = cv.getAsLong(ContentDescriptor.<contract.root.name.bactrian>.Cols.USER_ID_NAME);
 		}
 		// construct the returned object
-		LocationData rValue = new LocationData(latitude, longitude, height,
+		<contract.root.name.bactrian>Data rValue = new <contract.root.name.bactrian>Data(latitude, longitude, height,
 				userid);
 		return rValue;
 	}
 
 	/**
-	 * Get all of the LocationData from the passed in cursor.
+	 * Get all of the <contract.root.name.bactrian>Data from the passed in cursor.
 	 * 
 	 * @param cursor
 	 *            passed in cursor
-	 * @return ArrayList\<LocationData\> The set of LocationData
+	 * @return ArrayList\<<contract.root.name.bactrian>Data\> The set of <contract.root.name.bactrian>Data
 	 */
-	public static ArrayList\<LocationData> getLocationDataArrayListFromCursor(
+	public static ArrayList\<<contract.root.name.bactrian>Data> get<contract.root.name.bactrian>DataArrayListFromCursor(
 			Cursor cursor) {
-		ArrayList\<LocationData> rValue = new ArrayList\<LocationData>();
+		ArrayList\<<contract.root.name.bactrian>Data> rValue = new ArrayList\<<contract.root.name.bactrian>Data>();
 		if (cursor != null) {
 			cursor.moveToFirst();
 			do {
-				rValue.add(getLocationDataFromCursor(cursor));
+				rValue.add(get<contract.root.name.bactrian>DataFromCursor(cursor));
 			} while (cursor.moveToNext() == true);
 		}
 		return rValue;
 	}
 
 	/**
-	 * Get the first LocationData from the passed in cursor.
+	 * Get the first <contract.root.name.bactrian>Data from the passed in cursor.
 	 * 
 	 * @param cursor
 	 *            passed in cursor
-	 * @return LocationData object
+	 * @return <contract.root.name.bactrian>Data object
 	 */
-	public static LocationData getLocationDataFromCursor(Cursor cursor) {
+	public static <contract.root.name.bactrian>Data get<contract.root.name.bactrian>DataFromCursor(Cursor cursor) {
 
 		long latitude = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.Location.Cols.LAT_NAME));
+				.getColumnIndex(ContentDescriptor.<contract.root.name.bactrian>.Cols.LAT_NAME));
 		long longitude = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.Location.Cols.LONG_NAME));
+				.getColumnIndex(ContentDescriptor.<contract.root.name.bactrian>.Cols.LONG_NAME));
 		long height = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.Location.Cols.HEIGHT_NAME));
+				.getColumnIndex(ContentDescriptor.<contract.root.name.bactrian>.Cols.HEIGHT_NAME));
 		long user_id = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.Location.Cols.USER_ID_NAME));
+				.getColumnIndex(ContentDescriptor.<contract.root.name.bactrian>.Cols.USER_ID_NAME));
 
-		LocationData location = new LocationData(latitude, longitude, height,
+		<contract.root.name.bactrian>Data location = new <contract.root.name.bactrian>Data(latitude, longitude, height,
 				user_id);
 
 		return location;

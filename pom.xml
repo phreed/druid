@@ -15,7 +15,7 @@
   </modules>
 
  <properties>
-    <mavenVersion>3.0.3</mavenVersion>
+    <mavenVersion>3.0.4</mavenVersion>
     <plexusVersion>1.5.1</plexusVersion>
   </properties>
 

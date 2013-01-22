@@ -24,10 +24,56 @@ import org.xml.sax.SAXException;
 public class Contract {
     final private Logger logger;
 
-    public Contract(final Logger logger) {
-        this.logger = logger;
+    public final Root root;
+
+    public static Contract newInstance(final Logger logger, final File contractFile)
+            throws GeneratorException {
+        return new Contract(logger, contractFile);
     }
 
+    public Contract(final Logger logger, final File contractFile) throws GeneratorException {
+        this.logger = logger;
+
+        final File contractPath = contractFile;
+        try {
+            if (contractFile == null) {
+                throw new GeneratorException("no contract specified");
+            }
+            if (!contractFile.exists()) {
+                throw new GeneratorException("invalid contract specified " + contractFile);
+            }
+            logger.debug("contract: {}",
+                    contractPath.getCanonicalPath());
+        } catch (IOException e1) {
+            throw new GeneratorException("bad path for contract " + contractFile);
+        }
+        final DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+        final Document contractXml;
+        try
+        {
+            final DocumentBuilder db = dbf.newDocumentBuilder();
+            contractXml =
+                    db.parse(contractPath);
+            logger.info("Namespace: {}",
+                    contractXml.getNamespaceURI());
+        } catch (ParserConfigurationException pce) {
+            throw new GeneratorException("could not parse configuration" + pce);
+        } catch (SAXException se) {
+            throw new GeneratorException("could not parse via sax " + se);
+        } catch (IOException ioe) {
+            throw new GeneratorException("could not open configuration " + ioe);
+        }
+
+        /**
+         * Build from templates based on contract
+         */
+
+        final Element de = contractXml.getDocumentElement();
+        this.root = Root.newInstance(de);
+        logger.trace("contract {}", this.root);
+    }
+    
     /**
      * convert the string to snake case
      * 
@@ -122,29 +168,42 @@ public class Contract {
         }
     }
 
+    static class Sponsor {
+        final private String base;
+        final private String[] path;
+        
+        private Sponsor(final String base) {
+            this.base = base;
+            this.path = base.split("\\.");
+
+        }
+        
+        public String getBase() {
+            return this.base;
+        }
+        
+        public File getPath(final File basedir) {
+            File wip = basedir.getAbsoluteFile();
+            for (String node : this.path){
+                wip = new File(wip, node);
+            }
+            return wip;
+        }
+    }
     /**
      * The root object
      */
     static class Root {
         final private Name name;
-        final private String sponsor;
+        final private Sponsor sponsor;
         final private List<Relation> relations;
 
         public Name getName() {
             return name;
         }
 
-        public String getSponsor() {
+        public Sponsor getSponsor() {
             return sponsor;
-        }
-
-        public File getSponsorPath(final File basedir) {
-            File wip = basedir.getAbsoluteFile();
-            for (String dir : this.sponsor.split("\\.")) {
-                wip = new File(wip, dir);
-            }
-            wip = new File(wip, "provider");
-            return wip;
         }
 
         public List<Relation> getRelations() {
@@ -154,7 +213,7 @@ public class Contract {
         private Root(final Name name, final String sponsor,
                 List<Relation> relations) {
             this.name = name;
-            this.sponsor = sponsor;
+            this.sponsor = new Sponsor(sponsor);
             this.relations = relations;
         }
 
@@ -439,175 +498,113 @@ public class Contract {
         }
     }
 
-    public final Root root;
-    
-    public static Contract newInstance(final Logger logger, final File contractFile)
-            throws GeneratorException {
-        return new Contract(logger, contractFile);
-    }
 
-    public Contract(final Logger logger, final File contractFile) throws GeneratorException {
-        this.logger = logger;
-        
-        final File contractPath = contractFile;
-        try {
-            if (contractFile == null) {
-                throw new GeneratorException("no contract specified");
-            }
-            if (!contractFile.exists()) {
-                throw new GeneratorException("invalid contract specified "+ contractFile);
-            }
-            logger.debug("contract: {}",
-                    contractPath.getCanonicalPath());
-        } catch (IOException e1) {
-            throw new GeneratorException("bad path for contract "+ contractFile);
-        }
-        final DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-        final Document contractXml;
-        try
-        {
-            final DocumentBuilder db = dbf.newDocumentBuilder();
-            contractXml =
-                    db.parse(contractPath);
-            logger.info("Namespace: {}",
-                    contractXml.getNamespaceURI());
-        } catch (ParserConfigurationException pce) {
-            throw new GeneratorException("could not parse configuration"+ pce);
-        } catch (SAXException se) {
-            throw new GeneratorException("could not parse via sax "+ se);
-        } catch (IOException ioe) {
-            throw new GeneratorException("could not open configuration "+ ioe);
-        }
-
-        /**
-         * Build from templates based on contract
-         */
-
-        final Element de = contractXml.getDocumentElement();
-        this.root = Root.newInstance(de);
-        logger.trace("contract {}", this.root);
-    }
-    
-        /*
-    public void 
-        final File outputDir;
-         * switch (templateGroup) { case CONTENT_PROVIDER: { final ST stFile =
-         * stg.getInstanceOf("fileNameTemplate"); if (stFile == null) {
-         * logger.warn("no fileNameTemplate : cannot make file"); return false;
-         * } stFile.add("name", contract.name); stFile.add("suffix",
-         * this.suffix); if (isMakeDir) { outputDir =
-         * contract.getSponsorPath(this.outputPath); } else { outputDir =
-         * this.outputPath; } outputDir.mkdirs(); try {
-         * logger.debug("output directory {}", outputDir.getCanonicalPath()); }
-         * catch (IOException ex) {
-         * logger.warn("problem with output directory {}", outputDir); return
-         * false; } final ST stTemplate =
-         * stg.getInstanceOf("topTemplateTemplate"); if (stTemplate == null) {
-         * logger.warn("no topTemplateTemplate"); return false; } if
-         * (this.isSkeleton) { final Name mode = new Name("skel");
-         * addSingle(stFile, "mode", mode); addSingle(stTemplate, "mode", mode);
-         * if (this.isSchema) { serializeTemplate(contract, outputDir, stg,
-         * stFile, stTemplate, "schema"); } if (this.isProvider) {
-         * serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
-         * "provider"); } if (this.isSerializer) { serializeTemplate(contract,
-         * outputDir, stg, stFile, stTemplate, "service"); } if
-         * (this.makeMockProvider) { logger.info("mock skel : not relevant"); }
-         * } if (this.isBase) { final Name mode = new Name("base");
-         * addSingle(stFile, "mode", mode); addSingle(stTemplate, "mode", mode);
-         * if (this.isSchema) { serializeTemplate(contract, outputDir, stg,
-         * stFile, stTemplate, "schema"); } if (this.isProvider) {
-         * serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
-         * "provider"); } if (this.isSerializer) { serializeTemplate(contract,
-         * outputDir, stg, stFile, stTemplate, "service"); } if
-         * (this.makeMockProvider) { serializeTemplate(contract, outputDir, stg,
-         * stFile, stTemplate, "mock"); } } } break; case GATEWAY_PLUGIN: {
-         * outputDir = this.outputPath; try {
-         * logger.info("Output Directory: {}", outputDir.getCanonicalPath()); }
-         * catch (IOException ex) { throw new GeneratorException(ex); } final ST
-         * mainSource = stg.getInstanceOf("topPluginMainTemplate");
-         * mainSource.add("cp", contract); final File ms = new File(outputDir,
-         * "main.cpp"); logger.info(" main: {} ", ms);
-         * serializeTemplateToFile(mainSource, ms); final ST configMgrHeader =
-         * stg .getInstanceOf("topPluginCfgMgrHeaderTemplate");
-         * configMgrHeader.add("cp", contract); final File ch = new
-         * File(outputDir, contract.name.getBactrian() + "ConfigManager.h");
-         * logger.info(" cp: {} ", ch); serializeTemplateToFile(configMgrHeader,
-         * ch); final ST configMgrSource = stg
-         * .getInstanceOf("topPluginCfgMgrSourceTemplate");
-         * configMgrSource.add("cp", contract); final File cs = new
-         * File(outputDir, contract.name.getBactrian() + "ConfigManager.cpp");
-         * logger.info(" cs: {} ", cs); serializeTemplateToFile(configMgrSource,
-         * cs); final ST configFileJson = stg
-         * .getInstanceOf("topPluginConfigJsonTemplate");
-         * configFileJson.add("cp", contract); final File cj = new
-         * File(outputDir, contract.name.getBactrian() + "PluginConfig.json");
-         * logger.info(" cj: {} ", cj); serializeTemplateToFile(configFileJson,
-         * cj); final ST receiverHeader = stg
-         * .getInstanceOf("topReceiverHeaderTemplate"); receiverHeader.add("cp",
-         * contract); final File rh = new File(outputDir,
-         * contract.name.getBactrian() + "Receiver.h"); logger.info(" rh: {} ",
-         * rh); serializeTemplateToFile(receiverHeader, rh); final ST
-         * receiverSource = stg .getInstanceOf("topReceiverSourceTemplate");
-         * receiverSource.add("cp", contract); final File rs = new
-         * File(outputDir, contract.name.getBactrian() + "Receiver.cpp");
-         * logger.info(" rs: {} ", rs); serializeTemplateToFile(receiverSource,
-         * rs); final ST pushHandlerHeader = stg
-         * .getInstanceOf("topPushHandlerHeaderTemplate");
-         * pushHandlerHeader.add("cp", contract); final File ph = new
-         * File(outputDir, contract.name.getBactrian() + "PushHandler.h");
-         * logger.info(" ph: {} ", ph);
-         * serializeTemplateToFile(pushHandlerHeader, ph); final ST
-         * pushHandlerSource = stg
-         * .getInstanceOf("topPushHandlerSourceTemplate");
-         * pushHandlerSource.add("cp", contract); final File ps = new
-         * File(outputDir, contract.name.getBactrian() + "PushHandler.cpp");
-         * logger.info(" ps: {} ", ps);
-         * serializeTemplateToFile(pushHandlerSource, ps); final ST
-         * queryHandlerHeader = stg
-         * .getInstanceOf("topQueryHandlerHeaderTemplate");
-         * queryHandlerHeader.add("cp", contract); final File qh = new
-         * File(outputDir, contract.name.getBactrian() + "QueryHandler.h");
-         * logger.info(" qh: {} ", qh);
-         * serializeTemplateToFile(queryHandlerHeader, qh); final ST
-         * queryHandlerSource = stg
-         * .getInstanceOf("topQueryHandlerSourceTemplate");
-         * queryHandlerSource.add("cp", contract); final File qs = new
-         * File(outputDir, contract.name.getBactrian() + "QueryHandler.cpp");
-         * logger.info(" qs: {} ", qs);
-         * serializeTemplateToFile(queryHandlerSource, qs); final ST
-         * buildFileMpc = stg.getInstanceOf("topMPCTemplate");
-         * buildFileMpc.add("cp", contract); final File bf = new File(outputDir,
-         * contract.name.getBactrian() + "GatewayPlugin.mpc");
-         * logger.info(" bf: {} ", bf); serializeTemplateToFile(buildFileMpc,
-         * bf); } break; case PLUGIN_SERIALIZATION: { outputDir =
-         * this.outputPath; try { logger.info(" Output Directory: {}",
-         * outputDir.getCanonicalPath()); } catch (IOException ex) { throw new
-         * GeneratorException(ex); } final ST serialHeader = stg
-         * .getInstanceOf("topPluginSerializationDeclTemplate");
-         * serialHeader.add("cp", contract); final File sh = new File(outputDir,
-         * contract.name.getBactrian() + "Serialization.h");
-         * logger.info(" sh: {} stg: {}", sh, this.templateGroup);
-         * serializeTemplateToFile(serialHeader, sh); ST serialSource = stg
-         * .getInstanceOf("topPluginSerializationDefnTemplate");
-         * serialSource.add("cp", contract); File ss = new File(outputDir,
-         * contract.name.getBactrian() + "Serialization.cpp");
-         * logger.info(" ss: {} stg: {}", ss, this.templateGroup);
-         * serializeTemplateToFile(serialSource, ss); ST schemaProto =
-         * stg.getInstanceOf("topProtoTemplate"); schemaProto.add("cp",
-         * contract); File sp = new File(outputDir, contract.name.getBactrian()
-         * + ".proto"); logger.info(" sp: {} ", sp);
-         * serializeTemplateToFile(schemaProto, sp); ST serialMPC = stg
-         * .getInstanceOf("topPluginSerializationMPCTemplate");
-         * serialMPC.add("cp", contract); File sm = new File(outputDir,
-         * contract.name.getBactrian() + "Serialization.mpc");
-         * logger.info(" sm: {} ", sm); serializeTemplateToFile(serialMPC, sm);
-         * ST serialExHeader = stg
-         * .getInstanceOf("topPluginSerializationExportHdrTemplate");
-         * serialExHeader.add("cp", contract); File se = new File(outputDir,
-         * contract.name.getBactrian() + "_Export.h"); logger.info(" se: {} ",
-         * se); serializeTemplateToFile(serialExHeader, se); } break; default:
-         * logger.info("Unknown template type"); return false; } return true;
-         */
-    }
+    /*
+     * public void final File outputDir; switch (templateGroup) { case
+     * CONTENT_PROVIDER: { final ST stFile =
+     * stg.getInstanceOf("fileNameTemplate"); if (stFile == null) {
+     * logger.warn("no fileNameTemplate : cannot make file"); return false; }
+     * stFile.add("name", contract.name); stFile.add("suffix", this.suffix); if
+     * (isMakeDir) { outputDir = contract.getSponsorPath(this.outputPath); }
+     * else { outputDir = this.outputPath; } outputDir.mkdirs(); try {
+     * logger.debug("output directory {}", outputDir.getCanonicalPath()); }
+     * catch (IOException ex) { logger.warn("problem with output directory {}",
+     * outputDir); return false; } final ST stTemplate =
+     * stg.getInstanceOf("topTemplateTemplate"); if (stTemplate == null) {
+     * logger.warn("no topTemplateTemplate"); return false; } if
+     * (this.isSkeleton) { final Name mode = new Name("skel"); addSingle(stFile,
+     * "mode", mode); addSingle(stTemplate, "mode", mode); if (this.isSchema) {
+     * serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
+     * "schema"); } if (this.isProvider) { serializeTemplate(contract,
+     * outputDir, stg, stFile, stTemplate, "provider"); } if (this.isSerializer)
+     * { serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
+     * "service"); } if (this.makeMockProvider) {
+     * logger.info("mock skel : not relevant"); } } if (this.isBase) { final
+     * Name mode = new Name("base"); addSingle(stFile, "mode", mode);
+     * addSingle(stTemplate, "mode", mode); if (this.isSchema) {
+     * serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
+     * "schema"); } if (this.isProvider) { serializeTemplate(contract,
+     * outputDir, stg, stFile, stTemplate, "provider"); } if (this.isSerializer)
+     * { serializeTemplate(contract, outputDir, stg, stFile, stTemplate,
+     * "service"); } if (this.makeMockProvider) { serializeTemplate(contract,
+     * outputDir, stg, stFile, stTemplate, "mock"); } } } break; case
+     * GATEWAY_PLUGIN: { outputDir = this.outputPath; try {
+     * logger.info("Output Directory: {}", outputDir.getCanonicalPath()); }
+     * catch (IOException ex) { throw new GeneratorException(ex); } final ST
+     * mainSource = stg.getInstanceOf("topPluginMainTemplate");
+     * mainSource.add("cp", contract); final File ms = new File(outputDir,
+     * "main.cpp"); logger.info(" main: {} ", ms);
+     * serializeTemplateToFile(mainSource, ms); final ST configMgrHeader = stg
+     * .getInstanceOf("topPluginCfgMgrHeaderTemplate");
+     * configMgrHeader.add("cp", contract); final File ch = new File(outputDir,
+     * contract.name.getBactrian() + "ConfigManager.h"); logger.info(" cp: {} ",
+     * ch); serializeTemplateToFile(configMgrHeader, ch); final ST
+     * configMgrSource = stg .getInstanceOf("topPluginCfgMgrSourceTemplate");
+     * configMgrSource.add("cp", contract); final File cs = new File(outputDir,
+     * contract.name.getBactrian() + "ConfigManager.cpp");
+     * logger.info(" cs: {} ", cs); serializeTemplateToFile(configMgrSource,
+     * cs); final ST configFileJson = stg
+     * .getInstanceOf("topPluginConfigJsonTemplate"); configFileJson.add("cp",
+     * contract); final File cj = new File(outputDir,
+     * contract.name.getBactrian() + "PluginConfig.json");
+     * logger.info(" cj: {} ", cj); serializeTemplateToFile(configFileJson, cj);
+     * final ST receiverHeader = stg
+     * .getInstanceOf("topReceiverHeaderTemplate"); receiverHeader.add("cp",
+     * contract); final File rh = new File(outputDir,
+     * contract.name.getBactrian() + "Receiver.h"); logger.info(" rh: {} ", rh);
+     * serializeTemplateToFile(receiverHeader, rh); final ST receiverSource =
+     * stg .getInstanceOf("topReceiverSourceTemplate"); receiverSource.add("cp",
+     * contract); final File rs = new File(outputDir,
+     * contract.name.getBactrian() + "Receiver.cpp"); logger.info(" rs: {} ",
+     * rs); serializeTemplateToFile(receiverSource, rs); final ST
+     * pushHandlerHeader = stg .getInstanceOf("topPushHandlerHeaderTemplate");
+     * pushHandlerHeader.add("cp", contract); final File ph = new
+     * File(outputDir, contract.name.getBactrian() + "PushHandler.h");
+     * logger.info(" ph: {} ", ph); serializeTemplateToFile(pushHandlerHeader,
+     * ph); final ST pushHandlerSource = stg
+     * .getInstanceOf("topPushHandlerSourceTemplate");
+     * pushHandlerSource.add("cp", contract); final File ps = new
+     * File(outputDir, contract.name.getBactrian() + "PushHandler.cpp");
+     * logger.info(" ps: {} ", ps); serializeTemplateToFile(pushHandlerSource,
+     * ps); final ST queryHandlerHeader = stg
+     * .getInstanceOf("topQueryHandlerHeaderTemplate");
+     * queryHandlerHeader.add("cp", contract); final File qh = new
+     * File(outputDir, contract.name.getBactrian() + "QueryHandler.h");
+     * logger.info(" qh: {} ", qh); serializeTemplateToFile(queryHandlerHeader,
+     * qh); final ST queryHandlerSource = stg
+     * .getInstanceOf("topQueryHandlerSourceTemplate");
+     * queryHandlerSource.add("cp", contract); final File qs = new
+     * File(outputDir, contract.name.getBactrian() + "QueryHandler.cpp");
+     * logger.info(" qs: {} ", qs); serializeTemplateToFile(queryHandlerSource,
+     * qs); final ST buildFileMpc = stg.getInstanceOf("topMPCTemplate");
+     * buildFileMpc.add("cp", contract); final File bf = new File(outputDir,
+     * contract.name.getBactrian() + "GatewayPlugin.mpc");
+     * logger.info(" bf: {} ", bf); serializeTemplateToFile(buildFileMpc, bf); }
+     * break; case PLUGIN_SERIALIZATION: { outputDir = this.outputPath; try {
+     * logger.info(" Output Directory: {}", outputDir.getCanonicalPath()); }
+     * catch (IOException ex) { throw new GeneratorException(ex); } final ST
+     * serialHeader = stg .getInstanceOf("topPluginSerializationDeclTemplate");
+     * serialHeader.add("cp", contract); final File sh = new File(outputDir,
+     * contract.name.getBactrian() + "Serialization.h");
+     * logger.info(" sh: {} stg: {}", sh, this.templateGroup);
+     * serializeTemplateToFile(serialHeader, sh); ST serialSource = stg
+     * .getInstanceOf("topPluginSerializationDefnTemplate");
+     * serialSource.add("cp", contract); File ss = new File(outputDir,
+     * contract.name.getBactrian() + "Serialization.cpp");
+     * logger.info(" ss: {} stg: {}", ss, this.templateGroup);
+     * serializeTemplateToFile(serialSource, ss); ST schemaProto =
+     * stg.getInstanceOf("topProtoTemplate"); schemaProto.add("cp", contract);
+     * File sp = new File(outputDir, contract.name.getBactrian() + ".proto");
+     * logger.info(" sp: {} ", sp); serializeTemplateToFile(schemaProto, sp); ST
+     * serialMPC = stg .getInstanceOf("topPluginSerializationMPCTemplate");
+     * serialMPC.add("cp", contract); File sm = new File(outputDir,
+     * contract.name.getBactrian() + "Serialization.mpc");
+     * logger.info(" sm: {} ", sm); serializeTemplateToFile(serialMPC, sm); ST
+     * serialExHeader = stg
+     * .getInstanceOf("topPluginSerializationExportHdrTemplate");
+     * serialExHeader.add("cp", contract); File se = new File(outputDir,
+     * contract.name.getBactrian() + "_Export.h"); logger.info(" se: {} ", se);
+     * serializeTemplateToFile(serialExHeader, se); } break; default:
+     * logger.info("Unknown template type"); return false; } return true;
+     */
 }

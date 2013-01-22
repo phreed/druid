@@ -153,9 +153,8 @@ public class Generator {
         if (stFileName == null) {
             throw new GeneratorException("no path template provided");
         }
-        stFileName.add("rootDir", this.outputPath);
+        stFileName.add("directory", contract.root.getSponsor().getPath(this.outputPath));
         stFileName.add("isSkeleton", this.isSkeleton);
-        stFileName.add("sponsor", contract.root.getSponsor());
         stFileName.add("name", contract.root.getName());
         final String outputFileName = stFileName.render();
         final File outputFile = new File(outputFileName);

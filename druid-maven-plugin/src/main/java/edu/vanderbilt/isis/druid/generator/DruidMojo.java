@@ -112,14 +112,14 @@ public class DruidMojo extends AbstractMojo {
 	private boolean skeleton = false;
 
 	/**
-	 * outputFile : the base path for the generated files.
+	 * outputDirectory : the base path for the generated files.
 	 * <p>
 	 * This indicates where the generated files should be placed.
 	 * 
-	 * @parameter expression="${generate.outputFile}"
-	 *            default-value="${basedir}/target/generated-sources/ammogen"
+	 * @parameter expression="${generate.outputDirectory}"
+	 *            default-value="${basedir}/target/generated-sources/druid"
 	 */
-	private File outputFile = new File("gen");
+	private File outputDirectory = new File("gen");
 
 	/**
 	 * Satisfy the maven execution request.
@@ -167,7 +167,7 @@ public class DruidMojo extends AbstractMojo {
 		generator.setTemplateFileManifest(this.templateFileManifest);
 
 		generator.setContractPath(this.contractFile);
-		generator.setOutputDir(this.outputFile);
+		generator.setOutputDir(this.outputDirectory);
 
 		generator.setSkeleton(this.skeleton);
 

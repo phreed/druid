@@ -25,9 +25,9 @@
         <groupId>edu.vanderbilt.isis.druid</groupId>
         <artifactId>druid-maven-plugin</artifactId>
         <configuration>
-          <contractFile>${basedir}/src/test/resource/locator/contract/pli-locations.xml</contractFile>
+          <contractFile>${basedir}/src/test/resources/locator/contract/pli-locations.xml</contractFile>
           <templateFile>${basedir}/src/main/resources/template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
-          <outputFile>${basedir}/target/test-harness/druid-maven-plugin-generate-test/result.java</outputFile>
+          <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
         </configuration>
       </plugin>
     </plugins>
