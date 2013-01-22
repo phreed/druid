@@ -138,21 +138,25 @@ public class Generator {
      */
     public boolean build() throws GeneratorException {
         final STGroup stg = getGroup();
+        if (stg == null) {
+            throw new GeneratorException("no group file loaded");
+        }
+        
         final Contract contract = Contract.newInstance(logger, this.contractFile);
 
         final ST stFileBody = stg.getInstanceOf("BODY");
         if (stFileBody == null) {
-            logger.warn("no body template provided");
-            return false;
+            throw new GeneratorException("no body template provided");
         }
 
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
-            logger.warn("no body template provided");
-            return false;
+            throw new GeneratorException("no path template provided");
         }
         stFileName.add("rootDir", this.outputPath);
         stFileName.add("isSkeleton", this.isSkeleton);
+        stFileName.add("sponsor", contract.root.getSponsor());
+        stFileName.add("name", contract.root.getName());
         final String outputFileName = stFileName.render();
         final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();

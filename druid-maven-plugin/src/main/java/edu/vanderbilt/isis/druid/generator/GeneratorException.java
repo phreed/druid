@@ -6,7 +6,12 @@ public class GeneratorException extends Exception {
 	public GeneratorException(Exception ex) {
 		super(ex);
 	}
-
+	public GeneratorException(String msg) {
+        super(msg);
+    }
+	public GeneratorException(String msg, Exception ex) {
+        super(msg, ex);
+    }
 	/**
 	 * 
 	 */

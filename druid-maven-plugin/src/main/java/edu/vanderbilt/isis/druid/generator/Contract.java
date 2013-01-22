@@ -438,24 +438,29 @@ public class Contract {
                     .append("\"/>\n").toString();
         }
     }
+
+    public final Root root;
     
-    public static Contract newInstance(final Logger logger, final File contractFile) throws GeneratorException {
-       
+    public static Contract newInstance(final Logger logger, final File contractFile)
+            throws GeneratorException {
+        return new Contract(logger, contractFile);
+    }
+
+    public Contract(final Logger logger, final File contractFile) throws GeneratorException {
+        this.logger = logger;
+        
         final File contractPath = contractFile;
         try {
             if (contractFile == null) {
-                logger.warn("no contract specified");
-                return null;
+                throw new GeneratorException("no contract specified");
             }
-            if (! contractFile.exists()) {
-                logger.warn("invalid contract specified {}", contractFile);
-                return null;
+            if (!contractFile.exists()) {
+                throw new GeneratorException("invalid contract specified "+ contractFile);
             }
             logger.debug("contract: {}",
                     contractPath.getCanonicalPath());
         } catch (IOException e1) {
-            logger.error("bad path for contract {}", contractFile);
-            return null;
+            throw new GeneratorException("bad path for contract "+ contractFile);
         }
         final DocumentBuilderFactory dbf =
                 DocumentBuilderFactory.newInstance();
@@ -468,26 +473,26 @@ public class Contract {
             logger.info("Namespace: {}",
                     contractXml.getNamespaceURI());
         } catch (ParserConfigurationException pce) {
-            logger.error("could not parse configuration", pce);
-            return null;
+            throw new GeneratorException("could not parse configuration"+ pce);
         } catch (SAXException se) {
-            logger.error("could not parse via sax", se);
-            return null;
+            throw new GeneratorException("could not parse via sax "+ se);
         } catch (IOException ioe) {
-            logger.error("could not open configuration",
-                    ioe);
-            return null;
+            throw new GeneratorException("could not open configuration "+ ioe);
         }
-        return null;
 
         /**
          * Build from templates based on contract
          */
+
+        final Element de = contractXml.getDocumentElement();
+        this.root = Root.newInstance(de);
+        logger.trace("contract {}", this.root);
+    }
+    
         /*
-         * final Element de = contractXml.getDocumentElement(); final Contract
-         * contract = Contract.newInstance(de); logger.trace("contract {}",
-         * contract); final File outputDir; switch (templateGroup) { case
-         * CONTENT_PROVIDER: { final ST stFile =
+    public void 
+        final File outputDir;
+         * switch (templateGroup) { case CONTENT_PROVIDER: { final ST stFile =
          * stg.getInstanceOf("fileNameTemplate"); if (stFile == null) {
          * logger.warn("no fileNameTemplate : cannot make file"); return false;
          * } stFile.add("name", contract.name); stFile.add("suffix",

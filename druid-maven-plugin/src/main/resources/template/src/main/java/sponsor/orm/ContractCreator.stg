@@ -1,3 +1,6 @@
+PATH(rootDir, isSkeleton, sponsor, name) ::= "<sponsor>/<name>Creator.java"
+
+BODY(contract) ::= <<
 package com.walkernation.db.orm;
 
 import java.util.ArrayList;
@@ -14,7 +17,7 @@ public class LocationCreator {
 
 		/*
 		 * this is how you would check objects that are being stored ========>
-		 * if (data.<member> != null) { rValue.put(<key>, data.<data_member>);}
+		 * if (data.[member> != null) { rValue.put([key>, data.[data_member>);}
 		 */
 
 		rValue.put(ContentDescriptor.Location.Cols.LAT_NAME, data.latitude);
@@ -76,9 +79,9 @@ public class LocationCreator {
 	 *            passed in cursor
 	 * @return ArrayList\<LocationData\> The set of LocationData
 	 */
-	public static ArrayList<LocationData> getLocationDataArrayListFromCursor(
+	public static ArrayList\<LocationData> getLocationDataArrayListFromCursor(
 			Cursor cursor) {
-		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
+		ArrayList\<LocationData> rValue = new ArrayList\<LocationData>();
 		if (cursor != null) {
 			cursor.moveToFirst();
 			do {
@@ -112,3 +115,5 @@ public class LocationCreator {
 		return location;
 	}
 }
+
+>>

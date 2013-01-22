@@ -2,7 +2,6 @@
 package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
-import java.io.InputStream;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
@@ -11,11 +10,6 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
     
     /** {@inheritDoc} */
     protected void setUp() throws Exception {
-        System.out.println("the file of interest: ");
-        System.out.println( getPluginDescriptorLocation() );
-        final String name = "/" + getPluginDescriptorLocation();
-        getClass().getResource(name);
-        final InputStream is = getClass().getResourceAsStream( "/" + getPluginDescriptorLocation() );
         super.setUp();
     }
 
@@ -33,8 +27,8 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        GeneratorMojo myMojo = (GeneratorMojo) lookupMojo("generate", pom);
-        assertNotNull(myMojo);
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
         myMojo.execute();
     }
 }

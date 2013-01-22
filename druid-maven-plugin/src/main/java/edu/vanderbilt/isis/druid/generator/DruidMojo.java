@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
@@ -23,7 +24,7 @@ import org.sonatype.aether.util.artifact.DefaultArtifact;
  * 
  * @phase generate-sources
  */
-public class GeneratorMojo extends AbstractMojo {
+public class DruidMojo extends AbstractMojo {
     /**
      * The entry point to Aether
      * @component
@@ -125,7 +126,8 @@ public class GeneratorMojo extends AbstractMojo {
 	 * 
 	 */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        /*
+        final Log logger = getLog();
+       /*
         final Artifact artifact;
         try
         {
@@ -152,9 +154,9 @@ public class GeneratorMojo extends AbstractMojo {
             throw new MojoExecutionException( e.getMessage(), e );
         }
 
-        getLog().info( "Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from "
+        logger.info( "Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from "
                            + result.getRepository() );
-                           */
+        */
        
 		final Generator generator = new Generator(new MavenLoggerImpl(
 				this.getLog(), "druid"));
@@ -172,7 +174,8 @@ public class GeneratorMojo extends AbstractMojo {
 		try {
 			generator.build();
 		} catch (GeneratorException ex) {
-			this.getLog().error("build failed", ex);
+			logger.error("build failed", ex);
+			throw new MojoExecutionException("problem running code generator", ex);
 		}
 		return;
 	}
