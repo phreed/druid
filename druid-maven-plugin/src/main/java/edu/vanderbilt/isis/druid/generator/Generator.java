@@ -167,15 +167,15 @@ public class Generator {
             os = new BufferedOutputStream(new FileOutputStream(outputFile));
             os.write(stFileBody.render().getBytes());
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            throw new GeneratorException("problem writing output file", ex);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new GeneratorException("problem writing output file", ex);
         } finally {
             if (os != null)
                 try {
                     os.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    throw new GeneratorException("problem closing output file", ex);
                 }
         }
         return true;
