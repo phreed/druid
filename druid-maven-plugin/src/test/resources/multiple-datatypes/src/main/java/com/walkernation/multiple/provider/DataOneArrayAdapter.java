@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 import com.walkernation.multiple.orm.DataOneData;
 
 public class DataOneArrayAdapter extends ArrayAdapter<DataOneData> {

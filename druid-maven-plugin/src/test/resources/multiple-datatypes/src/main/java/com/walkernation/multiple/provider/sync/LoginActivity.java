@@ -15,7 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 
 /**
  * Activity that gets Launched when Adding an Account to the SyncManager

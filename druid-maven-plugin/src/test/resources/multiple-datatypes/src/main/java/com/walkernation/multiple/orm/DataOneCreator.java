@@ -50,8 +50,7 @@ public class DataOneCreator {
 	public static ArrayList<DataOneData> getDataOneDataArrayListFromCursor(
 			Cursor cursor) {
 		ArrayList<DataOneData> rValue = new ArrayList<DataOneData>();
-		if (cursor != null) {
-			cursor.moveToFirst();
+		if ((cursor != null) && (cursor.moveToFirst())) {
 			do {
 				rValue.add(getDataOneDataFromCursor(cursor));
 			} while (cursor.moveToNext() == true);
@@ -89,6 +88,8 @@ public class DataOneCreator {
 		/*
 		 * How to get a single byte stored (in a short's location) (wasteful of
 		 * 1 byte)
+		 * 
+		 * TODO find a better way to do this....
 		 */
 		short tempShort = cursor
 				.getShort(cursor
@@ -101,6 +102,7 @@ public class DataOneCreator {
 		shortName = cursor
 				.getShort(cursor
 						.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.SHORT_NAME));
+
 		intName = cursor
 				.getInt(cursor
 						.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.INT_NAME));

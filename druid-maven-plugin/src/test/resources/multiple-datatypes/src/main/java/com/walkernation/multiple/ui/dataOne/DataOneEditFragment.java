@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 

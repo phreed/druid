@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 
 // "FragmentActivity" is the Activity Version needed for support library 
 public class DataOneListActivity extends LocationActivityBase {

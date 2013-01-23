@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 import com.walkernation.multiple.orm.DataOneData;
 import com.walkernation.multiple.orm.MultipleResolver;
 import com.walkernation.multiple.provider.DataOneArrayAdapter;

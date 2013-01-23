@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.walkernation.db.R;
+import com.walkernation.multiple.R;
 
 /**
  * Base class for all activities
