@@ -13,7 +13,7 @@
     <field type="TIMESTAMP" name="created" default="now"/>
     <field type="TIMESTAMP" name="modified" default="now"/>
     <field type="LONG" name="hops" default="0" />
-    <field type="BLOB" name="deltalocations" />
+    <field type="BLOB" name="delta locations" />
     
     <key name="update">
       <ref field="name"/>
@@ -24,7 +24,7 @@
       <field ref="lat" type="INTEGER" />
       <field ref="lon" type="INTEGER" />
       <field ref="created" />
-      <field ref="deltalocations" />
+      <field ref="delta.locations" />
     </message>
   </relation>
 </content-provider>

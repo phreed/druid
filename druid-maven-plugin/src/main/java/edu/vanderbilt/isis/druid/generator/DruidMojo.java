@@ -112,6 +112,18 @@ public class DruidMojo extends AbstractMojo {
 	private boolean skeleton = false;
 
 	/**
+	 * each : generate a separate file for "each" of these elements.
+	 * <p>
+	 * <dl>
+	 * <dt>relation</dt><dd>one for each of the tables/relations mentioned</dd>
+	 * <dt>message</dt><dd>one for each of the messages mentioned</dd>
+	 * </dl>
+	 * 
+	 * @parameter expression="${generate.skeleton}" default-value="none"
+	 */
+	private String each;
+
+	/**
 	 * outputDirectory : the base path for the generated files.
 	 * <p>
 	 * This indicates where the generated files should be placed.
@@ -168,6 +180,11 @@ public class DruidMojo extends AbstractMojo {
 
 		generator.setContractPath(this.contractFile);
 		generator.setOutputDir(this.outputDirectory);
+		try {
+            generator.setEach(this.each);
+        } catch (GeneratorException ex) {
+            throw new MojoExecutionException("unknown each", ex);
+        }
 
 		generator.setSkeleton(this.skeleton);
 
