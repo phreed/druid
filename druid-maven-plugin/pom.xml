@@ -11,9 +11,43 @@
     <artifactId>druid-maven-plugin</artifactId>
     <name>druid code generator</name>
 
-    <packaging>jar</packaging>
+    <packaging>maven-plugin</packaging>
 
     <dependencies>
+<dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-aether-provider</artifactId>
+    </dependency>
+
+    <!-- plexus -->
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>2.2</version>
+    </dependency>
+
+
+
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-runtime</artifactId>
@@ -21,19 +55,14 @@
       </dependency>
 
       <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-plugin-api</artifactId>
+        <groupId>org.antlr</groupId>
+        <artifactId>ST4</artifactId>
       </dependency>
-  
+
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <scope>test</scope>
-      </dependency>
-  
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>ST4</artifactId>
       </dependency>
   
       <dependency>
@@ -53,6 +82,13 @@
   	<groupId>ch.qos.logback</groupId>
   	<artifactId>logback-core</artifactId>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven.plugin-testing</groupId>
+        <artifactId>maven-plugin-testing-harness</artifactId>
+        <scope>test</scope>
+      </dependency>
+
     </dependencies>
 
     <build>

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.stringtemplate.v4.ST;
@@ -32,6 +33,7 @@ public class Generator {
 
     private File outputPath;
     private boolean isSkeleton;
+    private Each each;
 
     public void setOutputDir(final File val) {
         this.outputPath = val;
@@ -59,6 +61,40 @@ public class Generator {
 
     public void setSkeleton(String skeleton) {
         this.setSkeleton(Boolean.valueOf(skeleton));
+    }
+
+    public void setEach(String each) throws GeneratorException {
+        final Each val = Each.getValue(each);
+        this.setEach(val);
+    }
+
+    public void setEach(Each each) {
+        this.each = each;
+    }
+
+    public static enum Each {
+        /** the tables/relations */
+        RELATION("relation"),
+        /** the messages */
+        MESSAGE("message"),
+        /** the messages */
+        NONE("none");
+
+        public final String val;
+
+        private Each(String val) {
+            this.val = val;
+        }
+
+        public static Each getValue(String val) throws GeneratorException {
+            if (Each.RELATION.val.equals(val))
+                return Each.RELATION;
+            if (Each.MESSAGE.val.equals(val))
+                return Each.MESSAGE;
+            if (Each.NONE.val.equals(val))
+                return Each.NONE;
+            throw new GeneratorException("unknown each type" + val);
+        }
     }
 
     /**
@@ -138,44 +174,85 @@ public class Generator {
      */
     public boolean build() throws GeneratorException {
         final STGroup stg = getGroup();
-        final Contract contract = Contract.newInstance(logger, this.contractFile);
-
-        final ST stFileBody = stg.getInstanceOf("BODY");
-        if (stFileBody == null) {
-            logger.warn("no body template provided");
-            return false;
+        if (stg == null) {
+            throw new GeneratorException("no group file loaded");
         }
+        final Contract contract = Contract.newInstance(logger, this.contractFile);
 
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
-            logger.warn("no body template provided");
-            return false;
+            throw new GeneratorException("no path template provided");
         }
-        stFileName.add("rootDir", this.outputPath);
+        stFileName.add("delimiter", File.pathSeparator);
+        stFileName.add("directory", this.outputPath);
+        stFileName.add("contract", contract.root);
         stFileName.add("isSkeleton", this.isSkeleton);
-        final String outputFileName = stFileName.render();
-        final File outputFile = new File(outputFileName);
+        
+        final ST stFileBody = stg.getInstanceOf("BODY");
+        if (stFileBody == null) {
+            throw new GeneratorException("no body template provided");
+        }
+        stFileBody.add("contract", contract);
+        
+        if (this.each.equals(Each.NONE)) {
+            final String outputFileName = stFileName.render();
+            final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
 
-        BufferedOutputStream os = null;
-        try {
-            stFileBody.add("contract", contract);
-            os = new BufferedOutputStream(new FileOutputStream(outputFile));
-            os.write(stFileBody.render().getBytes());
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (os != null)
-                try {
-                    os.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+            BufferedOutputStream os = null;
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(outputFile));
+                os.write(stFileBody.render().getBytes());
+            } catch (FileNotFoundException ex) {
+                throw new GeneratorException("problem writing output file", ex);
+            } catch (IOException ex) {
+                throw new GeneratorException("problem writing output file", ex);
+            } finally {
+                if (os != null)
+                    try {
+                        os.close();
+                    } catch (IOException ex) {
+                        throw new GeneratorException("problem closing output file", ex);
+                    }
+            }
+            return true;
+        }
+        final List<?> all;
+        switch (this.each) {
+            case RELATION:
+                all = contract.root.getRelations();
+                break;
+            case MESSAGE:
+            default:
+                throw new GeneratorException("unknown each type:" + this.each);
+        }
+        for (Object item : all) {
+            stFileName.add("item", item);
+            final String outputFileName = stFileName.render();
+            final File outputFile = new File(outputFileName);
+            final File outputDir = outputFile.getParentFile();
+            outputDir.mkdirs();
+
+            BufferedOutputStream os = null;
+            try {
+                stFileBody.add("item", item);
+                os = new BufferedOutputStream(new FileOutputStream(outputFile));
+                os.write(stFileBody.render().getBytes());
+            } catch (FileNotFoundException ex) {
+                throw new GeneratorException("problem writing output file", ex);
+            } catch (IOException ex) {
+                throw new GeneratorException("problem writing output file", ex);
+            } finally {
+                if (os != null)
+                    try {
+                        os.close();
+                    } catch (IOException ex) {
+                        throw new GeneratorException("problem closing output file", ex);
+                    }
+            }
         }
         return true;
     }
-    
+
 }
