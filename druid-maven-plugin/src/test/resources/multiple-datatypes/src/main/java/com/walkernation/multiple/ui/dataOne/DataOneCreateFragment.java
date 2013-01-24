@@ -82,8 +82,8 @@ public class DataOneCreateFragment extends Fragment {
 
 		// Get the EditTexts
 		byteNameET = (EditText) getView().findViewById(R.id.byteNameCreate);
-		// byteNameET.setKeyListener(null); // disable changing
 		shortNameET = (EditText) getView().findViewById(R.id.shortNameCreate);
+		intNameET = (EditText) getView().findViewById(R.id.intNameCreate);
 		longNameET = (EditText) getView().findViewById(R.id.longNameCreate);
 		floatNameET = (EditText) getView().findViewById(R.id.floatNameCreate);
 		doubleNameET = (EditText) getView().findViewById(R.id.doubleNameCreate);
@@ -139,8 +139,7 @@ public class DataOneCreateFragment extends Fragment {
 				Editable booleanEditable = doubleNameET.getText();
 
 				// pull values from Editables
-				byte byteNameValue = (byte) (Integer.valueOf(byteEditable
-						.toString()) % 128);
+				byte byteNameValue = 0;
 				short shortNameValue = Short.valueOf(shortEditable.toString());
 				int intNameValue = Integer.valueOf(intEditable.toString());
 				long longNameValue = Long.valueOf(longEditable.toString());

@@ -103,11 +103,13 @@ public class LocationsProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues value) {
+
 		Log.d(LOG_TAG, "insert()");
 
 		final int match = uriMatcher.match(uri);
 		switch (match) {
 		case DATA_ONE_ALL_ROWS: {
+			value.remove(ContentDescriptor.DataTypeOne.ColumnNames.ID);
 			long rowID = mDB.insert(ContentDescriptor.DataTypeOne.TABLE_NAME,
 					value);
 			if (rowID > -1) {
@@ -115,11 +117,15 @@ public class LocationsProvider extends ContentProvider {
 						ContentDescriptor.DataTypeOne.CONTENT_URI, rowID);
 				getContext().getContentResolver()
 						.notifyChange(insertedID, null);
+
 				return ContentUris.withAppendedId(CONTENT_URI, rowID);
+			} else {
+				Log.e(LOG_TAG, "insert didn't work, return of -1");
 			}
 			return null;
 		}
 		case DATA_TWO_ALL_ROWS: {
+			value.remove(ContentDescriptor.DataTypeOne.ColumnNames.ID);
 			long rowID = mDB.insert(ContentDescriptor.DataTypeTwo.TABLE_NAME,
 					value);
 			if (rowID > -1) {
@@ -134,6 +140,7 @@ public class LocationsProvider extends ContentProvider {
 
 		case DATA_TWO_SINGLE_ROW:
 		case DATA_ONE_SINGLE_ROW: {
+			value.remove(ContentDescriptor.DataTypeTwo.ColumnNames.ID);
 			throw new IllegalArgumentException(
 					"Unsupported URI, unable to insert into specific row: "
 							+ uri);

@@ -176,7 +176,7 @@ public class MultipleResolver {
 			throws RemoteException {
 		String[] selectionArgs = { String.valueOf(rowID) };
 		ArrayList<DataOneData> results = queryDataOneData(null,
-				ContentDescriptor.DataTypeOne.ColumnNames.ID + "=",
+				ContentDescriptor.DataTypeOne.ColumnNames.ID + "= ?",
 				selectionArgs, null);
 		if (results.size() > 0) {
 			return results.get(0);

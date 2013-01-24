@@ -14,7 +14,7 @@ public class LocationDataDBAdaptor {
 	private static final String LOG_TAG = LocationDataDBAdaptor.class
 			.getCanonicalName();
 
-	private static final String DATABASE_NAME = "myDatabase.db";
+	private static final String DATABASE_NAME = "myDatabase2.db";
 
 	static final int DATABASE_VERSION = 10;
 
@@ -25,25 +25,25 @@ public class LocationDataDBAdaptor {
 	private static final String DATA_ONE_TABLE_NAME = ContentDescriptor.DataTypeOne.TABLE_NAME;
 	private static final String ONE_KEY_ID = ContentDescriptor.DataTypeOne.ColumnNames.ID;
 	private static final String ONE_BYTE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
-	private static final String ONE_SHORT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
-	private static final String ONE_INT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
-	private static final String ONE_LONG_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
-	private static final String ONE_FLOAT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
-	private static final String ONE_DOUBLE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_SHORT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.SHORT_NAME;
+	private static final String ONE_INT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.INT_NAME;
+	private static final String ONE_LONG_NAME = ContentDescriptor.DataTypeOne.ColumnNames.LONG_NAME;
+	private static final String ONE_FLOAT_NAME = ContentDescriptor.DataTypeOne.ColumnNames.FLOAT_NAME;
+	private static final String ONE_DOUBLE_NAME = ContentDescriptor.DataTypeOne.ColumnNames.DOUBLE_NAME;
 	private static final String ONE_STRING_NAME = ContentDescriptor.DataTypeOne.ColumnNames.STRING_NAME;
-	private static final String ONE_BOOLEAN_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME;
+	private static final String ONE_BOOLEAN_NAME = ContentDescriptor.DataTypeOne.ColumnNames.BOOLEAN_NAME;
 
 	// for DataTypeTwo
 	private static final String DATA_TWO_TABLE_NAME = ContentDescriptor.DataTypeTwo.TABLE_NAME;
 	private static final String TWO_KEY_ID = ContentDescriptor.DataTypeTwo.ColumnNames.ID;
 	private static final String TWO_BYTE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
-	private static final String TWO_SHORT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
-	private static final String TWO_INT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
-	private static final String TWO_LONG_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
-	private static final String TWO_FLOAT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
-	private static final String TWO_DOUBLE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_SHORT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.SHORT_NAME;
+	private static final String TWO_INT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.INT_NAME;
+	private static final String TWO_LONG_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.LONG_NAME;
+	private static final String TWO_FLOAT_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.FLOAT_NAME;
+	private static final String TWO_DOUBLE_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.DOUBLE_NAME;
 	private static final String TWO_STRING_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.STRING_NAME;
-	private static final String TWO_BOOLEAN_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BYTE_NAME;
+	private static final String TWO_BOOLEAN_NAME = ContentDescriptor.DataTypeTwo.ColumnNames.BOOLEAN_NAME;
 
 	// SQL Statement to create a new database.
 	private static final String TABLE_DATA_ONE_CREATE = "create table "
@@ -137,8 +137,18 @@ public class LocationDataDBAdaptor {
 		try {
 			db = dbHelper.getWritableDatabase();
 		} catch (SQLException ex) {
-			db = dbHelper.getReadableDatabase();
+			try {
+				db = dbHelper.getReadableDatabase();
+				Log.e(LOG_TAG, "**************ONLY ABLE TO GET READABLE DB.");
+			} catch (SQLException ex2) {
+				Log.e(LOG_TAG, "**************unable ABLE TO GET READABLE DB.");
+				throw ex2;
+			}
 		}
+		if (db.isReadOnly()){
+			Log.e(LOG_TAG, "DB IS READ ONLY");
+		}
+		Log.e(LOG_TAG, "************** MADE IT TO END.");
 		return this;
 	}
 
@@ -245,9 +255,11 @@ public class LocationDataDBAdaptor {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d(LOG_TAG, "DBHelper: creation of new database.");
+			Log.d(LOG_TAG, "DBHelper: creation of new database."
+					+ TABLE_DATA_ONE_CREATE);
 			db.execSQL(TABLE_DATA_ONE_CREATE);
-			db.execSQL(TABLE_DATA_TWO_CREATE);
+
+			// db.execSQL(TABLE_DATA_TWO_CREATE);
 		}
 
 		@Override
@@ -260,7 +272,8 @@ public class LocationDataDBAdaptor {
 			// TODO: migrate data?? from old DB to new DB
 			// drop old DB
 			db.execSQL("DROP TABLE IF EXISTS " + DATA_ONE_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA_TWO_CREATE);
+			// db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA_TWO_CREATE);
+
 			// Create a new one.
 			onCreate(db);
 

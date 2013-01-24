@@ -1,7 +1,5 @@
 package com.walkernation.multiple.orm;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -82,7 +80,7 @@ public class DataOneCreator {
 					"Tried to read from empty Cursor.");
 		}
 
-		_id = cursor.getShort(cursor
+		_id = cursor.getInt(cursor
 				.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.ID));
 
 		/*
@@ -91,13 +89,13 @@ public class DataOneCreator {
 		 * 
 		 * TODO find a better way to do this....
 		 */
-		short tempShort = cursor
-				.getShort(cursor
-						.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME));
-		ByteBuffer bb = ByteBuffer.allocate(2);
-		bb.order(ByteOrder.LITTLE_ENDIAN);
-		bb.putShort(tempShort);
-		byteName = bb.get();
+		// short tempShort = cursor
+		// .getShort(cursor
+		// .getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.BYTE_NAME));
+		// ByteBuffer bb = ByteBuffer.allocate(2);
+		// bb.order(ByteOrder.LITTLE_ENDIAN);
+		// bb.putShort(tempShort);
+		// byteName = bb.get();
 
 		shortName = cursor
 				.getShort(cursor

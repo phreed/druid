@@ -21,8 +21,8 @@ public class ContentDescriptor {
 	 */
 
 	public static final String ORGANIZATIONAL_NAME = "com.walkernation";
-	public static final String PROJECT_NAME = "testDB";
-	public static final String PROVIDER_NAME = "tprovider";
+	public static final String PROJECT_NAME = "multiple";
+	public static final String PROVIDER_NAME = "provider";
 
 	/**
 	 * ConentProvider Related Constants
@@ -55,8 +55,7 @@ public class ContentDescriptor {
 	 */
 	public static class DataTypeOne {
 		// an identifying name for entity
-		public static final String TABLE_NAME = DataTypeOne.class
-				.getCanonicalName();
+		public static final String TABLE_NAME = "DataTypeOne";
 
 		// define a URI paths to access entity
 		// BASE_URI/restaurants - for list of locations
@@ -140,8 +139,7 @@ public class ContentDescriptor {
 	 */
 	public static class DataTypeTwo {
 		// an identifying name for entity
-		public static final String TABLE_NAME = DataTypeTwo.class
-				.getCanonicalName();
+		public static final String TABLE_NAME = "DataTypeTwo";
 
 		// define a URI paths to access entity
 		// BASE_URI/restaurants - for list of locations

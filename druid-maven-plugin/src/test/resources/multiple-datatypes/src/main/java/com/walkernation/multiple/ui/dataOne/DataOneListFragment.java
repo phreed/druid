@@ -95,7 +95,7 @@ public class DataOneListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// create the custom array adapter that will make the custom row
 		// layouts
-
+		super.onActivityCreated(savedInstanceState);
 		Log.d(LOG_TAG, "onActivityCreated");
 		aa = new DataOneArrayAdapter(getActivity(),
 				R.layout.data_one_listview_custom_row, dataOneData);
@@ -130,6 +130,9 @@ public class DataOneListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d(LOG_TAG, "onListItemClick");
+		Log.d(LOG_TAG,
+				"position: " + position + "id = "
+						+ (dataOneData.get(position))._id);
 		mOpener.openViewLocationFragment((dataOneData.get(position))._id);
 	}
 
