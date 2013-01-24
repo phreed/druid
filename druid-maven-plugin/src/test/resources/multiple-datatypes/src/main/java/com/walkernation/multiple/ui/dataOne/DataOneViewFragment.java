@@ -102,7 +102,7 @@ public class DataOneViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_view_fragment,
+		View view = inflater.inflate(R.layout.data_one_view_fragment,
 				container, false);
 		container.setBackgroundColor(Color.CYAN);
 		return view;
@@ -144,8 +144,7 @@ public class DataOneViewFragment extends Fragment {
 	public void setUiToDataOneData(int getUniqueKey) throws RemoteException {
 		DataOneData dataOneData = null;
 		try { // TODO fix this to pull the right value by'_id' or something...
-			 dataOneData = resolver
-					.getDataOneDataViaRowID(getUniqueKey);
+			dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey);
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "RemoteException Caught => " + e.getMessage());
 			e.printStackTrace();
@@ -174,13 +173,13 @@ public class DataOneViewFragment extends Fragment {
 		String message;
 
 		message = getResources().getString(
-				R.string.location_view_deletion_dialog_message);
+				R.string.dataone_view_deletion_dialog_message);
 
 		new AlertDialog.Builder(getActivity())
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.location_view_deletion_dialog_title)
+				.setTitle(R.string.dataone_view_deletion_dialog_title)
 				.setMessage(message)
-				.setPositiveButton(R.string.location_view_deletion_dialog_yes,
+				.setPositiveButton(R.string.dataone_view_deletion_dialog_yes,
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,
@@ -201,7 +200,7 @@ public class DataOneViewFragment extends Fragment {
 							}
 
 						})
-				.setNegativeButton(R.string.location_view_deletion_dialog_no,
+				.setNegativeButton(R.string.dataone_view_deletion_dialog_no,
 						null).show();
 	}
 

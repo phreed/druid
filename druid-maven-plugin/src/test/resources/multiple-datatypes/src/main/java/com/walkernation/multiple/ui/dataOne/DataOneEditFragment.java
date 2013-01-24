@@ -133,7 +133,7 @@ public class DataOneEditFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_edit_fragment,
+		View view = inflater.inflate(R.layout.data_one_edit_fragment,
 				container, false);
 		container.setBackgroundColor(Color.CYAN);
 		return view;

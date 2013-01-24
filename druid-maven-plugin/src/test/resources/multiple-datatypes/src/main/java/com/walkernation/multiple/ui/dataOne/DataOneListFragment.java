@@ -64,7 +64,7 @@ public class DataOneListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_listview, container,
+		View view = inflater.inflate(R.layout.data_one_listview_fragment, container,
 				false);
 		// get the ListView that will be displayed
 		ListView lv = (ListView) view.findViewById(android.R.id.list);

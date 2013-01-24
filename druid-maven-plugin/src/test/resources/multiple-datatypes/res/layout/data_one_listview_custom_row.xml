@@ -5,41 +5,41 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/shortName"
+        android:id="@+id/shortValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="user_id"
+        android:text="@string/dataone_list_custom_row_default_value_short"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/intName"
+        android:id="@+id/intValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shortName"
+        android:layout_below="@+id/shortValue"
         android:paddingLeft="10dp"
-        android:text="latitude"
+        android:text="@string/dataone_list_custom_row_default_value_int"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/longName"
+        android:id="@+id/longValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shortName"
-        android:layout_toRightOf="@+id/intName"
+        android:layout_below="@+id/shortValue"
+        android:layout_toRightOf="@+id/intValue"
         android:paddingLeft="10dp"
-        android:text="longitude"
+        android:text="@string/dataone_list_custom_row_default_value_long"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/stringName"
+        android:id="@+id/stringValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shortName"
-        android:layout_toRightOf="@+id/longName"
+        android:layout_below="@+id/shortValue"
+        android:layout_toRightOf="@+id/longValue"
         android:paddingLeft="10dp"
-        android:text="Height"
+        android:text="@string/dataone_list_custom_row_default_value_string"
         android:textSize="16sp" />
 
 </RelativeLayout>

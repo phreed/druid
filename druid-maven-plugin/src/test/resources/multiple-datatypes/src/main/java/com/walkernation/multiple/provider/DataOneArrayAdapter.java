@@ -58,12 +58,12 @@ public class DataOneArrayAdapter extends ArrayAdapter<DataOneData> {
 			}
 
 			TextView shortNameTV = (TextView) todoView
-					.findViewById(R.id.shortName);
-			TextView intNameTV = (TextView) todoView.findViewById(R.id.intName);
+					.findViewById(R.id.shortValue);
+			TextView intNameTV = (TextView) todoView.findViewById(R.id.intValue);
 			TextView longNameTV = (TextView) todoView
-					.findViewById(R.id.longName);
+					.findViewById(R.id.longValue);
 			TextView stringNameTV = (TextView) todoView
-					.findViewById(R.id.stringName);
+					.findViewById(R.id.stringValue);
 
 			shortNameTV.setText("" + shortName);
 			intNameTV.setText("" + intName);

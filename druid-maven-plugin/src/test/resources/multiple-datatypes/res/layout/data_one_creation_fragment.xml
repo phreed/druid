@@ -20,75 +20,75 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/location_create_view_label_byteName"
+                android:id="@+id/dataone_create_label_byte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/byteNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="byteName:"
+                android:text="@string/dataone_create_label_byte"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_short"
+                android:id="@+id/dataone_create_label_short"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/shortNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="shortName:"
+                android:text="@string/dataone_create_label_short"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_int"
+                android:id="@+id/dataone_create_label_int"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/intNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="intName:"
+                android:text="@string/dataone_create_label_int"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_long"
+                android:id="@+id/dataone_create_label_long"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/longNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="longName:"
+                android:text="@string/dataone_create_label_long"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_floatName"
+                android:id="@+id/dataone_create_label_floatName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/floatNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="floatName:"
+                android:text="@string/dataone_create_label_float"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_doubleName"
+                android:id="@+id/dataone_create_label_doubleName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/doubleNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="doubleName:"
+                android:text="@string/dataone_create_label_double"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_string"
+                android:id="@+id/dataone_create_label_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/stringNameCreate"
                 android:layout_alignParentLeft="true"
-                android:text="string"
+                android:text="@string/dataone_create_label_string"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_create_view_label_booleanName"
+                android:id="@+id/dataone_create_label_booleanName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/booleanNameToggleButtonCreate"
                 android:layout_alignParentLeft="true"
-                android:text="booleanName:"
+                android:text="@string/dataone_create_label_boolean"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <!-- EditText(s) -->
@@ -162,30 +162,30 @@
     <!-- Button(s) -->
 
     <Button
-        android:id="@+id/location_create_button_save"
+        android:id="@+id/dataone_create_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="32dp"
-        android:text="@string/location_create_button_label_create" />
+        android:text="@string/dataone_create_button_label_create" />
 
     <Button
-        android:id="@+id/location_create_button_reset"
+        android:id="@+id/dataone_create_button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/location_create_button_label_clear" />
+        android:text="@string/dataone_create_button_label_clear" />
 
     <Button
-        android:id="@+id/location_create_button_cancel"
+        android:id="@+id/dataone_create_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="21dp"
-        android:text="@string/location_create_button_label_cancel" />
+        android:text="@string/dataone_create_button_label_cancel" />
 
 </RelativeLayout>

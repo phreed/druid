@@ -92,11 +92,11 @@ public class DataOneCreateFragment extends Fragment {
 				R.id.booleanNameToggleButtonCreate);
 
 		buttonClear = (Button) getView().findViewById(
-				R.id.location_create_button_reset);
+				R.id.dataone_create_button_reset);
 		buttonCancel = (Button) getView().findViewById(
-				R.id.location_create_button_cancel);
+				R.id.dataone_create_button_reset);
 		buttonCreate = (Button) getView().findViewById(
-				R.id.location_create_button_save);
+				R.id.dataone_create_button_save);
 
 		buttonClear.setOnClickListener(new OnClickListener() {
 			@Override
@@ -139,7 +139,7 @@ public class DataOneCreateFragment extends Fragment {
 				Editable booleanEditable = doubleNameET.getText();
 
 				// pull values from Editables
-				byte byteNameValue = 0;
+				byte byteNameValue = Byte.valueOf(byteEditable.toString());
 				short shortNameValue = Short.valueOf(shortEditable.toString());
 				int intNameValue = Integer.valueOf(intEditable.toString());
 				long longNameValue = Long.valueOf(longEditable.toString());
@@ -178,7 +178,7 @@ public class DataOneCreateFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_creation_fragment,
+		View view = inflater.inflate(R.layout.data_one_creation_fragment,
 				container, false);
 		container.setBackgroundColor(Color.CYAN);
 		return view;

@@ -90,8 +90,10 @@ public class MultipleResolver {
 	/*
 	 * Insert for each ORM Data Type
 	 */
-	public Uri insert(final DataOneData locationData) throws RemoteException {
-		return cr.insert(dataOneURI, locationData.getCV());
+	public Uri insert(final DataOneData dataOneObject) throws RemoteException {
+		ContentValues tempCV = dataOneObject.getCV();
+		tempCV.remove(ContentDescriptor.DataTypeOne.ColumnNames.ID);
+		return cr.insert(dataOneURI, tempCV);
 	}
 
 	public Uri insert(final DataTwoData locationData) throws RemoteException {
