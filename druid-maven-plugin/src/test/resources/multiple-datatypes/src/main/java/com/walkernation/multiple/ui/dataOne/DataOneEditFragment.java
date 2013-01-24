@@ -116,6 +116,7 @@ public class DataOneEditFragment extends Fragment {
 		byteNameET = (EditText) getView().findViewById(R.id.byteValue);
 		// byteNameET.setKeyListener(null); // disable changing
 		shortNameET = (EditText) getView().findViewById(R.id.shortValue);
+		intNameET = (EditText) getView().findViewById(R.id.intValue);
 		longNameET = (EditText) getView().findViewById(R.id.longValue);
 		floatNameET = (EditText) getView().findViewById(R.id.floatValue);
 		doubleNameET = (EditText) getView().findViewById(R.id.doubleValue);
@@ -205,6 +206,7 @@ public class DataOneEditFragment extends Fragment {
 	}
 
 	public boolean setValuesToDefault() {
+
 		DataOneData dataOneData;
 		try {
 			dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey());
@@ -215,6 +217,7 @@ public class DataOneEditFragment extends Fragment {
 		}
 
 		if (dataOneData != null) {
+			Log.d(LOG_TAG, "setValuesToDefualt :" + dataOneData.toString());
 			// set the EditTexts to the current values
 			byteNameET.setText(String.valueOf(dataOneData.byteName));
 			shortNameET.setText(String.valueOf(dataOneData.shortName));
