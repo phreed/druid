@@ -142,9 +142,10 @@ public class DataOneViewFragment extends Fragment {
 	}
 
 	public void setUiToDataOneData(int getUniqueKey) throws RemoteException {
-		DataOneData dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey);
-		try { // TODO fix this to pull the right value by '_id' or something...
-			dataOneData = null;// = getLocationDataForUserID(getUniqueKey);
+		DataOneData dataOneData = null;
+		try { // TODO fix this to pull the right value by'_id' or something...
+			 dataOneData = resolver
+					.getDataOneDataViaRowID(getUniqueKey);
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "RemoteException Caught => " + e.getMessage());
 			e.printStackTrace();

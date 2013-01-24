@@ -146,9 +146,7 @@ public class LocationDataDBAdaptor {
 			}
 		}
 		if (db.isReadOnly()){
-			Log.e(LOG_TAG, "DB IS READ ONLY");
 		}
-		Log.e(LOG_TAG, "************** MADE IT TO END.");
 		return this;
 	}
 

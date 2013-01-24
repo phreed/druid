@@ -57,7 +57,9 @@ public class DataOneCreator {
 	}
 
 	/**
-	 * Get the first LocationData from the passed in cursor.
+	 * Get the LocationData from the passed in cursor at its current location.
+	 * <p>
+	 * it is your responsibility to iterate over the cursor properly.
 	 * 
 	 * @param cursor
 	 *            passed in cursor
@@ -75,11 +77,7 @@ public class DataOneCreator {
 		String stringName = "";
 		boolean booleanName = false;
 
-		if (cursor.moveToFirst() == false) {
-			throw new UnsupportedOperationException(
-					"Tried to read from empty Cursor.");
-		}
-
+	
 		_id = cursor.getInt(cursor
 				.getColumnIndex(ContentDescriptor.DataTypeOne.ColumnNames.ID));
 
