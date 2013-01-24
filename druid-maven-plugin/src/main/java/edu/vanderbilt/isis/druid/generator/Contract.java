@@ -146,6 +146,11 @@ public class Contract {
             }
             return sb.toString();
         }
+
+        @Override
+        public String toString() {
+        return this.base;
+    }
     }
 
     /**
@@ -177,14 +182,17 @@ public class Contract {
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
             sb.append("<provider name=\"").append(name.norm).append("\" ")
                     .append(" sponsor=\"").append(sponsor).append("\">\n");
             for (Relation relation : this.relations) {
                 sb.append(relation.toString());
             }
             sb.append("\n</provider>");
-            return sb.toString();
+            return sb;
         }
     }
 
@@ -196,6 +204,7 @@ public class Contract {
         final private RMode mode;
         final private List<Field> fields;
         final private List<FieldRef> keycols;
+        final private List<Message> messages;
 
         public Name getName() {
             return name;
@@ -212,18 +221,28 @@ public class Contract {
         public List<FieldRef> getKeycols() {
             return keycols;
         }
+        
+        public List<Message> getMessages() {
+            return this.messages;
+        }
+
 
         public Relation(final Name name, final RMode mode,
-                final List<Field> fields, final List<FieldRef> keycols) {
+                final List<Field> fields, final List<FieldRef> keycols, 
+                final List<Message> messages) {
             this.name = name;
             this.mode = mode;
             this.fields = fields;
             this.keycols = keycols;
+            this.messages = messages;
         }
 
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
             sb.append("<relation name=").append(name.norm).append(">\n");
             for (Field field : this.fields) {
                 sb.append(field.toString());
@@ -231,8 +250,12 @@ public class Contract {
             for (FieldRef ref : this.keycols) {
                 sb.append(ref.toString());
             }
+            for (Message message : this.messages) {
+                if (message == null) continue;
+                sb.append(message.toString());
+            }
             sb.append("\n</relation>");
-            return sb.toString();
+            return sb;
         }
     }
 
@@ -262,9 +285,13 @@ public class Contract {
 
         @Override
         public String toString() {
-            return new StringBuilder().append("<mode name='").append(name.norm)
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            return sb.append("<mode name='").append(name.norm)
                     .append("' type='").append(dtype).append("'>")
-                    .append(description).append("</field>").toString();
+                    .append(description).append("</mode>");
         }
     }
     
@@ -311,6 +338,9 @@ public class Contract {
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
             sb.append("<field name='").append(name.norm).append("' type='")
                     .append("'>");
             sb.append(description);
@@ -318,7 +348,7 @@ public class Contract {
                 sb.append(en.toString());
             }
             sb.append("</field>\n");
-            return sb.toString();
+            return sb;
         }
     }
 
@@ -335,10 +365,64 @@ public class Contract {
 
         @Override
         public String toString() {
-            return new StringBuilder().append("<ref field='").append(name.norm)
-                    .append("' />").toString();
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            return sb.append("<ref field='").append(name.norm).append("'/>");
         }
     }
+    
+
+    public static class Message {
+        private final Name encoding;
+        private final List<MessageField> fields;
+
+        public Name getName() {
+            return encoding;
+        }
+
+        public Message(final Name encoding, final List<MessageField> fields) {
+            this.encoding = encoding;
+            this.fields = fields;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            sb.append("<message encoding='").append(encoding.norm).append("'>");
+            for (MessageField field : this.fields) {
+                field.toString(sb);
+            }
+            return sb.append("</message>");
+        }
+    }
+    
+    public static class MessageField {
+        private final Name name;
+
+        public Name getName() {
+            return name;
+        }
+
+        public MessageField(final Name name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            return new StringBuilder().append("<field ref='").append(name.norm)
+                    .append("' />");
+        }
+    }
+
 
     /**
      * A column in a table (relation).
@@ -362,9 +446,13 @@ public class Contract {
 
         @Override
         public String toString() {
-            return new StringBuilder().append("<enum key=\"").append(key)
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            return sb.append("<enum key=\"").append(key)
                     .append('"').append(' ').append("value=\"").append(ordinal)
-                    .append("\"/>\n").toString();
+                    .append("\"/>\n");
         }
     }
 
