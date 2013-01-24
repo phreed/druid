@@ -24,7 +24,7 @@ public class DataOneData implements Serializable, Parcelable {
 	public boolean booleanName;
 
 	public DataOneData() {
-		_id = 0; // TODO change to negative 1?
+		_id = -1; // TODO change to negative 1?
 		byteName = 0;
 		shortName = 0;
 		intName = 0;
@@ -40,6 +40,21 @@ public class DataOneData implements Serializable, Parcelable {
 			final float floatName, final double doubleName,
 			final String stringName, final boolean booleanName) {
 		this._id = _id;
+		this.byteName = byteName;
+		this.shortName = shortName;
+		this.intName = intName;
+		this.longName = longName;
+		this.floatName = floatName;
+		this.doubleName = doubleName;
+		this.stringName = stringName;
+		this.booleanName = booleanName;
+
+	}
+
+	public DataOneData(final byte byteName, final short shortName,
+			final int intName, final long longName, final float floatName,
+			final double doubleName, final String stringName,
+			final boolean booleanName) {
 		this.byteName = byteName;
 		this.shortName = shortName;
 		this.intName = intName;
@@ -106,4 +121,12 @@ public class DataOneData implements Serializable, Parcelable {
 		booleanName = (in.readByte() == 1);
 	}
 
+	@Override
+	public String toString() {
+		String rValue = "id => " + _id + ", byte => " + shortName + ", int =>"
+				+ intName + ", long =>" + longName + ", float =>" + floatName
+				+ ", double =>" + doubleName + ", string =>" + stringName
+				+ ", bool =>" + booleanName;
+		return rValue;
+	}
 }

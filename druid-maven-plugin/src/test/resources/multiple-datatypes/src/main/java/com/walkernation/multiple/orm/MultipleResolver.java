@@ -205,12 +205,16 @@ public class MultipleResolver {
 		return deleteDataTwo("_id=?", selectionArgs);
 	}
 
-	public int deleteAllDataOne(long userID) throws RemoteException {
-		return deleteDataOne(null, null);
+	public int deleteAllDataOneWithRowID(long rowID) throws RemoteException {
+		String[] args = { String.valueOf(rowID) };
+		return deleteDataOne(ContentDescriptor.DataTypeOne.ColumnNames.ID
+				+ " = ? ", args);
 	}
 
-	public int deleteAllDataTwo(long userID) throws RemoteException {
-		return deleteDataTwo(null, null);
+	public int deleteAllDataTwoWithRowID(long rowID) throws RemoteException {
+		String[] args = { String.valueOf(rowID) };
+		return deleteDataTwo(ContentDescriptor.DataTypeTwo.ColumnNames.ID
+				+ " = ? ", args);
 	}
 
 	public int updateDataOneWithID(DataOneData dataOne) throws RemoteException {

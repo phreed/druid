@@ -145,7 +145,7 @@ public class LocationDataDBAdaptor {
 				throw ex2;
 			}
 		}
-		if (db.isReadOnly()){
+		if (db.isReadOnly()) {
 		}
 		return this;
 	}
@@ -253,11 +253,9 @@ public class LocationDataDBAdaptor {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d(LOG_TAG, "DBHelper: creation of new database."
-					+ TABLE_DATA_ONE_CREATE);
+			Log.d(LOG_TAG, "DBHelper: creation of new database.");
 			db.execSQL(TABLE_DATA_ONE_CREATE);
-
-			// db.execSQL(TABLE_DATA_TWO_CREATE);
+			db.execSQL(TABLE_DATA_TWO_CREATE);
 		}
 
 		@Override
@@ -270,7 +268,7 @@ public class LocationDataDBAdaptor {
 			// TODO: migrate data?? from old DB to new DB
 			// drop old DB
 			db.execSQL("DROP TABLE IF EXISTS " + DATA_ONE_TABLE_NAME);
-			// db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA_TWO_CREATE);
+			db.execSQL("DROP TABLE IF EXISTS " + DATA_TWO_TABLE_NAME);
 
 			// Create a new one.
 			onCreate(db);

@@ -29,7 +29,7 @@ public class DataOneViewFragment extends Fragment {
 	public final static String rowIdentifyerTAG = "index";
 
 	private OnOpenWindowInterface mOpener;
-
+	
 	public final static String LOCATION = "location";
 
 	TextView byteNameTV;
@@ -141,8 +141,10 @@ public class DataOneViewFragment extends Fragment {
 		}
 	}
 
+	DataOneData dataOneData;
+
 	public void setUiToDataOneData(int getUniqueKey) throws RemoteException {
-		DataOneData dataOneData = null;
+		dataOneData = null;
 		try { // TODO fix this to pull the right value by'_id' or something...
 			dataOneData = resolver.getDataOneDataViaRowID(getUniqueKey);
 		} catch (Exception e) {
@@ -165,7 +167,7 @@ public class DataOneViewFragment extends Fragment {
 
 	// action to be performed when the edit button is pressed
 	private void editButtonPressed() {
-		mOpener.openEditLocationFragment(getUniqueKey());
+		mOpener.openEditLocationFragment(dataOneData._id);
 	}
 
 	// action to be performed when the delete button is pressed
@@ -185,7 +187,7 @@ public class DataOneViewFragment extends Fragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								try {
-									resolver.deleteAllDataOne(getUniqueKey());
+									resolver.deleteAllDataOneWithRowID(dataOneData._id);
 								} catch (RemoteException e) {
 									Log.e(LOG_TAG, "RemoteException Caught => "
 											+ e.getMessage());
