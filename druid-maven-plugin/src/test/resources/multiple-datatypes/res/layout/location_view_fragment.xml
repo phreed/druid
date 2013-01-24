@@ -26,7 +26,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_latitude"
+                android:text="@string/dataone_view_label_byte"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <!-- The rest of the labels are aligned to the bottom & rigth of the one above -->
@@ -38,7 +38,7 @@
                 android:layout_alignLeft="@+id/labelByte"
                 android:layout_below="@+id/labelByte"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_longitude"
+                android:text="@string/dataone_view_label_short"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -48,7 +48,7 @@
                 android:layout_alignLeft="@+id/labelShort"
                 android:layout_below="@+id/labelShort"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_height"
+                android:text="@string/dataone_view_label_int"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_alignLeft="@+id/labelInt"
                 android:layout_below="@+id/labelInt"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_userid"
+                android:text="@string/dataone_view_label_long"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -68,7 +68,7 @@
                 android:layout_alignLeft="@+id/labelLong"
                 android:layout_below="@+id/labelLong"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_userid"
+                android:text="@string/dataone_view_label_float"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -78,7 +78,7 @@
                 android:layout_alignLeft="@+id/labelFloat"
                 android:layout_below="@+id/labelFloat"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_userid"
+                android:text="@string/dataone_view_label_double"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -88,7 +88,7 @@
                 android:layout_alignLeft="@+id/labelDouble"
                 android:layout_below="@+id/labelDouble"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_userid"
+                android:text="@string/dataone_view_label_string"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -98,7 +98,7 @@
                 android:layout_alignLeft="@+id/labelString"
                 android:layout_below="@+id/labelString"
                 android:layout_gravity="left"
-                android:text="@string/location_view_label_userid"
+                android:text="@string/dataone_view_label_boolean"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <!-- These are the diplayed values -->
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/location_view_edittext_userid_default_value"
+                android:text="@string/dataone_view_default_value_byte"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <!-- following are aligned below value above and to right of parent -->
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/byteName"
-                android:text="@string/location_view_edittext_latitude_default_value"
+                android:text="@string/dataone_view_default_value_short"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/shortName"
-                android:text="@string/location_view_edittext_longitude_default_value"
+                android:text="@string/dataone_view_default_value_int"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/intName"
-                android:text="@string/location_view_edittext_height_default_value"
+                android:text="@string/dataone_view_default_value_long"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/longName"
-                android:text="@string/location_view_edittext_height_default_value"
+                android:text="@string/dataone_view_default_value_float"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/floatName"
-                android:text="@string/location_view_edittext_height_default_value"
+                android:text="@string/dataone_view_default_value_double"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/doubleName"
-                android:text="@string/location_view_edittext_height_default_value"
+                android:text="@string/dataone_view_default_value_string"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/stringName"
-                android:text="@string/location_view_edittext_height_default_value"
+                android:text="@string/dataone_view_default_value_boolean"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </ScrollView>
@@ -189,7 +189,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="26dp"
         android:padding="3dp"
-        android:text="@string/location_view_button_label_edit"
+        android:text="@string/dataone_view_button_label_edit"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -199,7 +199,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:padding="3dp"
-        android:text="@string/location_view_button_label_delete"
+        android:text="@string/dataone_view_button_label_delete"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

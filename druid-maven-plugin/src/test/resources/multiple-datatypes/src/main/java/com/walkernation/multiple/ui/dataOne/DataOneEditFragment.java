@@ -53,13 +53,13 @@ public class DataOneEditFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.edit_location_button_save:
+			case R.id.dataone_edit_button_save:
 				doSaveButtonClick();
 				break;
-			case R.id.edit_location_button_reset:
+			case R.id.dataone_edit_button_reset:
 				doResetButtonClick();
 				break;
-			case R.id.edit_location_button_cancel:
+			case R.id.dataone_edit_button_cancel:
 				doCancelButtonClick();
 				break;
 			default:
@@ -107,21 +107,21 @@ public class DataOneEditFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		// Get the Buttons
 		saveButton = (Button) getView().findViewById(
-				R.id.edit_location_button_save);
+				R.id.dataone_edit_button_save);
 		resetButton = (Button) getView().findViewById(
-				R.id.edit_location_button_reset);
+				R.id.dataone_edit_button_reset);
 		cancelButton = (Button) getView().findViewById(
-				R.id.edit_location_button_cancel);
+				R.id.dataone_edit_button_cancel);
 		// Get the EditTexts
-		byteNameET = (EditText) getView().findViewById(R.id.byteName);
+		byteNameET = (EditText) getView().findViewById(R.id.byteValue);
 		// byteNameET.setKeyListener(null); // disable changing
-		shortNameET = (EditText) getView().findViewById(R.id.shortName);
-		longNameET = (EditText) getView().findViewById(R.id.longName);
-		floatNameET = (EditText) getView().findViewById(R.id.floatName);
-		doubleNameET = (EditText) getView().findViewById(R.id.doubleName);
-		stringNameET = (EditText) getView().findViewById(R.id.stringName);
+		shortNameET = (EditText) getView().findViewById(R.id.shortValue);
+		longNameET = (EditText) getView().findViewById(R.id.longValue);
+		floatNameET = (EditText) getView().findViewById(R.id.floatValue);
+		doubleNameET = (EditText) getView().findViewById(R.id.doubleValue);
+		stringNameET = (EditText) getView().findViewById(R.id.stringValue);
 		booleanNameTB = (ToggleButton) getView().findViewById(
-				R.id.booleanNameToggleButton);
+				R.id.booleanValueToggleButton);
 		// setup the onClick callback methods
 		saveButton.setOnClickListener(myOnClickListener);
 		resetButton.setOnClickListener(myOnClickListener);

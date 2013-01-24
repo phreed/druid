@@ -20,139 +20,146 @@
             <!-- labels -->
 
             <TextView
-                android:id="@+id/location_edit_view_label_userid"
+                android:id="@+id/dataone_edit_label_byte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/shortName"
+                android:layout_alignBottom="@+id/byteValue"
                 android:layout_alignParentLeft="true"
-                android:text="short"
+                android:text="@string/dataone_edit_label_byte"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_latitude"
+                android:id="@+id/dataone_edit_label_short"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/intName"
+                android:layout_alignBottom="@+id/shortValue"
                 android:layout_alignParentLeft="true"
-                android:text="int"
+                android:text="@string/dataone_edit_label_short"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_longitude"
+                android:id="@+id/dataone_edit_label_int"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/longName"
+                android:layout_alignBottom="@+id/intValue"
                 android:layout_alignParentLeft="true"
-                android:text="long"
+                android:text="@string/dataone_edit_label_int"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_height"
+                android:id="@+id/dataone_edit_label_long"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/stringName"
+                android:layout_alignBottom="@+id/longValue"
                 android:layout_alignParentLeft="true"
-                android:text="string"
+                android:text="@string/dataone_edit_label_long"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_booleanName"
+                android:id="@+id/dataone_edit_label_float"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/booleanNameToggleButton"
+                android:layout_alignBottom="@+id/floatValue"
                 android:layout_alignParentLeft="true"
-                android:text="booleanName:"
+                android:text="@string/dataone_edit_label_float"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_byteName"
+                android:id="@+id/dataone_edit_label_double"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/byteName"
+                android:layout_alignBottom="@+id/doubleValue"
                 android:layout_alignParentLeft="true"
-                android:text="byteName:"
+                android:text="@string/dataone_edit_label_double"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_floatName"
+                android:id="@+id/dataone_edit_label_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/floatName"
+                android:layout_alignBottom="@+id/stringValue"
                 android:layout_alignParentLeft="true"
-                android:text="booleanName:"
+                android:text="@string/dataone_edit_label_string"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/location_edit_view_label_doubleName"
+                android:id="@+id/dataone_edit_label_boolean"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/DoubleName"
+                android:layout_alignBottom="@+id/booleanValueToggleButton"
                 android:layout_alignParentLeft="true"
-                android:text="booleanName:"
+                android:text="@string/dataone_edit_label_boolean"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/byteName"
+                android:id="@+id/byteValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:inputType="number" />
+                android:inputType="number"
+                android:text="@string/dataone_edit_default_value_byte" />
 
             <EditText
-                android:id="@+id/shortName"
+                android:id="@+id/shortValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/byteName"
-                android:inputType="number" />
+                android:layout_below="@+id/byteValue"
+                android:inputType="numberSigned"
+                android:text="@string/dataone_edit_default_value_short" />
 
             <EditText
-                android:id="@+id/intName"
+                android:id="@+id/intValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/shortName"
-                android:inputType="number" />
+                android:layout_below="@+id/shortValue"
+                android:inputType="numberSigned"
+                android:text="@string/dataone_edit_default_value_int" />
 
             <EditText
-                android:id="@+id/longName"
+                android:id="@+id/longValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/intName"
-                android:inputType="number" />
+                android:layout_below="@+id/intValue"
+                android:inputType="numberSigned"
+                android:text="@string/dataone_edit_default_value_long" />
 
             <EditText
-                android:id="@+id/floatName"
+                android:id="@+id/floatValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/longName"
-                android:inputType="number" />
+                android:layout_below="@+id/longValue"
+                android:inputType="numberDecimal"
+                android:text="@string/dataone_edit_default_value_float" />
 
             <EditText
-                android:id="@+id/DoubleName"
+                android:id="@+id/doubleValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/floatName"
-                android:inputType="number" />
+                android:layout_below="@+id/floatValue"
+                android:inputType="numberDecimal"
+                android:text="@string/dataone_edit_default_value_double" />
 
             <EditText
-                android:id="@+id/stringName"
+                android:id="@+id/stringValue"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/DoubleName"
-                android:inputType="number" />
+                android:layout_below="@+id/doubleValue"
+                android:inputType="text"
+                android:text="@string/dataone_edit_default_value_string" />
 
             <ToggleButton
-                android:id="@+id/booleanNameToggleButton"
+                android:id="@+id/booleanValueToggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/stringName"
+                android:layout_below="@+id/stringValue"
                 android:textOff="False"
                 android:textOn="True" />
         </RelativeLayout>
@@ -160,30 +167,30 @@
     <!-- buttons -->
 
     <Button
-        android:id="@+id/edit_location_button_save"
+        android:id="@+id/dataone_edit_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="32dp"
-        android:text="@string/location_edit_button_message_save" />
+        android:text="@string/dataone_edit_button_message_save" />
 
     <Button
-        android:id="@+id/edit_location_button_reset"
+        android:id="@+id/dataone_edit_button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/location_edit_button_message_reset" />
+        android:text="@string/dataone_edit_button_message_reset" />
 
     <Button
-        android:id="@+id/edit_location_button_cancel"
+        android:id="@+id/dataone_edit_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="21dp"
-        android:text="@string/location_edit_button_message_cancel" />
+        android:text="@string/dataone_edit_button_message_cancel" />
 
 </RelativeLayout>
