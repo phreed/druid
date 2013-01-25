@@ -1,0 +1,93 @@
+
+
+literalValueMap ::= [
+        "SERIAL":    {"<value>"},
+        "FK":        {<value>},
+        "EXCLUSIVE": {<prefix>.<value>},
+        "INCLUSIVE": {<prefix>.<value>},
+        "SHORT":     {<value>},
+        "INTEGER":   {<value>},
+        "BOOL":      {<value>},
+        "LONG":      {<value>},
+        "TIMESTAMP": {<value>},
+        "REAL":      {<value>},
+        "GUID":      {"<value>"},
+        "TEXT":      {"<value>"},
+        "BLOB":      {"<value>"},
+        "FILE":      {"<value>"},
+        "TYPE":      {"<value>"},
+        default:     {"<value>"}
+]
+
+literalValue(type,value,prefix) ::= <%
+<literalValueMap.(type)>
+%>
+
+
+javaTypeMap ::= [
+        "SERIAL":"String",
+        "FK"    :"long",
+        "EXCLUSIVE"  :"int",
+        "INCLUSIVE"  :"int",
+        "SHORT":"short",
+        "INTEGER":"int",
+        "BOOL"  :"int",
+        "LONG"  :"long",
+        "TIMESTAMP":"long",
+        "REAL"  :"double",
+        "GUID"  :"String",
+        "TEXT"  :"String",
+        "BLOB"  :"byte[]",
+        "FILE"  :"String",
+        "TYPE"  :"String",
+        default: key
+]
+
+javaMethodTypeMap ::= [
+        "SERIAL":"String",
+        "FK"    :"Long",
+        "EXCLUSIVE"  :"Int",
+        "INCLUSIVE"  :"Int",
+        "SHORT":"Short",
+        "INTEGER":"Int",
+        "BOOL"  :"Int",
+        "LONG"  :"Long",
+        "TIMESTAMP":"Long",
+        "REAL"  :"Double",
+        "GUID"  :"String",
+        "TEXT"  :"String",
+        "BLOB"  :"Byte",
+        "FILE"  :"String",
+        "TYPE"  :"String",
+        default: key
+]
+
+cursorBoxTypeMap ::= [
+        "SERIAL"  :"String",
+        "FK"      :"Long",
+        "EXCLUSIVE"    :"Int",
+        "INCLUSIVE"    :"Int",
+        "SHORT" :"Short",
+        "INTEGER" :"Int",
+        "BOOL"    :"Int",
+        "LONG"    :"Long",
+        "TIMESTAMP":"Long",
+        "REAL"    :"Double",
+        "GUID"    :"String",
+        "TEXT"    :"String",
+        "BLOB"    :"Blob",
+        "FILE"    :"String",
+        "TYPE"    :"String",
+        default: key
+]
+
+
+auxTupleMap ::= [ 
+       "FILE": "refFileTupleTmpl", 
+       "BLOB": "refBlobTupleTmpl", 
+       default: "defaultTupleTmpl" 
+]
+
+auxTuple(type,value,prefix) ::= <%
+<auxTupleMap.(type)>
+%>

@@ -1,10 +1,13 @@
+
+import "../../dataTypeMaps.stg"
+
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter><contract.root.sponsor.path>orm<delimiter><relation.name.bactrian>Creator.java
+<directory.path><delimiter><contract.root.sponsor.path><delimiter>orm<delimiter><item.name.bactrian>Creator.java
 %>
 
-package(contract,relation) ::= "<contract.root.sponsor>.<contract.root.name>.orm"
+package(contract,relation) ::= "<contract.root.sponsor.base>.orm"
 
-SKELETON(contract,relation) ::= <<
+SKELETON(contract,item) ::= <<
 >>
 
 putField(field) ::= <%
@@ -12,10 +15,12 @@ rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, 
 %>
 
 BODY(contract,item) ::= <<
-package <package(contract,relation)>;
+// ST:BODY:start
+package <package(contract,item)>;
 
 import java.util.ArrayList;
 
+// ST:package:next
 import <package(contract)>.provider.ContentDescriptor;
 
 import android.content.ContentValues;
@@ -23,98 +28,83 @@ import android.database.Cursor;
 
 public class <item.name.bactrian>Creator {
 
-	public static ContentValues getCVfrom<item.name.bactrian>(final <item.name.bactrian>Data data) {
-		ContentValues rValue = new ContentValues();
-        <item.fields: { field | <putField(field)> }; separator="\n">
-		return rValue;
-	}
+  public static ContentValues getCVfrom<item.name.bactrian>(final <item.name.bactrian>Data data) {
+    ContentValues rValue = new ContentValues();
+    // ST:putField:next
+    <item.fields: { field | <putField(field)> }; separator="\n">
+    return rValue;
+  }
 
-	/**
-	 * Get <item.name.bactrian>Data object from ContentValues object
-	 * 
-	 * @param cv
-	 * @return
-	 */
-	// I'm not even sure this is used/usable, but here in case it is...
-	public static <contract.basitem.name.bactrian>Data CvTo<item.name.bactrian>Data(final ContentValues cv) {
-		// set default values
-		long latitude = 0;
-		long longitude = 0;
-		long height = 0;
-		long userid = 0;
+  /**
+   * Get <item.name.bactrian>Data object from ContentValues object
+   * 
+   * @param cv
+   * @return
+   */
+  // I'm not even sure this is used/usable, but here in case it is...
+  public static <item.name.bactrian>Data CvTo<item.name.bactrian>Data(final ContentValues cv) {
+    // set default values
+    
+    // ST:setValue:next
+    <item.fields: { field | <setValue(field)> }; separator="\n">
+    
+    // construct the returned object
+    <item.name.bactrian>Data rValue = 
+       new <item.name.bactrian>Data(<item.fields: { field | <field.name.camel> }; separator=",">);
+        
+    return rValue;
+  }
 
-		// // can only do this because all 4 are long, but nice
-		// // might be useful for VERY large objects, with lots of similar
-		// // data type, make an iterator for loop for each data type
-		// // will require a string[] of col names for that type
-		// for (String cvColName : COLUMN_NAMES) {
-		//
-		// if (cv.containsKey(cvColName)) {
-		// latitude = cv.getAsLong(cvColName);
-		// }
-		// }
+  /**
+   * Get all of the <item.name.bactrian>Data from the passed in cursor.
+   * 
+   * @param cursor
+   *            passed in cursor
+   * @return ArrayList\<<item.name.bactrian>Data\> The set of <item.name.bactrian>Data
+   */
+  public static ArrayList\<<item.name.bactrian>Data> get<item.name.bactrian>DataArrayListFromCursor(
+      Cursor cursor) {
+    ArrayList\<<item.name.bactrian>Data> rValue = new ArrayList\<<item.name.bactrian>Data>();
+    if (cursor != null) {
+      cursor.moveToFirst();
+      do {
+        rValue.add(get<item.name.bactrian>DataFromCursor(cursor));
+      } while (cursor.moveToNext() == true);
+    }
+    return rValue;
+  }
 
-		// check if CV contains keys, and if so, assign values
-		if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.LAT_NAME)) {
-			latitude = cv.getAsLong(ContentDescriptor.<item.name.bactrian>.Cols.LAT_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.LONG_NAME)) {
-			longitude = cv.getAsLong(ContentDescriptor.<item.name.bactrian>.Cols.LONG_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.HEIGHT_NAME)) {
-			height = cv.getAsLong(ContentDescriptor.<item.name.bactrian>.Cols.HEIGHT_NAME);
-		}
-		if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.USER_ID_NAME)) {
-			userid = cv.getAsLong(ContentDescriptor.<item.name.bactrian>.Cols.USER_ID_NAME);
-		}
-		// construct the returned object
-		<item.name.bactrian>Data rValue = new <item.name.bactrian>Data(latitude, longitude, height,
-				userid);
-		return rValue;
-	}
+  /**
+   * Get the first <item.name.bactrian>Data from the passed in cursor.
+   * 
+   * @param cursor
+   *            passed in cursor
+   * @return <item.name.bactrian>Data object
+   */
+  public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
 
-	/**
-	 * Get all of the <item.name.bactrian>Data from the passed in cursor.
-	 * 
-	 * @param cursor
-	 *            passed in cursor
-	 * @return ArrayList\<<item.name.bactrian>Data\> The set of <item.name.bactrian>Data
-	 */
-	public static ArrayList\<<item.name.bactrian>Data> get<item.name.bactrian>DataArrayListFromCursor(
-			Cursor cursor) {
-		ArrayList\<<item.name.bactrian>Data> rValue = new ArrayList\<<item.name.bactrian>Data>();
-		if (cursor != null) {
-			cursor.moveToFirst();
-			do {
-				rValue.add(get<item.name.bactrian>DataFromCursor(cursor));
-			} while (cursor.moveToNext() == true);
-		}
-		return rValue;
-	}
+    // ST:getValue:next
+    <item.fields: { field | <getValue(field)> }; separator="\n">
 
-	/**
-	 * Get the first <item.name.bactrian>Data from the passed in cursor.
-	 * 
-	 * @param cursor
-	 *            passed in cursor
-	 * @return <item.name.bactrian>Data object
-	 */
-	public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
-
-		long latitude = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.LAT_NAME));
-		long longitude = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.LONG_NAME));
-		long height = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.HEIGHT_NAME));
-		long user_id = cursor.getLong(cursor
-				.getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.USER_ID_NAME));
-
-		<item.name.bactrian>Data location = new <item.name.bactrian>Data(latitude, longitude, height,
-				user_id);
-
-		return location;
-	}
+    // construct the returned object
+    <item.name.bactrian>Data rValue = 
+       new <item.name.bactrian>Data(<item.fields: { field | <field.name.camel> }; separator=",">);
+        
+    return rValue;
+  }
 }
+// ST:BODY:end
+>>
 
+setValue(field) ::= <<
+<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default)>;
+
+if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.LAT_NAME)) {
+  <field.name.camel> = cv.getAs<javaMethodTypeMap.(field.dtype)>(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME);
+}
+>>
+ 
+getValue(field) ::= <<
+<javaTypeMap.(field.dtype)> <field.name.camel> = cursor.get<cursorBoxTypeMap.(field.dtype)>(cursor 
+        .getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME));
 >>

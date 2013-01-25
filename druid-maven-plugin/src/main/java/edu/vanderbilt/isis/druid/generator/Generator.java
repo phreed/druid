@@ -13,6 +13,8 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
+
 /**
  * The actual generator code.
  * 
@@ -177,15 +179,15 @@ public class Generator {
         if (stg == null) {
             throw new GeneratorException("no group file loaded");
         }
-        final Contract contract = Contract.newInstance(logger, this.contractFile);
+        final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
 
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
             throw new GeneratorException("no path template provided");
         }
-        stFileName.add("delimiter", File.pathSeparator);
+        stFileName.add("delimiter", File.separatorChar);
         stFileName.add("directory", this.outputPath);
-        stFileName.add("contract", contract.root);
+        stFileName.add("contract", contract);
         stFileName.add("isSkeleton", this.isSkeleton);
         
         final ST stFileBody = stg.getInstanceOf("BODY");
