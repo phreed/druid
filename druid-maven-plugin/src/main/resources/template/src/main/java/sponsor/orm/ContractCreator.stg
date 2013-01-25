@@ -2,17 +2,12 @@
 import "../../dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter><contract.root.sponsor.path><delimiter>orm<delimiter><item.name.bactrian>Creator.java
+<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Creator.java
 %>
 
-package(contract,relation) ::= "<contract.root.sponsor.base>.orm"
 
 SKELETON(contract,item) ::= <<
 >>
-
-putField(field) ::= <%
-rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, data.<field.name.camel>);
-%>
 
 BODY(contract,item) ::= <<
 // ST:BODY:start
@@ -20,8 +15,9 @@ package <package(contract,item)>;
 
 import java.util.ArrayList;
 
-// ST:package:next
+// ST:package:inline
 import <package(contract)>.provider.ContentDescriptor;
+// ST:package:complete
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -30,8 +26,9 @@ public class <item.name.bactrian>Creator {
 
   public static ContentValues getCVfrom<item.name.bactrian>(final <item.name.bactrian>Data data) {
     ContentValues rValue = new ContentValues();
-    // ST:putField:next
+    // ST:putField:inline
     <item.fields: { field | <putField(field)> }; separator="\n">
+    // ST:putField:complete
     return rValue;
   }
 
@@ -45,8 +42,9 @@ public class <item.name.bactrian>Creator {
   public static <item.name.bactrian>Data CvTo<item.name.bactrian>Data(final ContentValues cv) {
     // set default values
     
-    // ST:setValue:next
+    // ST:setValue:inline
     <item.fields: { field | <setValue(field)> }; separator="\n">
+    // ST:setValue:complete
     
     // construct the returned object
     <item.name.bactrian>Data rValue = 
@@ -83,8 +81,9 @@ public class <item.name.bactrian>Creator {
    */
   public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
 
-    // ST:getValue:next
+    // ST:getValue:inline
     <item.fields: { field | <getValue(field)> }; separator="\n">
+    // ST:getValue:complete
 
     // construct the returned object
     <item.name.bactrian>Data rValue = 
@@ -96,10 +95,16 @@ public class <item.name.bactrian>Creator {
 // ST:BODY:end
 >>
 
-setValue(field) ::= <<
-<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default)>;
+package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
-if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.LAT_NAME)) {
+putField(field) ::= <%
+rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, data.<field.name.camel>);
+%>
+
+setValue(field) ::= <<
+
+<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default)>;
+if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME)) {
   <field.name.camel> = cv.getAs<javaMethodTypeMap.(field.dtype)>(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME);
 }
 >>

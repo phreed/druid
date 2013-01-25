@@ -2,7 +2,7 @@
      handle custom field subsets in terse serialization. -->
 
 <content-provider name="pli">
-  <sponsor name="transapps"/>
+  <sponsor name="transapps.pli"/>
 
   <relation name="locations">
     <field type="TEXT" name="name" default="" />
