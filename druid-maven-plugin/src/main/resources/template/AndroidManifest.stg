@@ -4,7 +4,7 @@ PATH(delimiter, directory, contract, isSkeleton) ::= <%
 
 
 BODY(contract) ::= <<
-// ST:BODY:start
+\<!-- ST:BODY:start -->
 \<?xml version="1.0" encoding="utf-8"?>
 \<manifest 
      xmlns:android="http://schemas.android.com/apk/res/android" 
@@ -23,24 +23,8 @@ BODY(contract) ::= <<
 
     \<application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
 
-        \<!-- THIS IS THE LIST VIEW ACTIVITY -->
-        \<activity 
-                android:label="@string/title_activity_main"
-                android:name=".ui.<contract.root.name.camel>.List<contract.root.name.bactrian>Activity">
-            \<intent-filter>
-                \<action android:name="android.intent.action.MAIN"/>
-                \<category android:name="android.intent.category.LAUNCHER"/>
-            \</intent-filter>
-        \</activity>
-        \<!-- THIS IS THE CREATION ACTIVITY -->
-        \<activity android:name=".ui.<contract.root.name.camel>.Create<contract.root.name.bactrian>Activity">
-        \</activity>
-        \<!-- THIS IS THE SINGLE VIEW ACTIVITY -->
-        \<activity android:name=".ui.<contract.root.name.camel>.View<contract.root.name.bactrian>Activity">
-        \</activity>
-        \<!-- THIS IS THE EDIT ACTIVITY -->
-        \<activity android:name=".ui.<contract.root.name.camel>.Edit<contract.root.name.bactrian>Activity">
-        \</activity>
+        <contract.root.relations: { relation | <buildActivity(relation)> }; separator="\n">
+
         \<!-- THIS IS THE ACTUAL CONTENT PROVIDER -->
         \<provider 
               android:authorities="@string/authority" 
@@ -60,4 +44,27 @@ BODY(contract) ::= <<
     \</application>
 
 \</manifest>
+\<!-- ST:BODY:end -->
+>>
+
+buildActivity(relation) ::= <<
+\<!-- ST:buildActivity:start -->
+\<activity 
+        android:label="@string/title_activity_main"
+        android:name=".ui.<relation.name.camel>.List<relation.name.bactrian>Activity">
+    \<intent-filter>
+        \<action android:name="android.intent.action.MAIN"/>
+        \<category android:name="android.intent.category.LAUNCHER"/>
+    \</intent-filter>
+\</activity>
+\<!-- THIS IS THE CREATION ACTIVITY -->
+\<activity android:name=".ui.<relation.name.camel>.Create<relation.name.bactrian>Activity">
+\</activity>
+\<!-- THIS IS THE SINGLE VIEW ACTIVITY -->
+\<activity android:name=".ui.<relation.name.camel>.View<relation.name.bactrian>Activity">
+\</activity>
+\<!-- THIS IS THE EDIT ACTIVITY -->
+\<activity android:name=".ui.<relation.name.camel>.Edit<relation.name.bactrian>Activity">
+\</activity>
+\<!-- ST:buildActivity:end -->
 >>
