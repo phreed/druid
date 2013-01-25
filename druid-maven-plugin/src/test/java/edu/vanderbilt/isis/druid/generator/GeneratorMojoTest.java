@@ -18,12 +18,24 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         super.tearDown();
     }
 
+    static final private String unitTestDirName = "src/test/resources/unit/druid-maven-plugin-generate-test";
     /**
      * @throws Exception if any
      */
-    public void testSomething() throws Exception
+    public void testAndroidManifest() throws Exception
     {
-        final File pom = getTestFile("src/test/resources/unit/druid-maven-plugin-generate-test/plugin-config.xml");
+        final File pom = getTestFile(unitTestDirName, "android-manifest-test/plugin-config.xml");
+        assertNotNull(pom);
+        assertTrue(pom.exists());
+
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
+        myMojo.execute();
+    }
+    
+    public void testContractCreator() throws Exception
+    {
+        final File pom = getTestFile(unitTestDirName, "contract-creator-test/plugin-config.xml");
         assertNotNull(pom);
         assertTrue(pom.exists());
 

@@ -126,16 +126,14 @@ public class Generator {
         }
 
         if (!this.templateFileManifest.isFile()) {
-            logger.error("could not find template manifest {}", this.templateFileManifest);
-            return null;
+            throw new GeneratorException("could not find template manifest "+ this.templateFileManifest);
         }
         final STGroupFile manifestStg;
         try {
             manifestStg = new STGroupFile(this.templateFileManifest.getCanonicalPath(),
                     "US-ASCII", '<', '>');
         } catch (IOException ex) {
-            logger.error("could not open template manifest file {}", this.templateFileManifest, ex);
-            return null;
+            throw new GeneratorException("could not open template manifest file " + this.templateFileManifest, ex);
         }
 
         final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
@@ -151,18 +149,17 @@ public class Generator {
      * @param logger
      * @param templateGroupFileName
      * @return null if not able to load the file
+     * @throws GeneratorException 
      */
-    private static STGroup getGroupUtil(final Logger logger, final File templateGroupFileName) {
+    private static STGroup getGroupUtil(final Logger logger, final File templateGroupFileName) throws GeneratorException {
         if (!templateGroupFileName.isFile()) {
-            logger.error("template file path is not found {}", templateGroupFileName);
-            return null;
+            throw new GeneratorException("template file path is not found " + templateGroupFileName);
         }
         try {
             return new STGroupFile(templateGroupFileName.getCanonicalPath(),
                     "US-ASCII", '<', '>');
         } catch (IOException ex) {
-            logger.error("could not open file {}", templateGroupFileName, ex);
-            return null;
+            throw new GeneratorException("could not open file " + templateGroupFileName, ex);
         }
     }
 
@@ -176,9 +173,6 @@ public class Generator {
      */
     public boolean build() throws GeneratorException {
         final STGroup stg = getGroup();
-        if (stg == null) {
-            throw new GeneratorException("no group file loaded");
-        }
         final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
 
         final ST stFileName = stg.getInstanceOf("PATH");
