@@ -121,7 +121,7 @@ public class DruidMojo extends AbstractMojo {
 	 * 
 	 * @parameter expression="${generate.skeleton}" default-value="none"
 	 */
-	private String each;
+	private String each = Generator.Each.NONE.val;
 
 	/**
 	 * outputDirectory : the base path for the generated files.
