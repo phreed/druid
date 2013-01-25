@@ -45,8 +45,9 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         assertNotNull("generate code using druid", myMojo);
         myMojo.execute();
         
-        final File expected = new File(expectedDir, "AndroidManifest.xml");
-        final File actual = new File(actualDir, "AndroidManifest.xml");
+        final String fileName = "AndroidManifest.xml";
+        final File expected = new File(expectedDir, fileName);
+        final File actual = new File(actualDir, fileName);
         assertFilesEqual("manifests differ", expected, actual); 
     }
 
@@ -59,5 +60,10 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
         assertNotNull("generate code using druid", myMojo);
         myMojo.execute();
+        
+        final String fileName = "src/main/java/transapps/pli/orm/LocationsCreator.java";
+        final File expected = new File(expectedDir, fileName);
+        final File actual = new File(actualDir, fileName);
+        assertFilesEqual("manifests differ", expected, actual); 
     }
 }

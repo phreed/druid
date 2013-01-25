@@ -26,7 +26,7 @@
 				<configuration>
 					<contractFile>${basedir}/src/test/resources/locator/contract/pli-locations.xml</contractFile>
 					<templateFile>${basedir}/src/main/resources/template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
-					<outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+					<outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/src/main/java</outputDirectory>
 					<each>relation</each>
 				</configuration>
 			</plugin>
