@@ -15,7 +15,6 @@ BODY(contract,item) ::= <<
 package <package(contract,item)>;
 
 import java.util.ArrayList;
-// test
 // ST:package:inline
 import <package(contract)>.provider.ContentDescriptor;
 // ST:package:complete

@@ -85,9 +85,9 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         assertNotNull("generate code using druid", myMojo);
         myMojo.execute();
         
-//         final File expected = new File(expectedLayoutDir, "location_listview.xml");
-//         final File actual = new File(actualLayoutDir, "contract_listview.xml");
-//         assertFilesEqual("manifests differ", expected, actual); 
+        final File expected = new File(expectedLayoutDir, "location_listview.xml");
+        final File actual = new File(actualLayoutDir, "locations_listview.xml");
+        assertFilesEqual("manifests differ", expected, actual); 
     }
     
     public void testContractCreator() throws Exception
