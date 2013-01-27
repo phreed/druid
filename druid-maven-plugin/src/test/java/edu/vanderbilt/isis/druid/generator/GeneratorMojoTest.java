@@ -90,6 +90,24 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         assertFilesEqual("manifests differ", expected, actual); 
     }
     
+    /**
+     * @throws Exception if any
+     */
+    public void testUIListActivity() throws Exception
+    {
+        final File pom = getTestFile(unitTestDirName, "ui-list-activity-test/plugin-config.xml");
+        assertNotNull(pom);
+        assertTrue(pom.exists());
+
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
+        myMojo.execute();
+        
+//         final File expected = new File(expectedLayoutDir, "location_listview.xml");
+//         final File actual = new File(actualLayoutDir, "locations_listview.xml");
+//         assertFilesEqual("manifests differ", expected, actual); 
+    }
+    
     public void testContractCreator() throws Exception
     {
         final File pom = getTestFile(unitTestDirName, "contract-creator-test/plugin-config.xml");
