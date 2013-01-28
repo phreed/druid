@@ -38,7 +38,7 @@ public class DruidMojo extends AbstractMojo {
      * @readonly
      */
     private RepositorySystemSession repoSession;
-
+    
     /**
      * The project's remote repositories to use for the resolution of plugins and their dependencies.
      *
@@ -52,7 +52,7 @@ public class DruidMojo extends AbstractMojo {
      * 
      * @parameter expression="${aether.artifactCoords}"
      */
-     private String artifactCoords;
+     private String artifactCoords = "junit:junit:3.8.2";
 	
 	
 	/**
@@ -139,7 +139,7 @@ public class DruidMojo extends AbstractMojo {
 	 */
     public void execute() throws MojoExecutionException, MojoFailureException {
         final Log logger = getLog();
-       /*
+       
         final Artifact artifact;
         try
         {
@@ -156,6 +156,7 @@ public class DruidMojo extends AbstractMojo {
 
         getLog().info( "Resolving artifact " + artifact + " from " + remoteRepos );
 
+        /*
         final ArtifactResult result;
         try
         {

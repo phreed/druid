@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class CommandLine {
+public class DruidMain {
 
 	static final private Logger logger = LoggerFactory.getLogger("ammo.generator");
 	
@@ -142,7 +142,7 @@ public class CommandLine {
         System.out.println(df.format(now));
         final File cwd = new File(".");
 
-        final Generator that = new Generator(CommandLine.logger);
+        final Generator that = new Generator(DruidMain.logger);
 
         for (String arg : args) {
             final String[] param = arg.split("=", 2);

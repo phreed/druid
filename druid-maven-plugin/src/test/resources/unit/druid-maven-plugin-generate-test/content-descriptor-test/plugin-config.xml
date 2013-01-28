@@ -25,7 +25,7 @@
 				<artifactId>druid-maven-plugin</artifactId>
 				<configuration>
 					<contractFile>${basedir}/src/test/resources/locator/contract/pli-locations.xml</contractFile>
-					<templateFile>${basedir}/src/main/resources/template/src/main/java/sponsor/provider/ContentDescriptor.stg</templateFile>
+					<templateFile>${basedir}/../druid-templates/src/main/resources/template/src/main/java/sponsor/provider/ContentDescriptor.stg</templateFile>
 					<outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
 				</configuration>
 			</plugin>
