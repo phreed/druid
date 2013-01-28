@@ -30,8 +30,12 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
 
     static final private String unitTestDirName = "src/test/resources/unit/druid-maven-plugin-generate-test";
     static private final File expectedDir = new File("src/test/resources/locator/");
+    static private final File expectedProviderDir = new File("src/test/resources/locator/src/main/java/com/walkernation/db/provider/");
+    static private final File expectedLayoutDir = new File("src/test/resources/locator/res/layout/");
+    
     static private final File actualDir = new File("target/test-harness/druid-maven-plugin-generate-test/");
-
+    static private final File actualProviderDir = new File("target/test-harness/druid-maven-plugin-generate-test/transapps/pli/provider/");
+    static private final File actualLayoutDir = new File("target/test-harness/druid-maven-plugin-generate-test/res/layout/");
     /**
      * @throws Exception if any
      */
@@ -50,7 +54,61 @@ public class GeneratorMojoTest extends AbstractMojoTestCase
         final File actual = new File(actualDir, fileName);
         assertFilesEqual("manifests differ", expected, actual); 
     }
+    
+     /**
+     * @throws Exception if any
+     */
+    public void testContentDescriptor() throws Exception
+    {
+        final File pom = getTestFile(unitTestDirName, "content-descriptor-test/plugin-config.xml");
+        assertNotNull(pom);
+        assertTrue(pom.exists());
 
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
+        myMojo.execute();
+        
+       final File expected = new File(expectedProviderDir, "ContentDescriptor.java");
+       final File actual = new File(actualProviderDir, "ContentDescriptor.java");
+       assertFilesEqual("manifests differ", expected, actual); 
+    }
+
+    /**
+     * @throws Exception if any
+     */
+    public void testUIListFragmentLayout() throws Exception
+    {
+        final File pom = getTestFile(unitTestDirName, "ui-list-fragment-layout-test/plugin-config.xml");
+        assertNotNull(pom);
+        assertTrue(pom.exists());
+
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
+        myMojo.execute();
+        
+        final File expected = new File(expectedLayoutDir, "location_listview.xml");
+        final File actual = new File(actualLayoutDir, "locations_listview.xml");
+        assertFilesEqual("manifests differ", expected, actual); 
+    }
+    
+    /**
+     * @throws Exception if any
+     */
+    public void testUIListActivity() throws Exception
+    {
+        final File pom = getTestFile(unitTestDirName, "ui-list-activity-test/plugin-config.xml");
+        assertNotNull(pom);
+        assertTrue(pom.exists());
+
+        final DruidMojo myMojo = (DruidMojo) lookupMojo("generate", pom);
+        assertNotNull("generate code using druid", myMojo);
+        myMojo.execute();
+        
+//         final File expected = new File(expectedLayoutDir, "location_listview.xml");
+//         final File actual = new File(actualLayoutDir, "locations_listview.xml");
+//         assertFilesEqual("manifests differ", expected, actual); 
+    }
+    
     public void testContractCreator() throws Exception
     {
         final File pom = getTestFile(unitTestDirName, "contract-creator-test/plugin-config.xml");

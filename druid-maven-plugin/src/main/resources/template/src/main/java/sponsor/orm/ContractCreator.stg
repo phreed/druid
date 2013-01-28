@@ -10,11 +10,11 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
+// TEST
 // ST:BODY:start
 package <package(contract,item)>;
 
 import java.util.ArrayList;
-
 // ST:package:inline
 import <package(contract)>.provider.ContentDescriptor;
 // ST:package:complete
