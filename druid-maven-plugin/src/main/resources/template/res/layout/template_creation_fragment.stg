@@ -1,0 +1,117 @@
+
+import "../../src/main/java/dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name.snake>_creation_fragment.xml
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+\<!-- ST:BODY:start -->
+
+\<?xml version="1.0" encoding="utf-8"?>
+\<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    \<EditText
+        android:id="@+id/location_create_edittext_userID"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:inputType="number" />
+
+    \<EditText
+        android:id="@+id/location_create_edittext_latitude"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/location_create_edittext_userID"
+        android:inputType="number" />
+
+    \<EditText
+        android:id="@+id/location_create_edittext_longitude"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/location_create_edittext_latitude"
+        android:inputType="number" />
+
+    \<EditText
+        android:id="@+id/location_create_edittext_height"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/location_create_edittext_longitude"
+        android:inputType="number" />
+
+    \<TextView
+        android:id="@+id/labelHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/location_create_edittext_height"
+        android:layout_alignBottom="@+id/location_create_edittext_height"
+        android:layout_alignParentLeft="true"
+        android:text="@string/location_create_label_height" />
+
+    \<TextView
+        android:id="@+id/labelLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/location_create_edittext_longitude"
+        android:layout_alignBottom="@+id/location_create_edittext_longitude"
+        android:layout_alignParentLeft="true"
+        android:text="@string/location_create_label_longitude" />
+
+    \<TextView
+        android:id="@+id/labelLatitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/location_create_edittext_latitude"
+        android:layout_alignBottom="@+id/location_create_edittext_latitude"
+        android:layout_alignParentLeft="true"
+        android:text="@string/location_create_label_latitude" />
+
+    \<TextView
+        android:id="@+id/labelUserID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/location_create_edittext_userID"
+        android:layout_alignBottom="@+id/location_create_edittext_userID"
+        android:layout_alignParentLeft="true"
+        android:text="@string/location_create_label_userid" />
+
+    \<Button
+        android:id="@+id/location_create_button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:text="@string/location_create_button_label_create" />
+
+    \<Button
+        android:id="@+id/location_create_button_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/location_create_button_save"
+        android:layout_centerHorizontal="true"
+        android:text="@string/location_create_button_label_clear" />
+
+    \<Button
+        android:id="@+id/location_create_button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/location_create_button_reset"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="21dp"
+        android:text="@string/location_create_button_label_cancel" />
+
+\</RelativeLayout>
+
+>>

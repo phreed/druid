@@ -10,7 +10,6 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
-// TEST
 // ST:BODY:start
 package <package(contract,item)>;
 

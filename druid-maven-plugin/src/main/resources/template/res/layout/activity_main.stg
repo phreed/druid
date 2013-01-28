@@ -1,0 +1,28 @@
+import "../../src/main/java/dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>layout<delimiter>activity_main.xml
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract) ::= <<
+\<!-- ST:BODY:start -->
+
+\<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    \<FrameLayout
+        android:id="@+id/fragmentHolder"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_alignParentTop="true" >
+    \</FrameLayout>
+
+\</RelativeLayout>
+
+\<!-- ST:BODY:end -->
+>>

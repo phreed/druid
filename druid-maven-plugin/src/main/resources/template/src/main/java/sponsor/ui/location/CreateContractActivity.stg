@@ -1,0 +1,38 @@
+import "../../../dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter>Create<item.name.bactrian>Activity.java
+%>
+
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+
+
+package com.walkernation.db.ui.location;
+
+
+import android.os.Bundle;
+
+public class CreateLocationActivity extends LocationActivityBase {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState == null) {
+			// During initial setup, plug in the details fragment.
+			CreateLocationFragment creator = CreateLocationFragment
+					.newInstance();
+
+			creator.setArguments(getIntent().getExtras());
+
+			getSupportFragmentManager().beginTransaction()
+					.add(android.R.id.content, creator).commit();
+		}
+	}
+}
+
+>>

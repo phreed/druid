@@ -1,4 +1,18 @@
-package com.walkernation.multiple.ui.dataOne;
+
+import "../../dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Creator.java
+%>
+
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+// ST:BODY:start
+
+package <package(contract,item)>;
 
 import java.util.ArrayList;
 
@@ -14,12 +28,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.walkernation.multiple.R;
-import com.walkernation.multiple.orm.DataOneData;
-import com.walkernation.multiple.orm.MultipleResolver;
-import com.walkernation.multiple.provider.DataOneArrayAdapter;
+import <contract.root.sponsor.base>.<item.name.camel>.R;
+import <contract.root.sponsor.base>.<item.name.camel>.orm.<item.name.camel>Data;
+import <contract.root.sponsor.base>.<item.name.camel>.orm.<item.name.bactrian>Resolver;
+import <contract.root.sponsor.base>.<item.name.camel>.provider.<item.name.camel>ArrayAdapter;
 
-public class DataOneListFragment extends ListFragment {
+public class <item.name.bactrian>ListFragment extends ListFragment {
 
 	static final String LOG_TAG = DataOneListFragment.class.getCanonicalName();
 
@@ -145,3 +159,9 @@ public class DataOneListFragment extends ListFragment {
 	private DataOneArrayAdapter aa;
 
 }
+
+
+
+>>
+
+package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<relation.name.camel>"
