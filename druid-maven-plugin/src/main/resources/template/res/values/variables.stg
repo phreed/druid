@@ -1,0 +1,20 @@
+import "../../src/main/java/dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>values<delimiter>variables.xml
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract) ::= <<
+\<!-- ST:BODY:start -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <bool name="isTablet">false</bool>
+
+</resources>
+
+ >>

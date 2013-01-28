@@ -1,0 +1,51 @@
+import "../../src/main/java/dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name.snake>_retain_instance.xml
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+!!! I DO NOT THINK THIS IS USED, WILL CHECK THIS OUT LATER !!!
+
+BODY(contract,item) ::= <<
+\<!-- ST:BODY:start -->
+
+\<?xml version="1.0" encoding="utf-8"?>
+
+\<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    \<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="fragment_retain_instance_msg"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    \<ProgressBar
+        android:id="@+id/progress_horizontal"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:max="500"
+        android:padding="6dp" />
+
+    \<Button
+        android:id="@+id/restart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="restart" >
+
+        \<requestFocus />
+    \</Button>
+
+\</LinearLayout>
+
+>>
