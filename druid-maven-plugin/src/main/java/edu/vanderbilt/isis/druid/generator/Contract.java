@@ -113,7 +113,12 @@ public class Contract {
 
         public String getBactrian() {
             return capitalize(camel);
+        }  
+        
+        public String getPascal() {
+            return capitalize(camel);
         }
+        
     }
 
     /**

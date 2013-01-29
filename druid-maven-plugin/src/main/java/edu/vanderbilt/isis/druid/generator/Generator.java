@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,7 +21,7 @@ import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
 /**
  * The actual generator code.
  * 
- * @see GenerateMojo.java for a description of the fields.
+ * @see DruidMojo for a description of the fields.
  */
 public class Generator {
     final private Logger logger;
@@ -29,9 +32,10 @@ public class Generator {
 
     private File contractFile = new File("contract.xml");
 
-    private File templateFile = null;
+    private String templateJarName = null;
+    private String templateFileName = null;
     private String templateKey;
-    private File templateFileManifest;
+    private String templateManifestFileName;
 
     private File outputPath;
     private boolean isSkeleton;
@@ -41,16 +45,30 @@ public class Generator {
         this.outputPath = val;
     }
 
+    public void setTemplateJarName(String templateJarName) throws GeneratorException {
+        this.templateJarName = templateJarName;
+        final Thread ct = Thread.currentThread();
+        final ClassLoader pcl = ct.getContextClassLoader();
+        URL[] nurl;
+        try {
+            nurl = new URL[]{ new URL("file://"+templateJarName) };
+        } catch (MalformedURLException ex) {
+            throw new GeneratorException("could not load template jar", ex);
+        }
+        final URLClassLoader ucl = new URLClassLoader(nurl, pcl);
+        ct.setContextClassLoader(ucl);
+    }
+
     public void setTemplateKey(String val) {
         this.templateKey = val;
     }
 
-    public void setTemplateFile(final File val) {
-        this.templateFile = val;
+    public void setTemplateFileName(final String val) {
+        this.templateFileName = val;
     }
 
-    public void setTemplateFileManifest(final File val) {
-        this.templateFileManifest = val;
+    public void setTemplateFileManifestName(final String val) {
+        this.templateManifestFileName = val;
     }
 
     public void setContractPath(final File contract) {
@@ -114,53 +132,71 @@ public class Generator {
      * @return did the build work?
      * @throws GeneratorException
      */
-    public STGroup getGroup() throws GeneratorException {
+    public STGroup getTemplateGroup() throws GeneratorException {
         STGroup.trackCreationEvents = true;
 
         /**
          * It may be that the template-file is given explicitly. If that is the
          * case then it should be used.
          */
-        if (this.templateFile != null) {
-            return getGroupUtil(logger, this.templateFile);
+        if (this.templateFileName != null) {
+            return getGroupUtil(logger, this.templateFileName);
         }
 
-        if (!this.templateFileManifest.isFile()) {
-            throw new GeneratorException("could not find template manifest "+ this.templateFileManifest);
+        final File templateManifestFile = new File(this.templateManifestFileName);
+        if (!templateManifestFile.isFile()) {
+            throw new GeneratorException("could not find template manifest "
+                    + this.templateManifestFileName);
         }
-        final STGroupFile manifestStg;
-        try {
-            manifestStg = new STGroupFile(this.templateFileManifest.getCanonicalPath(),
-                    "US-ASCII", '<', '>');
-        } catch (IOException ex) {
-            throw new GeneratorException("could not open template manifest file " + this.templateFileManifest, ex);
-        }
-
+        final STGroup manifestStg = getManifestGroup();
         final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
         stGroup.add("key", this.templateKey);
         final String templateGroupFileName = stGroup.render();
-        final File templateGroupFile = new File(templateGroupFileName);
-        return getGroupUtil(logger, templateGroupFile);
+        return getGroupUtil(logger, templateGroupFileName);
     }
 
     /**
      * A utility function for loading template group files.
      * 
      * @param logger
-     * @param templateGroupFileName
+     * @param templateFileName
      * @return null if not able to load the file
-     * @throws GeneratorException 
+     * @throws GeneratorException
      */
-    private static STGroup getGroupUtil(final Logger logger, final File templateGroupFileName) throws GeneratorException {
-        if (!templateGroupFileName.isFile()) {
-            throw new GeneratorException("template file path is not found " + templateGroupFileName);
+    private STGroup getGroupUtil(final Logger logger, final String templateFileName)
+            throws GeneratorException {
+        if (this.templateJarName == null) {
+            final File templateFile = new File(templateFileName);
+            if (!templateFile.isFile()) {
+                throw new GeneratorException("template file path is not found "
+                        + templateFile);
+            }
+            return new STGroupFile(templateFileName, "US-ASCII", '<', '>');
         }
+        return new STGroupFile(templateFileName, "US-ASCII", '<', '>');
+    }
+
+    private STGroup getManifestGroup() throws GeneratorException {
+        if (this.templateJarName == null) {
+            final File templateManifestFile = new File(templateManifestFileName);
+            if (!templateManifestFile.isFile()) {
+                throw new GeneratorException("template file path is not found "
+                        + templateManifestFile);
+            }
+            return new STGroupFile(this.templateManifestFileName, "US-ASCII", '<', '>');
+        }
+        final String urlName = new StringBuilder()
+                // .append("jar:file:").append(templateJar.getAbsolutePath()).append("!")
+                .append(templateManifestFileName).toString();
+        final URL url;
         try {
-            return new STGroupFile(templateGroupFileName.getCanonicalPath(),
-                    "US-ASCII", '<', '>');
-        } catch (IOException ex) {
-            throw new GeneratorException("could not open file " + templateGroupFileName, ex);
+            url = new URL(urlName);
+        } catch (MalformedURLException ex) {
+            throw new GeneratorException("bad manifest url", ex);
         }
+        final STGroup stg = new STGroupFile(url, "US-ASCII", '<', '>');
+        logger.debug("default template group");
+        return stg;
     }
 
     /**
@@ -172,24 +208,27 @@ public class Generator {
      * @throws GeneratorException
      */
     public boolean build() throws GeneratorException {
-        final STGroup stg = getGroup();
+        final STGroup stg = getTemplateGroup();
         final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
 
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
-            throw new GeneratorException("no path template provided");
+            for (String templateName : stg.getTemplateNames()) {
+                logger.error("template name {}", templateName);
+            }
+            throw new GeneratorException("no \"PATH\" template provided");
         }
         stFileName.add("delimiter", File.separatorChar);
         stFileName.add("directory", this.outputPath);
         stFileName.add("contract", contract);
         stFileName.add("isSkeleton", this.isSkeleton);
-        
+
         final ST stFileBody = stg.getInstanceOf("BODY");
         if (stFileBody == null) {
             throw new GeneratorException("no body template provided");
         }
         stFileBody.add("contract", contract);
-        
+
         if (this.each.equals(Each.NONE)) {
             final String outputFileName = stFileName.render();
             final File outputFile = new File(outputFileName);
