@@ -48,7 +48,7 @@
           </execution>
 
           <execution>
-            <id>generate-res-strings-xml</id>
+            <id>generate-res-values-strings-xml</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>generate</goal>
@@ -58,6 +58,21 @@
               <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
               <templateFile>template/res/values/strings.stg</templateFile>
               <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>generate-res-layout-listview-xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/layout/contract_listview.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
             </configuration>
           </execution>
 
