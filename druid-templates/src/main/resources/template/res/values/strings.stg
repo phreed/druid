@@ -11,20 +11,20 @@ BODY(contract) ::= <<
 \<!-- ST:BODY:start -->
 \<resources>
 
-    \<!-- **** Application-wide Strings **** -->
+    \<!-- ************** Application-wide Strings ************* -->
     \<string name="app_name"><contract.root.sponsor.base>\</string>
     \<string name="menu_settings">Settings\</string>
     \<string name="title_activity_main"><contract.root.sponsor.base>\</string>
     \<string name="authority"><contract.root.sponsor.base>.<contract.root.name>.<contract.root.name>provider\</string>
     
-    \<!-- **** Defined Colors **** -->
+    \<!-- ******************* Defined Colors ****************** -->
     \<color name="cyan">#00ffff\</color>
     
     
     \<!-- **** Strings for View Fragment for each Relation **** -->
-    \<!-- ST:buildActivity:start -->
-    <contract.root.relations: { relation | <buildActivity(relation)> }; separator="\n">
-    \<!-- ST:buildActivity:end -->
+    \<!-- ST:buildViewFragmentStrings:start -->
+    <contract.root.relations: { relation | <buildViewFragmentStrings(relation)> }; separator="\n">
+    \<!-- ST:buildViewFragmentStrings:end -->
     
     
     \<!-- **** Strings for List Fragment for each Relation **** -->
@@ -39,7 +39,7 @@ BODY(contract) ::= <<
     \<!-- ST:buildCreateFragmentStrings:end -->    
 
   
-    \<!-- Sycn Adaptor Account Login Strings -->
+    \<!-- ******** Sycn Adaptor Account Login Strings *********** -->
     \<string name="ACCOUNT_TYPE"><contract.root.sponsor.base>.SyncProviderDemo.account\</string>
     \<string name="server">Server Address::\</string>
     \<string name="username">Username:\</string>
@@ -57,7 +57,6 @@ BODY(contract) ::= <<
 
 
 buildViewFragmentStrings(relation) ::= <<
-\<!-- ST:buildViewFragmentStrings:start -->
     \<!-- location View Fragment Strings -->
     \<string name="<relation.name.snake>_view_button_label_delete">Delete\</string>
     \<string name="<relation.name.snake>_view_button_label_edit">Edit\</string>
@@ -74,8 +73,6 @@ buildViewFragmentStrings(relation) ::= <<
     \<!-- ST:putViewFragmentLabelInline:start: -->    
     <relation.fields: { field | <putViewFragmentLabelInline(relation, field)> }; separator="\n">
     \<!-- ST:putViewFragmentLabelInline:end -->
- 
-\<!-- ST:buildViewFragmentStrings:end -->
 >>
 
 putViewFragmentDefaultInline(relation,field) ::= << \<string name="<relation.name.snake>_view_edittext_<field.name.snake>_default_value"><field.name.bactrian>\</string> >>
@@ -88,11 +85,9 @@ putViewFragmentLabelInline(relation,field) ::= << \<string name="<relation.name.
 
 
 buildListFragmentStrings(relation) ::= <<
-\<!-- ST:buildListFragmentStrings:start -->
     \<!-- <relation.name.snake> List Fragment Strings -->
     \<string name="<relation.name.snake>_list_button_label_add">ADD\</string>
     \<string name="<relation.name.snake>_list_button_label_refresh">REFRESH\</string>
-\<!-- ST:buildListFragmentStrings:end -->
 >>
 
 
@@ -114,10 +109,11 @@ buildCreateFragmentStrings(relation) ::= <<
     \<string name="<relation.name.snake>_edit_button_message_save">Save\</string>
     \<string name="<relation.name.snake>_edit_button_message_reset">Reset\</string>
     \<string name="<relation.name.snake>_edit_button_message_cancel">Cancel\</string>
-    
 >>
     
-putCreateFragmentLabelInline(relation,field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.name.bactrian>\</string> >>
+putCreateFragmentLabelInlineWithInitial(relation,field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.initial>\</string> >>
+
+putCreateFragmentLabelInline(relation,field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.initial>\</string> >>
    
 
    
