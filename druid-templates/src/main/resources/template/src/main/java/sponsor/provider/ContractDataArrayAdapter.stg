@@ -1,4 +1,4 @@
-import "../../dataTypeMaps.stg"
+import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><item.name.bactrian>DataArrayAdaptor.java
