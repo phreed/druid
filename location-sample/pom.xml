@@ -4,33 +4,77 @@
                       http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.maven.plugin.my.unit</groupId>
-  <artifactId>project-to-test</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <groupId>edu.vanderbilt.isis.druid</groupId>
+  <artifactId>local-sample</artifactId>
   <packaging>jar</packaging>
-  <name>Test GeneratorMojo</name>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>build a sample apk from a contract</name>
 
   <build>
     <plugins>
       <plugin>
         <groupId>edu.vanderbilt.isis.druid</groupId>
         <artifactId>druid-maven-plugin</artifactId>
-        <configuration>
-          <contractFile>${basedir}/src/test/resources/locator/contract/pli-locations.xml</contractFile>
-          <templateFile>${basedir}/src/main/resources/template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
-          <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
-          <each>relation</each>
+        <version>2.0.0</version>
+        <executions>
+          <execution>
+            <id>generate-manifest</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/AndroidManifest.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-creators</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+          <lifecycleMappingMetadata>
+            <pluginExecutions>
+
+              <pluginExecution>
+                <pluginExecutionFilter>
+                  <groupId>edu.vanderbilt.isis.druid</groupId>
+                  <artifactId>druid-maven-plugin</artifactId>
+                  <versionRange>[2.0.0,)</versionRange>
+                  <goals>
+                    <goal>generate</goal>
+                  </goals>
+                </pluginExecutionFilter>
+                <action>
+                  <ignore/>
+                </action>
+              </pluginExecution>
+            </pluginExecutions>
+          </lifecycleMappingMetadata>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 </project>
+
+

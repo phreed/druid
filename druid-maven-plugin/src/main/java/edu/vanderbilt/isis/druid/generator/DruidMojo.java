@@ -78,7 +78,7 @@ public class DruidMojo extends AbstractMojo {
 	 * 
 	 * @parameter expression="${generate.template}" default-value=""
 	 */
-	private File templateFile = null;
+	private String templateFile = null;
 	
 	 /**
      * templateKey : the name of template to be used to generate the output.
@@ -98,7 +98,7 @@ public class DruidMojo extends AbstractMojo {
     * @parameter expression="${generate.template.filemap}"
     *            default-value="template-manifest.stg"
     */
-    private File templateFileManifest = new File("template-manifest.stg");
+    private String templateFileManifest = "template-manifest.stg";
 	
 	/**
 	 * skeleton : has the skeleton target been requested?
@@ -156,7 +156,6 @@ public class DruidMojo extends AbstractMojo {
 
         getLog().info( "Resolving artifact " + artifact + " from " + remoteRepos );
 
-        /*
         final ArtifactResult result;
         try
         {
@@ -166,18 +165,24 @@ public class DruidMojo extends AbstractMojo {
         {
             throw new MojoExecutionException( e.getMessage(), e );
         }
-
-        logger.info( "Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from "
+        final String templateJar = result.getArtifact().getFile().getAbsolutePath();
+     
+        logger.info( "Resolved artifact " + artifact + " to " + templateJar + " from "
                            + result.getRepository() );
-        */
        
 		final Generator generator = new Generator(new MavenLoggerImpl(
 				this.getLog(), "druid"));
 
-        generator.setTemplateFile(this.templateFile);
+        try {
+            generator.setTemplateJarName(templateJar);
+        } catch (GeneratorException ex) {
+            logger.error("build failed", ex);
+            throw new MojoExecutionException("problem running code generator", ex);
+        }
+        generator.setTemplateFileName(this.templateFile);
         
 		generator.setTemplateKey(this.templateKey);
-		generator.setTemplateFileManifest(this.templateFileManifest);
+		generator.setTemplateFileManifestName(this.templateFileManifest);
 
 		generator.setContractPath(this.contractFile);
 		generator.setOutputDir(this.outputDirectory);
