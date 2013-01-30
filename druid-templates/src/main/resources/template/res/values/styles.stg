@@ -10,10 +10,10 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 \<!-- ST:BODY:start -->
 
-<resources>
+\<resources>
 
-    <style name="AppTheme" parent="android:Theme.Light" />
+    \<style name="AppTheme" parent="android:Theme.Light" />
 
-</resources>
+\</resources>
 
 >>

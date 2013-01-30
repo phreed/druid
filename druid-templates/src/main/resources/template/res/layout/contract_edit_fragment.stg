@@ -12,7 +12,7 @@ BODY(contract,item) ::= <<
 
 \<?xml version="1.0" encoding="utf-8"?>
 \<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/RelativeLayout<item.name.bactian>"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
@@ -71,14 +71,6 @@ BODY(contract,item) ::= <<
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/latitude"
         android:layout_alignBottom="@+id/latitude"
-        android:layout_alignParentLeft="true" />
-
-    \<TextView
-        android:id="@+id/labelUserID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/userID"
-        android:layout_alignBottom="@+id/userID"
         android:layout_alignParentLeft="true" />
 
     \<Button
@@ -146,3 +138,36 @@ BODY(contract,item) ::= <<
 \</RelativeLayout>
 
  >>
+
+ 
+topRowLabelAndEditText(relation,field) ::= <<
+    \<EditText
+        android:id="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+    \<TextView
+        android:id="@+id/<relation.name.snake>_label_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_alignParentLeft="true" />   
+>>
+
+restOfRowsLabelAndEditText(relation,field) ::= <<
+    \<EditText
+        android:id="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+    \<TextView
+        android:id="@+id/<relation.name.snake>_label_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_edit_text_<field.name.snake>"
+        android:layout_alignParentLeft="true" />   
+>>

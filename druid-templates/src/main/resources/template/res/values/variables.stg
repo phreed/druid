@@ -10,11 +10,11 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 \<!-- ST:BODY:start -->
 
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+\<?xml version="1.0" encoding="utf-8"?>
+\<resources>
 
-    <bool name="isTablet">false</bool>
+    \<bool name="isTablet">false</bool>
 
-</resources>
+\</resources>
 
- >>
+>>

@@ -18,7 +18,7 @@
         <version>2.0.0</version>
         <executions>
 
-          <execution>
+          <execution> <!-- AndroidManifest.xml -->
             <id>generate-manifest</id>
             <phase>generate-sources</phase>
             <goals>
@@ -32,7 +32,8 @@
             </configuration>
           </execution>
 
-          <execution>
+          <!-- ORM classes  -->
+          <execution> <!-- ORM Object Creation Builder(s) -->
             <id>generate-creators</id>
             <phase>generate-sources</phase>
             <goals>
@@ -47,7 +48,8 @@
             </configuration>
           </execution>
 
-          <execution>
+	  <!-- res/values/ -->	
+          <execution> <!-- strings.xml  -->
             <id>generate-res-values-strings-xml</id>
             <phase>generate-sources</phase>
             <goals>
@@ -61,7 +63,81 @@
             </configuration>
           </execution>
 
-          <execution>
+          <execution> <!-- styles.xml  -->
+            <id>generate-res-values-styless-xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/values/styles.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+         
+          <execution> <!-- variables.xml  -->
+            <id>generate-res-values-variables-xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/values/variables.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+	  <!-- res/xml/ -->	
+          <execution> <!-- account-preferences.xml (for conventional SyncAdaptor )  -->
+            <id>generate-xml-account-preferences-xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/xml/account_preferences.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution> <!-- authenticator.xml (for conventional SyncAdaptor )  -->
+            <id>generate-xml-authenticator-xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/xml/authenticator.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <!-- res/layout -->
+          <execution> <!-- Main(s) (holds all the fragments) -->
+            <id>generate-res-layout-main.xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/layout/activity_main.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+
+          <execution><!-- Listview Fragments Layout(s) -->
             <id>generate-res-layout-listview-xml</id>
             <phase>generate-sources</phase>
             <goals>
@@ -76,7 +152,7 @@
             </configuration>
           </execution>
 
-          <execution>
+          <execution> <!-- Listview custom row layout(s)  -->
             <id>generate-res-layout-listview-custom-row.xml</id>
             <phase>generate-sources</phase>
             <goals>
@@ -91,7 +167,7 @@
             </configuration>
           </execution>
 
-          <execution>
+          <execution> <!-- Edit Fragment Layout(s)  -->
             <id>generate-res-layout-edit-fragment.xml</id>
             <phase>generate-sources</phase>
             <goals>
@@ -101,6 +177,36 @@
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
               <templateFile>template/res/layout/contract_edit_fragment.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- View Fragment Layout(s)  -->
+            <id>generate-res-layout-view-fragment.xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/layout/contract_listview.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Create Fragment Layout(s)  -->
+            <id>generate-res-layout-create-fragment.xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/layout/template_creation_fragment.stg</templateFile>
               <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
               <each>relation</each>
             </configuration>

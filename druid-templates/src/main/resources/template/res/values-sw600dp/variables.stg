@@ -1,6 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+import "dataTypeMaps.stg"
 
-    <bool name="isTablet">true</bool>
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>valeus-sw600dp<delimiter>account_preferences.xml
+%>
 
-</resources>
+SKELETON(contract) ::= <<
+>>
+
+BODY(contract) ::= <<
+\<!-- ST:BODY:start -->
+\<?xml version="1.0" encoding="utf-8"?>
+\<resources>
+
+    \<bool name="isTablet">true</bool>
+
+\</resources>
+\<!-- ST:BODY:end -->
+>>

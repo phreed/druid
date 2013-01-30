@@ -1,13 +1,14 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name>activity_main.xml
+  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name.snake>_activity_main.xml
 %>
 
 SKELETON(contract,item) ::= <<
 >>
 
-BODY(contract) ::= <<
+BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?>
 \<!-- ST:BODY:start -->
 
 \<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

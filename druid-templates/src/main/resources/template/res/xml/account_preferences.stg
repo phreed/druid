@@ -4,15 +4,16 @@ PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
   <directory.path><delimiter>res<delimiter>xml<delimiter>account_preferences.xml
 %>
 
-SKELETON(contract,item) ::= <<
+SKELETON(contract) ::= <<
 >>
 
 BODY(contract) ::= <<
 \<!-- ST:BODY:start -->
 
-<PreferenceScreen
+\<PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
 
-</PreferenceScreen>
+\</PreferenceScreen>
 
+\<!-- ST:BODY:end -->
 >>
