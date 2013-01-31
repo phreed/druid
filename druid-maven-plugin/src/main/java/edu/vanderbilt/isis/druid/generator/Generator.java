@@ -45,13 +45,23 @@ public class Generator {
         this.outputPath = val;
     }
 
+    /**
+     * This method sets the base class for the string template group files.
+     * There may be other ways to accomplish this, such as using the
+     * getGroupDir() method.
+     * 
+     * @param templateJarName
+     * @throws GeneratorException
+     */
     public void setTemplateJarName(String templateJarName) throws GeneratorException {
         this.templateJarName = templateJarName;
         final Thread ct = Thread.currentThread();
         final ClassLoader pcl = ct.getContextClassLoader();
         URL[] nurl;
         try {
-            nurl = new URL[]{ new URL("file://"+templateJarName) };
+            nurl = new URL[] {
+                new URL("file://" + templateJarName)
+            };
         } catch (MalformedURLException ex) {
             throw new GeneratorException("could not load template jar", ex);
         }
@@ -59,15 +69,27 @@ public class Generator {
         ct.setContextClassLoader(ucl);
     }
 
+    /**
+     * The template key points not to a single template but to a group
+     * of templates which work together to construct a component.
+     * The key is used in conjunction with the template manifest.
+     * 
+     * @param val
+     */
     public void setTemplateKey(String val) {
         this.templateKey = val;
     }
 
+    /**
+     * When a single template is to be used.
+     * 
+     * @param val
+     */
     public void setTemplateFileName(final String val) {
         this.templateFileName = val;
     }
 
-    public void setTemplateFileManifestName(final String val) {
+    public void setTemplateManifestFileName(final String val) {
         this.templateManifestFileName = val;
     }
 
@@ -97,8 +119,8 @@ public class Generator {
         RELATION("relation"),
         /** the messages */
         MESSAGE("message"),
-        /** the messages */
-        NONE("none");
+        /** the contract, only one */
+        CONTRACT("contract");
 
         public final String val;
 
@@ -107,52 +129,17 @@ public class Generator {
         }
 
         public static Each getValue(String val) throws GeneratorException {
-            if (Each.RELATION.val.equals(val))
+            if (Each.RELATION.val.equalsIgnoreCase(val)) {
                 return Each.RELATION;
-            if (Each.MESSAGE.val.equals(val))
+            }
+            if (Each.MESSAGE.val.equalsIgnoreCase(val)) {
                 return Each.MESSAGE;
-            if (Each.NONE.val.equals(val))
-                return Each.NONE;
+            }
+            if (Each.CONTRACT.val.equalsIgnoreCase(val)) {
+                return Each.CONTRACT;
+            }
             throw new GeneratorException("unknown each type" + val);
         }
-    }
-
-    /**
-     * The main worker which generates the source files from the contract.
-     * Decide which template group is being used. There is a template manifest
-     * which contains a list of rules for generating file names and templates.
-     * <p>
-     * <ol>
-     * <li>Load the appropriate template group.</li>
-     * <li>Determine the file to be written.</li>
-     * <li>Build the body of the output file.</li>
-     * <li>Write the file.</li>
-     * </ol>
-     * 
-     * @return did the build work?
-     * @throws GeneratorException
-     */
-    public STGroup getTemplateGroup() throws GeneratorException {
-        STGroup.trackCreationEvents = true;
-
-        /**
-         * It may be that the template-file is given explicitly. If that is the
-         * case then it should be used.
-         */
-        if (this.templateFileName != null) {
-            return getGroupUtil(logger, this.templateFileName);
-        }
-
-        final File templateManifestFile = new File(this.templateManifestFileName);
-        if (!templateManifestFile.isFile()) {
-            throw new GeneratorException("could not find template manifest "
-                    + this.templateManifestFileName);
-        }
-        final STGroup manifestStg = getManifestGroup();
-        final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
-        stGroup.add("key", this.templateKey);
-        final String templateGroupFileName = stGroup.render();
-        return getGroupUtil(logger, templateGroupFileName);
     }
 
     /**
@@ -163,7 +150,7 @@ public class Generator {
      * @return null if not able to load the file
      * @throws GeneratorException
      */
-    private STGroup getGroupUtil(final Logger logger, final String templateFileName)
+    private STGroup getGroup(final Logger logger, final String templateFileName)
             throws GeneratorException {
         if (this.templateJarName == null) {
             final File templateFile = new File(templateFileName);
@@ -200,17 +187,67 @@ public class Generator {
     }
 
     /**
-     * The build acquires a template group and a contract from which it builds
+     * The main worker which generates the source files from the contract.
+     * Decide which template group is being used. There is a template manifest
+     * which contains a list of rules for generating file names and templates.
+     * <p>
+     * <ol>
+     * <li>Load the appropriate template group.</li>
+     * <li>Determine the file to be written.</li>
+     * <li>Build the body of the output file.</li>
+     * <li>Write the file.</li>
+     * </ol>
+     * 
+     * @return did the build work?
+     * @throws GeneratorException
+     */
+    public void build() throws GeneratorException {
+        final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
+        STGroup.trackCreationEvents = true;
+
+        /**
+         * It may be that the template-file is given explicitly. If that is the
+         * case then it should be used.
+         */
+        if (this.templateFileName != null) {
+            final STGroup stg = getGroup(logger, this.templateFileName);
+            buildTemplate(contract, stg);
+            return;
+        }
+
+        /**
+         * If the template file is not given explicitly then the template key will be used.
+         */
+        if (this.templateKey == null) {
+            throw new GeneratorException("no template key");
+        }
+        final File templateManifestFile = new File(this.templateManifestFileName);
+        if (!templateManifestFile.isFile()) {
+            throw new GeneratorException("could not find template manifest "
+                    + this.templateManifestFileName);
+        }
+        /*
+        final STGroup manifestStg = getManifestGroup();
+        final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
+        stGroup.add("key", this.templateKey);
+        final String templateGroupFileName = stGroup.render();
+        return getGroupUtil(logger, templateGroupFileName);
+        if (this.templateManifestFileName) 
+        final STGroup stg = getTemplateGroup();
+        return buildTemplate(contract, stg);
+        */
+    }
+
+    /**
+     * The build template acquires a template group and a contract from which it builds
      * an output file. The output file has a name and a body both of which are
      * generated via a template.
      * 
      * @return
      * @throws GeneratorException
      */
-    public boolean build() throws GeneratorException {
-        final STGroup stg = getTemplateGroup();
-        final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
-
+    private void buildTemplate(final Contract contract, final STGroup stg) throws GeneratorException {
+       
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
             for (String templateName : stg.getTemplateNames()) {
@@ -229,7 +266,7 @@ public class Generator {
         }
         stFileBody.add("contract", contract);
 
-        if (this.each.equals(Each.NONE)) {
+        if (this.each.equals(Each.CONTRACT)) {
             final String outputFileName = stFileName.render();
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
@@ -251,7 +288,7 @@ public class Generator {
                         throw new GeneratorException("problem closing output file", ex);
                     }
             }
-            return true;
+            return;
         }
         final List<?> all;
         switch (this.each) {
@@ -287,7 +324,6 @@ public class Generator {
                     }
             }
         }
-        return true;
     }
 
 }

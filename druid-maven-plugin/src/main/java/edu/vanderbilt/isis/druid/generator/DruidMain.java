@@ -180,8 +180,7 @@ public class DruidMain {
             System.exit(-1);
         }
         try {
-			if (that.build())
-			    return;
+			that.build();
 		} catch (GeneratorException ex) {
 			 ex.printStackTrace();
 	            usage();
