@@ -12,7 +12,7 @@ BODY(contract) ::= <<
 \<?xml version="1.0" encoding="utf-8"?>
 \<resources>
 
-    \<bool name="isTablet">true</bool>
+    \<bool name="isTablet">true\</bool>
 
 \</resources>
 \<!-- ST:BODY:end -->
