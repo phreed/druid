@@ -32,22 +32,6 @@
             </configuration>
           </execution>
 
-          <!-- ORM classes  -->
-          <execution> <!-- ORM Object Creation Builder(s) -->
-            <id>generate-creators</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
-              <templateFile>template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
-              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
-              <each>relation</each>
-            </configuration>
-          </execution>
-
 	  <!-- res/values/ -->	
           <execution> <!-- strings.xml  -->
             <id>generate-res-values-strings-xml</id>
@@ -136,7 +120,6 @@
             </configuration>
           </execution>
 
-
           <execution><!-- Listview Fragments Layout(s) -->
             <id>generate-res-layout-listview-xml</id>
             <phase>generate-sources</phase>
@@ -211,6 +194,68 @@
               <each>relation</each>
             </configuration>
           </execution>
+
+          <execution> <!-- Create Fragment Layout(s)  -->
+            <id>generate-res-layout-authenicator.xml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/res/layout/authenticator_layout.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <!-- ORM   -->
+          <execution> <!-- ORM Object Creation Builder(s) -->
+            <id>generate-creators</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/orm/ContractCreator.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- ORM transportData Resolver (object interface to ContentProvider)  -->
+            <id>generate-src-main-java-orm-TransportDataResolver.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/orm/ContractResolver.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution> <!-- ORM transport Data Object(s) (per relation)  -->
+            <id>generate-src-main-java-orm-TransportData.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/orm/ContractData.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <!-- -->
 
         </executions>
       </plugin>

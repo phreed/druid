@@ -1,18 +1,18 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Creator.java
+<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><contract.root.sponsor.base>Resolver.java 
 %>
 
 
-SKELETON(contract,item) ::= <<
+SKELETON(contract) ::= <<
 >>
 
-BODY(contract,item) ::= <<
+BODY(contract) ::= <<
 // ST:BODY:start
 
 // ST:package:inline
-package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
+<package(contract,relation)>
 // ST:package:complete
 
 import java.io.FileNotFoundException;
@@ -35,7 +35,7 @@ import com.walkernation.db.provider.ContentDescriptor;
 
 /**
  * encapsulation of the ContentProviderClient for a single URI
- * <p>
+ * \<p>
  * Uses ContentResolver instead of ContentProviderClient or other mechanism to
  * simplify code and to make this object thread safe.
  * 
@@ -52,12 +52,12 @@ public class <item.name.bactrian>Resolver {
 	}
 
 	public ContentProviderResult[] applyBatch(
-			ArrayList<ContentProviderOperation> operations)
+			ArrayList\<ContentProviderOperation> operations)
 			throws RemoteException, OperationApplicationException {
 		return cr.applyBatch(ContentDescriptor.AUTHORITY, operations);
 	}
 
-	public int bulkInsert(ArrayList<LocationData> locations)
+	public int bulkInsert(ArrayList\<LocationData> locations)
 			throws RemoteException {
 		ContentValues[] values = new ContentValues[locations.size()];
 		int index = 0;
@@ -96,13 +96,13 @@ public class <item.name.bactrian>Resolver {
 		return cr.openFileDescriptor(uri, mode);
 	}
 
-	public ArrayList<LocationData> query(String[] projection, String selection,
+	public ArrayList\<LocationData> query(String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) throws RemoteException {
 		// query the C.P.
 		Cursor result = cr.query(uri, projection, selection, selectionArgs,
 				sortOrder);
 		// make return object
-		ArrayList<LocationData> rValue = new ArrayList<LocationData>();
+		ArrayList\<LocationData> rValue = new ArrayList\<LocationData>();
 		// convert cursor to reutrn object
 		rValue.addAll(LocationCreator
 				.getLocationDataArrayListFromCursor(result));
@@ -115,14 +115,14 @@ public class <item.name.bactrian>Resolver {
 		return cr.update(uri, values.getCV(), selection, selectionArgs);
 	}
 
-	public ArrayList<LocationData> getAllLocations() throws RemoteException {
+	public ArrayList\<LocationData> getAllLocations() throws RemoteException {
 		return query(null, null, null, null);
 	}
 
 	public LocationData getLocationOfUser(long userID) throws RemoteException {
 		LocationData rValue = null;
 
-		ArrayList<LocationData> list = query(
+		ArrayList\<LocationData> list = query(
 				ContentDescriptor.Location.ORM_COLUMN_NAMES,
 				ContentDescriptor.Location.Cols.USER_ID_NAME + " = ?",
 				new String[] { "" + userID }, null);
@@ -133,7 +133,8 @@ public class <item.name.bactrian>Resolver {
 		return rValue;
 	}
 }
-
 >>
 
 package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
+
+

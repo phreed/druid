@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Creator.java
+<directory.path><delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Data.java
 %>
 
 
@@ -66,7 +66,7 @@ public class LocationData implements Parcelable, Serializable {
 		dest.writeLong(height);
 	}
 
-	public static final Parcelable.Creator<LocationData> CREATOR = new Parcelable.Creator<LocationData>() {
+	public static final Parcelable.Creator\<LocationData> CREATOR = new Parcelable.Creator\<LocationData>() {
 		public LocationData createFromParcel(Parcel in) {
 			return new LocationData(in);
 		}
@@ -84,3 +84,4 @@ public class LocationData implements Parcelable, Serializable {
 	}
 
 }
+>>
