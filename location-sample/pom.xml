@@ -18,6 +18,7 @@
         <version>2.0.0</version>
         <executions>
 
+          <!-- root directory of project -->
           <execution> <!-- AndroidManifest.xml -->
             <id>generate-manifest</id>
             <phase>generate-sources</phase>
@@ -255,7 +256,201 @@
             </configuration>
           </execution>
 
-          <!-- -->
+          <!-- provider -->
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-provider-ContentDescriptor.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/provider/ContentDescriptor.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution> <!-- DB Adaptor that stores the local data -->
+            <id>generate-src-main-java-provider-DBAdaptor.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/provider/ContractDataDBAdaptor.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution> <!-- the ContentProvider for the entire application -->
+            <id>generate-src-main-java-provider-Provider.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/provider/ContractProvider.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Array Adaptor (per relation) -->
+            <id>generate-src-main-java-provider-relationArrayAdaptor.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/provider/ContractDataArrayAdapter.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+              <each>relation</each>
+            </configuration>
+          </execution>
+
+          <!-- UI java classes -->
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-activityBase.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ContractActivityBase.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-listFragment.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ContractListFragment.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-createActivity.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/CreateContractActivity.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-editActivity.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/EditContractActivity.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-editFragment.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/EditContractFragment.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-listActivity.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ListContractActivity.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-openWindowInterface.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/OnOpenWindowInterface.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-viewActivity.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ViewContractActivity.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+            <id>generate-src-main-java-ui-viewFragment.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ViewContractFragment.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
 
         </executions>
       </plugin>
