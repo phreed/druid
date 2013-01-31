@@ -38,7 +38,7 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 
 	OnOpenWindowInterface mOpener;
 	MultipleResolver resolver;
-	ArrayList<DataOneData> dataOneData;
+	ArrayList\<DataOneData> dataOneData;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -70,7 +70,7 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 		Log.d(LOG_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		resolver = new MultipleResolver(getActivity());
-		dataOneData = new ArrayList<DataOneData>();
+		dataOneData = new ArrayList\<DataOneData>();
 		setRetainInstance(true);
 	}
 
@@ -93,7 +93,7 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 		try {
 			dataOneData.clear();
 
-			ArrayList<DataOneData> currentList = resolver.getAllDataOneData();
+			ArrayList\<DataOneData> currentList = resolver.getAllDataOneData();
 
 			dataOneData.addAll(currentList);
 			aa.notifyDataSetChanged();

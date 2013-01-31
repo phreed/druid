@@ -66,13 +66,13 @@ public class ContentDescriptor {
 
 package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
 
-addMatcherURIs(relation) ::= "
+addMatcherURIs(relation) ::= <<
 // <relation.name.bactrian> URIs
 matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH, <relation.name.bactrian>.PATH_TOKEN);
 matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH_FOR_ID, <relation.name.bactrian>.PATH_FOR_ID_TOKEN);
-"
+>>
 
-createRelationMetaData(relation) ::= "
+createRelationMetaData(relation) ::= <<
 // Define a static class that represents description of stored content
 // entity.
 public static class <relation.name.bactrian> {
@@ -120,12 +120,12 @@ public static class <relation.name.bactrian> {
 		// ST:getColumnDeclaration:complete
 	}
 }
-"
+>>
 
 getColumnNames(field) ::="Cols.<field.name.bactrian>"
 
-getColumnDeclaration(field) ::="
+getColumnDeclaration(field) ::= <%
 public static final String <field.name.bactrian> = \"<field.name.camel>\";
-"
+%>
 
 
