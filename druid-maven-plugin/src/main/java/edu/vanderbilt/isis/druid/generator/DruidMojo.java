@@ -95,10 +95,10 @@ public class DruidMojo extends AbstractMojo {
     * <p>
     * This is used to select the group template file.
     * 
-    * @parameter expression="${generate.template.filemap}"
-    *            default-value="template-manifest.stg"
+    * @parameter expression="${generate.template.manifest}"
+    *            default-value="template-manifest.cfg"
     */
-    private String templateFileManifest = "template-manifest.stg";
+    private String templateFileManifest = "template-manifest.cfg";
 	
 	/**
 	 * skeleton : has the skeleton target been requested?
@@ -119,9 +119,9 @@ public class DruidMojo extends AbstractMojo {
 	 * <dt>message</dt><dd>one for each of the messages mentioned</dd>
 	 * </dl>
 	 * 
-	 * @parameter expression="${generate.skeleton}" default-value="none"
+	 * @parameter expression="${generate.skeleton}" default-value="contract"
 	 */
-	private String each = Generator.Each.NONE.val;
+	private String each = Generator.Each.CONTRACT.val;
 
 	/**
 	 * outputDirectory : the base path for the generated files.
@@ -182,7 +182,7 @@ public class DruidMojo extends AbstractMojo {
         generator.setTemplateFileName(this.templateFile);
         
 		generator.setTemplateKey(this.templateKey);
-		generator.setTemplateFileManifestName(this.templateFileManifest);
+		generator.setTemplateManifestFileName(this.templateFileManifest);
 
 		generator.setContractPath(this.contractFile);
 		generator.setOutputDir(this.outputDirectory);

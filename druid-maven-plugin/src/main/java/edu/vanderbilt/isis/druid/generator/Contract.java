@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
  * @see GenerateMojo.java for a description of the fields.
  */
 public class Contract {
+    @SuppressWarnings("unused")
     final private Logger logger;
 
     public final Root root;
@@ -201,6 +202,10 @@ public class Contract {
         }
     }
 
+    public interface Predecessor {
+        Name getName();
+        Predecessor getPredecessor();
+    }
     /**
      * Collect table information.
      */
@@ -237,6 +242,9 @@ public class Contract {
                 final List<Message> messages) {
             this.name = name;
             this.mode = mode;
+            for (Field field : fields) {
+                field.setParent(this);
+            }
             this.fields = fields;
             this.keycols = keycols;
             this.messages = messages;
@@ -303,12 +311,13 @@ public class Contract {
     /**
      * A column in a table (relation).
      */
-    public static class Field {
+    public static class Field implements Predecessor {
         private final Name name;
         private final String dtype;
         private final String initial;
         private final String description;
         private final List<Enumeration> enums;
+        private Relation parent;
 
         public Name getName() {
             return name;
@@ -329,6 +338,14 @@ public class Contract {
         public List<Enumeration> getEnums() {
             return enums;
         }
+        
+        public Predecessor getPredecessor() {
+            final int ix = parent.fields.indexOf(this);
+            if (ix < 0) {
+                return null;
+            }
+            return parent.fields.get(ix);
+        }
 
         public Field(final Name name, final String dtype,
                 final String initial, final String description,
@@ -338,6 +355,9 @@ public class Contract {
             this.initial = initial;
             this.description = description.trim();
             this.enums = enum_set;
+        }
+        public void setParent(final Relation parent) {
+            this.parent = parent;
         }
 
         @Override
