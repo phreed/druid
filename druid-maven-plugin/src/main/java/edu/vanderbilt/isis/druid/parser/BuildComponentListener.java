@@ -122,7 +122,7 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
             return;
         }
         try {
-            this.generator.buildPartUsingTemplate(this.contract, Each.CONTRACT, this.templateFileName);
+            this.generator.buildPartUsingTemplate(this.contract, this.templateFileName);
         } catch (GeneratorException ex) {
             this.generator.getLogger().error("could not procees template {}",
                     this.templateFileName, ex);
@@ -200,8 +200,20 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
 
     @Override
     public void exitSimpleCopy(SimpleCopyContext ctx) {
-        // TODO Auto-generated method stub
-
+        if (!this.isComponentActive) {
+            return;
+        }
+        final String filePath = ctx.FILE_PATH().getText().replaceAll("^\"|\"$", "");
+        final String template = ctx.TEMPLATE().getText().replaceAll("^'|'$", "");
+       
+        logger.info("simple copy tree = {}", ctx.toStringTree());
+        try {
+            this.generator.buildPartUsingCopy(this.contract, filePath, template);
+        } catch (GeneratorException ex) {
+            this.generator.getLogger().error("could not procees file {} with template {}",
+                    filePath, template, ex);
+        }
+        return;
     }
 
 }
