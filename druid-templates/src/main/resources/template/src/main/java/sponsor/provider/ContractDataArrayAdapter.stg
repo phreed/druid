@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.walkernation.db.R;
 import com.walkernation.db.orm.LocationData;
 
-public class LocationDataArrayAdapter extends ArrayAdapter<LocationData> {
+public class LocationDataArrayAdapter extends ArrayAdapter\<LocationData> {
 
 	private static final String LOG_TAG = LocationDataArrayAdapter.class
 			.getCanonicalName();
@@ -36,7 +36,7 @@ public class LocationDataArrayAdapter extends ArrayAdapter<LocationData> {
 	int resource;
 
 	public LocationDataArrayAdapter(Context _context, int _resource,
-			List<LocationData> _items) {
+			List\<LocationData> _items) {
 		super(_context, _resource, _items);
 		Log.d(LOG_TAG, "constructor()");
 		resource = _resource;

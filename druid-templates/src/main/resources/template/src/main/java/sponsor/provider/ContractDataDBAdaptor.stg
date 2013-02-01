@@ -119,7 +119,7 @@ public class LocationDataDBAdaptor {
 
 	/**
 	 * Delete row(s) that match the whereClause and whereArgs(if used).
-	 * <p>
+	 * \<p>
 	 * the whereArgs is an String[] of values to substitute for the '?'s in the
 	 * whereClause
 	 * 

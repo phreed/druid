@@ -317,7 +317,7 @@
 
           <!-- UI java classes -->
 
-          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+          <execution> <!-- base class for all activities in this package -->
             <id>generate-src-main-java-ui-activityBase.java</id>
             <phase>generate-sources</phase>
             <goals>
@@ -332,7 +332,22 @@
             </configuration>
           </execution>
 
-          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+          <execution> <!-- Activity for holding ListView Fragment in handheld display mode -->
+            <id>generate-src-main-java-ui-listActivity.java</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
+              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
+              <templateFile>template/src/main/java/sponsor/ui/location/ListContractActivity.stg</templateFile>
+              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
+	      <each>relation</each>
+            </configuration>
+          </execution>
+
+          <execution> <!-- Fragment for ListView -->
             <id>generate-src-main-java-ui-listFragment.java</id>
             <phase>generate-sources</phase>
             <goals>
@@ -347,7 +362,7 @@
             </configuration>
           </execution>
 
-          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
+          <execution> <!-- Activity to hold Creation Fragment in handheld diplay mode -->
             <id>generate-src-main-java-ui-createActivity.java</id>
             <phase>generate-sources</phase>
             <goals>
@@ -387,21 +402,6 @@
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
               <templateFile>template/src/main/java/sponsor/ui/location/EditContractFragment.stg</templateFile>
-              <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
-	      <each>relation</each>
-            </configuration>
-          </execution>
-
-          <execution> <!-- Meta Data descriptor for the entire ContentProvider -->
-            <id>generate-src-main-java-ui-listActivity.java</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
-              <templateFile>template/src/main/java/sponsor/ui/location/ListContractActivity.stg</templateFile>
               <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
 	      <each>relation</each>
             </configuration>
