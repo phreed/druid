@@ -175,7 +175,7 @@
             <configuration>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/contract/pli.xml</contractFile>
-              <templateFile>template/res/layout/contract_listview.stg</templateFile>
+              <templateFile>template/res/layout/contract_view_fragment.stg</templateFile>
               <outputDirectory>${basedir}/target/test-harness/druid-maven-plugin-generate-test/</outputDirectory>
               <each>relation</each>
             </configuration>

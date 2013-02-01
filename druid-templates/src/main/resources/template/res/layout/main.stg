@@ -8,6 +8,7 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?> <! this HAS to be first line in file !>
 \<!-- ST:BODY:start -->
 
 \<?xml version="1.0" encoding="utf-8"?>
