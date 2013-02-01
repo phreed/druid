@@ -20,15 +20,15 @@
 
           <!-- root directory of project -->
           <execution> <!-- AndroidManifest.xml -->
-            <id>generate-manifest</id>
+            <id>generate-android-source</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
+              <templateKey>beta</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
-              <templateKey>simple</templateKey>
               <outputDirectory>${basedir}/target/druid/</outputDirectory>
             </configuration>
           </execution>

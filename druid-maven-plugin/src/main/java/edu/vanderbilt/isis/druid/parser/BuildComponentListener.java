@@ -4,12 +4,11 @@ package edu.vanderbilt.isis.druid.parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.apache.maven.plugin.logging.Log;
 import org.slf4j.Logger;
-import org.stringtemplate.v4.STGroup;
 
 import edu.vanderbilt.isis.druid.generator.Contract;
 import edu.vanderbilt.isis.druid.generator.Generator;
+import edu.vanderbilt.isis.druid.generator.Generator.Each;
 import edu.vanderbilt.isis.druid.generator.GeneratorException;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestParser.BuildComponentContext;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestParser.MultiTemplateContext;
@@ -27,19 +26,25 @@ import edu.vanderbilt.isis.druid.parser.ComponentManifestParser.SubsetContext;
  * @see GenerateMojo.java for a description of the fields.
  */
 public class BuildComponentListener extends ComponentManifestBaseListener {
+    @SuppressWarnings("unused")
     final private ComponentManifestParser parser;
+    @SuppressWarnings("unused")
+    final private Logger logger;
     final private Generator generator;
     final private Contract contract;
-    final private Logger logger;
+    final private String componentName;
+    private boolean isComponentActive = false;
+    private String subsetName = null;
 
     private String templateFileName = null;
 
     public BuildComponentListener(final ComponentManifestParser parser, final Contract contract,
-            final Generator generator) {
+            final Generator generator, final String componentName) {
         this.logger = generator.getLogger();
         this.parser = parser;
         this.contract = contract;
         this.generator = generator;
+        this.componentName = componentName;
     }
 
     @Override
@@ -74,20 +79,18 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
 
     @Override
     public void exitSubset(SubsetContext ctx) {
-        // TODO Auto-generated method stub
-
+        this.subsetName = ctx.getText();
     }
 
     @Override
     public void enterBuildComponent(BuildComponentContext ctx) {
-        // TODO Auto-generated method stub
-
+        final String currentComponentName = ctx.ID().getText();
+        this.isComponentActive = this.componentName.equalsIgnoreCase(currentComponentName);
     }
 
     @Override
     public void exitBuildComponent(BuildComponentContext ctx) {
-        // TODO Auto-generated method stub
-
+        this.isComponentActive = false;
     }
 
     @Override
@@ -111,11 +114,15 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
 
     @Override
     public void exitSimpleTemplate(SimpleTemplateContext ctx) {
+        if (!this.isComponentActive) {
+            return;
+        }
+        logger.info("simple context tree = {}", ctx.toStringTree());
         if (this.templateFileName == null) {
             return;
         }
         try {
-             this.generator.buildPartUsingTemplate(this.contract, this.templateFileName);
+            this.generator.buildPartUsingTemplate(this.contract, Each.CONTRACT, this.templateFileName);
         } catch (GeneratorException ex) {
             this.generator.getLogger().error("could not procees template {}",
                     this.templateFileName, ex);
@@ -161,14 +168,28 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
 
     @Override
     public void enterMultiTemplate(MultiTemplateContext ctx) {
-        // TODO Auto-generated method stub
-
+        final TerminalNode templateFileNode = ctx.FILE_PATH();
+        final String full = templateFileNode.getText();
+        this.templateFileName = full.replaceAll("^\"|\"$", "");
     }
 
     @Override
     public void exitMultiTemplate(MultiTemplateContext ctx) {
-        // TODO Auto-generated method stub
+        if (!this.isComponentActive) {
+            return;
+        }
 
+        if (this.templateFileName == null) {
+            return;
+        }
+        try {
+            logger.info("multi context tree = [{}] subset = {}", ctx.toStringTree(), this.subsetName);
+            this.generator.buildPartUsingTemplate(this.contract, this.subsetName, this.templateFileName);
+        } catch (GeneratorException ex) {
+            this.generator.getLogger().error("could not procees template {}",
+                    this.templateFileName, ex);
+        }
+        return;
     }
 
     @Override

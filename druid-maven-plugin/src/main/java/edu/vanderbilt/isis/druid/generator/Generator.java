@@ -201,7 +201,7 @@ public class Generator {
          * case then it should be used.
          */
         if (this.templateFileName != null) {
-            buildPartUsingTemplate(contract, this.templateFileName);
+            buildPartUsingTemplate(contract, this.each, this.templateFileName);
             return;
         }
 
@@ -247,7 +247,7 @@ public class Generator {
             final ParseTree tree = parser.prog();
             final ParseTreeWalker walker = new ParseTreeWalker();
             final BuildComponentListener extractor = 
-                    new BuildComponentListener(parser,contract,this);
+                    new BuildComponentListener(parser,contract,this, this.templateKey);
             walker.walk(extractor, tree);
         } finally {
             if (inputStream != null) {
@@ -270,7 +270,13 @@ public class Generator {
      * @return
      * @throws GeneratorException
      */
-    public void buildPartUsingTemplate(final Contract contract, final String templateFileName) throws GeneratorException {
+    public void buildPartUsingTemplate(final Contract contract, final String eachName, final String templateFileName) throws GeneratorException {
+        final Each forEach = Each.getValue(eachName);
+        buildPartUsingTemplate(contract, forEach, templateFileName);
+    }
+    
+    public void buildPartUsingTemplate(final Contract contract, final Each forEach, final String templateFileName) throws GeneratorException {
+        
         final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
@@ -290,9 +296,9 @@ public class Generator {
         }
         stFileBody.add("contract", contract);
 
-        if (this.each.equals(Each.CONTRACT)) {
+        if (forEach.equals(Each.CONTRACT)) {
             final String outputFileName = stFileName.render();
-            logger.info("building {} using {}", outputFileName, templateFileName );
+            logger.info("building {} using {} single", outputFileName, templateFileName );
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
@@ -316,18 +322,18 @@ public class Generator {
             return;
         }
         final List<?> all;
-        switch (this.each) {
+        switch (forEach) {
             case RELATION:
                 all = contract.root.getRelations();
                 break;
             case MESSAGE:
             default:
-                throw new GeneratorException("unknown each type:" + this.each);
+                throw new GeneratorException("unknown each type:" + forEach);
         }
         for (Object item : all) {
             stFileName.add("item", item);
             final String outputFileName = stFileName.render();
-            logger.info("building {} using {}", outputFileName, templateFileName );
+            logger.info("building {} using {} for a {}", outputFileName, templateFileName, forEach);
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
