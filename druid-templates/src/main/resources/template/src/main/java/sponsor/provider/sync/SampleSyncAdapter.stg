@@ -1,3 +1,15 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter>sync<delimiter>SampleSyncAdapter.java
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?>
+\<!-- ST:BODY:start -->
 package com.walkernation.db.provider.sync;
 
 import java.io.IOException;
@@ -20,7 +32,7 @@ import android.util.Log;
 /**
  * This is the SyncAdapater class that synchronizes the Local ContentProvider
  * with a remote data store.
- * <p>
+ * \<p>
  * Currently this is only a STUB implementation.
  * 
  * @author Michael A. Walker
@@ -94,3 +106,5 @@ public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 	}
 }
+\<!-- ST:BODY:end -->
+>>

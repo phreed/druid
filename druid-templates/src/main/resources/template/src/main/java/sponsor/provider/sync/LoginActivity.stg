@@ -1,3 +1,15 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter>sync<delimiter>LoginActivity.java
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?>
+\<!-- ST:BODY:start -->
 package com.walkernation.db.provider.sync;
 
 import java.util.Locale;
@@ -19,7 +31,7 @@ import com.walkernation.db.R;
 
 /**
  * Activity that gets Launched when Adding an Account to the SyncManager
- * <p>
+ * \<p>
  * An Activity to prompt for a Server Address, a UserName, and a Password. Uses
  * these to verify user login credentials and to create a 'token' identifying
  * the user account on the device.
@@ -89,7 +101,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 	 * @author Michael A. Walker
 	 * 
 	 */
-	private class LoginTask extends AsyncTask<String, Void, Boolean> {
+	private class LoginTask extends AsyncTask\<String, Void, Boolean> {
 
 		Context mContext;
 		ProgressDialog mDialog;
@@ -146,3 +158,5 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 		}
 	}
 }
+\<!-- ST:BODY:end -->
+>>

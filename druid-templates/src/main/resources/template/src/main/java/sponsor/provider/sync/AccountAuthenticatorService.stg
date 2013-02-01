@@ -1,3 +1,16 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter>sync<delimiter>AccountAuthenticatorService.java
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?>
+\<!-- ST:BODY:start -->
+
 package com.walkernation.db.provider.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
@@ -161,3 +174,5 @@ public class AccountAuthenticatorService extends Service {
 		}
 	}
 }
+\<!-- ST:BODY:start -->
+>>
