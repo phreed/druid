@@ -21,10 +21,15 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class LocationData implements Parcelable, Serializable {
+public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
-	private static final long serialVersionUID = 5505248865103008665L;
+	//private static final long serialVersionUID = 5505248865103008665L;
 
+	<!-- ST:putFirstLabelAndValue:start -->
+	
+	<item.fields>
+	\<!-- ST:putFirstLabelAndValue:end -->
+	
 	public long latitude;
 	public long longitude;
 	public long height;

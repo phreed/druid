@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter><item.name.bactrian>ListViewFragment.java
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter><item.name.bactrian>ListFragment.java
 %>
 
 
@@ -34,7 +34,7 @@ import <contract.root.sponsor.base>.<item.name.camel>.provider.<item.name.camel>
 
 public class <item.name.bactrian>ListFragment extends ListFragment {
 
-	static final String LOG_TAG = DataOneListFragment.class.getCanonicalName();
+	static final String LOG_TAG = <item.name.bactrian>ListFragment.class.getCanonicalName();
 
 	OnOpenWindowInterface mOpener;
 	MultipleResolver resolver;
