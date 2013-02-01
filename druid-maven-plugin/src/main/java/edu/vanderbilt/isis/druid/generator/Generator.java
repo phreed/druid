@@ -3,19 +3,29 @@ package edu.vanderbilt.isis.druid.generator;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.slf4j.Logger;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import edu.vanderbilt.isis.druid.parser.BuildComponentListener;
+import edu.vanderbilt.isis.druid.parser.ComponentManifestLexer;
+import edu.vanderbilt.isis.druid.parser.ComponentManifestParser;
 import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
 
 /**
@@ -25,6 +35,10 @@ import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
  */
 public class Generator {
     final private Logger logger;
+
+    public Logger getLogger() {
+        return logger;
+    }
 
     public Generator(final Logger logger) {
         this.logger = logger;
@@ -60,7 +74,7 @@ public class Generator {
         URL[] nurl;
         try {
             nurl = new URL[] {
-                new URL("file://" + templateJarName)
+                    new URL("file://" + templateJarName)
             };
         } catch (MalformedURLException ex) {
             throw new GeneratorException("could not load template jar", ex);
@@ -70,9 +84,9 @@ public class Generator {
     }
 
     /**
-     * The template key points not to a single template but to a group
-     * of templates which work together to construct a component.
-     * The key is used in conjunction with the template manifest.
+     * The template key points not to a single template but to a group of
+     * templates which work together to construct a component. The key is used
+     * in conjunction with the template manifest.
      * 
      * @param val
      */
@@ -163,29 +177,6 @@ public class Generator {
         return new STGroupFile(templateFileName, "US-ASCII", '<', '>');
     }
 
-    private STGroup getManifestGroup() throws GeneratorException {
-        if (this.templateJarName == null) {
-            final File templateManifestFile = new File(templateManifestFileName);
-            if (!templateManifestFile.isFile()) {
-                throw new GeneratorException("template file path is not found "
-                        + templateManifestFile);
-            }
-            return new STGroupFile(this.templateManifestFileName, "US-ASCII", '<', '>');
-        }
-        final String urlName = new StringBuilder()
-                // .append("jar:file:").append(templateJar.getAbsolutePath()).append("!")
-                .append(templateManifestFileName).toString();
-        final URL url;
-        try {
-            url = new URL(urlName);
-        } catch (MalformedURLException ex) {
-            throw new GeneratorException("bad manifest url", ex);
-        }
-        final STGroup stg = new STGroupFile(url, "US-ASCII", '<', '>');
-        logger.debug("default template group");
-        return stg;
-    }
-
     /**
      * The main worker which generates the source files from the contract.
      * Decide which template group is being used. There is a template manifest
@@ -202,7 +193,7 @@ public class Generator {
      * @throws GeneratorException
      */
     public void build() throws GeneratorException {
-        final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
+        final Contract contract = ContractXmlParser.parseXmlFile(getLogger(), this.contractFile);
         STGroup.trackCreationEvents = true;
 
         /**
@@ -210,48 +201,81 @@ public class Generator {
          * case then it should be used.
          */
         if (this.templateFileName != null) {
-            final STGroup stg = getGroup(logger, this.templateFileName);
-            buildTemplate(contract, stg);
+            buildPartUsingTemplate(contract, this.templateFileName);
             return;
         }
 
         /**
-         * If the template file is not given explicitly then the template key will be used.
+         * If the template file is not given explicitly then the template key
+         * will be used.
          */
         if (this.templateKey == null) {
             throw new GeneratorException("no template key");
         }
-        final File templateManifestFile = new File(this.templateManifestFileName);
-        if (!templateManifestFile.isFile()) {
-            throw new GeneratorException("could not find template manifest "
-                    + this.templateManifestFileName);
+        InputStream inputStream = null;
+        try {
+            if (this.templateJarName == null) {
+
+                final File templateManifestFile = new File(this.templateManifestFileName);
+                if (!templateManifestFile.isFile()) {
+                    throw new GeneratorException("could not find template manifest "
+                            + this.templateManifestFileName);
+                }
+                try {
+                    inputStream = new FileInputStream(templateManifestFile);
+                } catch (FileNotFoundException e) {
+                    throw new GeneratorException("could not open component manifest file "
+                            + this.templateManifestFileName);
+                }
+            } else {
+                final Thread ct = Thread.currentThread();
+                final ClassLoader pcl = ct.getContextClassLoader();
+                inputStream = pcl.getResourceAsStream(this.templateManifestFileName);
+            }
+
+            final ANTLRInputStream input;
+            try {
+                input = new ANTLRInputStream(inputStream);
+            } catch (IOException e) {
+                throw new GeneratorException(
+                        "could not open component manifest file as an antlr stream "
+                                + this.templateManifestFileName);
+            }
+            final ComponentManifestLexer lexer = new ComponentManifestLexer(input);
+            final CommonTokenStream tokens = new CommonTokenStream(lexer);
+            final ComponentManifestParser parser = new ComponentManifestParser(tokens);
+            final ParseTree tree = parser.prog();
+            final ParseTreeWalker walker = new ParseTreeWalker();
+            final BuildComponentListener extractor = 
+                    new BuildComponentListener(parser,contract,this);
+            walker.walk(extractor, tree);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    throw new GeneratorException(
+                            "could not close manifest file "
+                                    + this.templateManifestFileName);
+                }
+            }
         }
-        /*
-        final STGroup manifestStg = getManifestGroup();
-        final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
-        stGroup.add("key", this.templateKey);
-        final String templateGroupFileName = stGroup.render();
-        return getGroupUtil(logger, templateGroupFileName);
-        if (this.templateManifestFileName) 
-        final STGroup stg = getTemplateGroup();
-        return buildTemplate(contract, stg);
-        */
     }
 
     /**
-     * The build template acquires a template group and a contract from which it builds
-     * an output file. The output file has a name and a body both of which are
-     * generated via a template.
+     * The build template acquires a template group and a contract from which it
+     * builds an output file. The output file has a name and a body both of
+     * which are generated via a template.
      * 
      * @return
      * @throws GeneratorException
      */
-    private void buildTemplate(final Contract contract, final STGroup stg) throws GeneratorException {
-       
+    public void buildPartUsingTemplate(final Contract contract, final String templateFileName) throws GeneratorException {
+        final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
             for (String templateName : stg.getTemplateNames()) {
-                logger.error("template name {}", templateName);
+                getLogger().error("template name {}", templateName);
             }
             throw new GeneratorException("no \"PATH\" template provided");
         }
@@ -268,6 +292,7 @@ public class Generator {
 
         if (this.each.equals(Each.CONTRACT)) {
             final String outputFileName = stFileName.render();
+            logger.info("building {} using {}", outputFileName, templateFileName );
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
@@ -302,6 +327,7 @@ public class Generator {
         for (Object item : all) {
             stFileName.add("item", item);
             final String outputFileName = stFileName.render();
+            logger.info("building {} using {}", outputFileName, templateFileName );
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();

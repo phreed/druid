@@ -1,7 +1,9 @@
 /**
  * This grammar is used to describe sets of components which work together.
  * The compoent has an identifier and a set of parts of 
- * which the component is constituted. 
+ * which the component is comprised.. 
+ * Each of the parts has a rule describing how it is to be constructed.
+ * 
  */
 grammar ComponentManifest;
 
@@ -15,17 +17,17 @@ statement
 
 buildComponent : 'build-component' ID 'of-parts' partsList ;
 
-partsList : '[' partDecl+ ']' ;
+partsList : '[' partConstructionRule+ ']' ;
 
-partDecl 
+partConstructionRule 
    : simpleTemplate 
    | multiTemplate 
    | simpleCopy 
    ; 
 
-simpleTemplate : 'with' 'template' FILE_PATH ; 
-multiTemplate : 'for-each' subset 'with' 'template' FILE_PATH ; 
-simpleCopy : 'with' 'copy-of' FILE_PATH 'to-path' TEMPLATE ; 
+simpleTemplate : 'using' 'template' FILE_PATH ; 
+multiTemplate : 'for-each' subset 'using' 'template' FILE_PATH ; 
+simpleCopy : 'using' 'copy-of' FILE_PATH 'to-path' TEMPLATE ; 
 
 subset
    : 'relation'
