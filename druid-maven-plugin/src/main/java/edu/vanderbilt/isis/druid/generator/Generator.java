@@ -3,19 +3,36 @@ package edu.vanderbilt.isis.druid.generator;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.List;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.codehaus.plexus.util.FileUtils;
 import org.slf4j.Logger;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import edu.vanderbilt.isis.druid.parser.BuildComponentListener;
+import edu.vanderbilt.isis.druid.parser.ComponentManifestLexer;
+import edu.vanderbilt.isis.druid.parser.ComponentManifestParser;
 import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
 
 /**
@@ -25,6 +42,10 @@ import edu.vanderbilt.isis.druid.parser.ContractXmlParser;
  */
 public class Generator {
     final private Logger logger;
+
+    public Logger getLogger() {
+        return logger;
+    }
 
     public Generator(final Logger logger) {
         this.logger = logger;
@@ -60,7 +81,7 @@ public class Generator {
         URL[] nurl;
         try {
             nurl = new URL[] {
-                new URL("file://" + templateJarName)
+                    new URL("file://" + templateJarName)
             };
         } catch (MalformedURLException ex) {
             throw new GeneratorException("could not load template jar", ex);
@@ -70,9 +91,9 @@ public class Generator {
     }
 
     /**
-     * The template key points not to a single template but to a group
-     * of templates which work together to construct a component.
-     * The key is used in conjunction with the template manifest.
+     * The template key points not to a single template but to a group of
+     * templates which work together to construct a component. The key is used
+     * in conjunction with the template manifest.
      * 
      * @param val
      */
@@ -163,29 +184,6 @@ public class Generator {
         return new STGroupFile(templateFileName, "US-ASCII", '<', '>');
     }
 
-    private STGroup getManifestGroup() throws GeneratorException {
-        if (this.templateJarName == null) {
-            final File templateManifestFile = new File(templateManifestFileName);
-            if (!templateManifestFile.isFile()) {
-                throw new GeneratorException("template file path is not found "
-                        + templateManifestFile);
-            }
-            return new STGroupFile(this.templateManifestFileName, "US-ASCII", '<', '>');
-        }
-        final String urlName = new StringBuilder()
-                // .append("jar:file:").append(templateJar.getAbsolutePath()).append("!")
-                .append(templateManifestFileName).toString();
-        final URL url;
-        try {
-            url = new URL(urlName);
-        } catch (MalformedURLException ex) {
-            throw new GeneratorException("bad manifest url", ex);
-        }
-        final STGroup stg = new STGroupFile(url, "US-ASCII", '<', '>');
-        logger.debug("default template group");
-        return stg;
-    }
-
     /**
      * The main worker which generates the source files from the contract.
      * Decide which template group is being used. There is a template manifest
@@ -202,7 +200,7 @@ public class Generator {
      * @throws GeneratorException
      */
     public void build() throws GeneratorException {
-        final Contract contract = ContractXmlParser.parseXmlFile(logger, this.contractFile);
+        final Contract contract = ContractXmlParser.parseXmlFile(getLogger(), this.contractFile);
         STGroup.trackCreationEvents = true;
 
         /**
@@ -210,48 +208,93 @@ public class Generator {
          * case then it should be used.
          */
         if (this.templateFileName != null) {
-            final STGroup stg = getGroup(logger, this.templateFileName);
-            buildTemplate(contract, stg);
+            if (Each.CONTRACT.equals(this.each)) {
+                buildPartUsingTemplate(contract, this.templateFileName);
+            } else {
+                buildPartUsingTemplate(contract, this.each, this.templateFileName);
+            }
             return;
         }
 
         /**
-         * If the template file is not given explicitly then the template key will be used.
+         * If the template file is not given explicitly then the template key
+         * will be used.
          */
         if (this.templateKey == null) {
             throw new GeneratorException("no template key");
         }
-        final File templateManifestFile = new File(this.templateManifestFileName);
-        if (!templateManifestFile.isFile()) {
-            throw new GeneratorException("could not find template manifest "
-                    + this.templateManifestFileName);
+        InputStream inputStream = null;
+        try {
+            if (this.templateJarName == null) {
+
+                final File templateManifestFile = new File(this.templateManifestFileName);
+                if (!templateManifestFile.isFile()) {
+                    throw new GeneratorException("could not find template manifest "
+                            + this.templateManifestFileName);
+                }
+                try {
+                    inputStream = new FileInputStream(templateManifestFile);
+                } catch (FileNotFoundException e) {
+                    throw new GeneratorException("could not open component manifest file "
+                            + this.templateManifestFileName);
+                }
+            } else {
+                final Thread ct = Thread.currentThread();
+                final ClassLoader pcl = ct.getContextClassLoader();
+                inputStream = pcl.getResourceAsStream(this.templateManifestFileName);
+            }
+
+            final ANTLRInputStream input;
+            try {
+                input = new ANTLRInputStream(inputStream);
+            } catch (IOException e) {
+                throw new GeneratorException(
+                        "could not open component manifest file as an antlr stream "
+                                + this.templateManifestFileName);
+            }
+            final ComponentManifestLexer lexer = new ComponentManifestLexer(input);
+            final CommonTokenStream tokens = new CommonTokenStream(lexer);
+            final ComponentManifestParser parser = new ComponentManifestParser(tokens);
+            final ParseTree tree = parser.prog();
+            final ParseTreeWalker walker = new ParseTreeWalker();
+            final BuildComponentListener extractor =
+                    new BuildComponentListener(parser, contract, this, this.templateKey);
+            walker.walk(extractor, tree);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    throw new GeneratorException(
+                            "could not close manifest file "
+                                    + this.templateManifestFileName);
+                }
+            }
         }
-        /*
-        final STGroup manifestStg = getManifestGroup();
-        final ST stGroup = manifestStg.getInstanceOf("GROUP_PATH");
-        stGroup.add("key", this.templateKey);
-        final String templateGroupFileName = stGroup.render();
-        return getGroupUtil(logger, templateGroupFileName);
-        if (this.templateManifestFileName) 
-        final STGroup stg = getTemplateGroup();
-        return buildTemplate(contract, stg);
-        */
     }
 
     /**
-     * The build template acquires a template group and a contract from which it builds
-     * an output file. The output file has a name and a body both of which are
-     * generated via a template.
+     * The build template acquires a template group and a contract from which it
+     * builds an output file. The output file has a name and a body both of
+     * which are generated via a template.
      * 
      * @return
      * @throws GeneratorException
      */
-    private void buildTemplate(final Contract contract, final STGroup stg) throws GeneratorException {
-       
+    public void buildPartUsingTemplate(final Contract contract, final String eachName,
+            final String templateFileName) throws GeneratorException {
+        final Each forEach = Each.getValue(eachName);
+        buildPartUsingTemplate(contract, forEach, templateFileName);
+    }
+
+    public void buildPartUsingTemplate(final Contract contract, final String templateFileName)
+            throws GeneratorException {
+
+        final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
         if (stFileName == null) {
             for (String templateName : stg.getTemplateNames()) {
-                logger.error("template name {}", templateName);
+                getLogger().error("template name {}", templateName);
             }
             throw new GeneratorException("no \"PATH\" template provided");
         }
@@ -266,42 +309,67 @@ public class Generator {
         }
         stFileBody.add("contract", contract);
 
-        if (this.each.equals(Each.CONTRACT)) {
-            final String outputFileName = stFileName.render();
-            final File outputFile = new File(outputFileName);
-            final File outputDir = outputFile.getParentFile();
-            outputDir.mkdirs();
+        final String outputFileName = stFileName.render();
+        logger.info("building {} using {} single", outputFileName, templateFileName);
+        final File outputFile = new File(outputFileName);
+        final File outputDir = outputFile.getParentFile();
+        outputDir.mkdirs();
 
-            BufferedOutputStream os = null;
-            try {
-                os = new BufferedOutputStream(new FileOutputStream(outputFile));
-                os.write(stFileBody.render().getBytes());
-            } catch (FileNotFoundException ex) {
-                throw new GeneratorException("problem writing output file", ex);
-            } catch (IOException ex) {
-                throw new GeneratorException("problem writing output file", ex);
-            } finally {
-                if (os != null)
-                    try {
-                        os.close();
-                    } catch (IOException ex) {
-                        throw new GeneratorException("problem closing output file", ex);
-                    }
-            }
-            return;
+        BufferedOutputStream os = null;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(outputFile));
+            os.write(stFileBody.render().getBytes());
+        } catch (FileNotFoundException ex) {
+            throw new GeneratorException("problem writing output file", ex);
+        } catch (IOException ex) {
+            throw new GeneratorException("problem writing output file", ex);
+        } finally {
+            if (os != null)
+                try {
+                    os.close();
+                } catch (IOException ex) {
+                    throw new GeneratorException("problem closing output file", ex);
+                }
         }
+        return;
+
+    }
+
+    public void buildPartUsingTemplate(final Contract contract, final Each forEach,
+            final String templateFileName) throws GeneratorException {
+
+        final STGroup stg = getGroup(getLogger(), templateFileName);
+        final ST stFileName = stg.getInstanceOf("PATH");
+        if (stFileName == null) {
+            for (String templateName : stg.getTemplateNames()) {
+                getLogger().error("template name {}", templateName);
+            }
+            throw new GeneratorException("no \"PATH\" template provided");
+        }
+        stFileName.add("delimiter", File.separatorChar);
+        stFileName.add("directory", this.outputPath);
+        stFileName.add("contract", contract);
+        stFileName.add("isSkeleton", this.isSkeleton);
+
+        final ST stFileBody = stg.getInstanceOf("BODY");
+        if (stFileBody == null) {
+            throw new GeneratorException("no body template provided");
+        }
+        stFileBody.add("contract", contract);
+
         final List<?> all;
-        switch (this.each) {
+        switch (forEach) {
             case RELATION:
                 all = contract.root.getRelations();
                 break;
             case MESSAGE:
             default:
-                throw new GeneratorException("unknown each type:" + this.each);
+                throw new GeneratorException("unknown each type:" + forEach);
         }
         for (Object item : all) {
             stFileName.add("item", item);
             final String outputFileName = stFileName.render();
+            logger.info("building {} using {} for a {}", outputFileName, templateFileName, forEach);
             final File outputFile = new File(outputFileName);
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
@@ -326,4 +394,95 @@ public class Generator {
         }
     }
 
+    public void buildPartUsingCopy(final Contract contract, final String inputFilePath,
+            final String outputPathTemplate) throws GeneratorException {
+        final ST stFileName = new ST(outputPathTemplate);
+        stFileName.add("delimiter", File.separatorChar);
+        stFileName.add("directory", this.outputPath);
+        stFileName.add("contract", contract);
+        stFileName.add("isSkeleton", this.isSkeleton);
+
+        final String outputFileName = stFileName.render();
+        logger.info("building {} using {} copy", outputFileName, inputFilePath);
+        final File outputFile = new File(outputFileName);
+        final File outputDir = outputFile.getParentFile();
+        if (outputDir == null) {
+            throw new GeneratorException("could not obtain output directory "
+                    + outputFile);
+        }
+        outputDir.mkdirs();
+
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            if (this.templateJarName == null) {
+                final File inputFile = new File(inputFilePath);
+                if (!inputFile.isFile()) {
+                    throw new GeneratorException("could not find template manifest "
+                            + this.templateManifestFileName);
+                }
+                try {
+                    inputStream = new FileInputStream(inputFile);
+                } catch (FileNotFoundException e) {
+                    throw new GeneratorException("could not open input file "
+                            + inputFilePath);
+                }
+            } else {
+                final Thread ct = Thread.currentThread();
+                final ClassLoader pcl = ct.getContextClassLoader();
+                inputStream = pcl.getResourceAsStream(inputFilePath);
+            }
+            try {
+                outputStream = new FileOutputStream(outputFile);
+            } catch (FileNotFoundException ex) {
+                throw new GeneratorException("problem closing output stream", ex);
+            }
+
+            final ReadableByteChannel inputChannel = Channels.newChannel(inputStream);
+            final WritableByteChannel outputChannel = Channels.newChannel(outputStream);
+            try {
+                Generator.fastChannelCopy(inputChannel, outputChannel);
+            } catch (IOException ex) {
+                throw new GeneratorException("problem closing output stream", ex);
+            }
+
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException ex) {
+                throw new GeneratorException("problem closing input stream", ex);
+            }
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException ex) {
+                throw new GeneratorException("problem closing output stream", ex);
+            }
+        }
+
+    }
+
+    /**
+     * Use NIO to copy input stream to output stream.
+     * 
+     * @param src
+     * @param dest
+     * @throws IOException
+     */
+    public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest)
+            throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
+        while (src.read(buffer) != -1) {
+            buffer.flip();
+            dest.write(buffer);
+            buffer.compact();
+        }
+        buffer.flip();
+        while (buffer.hasRemaining()) {
+            dest.write(buffer);
+        }
+    }
 }

@@ -339,8 +339,12 @@ public class Contract {
             return enums;
         }
         
+        /**
+         * The object must be found in the list and 
+         * it cannot be the first item for this to work.
+         */
         public Predecessor getPredecessor() {
-            final int ix = parent.fields.indexOf(this);
+            final int ix = parent.fields.indexOf(this) - 1;
             if (ix < 0) {
                 return null;
             }
