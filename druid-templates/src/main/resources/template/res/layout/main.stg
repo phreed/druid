@@ -10,6 +10,7 @@ SKELETON(contract,item) ::= <<
 BODY(contract,item) ::= <<
 \<?xml version="1.0" encoding="utf-8"?> <! this HAS to be first line in file !>
 \<!-- ST:BODY:start -->
+\<!-- This is for future "main" activity that launches all the listviews from here.  -->
 
 \<?xml version="1.0" encoding="utf-8"?>
 \<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

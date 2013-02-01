@@ -25,10 +25,9 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	//private static final long serialVersionUID = 5505248865103008665L;
 
-	<!-- ST:putFirstLabelAndValue:start -->
-	
-	<item.fields>
-	\<!-- ST:putFirstLabelAndValue:end -->
+	<!-- ST:putDeclaration:start -->
+	<item.fields: { field | <putDeclaration(item, field)> }; separator="\n">
+	\<!-- ST:putDeclaration:end -->
 	
 	public long latitude;
 	public long longitude;
@@ -90,3 +89,13 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 }
 >>
+
+
+
+putDeclaration(relation, field) ::= <<
+      public <ttyl.(field)> <relation.name.camel><field.name.bactrian>;
+>>
+
+
+
+
