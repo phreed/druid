@@ -14,7 +14,7 @@ package <package(contract,item)>;
 
 import java.util.ArrayList;
 // ST:package:inline
-import <package(contract)>.provider.ContentDescriptor;
+import <package(contract,item)>.provider.ContentDescriptor;
 // ST:package:complete
 
 import android.content.ContentValues;
@@ -41,7 +41,7 @@ public class <item.name.bactrian>Creator {
     // set default values
     
     // ST:setValue:inline
-    <item.fields: { field | <setValue(field)> }; separator="\n">
+    <item.fields: { field | <setValue(field,"")> }; separator="\n">
     // ST:setValue:complete
     
     // construct the returned object
@@ -99,9 +99,9 @@ putField(field) ::= <%
 rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, data.<field.name.camel>);
 %>
 
-setValue(field) ::= <<
+setValue(field, prefix) ::= <<
 
-<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default)>;
+<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default, prefix )>;
 if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME)) {
   <field.name.camel> = cv.getAs<javaMethodTypeMap.(field.dtype)>(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME);
 }

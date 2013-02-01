@@ -4,13 +4,13 @@ PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><item.name.bactrian>ContentDescriptor.java
 %>
 
-SKELETON(contract,item) ::= <<
+SKELETON(contract) ::= <<
 >>
 
 BODY(contract) ::= <<
 // ST:BODY:start
 
-package <package(contract,item)>;
+package <package(contract)>;
 
 import android.content.UriMatcher;
 import android.net.Uri;
@@ -18,11 +18,11 @@ import android.provider.BaseColumns;
 
 /**
  * @author Michael A. Walker
- *         <p>
+ *         \<p>
  *         based on the work by Vladimir Vivien (http://vladimirvivien.com/),
  *         which provides a very logical organization of the meta-data of the
  *         Database and Content Provider
- *         <p>
+ *         \<p>
  *         This note might be moved to a 'Special Thanks' section once one is
  *         created and moved out of future test code.
  */
@@ -64,7 +64,7 @@ public class ContentDescriptor {
 // ST:BODY:end
 >>
 
-package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
 
 addMatcherURIs(relation) ::= <<
 // <relation.name.bactrian> URIs
@@ -78,15 +78,15 @@ createRelationMetaData(relation) ::= <<
 public static class <relation.name.bactrian> {
 	// an identifying name for entity
 	
-	public static final String TABLE_NAME = \"<relation.name.snake>_table\";
+	public static final String TABLE_NAME = "<relation.name.snake>_table";
 
 	// define a URI paths to access entity
 	// BASE_URI/restaurants - for list of locations
 	// BASE_URI/restaurants/* - retrieve specific location by id
 	// the token value are used to register path in matcher (see above)
-	public static final String PATH = \"<relation.name.camel>s\";
+	public static final String PATH = "<relation.name.camel>s";
 	public static final int PATH_TOKEN = 100;
-	public static final String PATH_FOR_ID = \"<relation.name.camel>/*\";
+	public static final String PATH_FOR_ID = "<relation.name.camel>/*";
 	public static final int PATH_FOR_ID_TOKEN = 200;
 
 	// URI for all content stored as Restaurant entity
@@ -95,19 +95,19 @@ public static class <relation.name.bactrian> {
 	// TODO figure out why 'db' is here...
 	// might have been convention of example code I used previously
 	// or might have some actual meaning
-	private final static String MIME_TYPE_END = \"<relation.name.snake>\";
+	private final static String MIME_TYPE_END = "<relation.name.snake>";
 
 	// define the MIME type of data in the content provider
 	public static final String CONTENT_TYPE_DIR = ORGANIZATIONAL_NAME
-			+ \".cursor.dir/\" + ORGANIZATIONAL_NAME + \".\" + MIME_TYPE_END;
+			+ ".cursor.dir/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
 	public static final String CONTENT_ITEM_TYPE = ORGANIZATIONAL_NAME
-			+ \".cursor.item/\" + ORGANIZATIONAL_NAME + \".\" + MIME_TYPE_END;
+			+ ".cursor.item/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
          };
 
 	// the names and order of ALL columns, including internal use ones
 	public static final String[] ALL_COLUMN_NAMES = { Cols.ID,
 	// ST:getColumnNames:inline
-        <relation.fields: { field | <getColumnNames(field)> }; separator=\",\n\">
+        <relation.fields: { field | <getColumnNames(field)> }; separator=",\n">
         // ST:getColumnNames:complete
 	};
 
@@ -116,7 +116,7 @@ public static class <relation.name.bactrian> {
 		public static final String ID = BaseColumns._ID; // convention
 		// The name and column index of each column in your database
 		// ST:getColumnDeclaration:inline
-		<relation.fields: { field | <getColumnDeclaration(field)> }; separator=\"\n\">
+		<relation.fields: { field | <getColumnDeclaration(field)> }; separator="\n">
 		// ST:getColumnDeclaration:complete
 	}
 }
@@ -125,7 +125,7 @@ public static class <relation.name.bactrian> {
 getColumnNames(field) ::="Cols.<field.name.bactrian>"
 
 getColumnDeclaration(field) ::= <%
-public static final String <field.name.bactrian> = \"<field.name.camel>\";
+public static final String <field.name.bactrian> = "<field.name.camel>";
 %>
 
 

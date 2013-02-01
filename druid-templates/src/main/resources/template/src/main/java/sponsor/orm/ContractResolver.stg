@@ -12,7 +12,7 @@ BODY(contract) ::= <<
 // ST:BODY:start
 
 // ST:package:inline
-<package(contract,relation)>
+<package(contract)>
 // ST:package:complete
 
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ import com.walkernation.db.provider.ContentDescriptor;
  * @author Michael A. Walker
  * 
  */
-public class <item.name.bactrian>Resolver {
+public class <contract.root.sponsor.bactrian>Resolver {
 
 	private ContentResolver cr;
 	private Uri uri = ContentDescriptor.Location.CONTENT_URI;
@@ -135,6 +135,6 @@ public class <item.name.bactrian>Resolver {
 }
 >>
 
-package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
 
