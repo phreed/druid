@@ -4,6 +4,10 @@
                       http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <groupId>edu.vanderbilt.isis.druid</groupId>
   <artifactId>all-types-sample</artifactId>
   <packaging>jar</packaging>
@@ -35,34 +39,37 @@
 
         </executions>
       </plugin>
+    </plugins>
 
-      <plugin>
+    <pluginManagement>
+      <plugins>
+        <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>
           <configuration>
-          <lifecycleMappingMetadata>
-            <pluginExecutions>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
 
-              <pluginExecution>
-                <pluginExecutionFilter>
-                  <groupId>edu.vanderbilt.isis.druid</groupId>
-                  <artifactId>druid-maven-plugin</artifactId>
-                  <versionRange>[2.0.0,)</versionRange>
-                  <goals>
-                    <goal>generate</goal>
-                  </goals>
-                </pluginExecutionFilter>
-                <action>
-                  <ignore/>
-                </action>
-              </pluginExecution>
-            </pluginExecutions>
-          </lifecycleMappingMetadata>
-        </configuration>
-      </plugin>
-
-    </plugins>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>edu.vanderbilt.isis.druid</groupId>
+                    <artifactId>druid-maven-plugin</artifactId>
+                    <versionRange>[2.0.0,)</versionRange>
+                    <goals>
+                      <goal>generate</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
 
