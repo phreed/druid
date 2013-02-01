@@ -11,6 +11,7 @@ BODY(contract,item) ::= <<
 \<?xml version="1.0" encoding="utf-8"?> <! this HAS to be first line in file !>
 \<!-- ST:BODY:start -->
 \<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/<item.name.snake>ListViewLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -28,10 +29,10 @@ BODY(contract,item) ::= <<
             android:layout_height="40dp"
             android:layout_weight="1"
             android:onClick="test"
-            android:text="@string/<item.name.snake>_list_button_label_add" />
+            android:text="@string/<item.name.snake>_list_button_label_create" />
 
         \<Button
-            android:id="@+id/<item.name.snake>_listview_refreshed"
+            android:id="@+id/<item.name.snake>_listview_refresh"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="1"

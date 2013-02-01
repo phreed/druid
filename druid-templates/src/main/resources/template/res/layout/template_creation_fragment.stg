@@ -8,109 +8,107 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
+\<?xml version="1.0" encoding="utf-8"?> <! this HAS to be first line in file !>
 \<!-- ST:BODY:start -->
 
-\<?xml version="1.0" encoding="utf-8"?>
 \<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/<item.name.snake>RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    \<EditText
-        android:id="@+id/location_create_edittext_userID"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:inputType="number" />
-
-    \<EditText
-        android:id="@+id/location_create_edittext_latitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_userID"
-        android:inputType="number" />
-
-    \<EditText
-        android:id="@+id/location_create_edittext_longitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_latitude"
-        android:inputType="number" />
-
-    \<EditText
-        android:id="@+id/location_create_edittext_height"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/location_create_edittext_longitude"
-        android:inputType="number" />
-
-    \<TextView
-        android:id="@+id/labelHeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_height"
-        android:layout_alignBottom="@+id/location_create_edittext_height"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_height" />
-
-    \<TextView
-        android:id="@+id/labelLongitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_longitude"
-        android:layout_alignBottom="@+id/location_create_edittext_longitude"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_longitude" />
-
-    \<TextView
-        android:id="@+id/labelLatitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_latitude"
-        android:layout_alignBottom="@+id/location_create_edittext_latitude"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_latitude" />
-
-    \<TextView
-        android:id="@+id/labelUserID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/location_create_edittext_userID"
-        android:layout_alignBottom="@+id/location_create_edittext_userID"
-        android:layout_alignParentLeft="true"
-        android:text="@string/location_create_label_userid" />
-
+    \<!-- ST:putFirstLabelAndValue:start -->
+    <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n\n">
+    \<!-- ST:putFirstLabelAndValue:end -->
+    
+    \<!-- ST:putLabelAndValue:start -->
+    <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n\n">
+    \<!-- ST:putLabelAndValue:end -->
+     
+        
     \<Button
-        android:id="@+id/location_create_button_save"
+        android:id="@+id/<item.name.snake>_create_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="32dp"
-        android:text="@string/location_create_button_label_create" />
+        android:text="@string/<item.name.snake>_create_button_label_create" />
 
     \<Button
-        android:id="@+id/location_create_button_reset"
+        android:id="@+id/<item.name.snake>_create_button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/location_create_button_save"
+        android:layout_alignBottom="@+id/<item.name.snake>_create_button_save"
         android:layout_centerHorizontal="true"
         android:text="@string/location_create_button_label_clear" />
 
     \<Button
-        android:id="@+id/location_create_button_cancel"
+        android:id="@+id/<item.name.snake>_create_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/location_create_button_reset"
+        android:layout_alignBottom="@+id/<item.name.snake>_create_button_reset"
         android:layout_alignParentRight="true"
         android:layout_marginRight="21dp"
-        android:text="@string/location_create_button_label_cancel" />
+        android:text="@string/<item.name.snake>_create_button_label_cancel" />
 
 \</RelativeLayout>
 
 >>
+
+putFirstLabelAndValue(relation,field) ::= <<
+\<!-- <field.name.snake> -->
+<putFirstLabel(relation,field)>
+<putFirstValue(relation,field)>
+>>
+
+putFirstLabel(relation,field) ::= <<
+\<TextView
+        android:id="@+id/<relation.name.snake>_create_<field.name.snake>_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignParentLeft="true"
+        android:text="@string/<relation.name.snake>_create_<field.name.snake>_label" />
+>>
+
+putFirstValue(relation,field) ::= <<
+\<EditText
+        android:id="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+>>
+
+putLabelAndValue(relation,field) ::= <<
+\<!-- <field.name.snake> -->
+<putLabel(relation,field)>
+<putValue(relation,field)>
+>>
+
+putLabel(relation,field) ::= <<
+\<TextView
+        android:id="@+id/<relation.name.snake>_create_<field.name.snake>_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignParentLeft="true"
+        android:text="@string/<relation.name.snake>_create_<field.name.snake>_label" />
+>>
+
+putValue(relation,field) ::= <<
+\<EditText
+        android:id="@+id/@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/<relation.name.snake>_create_<field.predecessor.name.snake>"
+        android:inputType="number" />
+>>
+
+
+
+
