@@ -208,7 +208,11 @@ public class Generator {
          * case then it should be used.
          */
         if (this.templateFileName != null) {
-            buildPartUsingTemplate(contract, this.each, this.templateFileName);
+            if (Each.CONTRACT.equals(this.each)) {
+                buildPartUsingTemplate(contract, this.templateFileName);
+            } else {
+                buildPartUsingTemplate(contract, this.each, this.templateFileName);
+            }
             return;
         }
 
