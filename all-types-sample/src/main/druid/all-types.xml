@@ -9,12 +9,11 @@
     <field type="LONG" name="a long field" default="0" />
     <field type="TIMESTAMP" name="a time field" default="now"/>
     <field type="BLOB" name="a blob field" />
-    <field type="BYTE" name="a byte field" />
     <field type="SHORT" name="a short field" />
     <field type="INTEGER" name="an integer field" />
     <field type="FLOAT" name="a float field" />
     <field type="DOUBLE" name="a double field" />
-    <field type="BOOLEAN" name="a boolean field" />
+    <field type="BOOL" name="a boolean field" />
     <field type="FK" name="a foreign key field" />
     
     <key name="update">

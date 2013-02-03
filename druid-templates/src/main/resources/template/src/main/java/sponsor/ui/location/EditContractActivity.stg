@@ -11,11 +11,11 @@ SKELETON(contract,item) ::= <<
 BODY(contract,item) ::= <<
 
 
-package com.walkernation.db.ui.location;
+package <package(contract,item)>;
 
 import android.os.Bundle;
 
-public class EditLocationActivity extends LocationActivityBase {
+public class Edit<item.name.bactrian>Activity extends <item.name.bactrian>ActivityBase {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +24,9 @@ public class EditLocationActivity extends LocationActivityBase {
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
 			int index = getIntent().getExtras().getInt(
-					EditLocationFragment.rowIdentifyerTAG);
+					Edit<item.name.bactrian>Fragment.rowIdentifyerTAG);
 
-			EditLocationFragment editor = EditLocationFragment
+			Edit<item.name.bactrian>Fragment editor = Edit<item.name.bactrian>Fragment
 					.newInstance(index);
 
 			editor.setArguments(getIntent().getExtras());
@@ -39,3 +39,5 @@ public class EditLocationActivity extends LocationActivityBase {
 }
 
 >>
+
+package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"

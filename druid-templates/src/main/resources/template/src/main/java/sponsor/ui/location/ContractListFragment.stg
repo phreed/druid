@@ -163,4 +163,4 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 
 >>
 
-package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<relation.name.camel>"
+package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"

@@ -4,8 +4,8 @@ PATH(delimiter, directory, contract, isSkeleton) ::= <%
 
 
 BODY(contract) ::= <<
-\<!-- ST:BODY:start -->
 \<?xml version="1.0" encoding="utf-8"?>
+\<!-- ST:BODY:start -->
 \<manifest 
      xmlns:android="http://schemas.android.com/apk/res/android" 
      xmlns:tools="http://schemas.android.com/tools" 

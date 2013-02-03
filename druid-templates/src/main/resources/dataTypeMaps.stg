@@ -40,8 +40,74 @@ javaTypeMap ::= [
         "BLOB"  :"byte[]",
         "FILE"  :"String",
         "TYPE"  :"String",
+        "FLOAT" :"float",
+        "DOUBLE":"double",
         default: key
 ]
+
+androidWriteParcelMethodMap ::= [
+        "SERIAL":"writeString",
+        "FK"    :"writeLong",
+        "EXCLUSIVE"  :"writeInt",
+        "INCLUSIVE"  :"writeInt",
+        "SHORT":"writeShort",
+        "INTEGER":"writeInt",
+        "BOOL"  :"writeInt",
+        "LONG"  :"writeLong",
+        "TIMESTAMP":"writeLong",
+        "REAL"  :"writeDouble",
+        "GUID"  :"writeString",
+        "TEXT"  :"writeString",
+        "BLOB"  :"writeByteArray",
+        "FILE"  :"writeString",
+        "TYPE"  :"writeString",
+        "FLOAT" :"writeFloat",
+        "DOUBLE":"writeDouble",
+        default: key
+]
+
+androidReadParcelMethodMap ::= [
+        "SERIAL":"readString",
+        "FK"    :"readLong",
+        "EXCLUSIVE"  :"readInt",
+        "INCLUSIVE"  :"readInt",
+        "SHORT":"readShort",
+        "INTEGER":"readInt",
+        "BOOL"  :"readInt",
+        "LONG"  :"readLong",
+        "TIMESTAMP":"readLong",
+        "REAL"  :"readDouble",
+        "GUID"  :"readString",
+        "TEXT"  :"readString",
+        "BLOB"  :"readByteArray",
+        "FILE"  :"readString",
+        "TYPE"  :"readString",
+        "FLOAT" :"readFloat",
+        "DOUBLE":"readDouble",
+        default: key
+]
+
+androidReadFromCursorMethodMap ::= [
+        "SERIAL":"getString",
+        "FK"    :"readLong",
+        "EXCLUSIVE"  :"readInt",
+        "INCLUSIVE"  :"readInt",
+        "SHORT":"readShort",
+        "INTEGER":"readInt",
+        "BOOL"  :"readInt",
+        "LONG"  :"readLong",
+        "TIMESTAMP":"readLong",
+        "REAL"  :"readDouble",
+        "GUID"  :"getString",
+        "TEXT"  :"getString",
+        "BLOB"  :"getBlob",
+        "FILE"  :"getString",
+        "TYPE"  :"getString",
+        "FLOAT" :"getFloat",
+        "DOUBLE":"getDouble",
+        default: key
+]
+
 
 javaMethodTypeMap ::= [
         "SERIAL":"String",
@@ -59,25 +125,8 @@ javaMethodTypeMap ::= [
         "BLOB"  :"Byte",
         "FILE"  :"String",
         "TYPE"  :"String",
-        default: key
-]
-
-cursorBoxTypeMap ::= [
-        "SERIAL"  :"String",
-        "FK"      :"Long",
-        "EXCLUSIVE"    :"Int",
-        "INCLUSIVE"    :"Int",
-        "SHORT" :"Short",
-        "INTEGER" :"Int",
-        "BOOL"    :"Int",
-        "LONG"    :"Long",
-        "TIMESTAMP":"Long",
-        "REAL"    :"Double",
-        "GUID"    :"String",
-        "TEXT"    :"String",
-        "BLOB"    :"Blob",
-        "FILE"    :"String",
-        "TYPE"    :"String",
+        "FLOAT" :"float",
+        "DOUBLE":"double",
         default: key
 ]
 

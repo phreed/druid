@@ -31,27 +31,6 @@ public class <item.name.bactrian>Creator {
   }
 
   /**
-   * Get <item.name.bactrian>Data object from ContentValues object
-   * 
-   * @param cv
-   * @return
-   */
-  // I'm not even sure this is used/usable, but here in case it is...
-  public static <item.name.bactrian>Data CvTo<item.name.bactrian>Data(final ContentValues cv) {
-    // set default values
-    
-    // ST:setValue:inline
-    <item.fields: { field | <setValue(field,"")> }; separator="\n">
-    // ST:setValue:complete
-    
-    // construct the returned object
-    <item.name.bactrian>Data rValue = 
-       new <item.name.bactrian>Data(<item.fields: { field | <field.name.camel> }; separator=",">);
-        
-    return rValue;
-  }
-
-  /**
    * Get all of the <item.name.bactrian>Data from the passed in cursor.
    * 
    * @param cursor
@@ -85,7 +64,7 @@ public class <item.name.bactrian>Creator {
 
     // construct the returned object
     <item.name.bactrian>Data rValue = 
-       new <item.name.bactrian>Data(<item.fields: { field | <field.name.camel> }; separator=",">);
+       new <item.name.bactrian>Data(<item.fields:{ field | <field.name.camel>}; separator=", ">);
         
     return rValue;
   }
@@ -99,15 +78,7 @@ putField(field) ::= <%
 rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, data.<field.name.camel>);
 %>
 
-setValue(field, prefix) ::= <<
-
-<javaTypeMap.(field.dtype)> <field.name.camel> = <literalValue(field.dtype, field.default, prefix )>;
-if (cv.containsKey(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME)) {
-  <field.name.camel> = cv.getAs<javaMethodTypeMap.(field.dtype)>(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME);
-}
->>
- 
 getValue(field) ::= <<
-<javaTypeMap.(field.dtype)> <field.name.camel> = cursor.get<cursorBoxTypeMap.(field.dtype)>(cursor 
+<javaTypeMap.(field.dtype)> <field.name.camel> = cursor.<androidReadFromCursorMethodMap.(field.dtype)>(cursor 
         .getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME));
 >>

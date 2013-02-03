@@ -11,16 +11,16 @@ SKELETON(contract,item) ::= <<
 BODY(contract,item) ::= <<
 
 
-package com.walkernation.db.ui.location;
+package <package(contract,item)>;
 
 public interface OnOpenWindowInterface {
-	public void openEditLocationFragment(int index);
+	public void openEdit<item.name.bactrian>Fragment(int index);
 
-	public void openViewLocationFragment(int index);
+	public void openView<item.name.bactrian>Fragment(int index);
 
-	public void openCreateLocationFragment();
+	public void openCreate<item.name.bactrian>Fragment();
 
-	public void openListLocationsFragment();
+	public void openList<item.name.bactrian>Fragment();
 
 	// ADD HERE FOR EACH : activity/Fragment
 	// implement in LocationActivityBase.java
@@ -28,3 +28,4 @@ public interface OnOpenWindowInterface {
 
 
 >>
+package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<relation.name.camel>"

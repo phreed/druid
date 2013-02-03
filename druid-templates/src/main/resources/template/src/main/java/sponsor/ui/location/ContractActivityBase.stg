@@ -12,7 +12,7 @@ SKELETON(contract,item) ::= <<
 
 BODY(contract,item) ::= <<
 
-package com.walkernation.db.ui.location;
+package <package(contract,item)>;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -265,3 +265,5 @@ public class LocationActivityBase extends FragmentActivity implements
 	}
 }
 >>
+
+package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"
