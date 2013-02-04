@@ -10,7 +10,7 @@ SKELETON(contract) ::= <<
 BODY(contract) ::= <<
 // ST:BODY:startTransaction
 
-package com.walkernation.db.provider;
+package <package(contract)>;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -307,3 +307,6 @@ db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_<relation.name.cobra>);
 createTable(relation) ::= <%
 db.execSQL(DATABASE_CREATE_<relation.name.cobra>);
 %>
+
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"

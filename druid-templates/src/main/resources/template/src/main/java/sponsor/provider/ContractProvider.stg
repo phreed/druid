@@ -10,7 +10,7 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 // ST:BODY:start
 
-package com.walkernation.db.provider;
+package <package(contract)>;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -57,14 +57,10 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 	public String getType(Uri uri) {
 		Log.d(LOG_TAG, "getType()");
 		switch (uriMatcher.match(uri)) {
-		case DATA_ONE_ALL_ROWS:
-			return ContentDescriptor.DataTypeOne.CONTENT_TYPE_DIR;
-		case DATA_ONE_SINGLE_ROW:
-			return ContentDescriptor.DataTypeOne.CONTENT_ITEM_TYPE;
-		case DATA_TWO_ALL_ROWS:
-			return ContentDescriptor.DataTypeTwo.CONTENT_TYPE_DIR;
-		case DATA_TWO_SINGLE_ROW:
-			return ContentDescriptor.DataTypeTwo.CONTENT_ITEM_TYPE;
+
+	       // ST:createContentTypeReturnsforRelations:begin
+	       <contract.root.relations: { relation | <createContentTypeReturnsforRelations(relation)> }; separator="\n">
+	       // ST:createContentTypeReturnsforRelations:finish
 
 		default:
 			throw new UnsupportedOperationException("URI " + uri
@@ -78,26 +74,12 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 			final String sortOrder) {
 		Log.d(LOG_TAG, "query()");
 		String modifiedSelection = selection;
-		final int match = uriMatcher.match(uri);
-		switch (match) {
-		case DATA_ONE_SINGLE_ROW: {
-			modifiedSelection = modifiedSelection
-					+ ContentDescriptor.DataTypeOne.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-		}
-		case DATA_ONE_ALL_ROWS: {
-			return query(uri, ContentDescriptor.DataTypeOne.TABLE_NAME,
-					projection, modifiedSelection, selectionArgs, sortOrder);
-		}
-		case DATA_TWO_SINGLE_ROW: {
-			modifiedSelection = modifiedSelection
-					+ ContentDescriptor.DataTypeOne.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-		}
-		case DATA_TWO_ALL_ROWS: {
-			return query(uri, ContentDescriptor.DataTypeTwo.TABLE_NAME,
-					projection, modifiedSelection, selectionArgs, sortOrder);
-		}
+		switch (uriMatcher.match(uri)) {
+		
+	       // ST:createPublicQueryforRelations:begin
+	       <contract.root.relations: { relation | <createPublicQueryforRelations(relation)> }; separator="\n">
+	       // ST:createPublicQueryforRelations:finish
+	       
 		default:
 			return null;
 		}
@@ -125,44 +107,18 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 
 		final int match = uriMatcher.match(uri);
 		switch (match) {
-		case DATA_ONE_ALL_ROWS: {
-			value.remove(ContentDescriptor.DataTypeOne.ColumnNames.ID);
-			long rowID = mDB.insert(ContentDescriptor.DataTypeOne.TABLE_NAME,
-					value);
-			if (rowID > -1) {
-				Uri insertedID = ContentUris.withAppendedId(
-						ContentDescriptor.DataTypeOne.CONTENT_URI, rowID);
-				getContext().getContentResolver()
-						.notifyChange(insertedID, null);
-
-				return ContentUris.withAppendedId(CONTENT_URI, rowID);
-			} else {
-				Log.e(LOG_TAG, "insert didn't work, return of -1");
-			}
-			return null;
-		}
-		case DATA_TWO_ALL_ROWS: {
-			value.remove(ContentDescriptor.DataTypeOne.ColumnNames.ID);
-			long rowID = mDB.insert(ContentDescriptor.DataTypeTwo.TABLE_NAME,
-					value);
-			if (rowID > -1) {
-				Uri insertedID = ContentUris.withAppendedId(
-						ContentDescriptor.DataTypeTwo.CONTENT_URI, rowID);
-				getContext().getContentResolver()
-						.notifyChange(insertedID, null);
-				return ContentUris.withAppendedId(CONTENT_URI, rowID);
-			}
-			return null;
-		}
-
-		case DATA_TWO_SINGLE_ROW:
-		case DATA_ONE_SINGLE_ROW: {
+	
+	        // ST:createInsertforRelations:begin
+	        <contract.root.relations: { relation | <createInsertforRelations(relation)> }; separator="\n">
+	        // ST:createInsertforRelations:finish
+	
+		<contract.root.relations: { relation | <relation.name.cobra>_SINGLE_ROW: }; separator="\n">
+		{
 			value.remove(ContentDescriptor.DataTypeTwo.ColumnNames.ID);
-			throw new IllegalArgumentException(
-					"Unsupported URI, unable to insert into specific row: "
-							+ uri);
+			throw new IllegalArgumentException( "Unsupported URI, unable to insert into specific row: " + uri);
 		}
 		default:
+		{
 			throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
 
@@ -173,27 +129,9 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 		Log.d(LOG_TAG, "delete()");
 
 		switch (uriMatcher.match(uri)) {
-		case DATA_ONE_SINGLE_ROW:
-			whereClause = whereClause
-					+ ContentDescriptor.DataTypeOne.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-			// no break here on purpose
-		case DATA_ONE_ALL_ROWS: {
-			return deleteAndNotify(uri,
-					ContentDescriptor.DataTypeOne.TABLE_NAME, whereClause,
-					whereArgs);
-		}
-
-		case DATA_TWO_SINGLE_ROW:
-			whereClause = whereClause
-					+ ContentDescriptor.DataTypeTwo.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-			// no break here on purpose
-		case DATA_TWO_ALL_ROWS: {
-			return deleteAndNotify(uri,
-					ContentDescriptor.DataTypeTwo.TABLE_NAME, whereClause,
-					whereArgs);
-		}
+	        // ST:createDeleteforRelations:begin
+	        <contract.root.relations: { relation | <createDeleteforRelations(relation)> }; separator="\n">
+	        // ST:createDeleteforRelations:finish
 
 		default:
 			throw new IllegalArgumentException("Unsupported URI: " + uri);
@@ -220,25 +158,11 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 		Log.d(LOG_TAG, "update()");
 
 		switch (uriMatcher.match(uri)) {
-		case DATA_ONE_SINGLE_ROW:
-			whereClause = whereClause
-					+ ContentDescriptor.DataTypeOne.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-		case DATA_ONE_ALL_ROWS: {
-			return updateAndNotify(uri,
-					ContentDescriptor.DataTypeOne.TABLE_NAME, values,
-					whereClause, whereArgs);
-
-		}
-		case DATA_TWO_SINGLE_ROW:
-			whereClause = whereClause
-					+ ContentDescriptor.DataTypeTwo.ColumnNames.ID + " = "
-					+ uri.getLastPathSegment();
-		case DATA_TWO_ALL_ROWS: {
-			return updateAndNotify(uri,
-					ContentDescriptor.DataTypeTwo.TABLE_NAME, values,
-					whereClause, whereArgs);
-		}
+		
+		// ST:createUpdateForRelations:begin
+	        <contract.root.relations: { relation | <createUpdateForRelations(relation)> }; separator="\n">
+	        // ST:createUpdateForRelations:finish
+		
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -251,8 +175,7 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 	private int updateAndNotify(final Uri uri, final String tableName,
 			final ContentValues values, final String whereClause,
 			final String[] whereArgs) {
-		int count = mDB.update(ContentDescriptor.DataTypeOne.TABLE_NAME,
-				values, whereClause, whereArgs);
+		int count = mDB.update(tableName, values, whereClause, whereArgs);
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
 		}
@@ -270,4 +193,67 @@ createShortContentURIforRelations(relation) ::= <%
 public final static Uri <relation.name.cobra>_CONTENT_URI = ContentDescriptor.<relation.name.camel>.CONTENT_URI;
 %>
 
-public final static Uri CONTENT_URI = ContentDescriptor.DataTypeOne.CONTENT_URI;
+createContentTypeReturnsforRelations(relation) ::= <<
+case <relation.name.cobra>_ALL_ROWS: return ContentDescriptor.<relation.name.camel>.CONTENT_TYPE_DIR;
+case <relation.name.cobra>_SINGLE_ROW: return ContentDescriptor.<relation.name.camel>.CONTENT_ITEM_TYPE;
+>>
+
+createPublicQueryforRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW: {
+	modifiedSelection = modifiedSelection
+		+ ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+		+ uri.getLastPathSegment();
+}
+case <relation.name.cobra>_ALL_ROWS: {
+	return query(uri, ContentDescriptor.<relation.name.camel>.TABLE_NAME,
+		projection, modifiedSelection, selectionArgs, sortOrder);
+}
+>>
+
+
+createInsertforRelations(relation) ::= <<
+case <relation.name.cobra>_ALL_ROWS: {
+	value.remove(ContentDescriptor.<relation.name.camel>.ColumnNames.ID);
+	long rowID = mDB.insert(ContentDescriptor.<relation.name.camel>.TABLE_NAME, value);
+	if (rowID > -1) {
+		Uri insertedID = ContentUris.withAppendedId( ContentDescriptor.<relation.name.camel>.CONTENT_URI, rowID);
+		getContext().getContentResolver().notifyChange(insertedID, null);
+		return ContentUris.withAppendedId(CONTENT_URI, rowID);
+	} else {
+		Log.e(LOG_TAG, "insert didn't work, return of -1");
+	}
+		return null;
+	}
+>>
+
+
+createDeleteforRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW:
+	whereClause = whereClause
+			+ ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+			+ uri.getLastPathSegment();
+	// no break here on purpose
+case <relation.name.cobra>_ALL_ROWS: {
+	return deleteAndNotify(uri,
+			ContentDescriptor.<relation.name.camel>.TABLE_NAME, whereClause,
+			whereArgs);
+}
+>>
+
+
+
+
+createUpdateForRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW:
+	whereClause = whereClause
+		      + ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+		      + uri.getLastPathSegment();
+case <relation.name.cobra>_ALL_ROWS: {
+	return updateAndNotify(uri,
+			ContentDescriptor.<relation.name.camel>.TABLE_NAME, values,
+			whereClause, whereArgs);
+
+}
+>>
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
