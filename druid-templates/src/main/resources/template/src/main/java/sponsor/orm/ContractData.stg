@@ -11,9 +11,9 @@ SKELETON(contract,item) ::= <<
 BODY(contract,item) ::= <<
 // ST:BODY:start
 
-// ST:package:inline
-package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
-// ST:package:complete
+// ST:package:start
+package <package(contract)>;
+// ST:package:finish
 
 import java.io.Serializable;
 
@@ -25,38 +25,37 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	//private static final long serialVersionUID = 5505248865103008665L;
 
-	<!-- ST:putDeclaration:start -->
-	<item.fields: { field | <putDeclaration(item, field)> }; separator="\n">
-	\<!-- ST:putDeclaration:end -->
+	// ST:putDeclaration:start
+	<item.fields: { field | <putDeclaration(field)> }; separator="\n">
+	// ST:putDeclaration:finish
 	
-	public long latitude;
-	public long longitude;
-	public long height;
-	public long userID;
-
-	public LocationData(long _latitude, long _longitude, long _height,
-			long _userID) {
-		latitude = _latitude;
-		longitude = _longitude;
-		height = _height;
-		userID = _userID;
+	public <item.name.bactrian>Data(
+	    // ST:constructorParameters:start
+	    <item.fields: { field | <javaTypeMap.(field.dtype)> <field.name.camel> }; separator=", ">){		
+	    // ST:constructorParameters:finish
+	    // ST:constructorAsignments:start
+	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">	
+	    // ST:constructorAsignments:finish
 	}
 
 	@Override
 	public String toString() {
-		return "User: " + userID + " @ lat/long: " + latitude + ", "
-				+ longitude + " height:" + height;
+	    // ST:constructToString:start
+	    return <item.fields: { field | " <field.name.camel>: " + <field.name.camel> }; separator="+ ">;
+	    // ST:constructToString:finish
 	}
 
 	public ContentValues getCV() {
-		// use the LocationDataDBAdaptor class to simplify creation
-		return LocationCreator.getCVfromLocation(this);
+		return <item.name.bactrian>Creator.getCVfrom<item.name.camel>(this);
 	}
 
-	public LocationData clone() {
-		return new LocationData(latitude, longitude, height, userID);
+	public <item.name.bactrian>Data clone() {
+	        // ST:constructClone:start
+		return new <item.name.bactrian>Data(<item.fields: { field | <field.name.camel> }; separator=", ">);
+		// ST:constructClone:finish
 	}
 
+	// these are for parcelable interface
 	@Override
 	public int describeContents() {
 		return 0;
@@ -64,38 +63,35 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(userID);
-		dest.writeLong(latitude);
-		dest.writeLong(longitude);
-		dest.writeLong(height);
+	    // ST:constructWriteParcel:start
+	    <item.fields: { field | dest.<androidWriteParcelMethodMap.(field.dtype)>(<field.name.camel>); }; separator="\n">
+	    // ST:constructWriteParcel:finish
 	}
-
-	public static final Parcelable.Creator\<LocationData> CREATOR = new Parcelable.Creator\<LocationData>() {
-		public LocationData createFromParcel(Parcel in) {
-			return new LocationData(in);
+		
+	public static final Parcelable.Creator\<<item.name.bactrian>Data> CREATOR = new Parcelable.Creator\<<item.name.bactrian>Data>() {
+		public <item.name.bactrian>Data createFromParcel(Parcel in) {
+			return new <item.name.bactrian>Data(in);
 		}
 
-		public LocationData[] newArray(int size) {
-			return new LocationData[size];
+		public <item.name.bactrian>Data[] newArray(int size) {
+			return new <item.name.bactrian>Data[size];
 		}
 	};
 
-	private LocationData(Parcel in) {
-		userID = in.readLong();
-		latitude = in.readLong();
-		longitude = in.readLong();
-		height = in.readLong();
+	private <item.name.bactrian>Data(Parcel in) {
+            // ST:constructReadParcel:start
+	    <item.fields: { field | <field.name.camel> = in.<androidReadParcelMethodMap.(field.dtype)>(); }; separator="\n">\
+	    // ST:constructReadParcel:finish
 	}
 
 }
 >>
 
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
-
-putDeclaration(relation, field) ::= <<
-      public <ttyl.(field)> <relation.name.camel><field.name.bactrian>;
->>
-
+putDeclaration(field) ::= <%
+    public <javaTypeMap.(field.dtype)> <field.name.camel>;
+%>
 
 
 

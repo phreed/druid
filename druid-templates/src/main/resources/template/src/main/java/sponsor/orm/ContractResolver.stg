@@ -31,7 +31,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 
-import com.walkernation.db.provider.ContentDescriptor;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.ContentDescriptor;
 
 /**
  * encapsulation of the ContentProviderClient for a single URI
@@ -42,99 +42,200 @@ import com.walkernation.db.provider.ContentDescriptor;
  * @author Michael A. Walker
  * 
  */
-public class <contract.root.sponsor.bactrian>Resolver {
+public class <contract.root.sponsor.name.bactrian>Resolver {
 
 	private ContentResolver cr;
-	private Uri uri = ContentDescriptor.Location.CONTENT_URI;
+	
+	// ST:declareRelationURI:start
+	<contract.root.relations: { relation | <declareRelationURI(relation)> }; separator="\n">
+	// ST:declareRelationURI:finish
 
-	public LocationResolver(Activity activity) {
+	public MultipleResolver(Activity activity) {
 		cr = activity.getContentResolver();
 	}
 
 	public ContentProviderResult[] applyBatch(
-			ArrayList\<ContentProviderOperation> operations)
+			final ArrayList\<ContentProviderOperation> operations)
 			throws RemoteException, OperationApplicationException {
 		return cr.applyBatch(ContentDescriptor.AUTHORITY, operations);
 	}
 
-	public int bulkInsert(ArrayList\<LocationData> locations)
-			throws RemoteException {
-		ContentValues[] values = new ContentValues[locations.size()];
-		int index = 0;
-		for (LocationData locationData : locations) {
-			values[index] = locationData.getCV();
-			++index;
-		}
-		return cr.bulkInsert(uri, values);
-	}
+	/*
+	 * Bulk Insert for each ORM Data Type
+	 */
+	 
+	// ST:makeBulkInsertForRelation:start
+	<contract.root.relations: { relation | <makeBulkInsertForRelation(relation)> }; separator="\n">
+	// ST:makeBulkInsertForRelation:finish
 
-	public int deleteLocationOfUserID(long userID) throws RemoteException {
-		String[] selectionArgs = new String[] { String.valueOf(userID) };
-		return cr.delete(uri, "user_id=?", selectionArgs);
-	}
-
-	public int delete(String selection, String[] selectionArgs)
-			throws RemoteException {
-		return cr.delete(uri, selection, selectionArgs);
-	}
-
-	public String getType() throws RemoteException {
+	/*
+	 * Delete for each ORM Data Type
+	 */
+	// ST:makeDeleteRawForRelation:start
+	<contract.root.relations: { relation | <makeDeleteRawForRelation(relation)> }; separator="\n">
+	// ST:makeDeleteRawForRelation:finish
+	 
+	/*
+	 * Get Type for a URI
+	 */
+	public String getType(Uri uri) throws RemoteException {
 		return cr.getType(uri);
 	}
 
-	public Uri insert(LocationData locationData) throws RemoteException {
-		return cr.insert(uri, locationData.getCV());
-	}
+	/*
+	 * Insert for each ORM Data Type
+	 */
+	
+	// ST:makeInsertOrmForRelation:start
+	<contract.root.relations: { relation | <makeInsertOrmForRelation(relation)> }; separator="\n">
+	// ST:makeInsertOrmForRelation:finish
 
-	public AssetFileDescriptor openAssetFileDescriptor(Uri uri, String mode)
-			throws RemoteException, FileNotFoundException {
+	/*
+	 * access files from the content provider
+	 */
+	public AssetFileDescriptor openAssetFileDescriptor(final Uri uri,
+			final String mode) throws RemoteException, FileNotFoundException {
 		return cr.openAssetFileDescriptor(uri, mode);
 	}
 
-	public ParcelFileDescriptor openFileDescriptor(Uri uri, String mode)
-			throws RemoteException, FileNotFoundException {
+	public ParcelFileDescriptor openFileDescriptor(final Uri uri,
+			final String mode) throws RemoteException, FileNotFoundException {
 		return cr.openFileDescriptor(uri, mode);
 	}
 
-	public ArrayList\<LocationData> query(String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) throws RemoteException {
-		// query the C.P.
-		Cursor result = cr.query(uri, projection, selection, selectionArgs,
-				sortOrder);
-		// make return object
-		ArrayList\<LocationData> rValue = new ArrayList\<LocationData>();
-		// convert cursor to reutrn object
-		rValue.addAll(LocationCreator
-				.getLocationDataArrayListFromCursor(result));
-		// return 'return object'
-		return rValue;
-	}
+	/*
+	 * Query for each ORM Data Type
+	 */
 
-	public int update(LocationData values, String selection,
-			String[] selectionArgs) throws RemoteException {
-		return cr.update(uri, values.getCV(), selection, selectionArgs);
-	}
+	// ST:makeQueryOrmForRelation:start
+	<contract.root.relations: { relation | <makeQueryOrmForRelation(relation)> }; separator="\n">
+	// ST:makeQueryOrmForRelation:finish 
+	
 
-	public ArrayList\<LocationData> getAllLocations() throws RemoteException {
-		return query(null, null, null, null);
-	}
+	/*
+	 * Update for each ORM Data Type
+	 */
 
-	public LocationData getLocationOfUser(long userID) throws RemoteException {
-		LocationData rValue = null;
+	// ST:makeUpdateOrmForRelation:start
+	<contract.root.relations: { relation | <makeUpdateOrmForRelation(relation)> }; separator="\n">
+	// ST:makeUpdateOrmForRelation:finish 
 
-		ArrayList\<LocationData> list = query(
-				ContentDescriptor.Location.ORM_COLUMN_NAMES,
-				ContentDescriptor.Location.Cols.USER_ID_NAME + " = ?",
-				new String[] { "" + userID }, null);
+	/*
+	 * Sample extensions of above for customized additional methods for classes
+	 * that extend this one
+	 */
 
-		if (list.size() > 0) {
-			rValue = list.get(0);
-		}
-		return rValue;
-	}
+	 
+	 // ST:makeGetAllDataOrmForRelation:start
+	<contract.root.relations: { relation | <makeGetAllDataOrmForRelation(relation)> }; separator="\n">
+	// ST:makeGetAllDataOrmForRelation:finish 
+	
+	// ST:makeGetDataViaRowIDOrmForRelation:start
+	<contract.root.relations: { relation | <makeGetDataViaRowIDOrmForRelation(relation)> }; separator="\n">
+	// ST:makeGetDataViaRowIDOrmForRelation:finish 
+
+	// ST:makeDeleteAllWithIDOrmForRelation:start
+	<contract.root.relations: { relation | <makeDeleteAllWithIDOrmForRelation(relation)> }; separator="\n">
+	// ST:makeDeleteAllWithIDOrmForRelation:finish 
+
+	// ST:makeUpdatWithIdOrmForRelation:start
+	<contract.root.relations: { relation | <makeUpdatWithIdOrmForRelation(relation)> }; separator="\n">
+	// ST:makeUpdatWithIdOrmForRelation:finish 
+	
 }
 >>
 
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
+declareRelationURI(relation) ::= <%
+private Uri <relation.name.camel>URI = ContentDescriptor.<relation.name.camel>Data.CONTENT_URI;
+%>
 
+makeBulkInsertForRelation(relation) ::= <<
+public int bulkInsert<relation.name.bactrian>(final ArrayList\<<relation.name.bactrian>Data> data)
+		throws RemoteException {
+	ContentValues[] values = new ContentValues[data.size()];
+	int index = 0;
+	for (<relation.name.bactrian>Data <relation.name.camel> : data) {
+		values[index] = <relation.name.camel>.getCV();
+		++index;
+	}
+	return cr.bulkInsert(<relation.name.camel>URI, values);
+}
+>>
+
+makeDeleteRawForRelation(relation) ::= <<
+public int delete<relation.name.bactrian>Data(final String selection,
+			final String[] selectionArgs) throws RemoteException {
+		return cr.delete(<relation.name.camel>URI, selection, selectionArgs);
+	}
+>>
+
+makeInsertOrmForRelation(relation) ::= <<
+public Uri insert(final <relation.name.bactrian>Data <relation.name.camel>Object) throws RemoteException {
+	ContentValues tempCV = <relation.name.camel>Object.getCV();
+	tempCV.remove(ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID);
+	return cr.insert(<relation.name.camel>URI, tempCV);
+}
+>>
+
+makeQueryOrmForRelation(relation) ::= <<
+public ArrayList\<<relation.name.bactrian>Data> query<relation.name.bactrian>Data(final String[] projection,
+		final String selection, final String[] selectionArgs,
+		final String sortOrder) throws RemoteException {
+	// query the C.P.
+	Cursor result = cr.query(<relation.name.camel>URI, projection, selection,
+			selectionArgs, sortOrder);
+	// make return object
+	ArrayList\<<relation.name.bactrian>Data> rValue = new ArrayList\<<relation.name.bactrian>Data>();
+	// convert cursor to reutrn object
+	rValue.addAll(<relation.name.bactrian>Creator.get<relation.name.bactrian>DataArrayListFromCursor(result));
+	// return 'return object'
+	return rValue;
+}
+>>
+
+makeUpdateOrmForRelation(relation) ::= <<
+public int update<relation.name.bactrian>Data(final <relation.name.bactrian>Data values,
+		final String selection, final String[] selectionArgs)
+		throws RemoteException {
+	return cr.update(<relation.name.camel>URI, values.getCV(), selection, selectionArgs);
+}
+>>
+
+
+makeUpdatWithIdOrmForRelation(relation) ::= <<
+public int update<relation.name.bactrian>WithID(<relation.name.bactrian>Data data) throws RemoteException {
+	String selection = "user_id = ?";
+	String[] selectionArgs = { String.valueOf(dataOne._id) };
+	return update<relation.name.bactrian>Data(data, selection, selectionArgs);
+}
+>>	
+	
+makeDeleteAllWithIDOrmForRelation(relation) ::= <<
+public int deleteAll<relation.name.bactrian>WithRowID(long rowID) throws RemoteException {
+   String[] args = { String.valueOf(rowID) };
+   return delete<relation.name.bactrian>Data(ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID + " = ? ", args);
+}
+>>
+
+makeGetDataViaRowIDOrmForRelation(relation) ::= <<
+public <relation.name.bactrian>Data get<relation.name.bactrian>DataViaRowID(final int rowID)
+		throws RemoteException {
+	String[] selectionArgs = { String.valueOf(rowID) };
+	ArrayList\<<relation.name.bactrian>Data> results = query<relation.name.bactrian>Data(null,
+			ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID + "= ?",
+			selectionArgs, null);
+	if (results.size() > 0) {
+		return results.get(0);
+	} else {
+		return null;
+	}
+}
+>>
+
+makeGetAllDataOrmForRelation(relation) ::= <<
+public ArrayList\<<relation.name.bactrian>Data> getAll<relation.name.bactrian>Data() throws RemoteException {
+	return query<relation.name.bactrian>Data(null, null, null, null);
+}
+>>

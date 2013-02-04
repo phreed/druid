@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><contract.root.name>Provider.java
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><contract.root.name.snake>Provider.java
 %>
 
 SKELETON(contract,item) ::= <<
