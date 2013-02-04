@@ -137,6 +137,28 @@ auxTupleMap ::= [
        default: "defaultTupleTmpl" 
 ]
 
+
+javaTypeSQLiteMap ::= [
+        "SERIAL":"TEXT",
+        "FK"    :"INTEGER",
+        "EXCLUSIVE"  :"INTEGER",
+        "INCLUSIVE"  :"INTEGER",
+        "SHORT":"INTEGER",
+        "INTEGER":"INTEGER",
+        "BOOL"  :"INTEGER",
+        "LONG"  :"INTEGER",
+        "TIMESTAMP":"INTEGER",
+        "REAL"  :"REAL",
+        "GUID"  :"TEXT",
+        "TEXT"  :"TEXT",
+        "BLOB"  :"BLOB",
+        "FILE"  :"TEXT",
+        "TYPE"  :"TEXT",
+        "FLOAT" :"REAL",
+        "DOUBLE":"REAL",
+        default: key
+]
+
 auxTuple(type,value,prefix) ::= <%
 <auxTupleMap.(type)>
 %>
