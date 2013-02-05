@@ -7,6 +7,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.StaticLoggerBinder;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
@@ -138,7 +141,8 @@ public class DruidMojo extends AbstractMojo {
 	 * 
 	 */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        final Log logger = getLog();
+        StaticLoggerBinder.getSingleton().setLog(getLog());
+        final Logger logger = LoggerFactory.getLogger("druid-mojo");
        
         final Artifact artifact;
         try
@@ -154,7 +158,7 @@ public class DruidMojo extends AbstractMojo {
         request.setArtifact( artifact );
         request.setRepositories( remoteRepos );
 
-        getLog().info( "Resolving artifact " + artifact + " from " + remoteRepos );
+        logger.info( "Resolving artifact {} from {}", artifact, remoteRepos );
 
         final ArtifactResult result;
         try
@@ -170,8 +174,7 @@ public class DruidMojo extends AbstractMojo {
         logger.info( "Resolved artifact " + artifact + " to " + templateJar + " from "
                            + result.getRepository() );
        
-		final Generator generator = new Generator(new MavenLoggerImpl(
-				this.getLog(), "druid"));
+		final Generator generator = new Generator(logger);
 
         try {
             generator.setTemplateJarName(templateJar);

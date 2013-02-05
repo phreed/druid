@@ -14,9 +14,12 @@
     <module>druid-maven-plugin</module>
     <module>druid-templates</module>
     <module>location-sample</module>
+    <module>all-types-sample</module>
+    <module>archetype</module>
   </modules>
 
  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.0.4</maven.version>
     <plexus.version>1.5.1</plexus.version>
     <aether.version>1.8</aether.version>
@@ -99,16 +102,10 @@
       </dependency>
    
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.0.7</version>
-       </dependency>
-
-       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
-        <version>1.0.7</version>
-       </dependency>
+        <groupId>com.googlecode.slf4j-maven-plugin-log</groupId>
+        <artifactId>slf4j-maven-plugin-log</artifactId>
+        <version>1.0.0</version>
+      </dependency>
 
       <dependency>
         <groupId>junit</groupId>
@@ -290,7 +287,7 @@
                   </goals>
                 </pluginExecutionFilter>
                 <action>
-                  <ignore></ignore>
+                  <ignore/>
                 </action>
               </pluginExecution>
 
