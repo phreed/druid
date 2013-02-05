@@ -102,7 +102,7 @@ public static class <relation.name.bactrian> {
 			+ ".cursor.dir/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
 	public static final String CONTENT_ITEM_TYPE = ORGANIZATIONAL_NAME
 			+ ".cursor.item/" + ORGANIZATIONAL_NAME + "." + MIME_TYPE_END;
-         };
+        
 
 	// the names and order of ALL columns, including internal use ones
 	public static final String[] ALL_COLUMN_NAMES = { Cols.ID,
@@ -122,10 +122,10 @@ public static class <relation.name.bactrian> {
 }
 >>
 
-getColumnNames(field) ::="Cols.<field.name.bactrian>"
+getColumnNames(field) ::="Cols.<field.name.cobra>"
 
 getColumnDeclaration(field) ::= <%
-public static final String <field.name.bactrian> = "<field.name.camel>";
+public static final String <field.name.cobra> = "<field.name.cobra>";
 %>
 
 

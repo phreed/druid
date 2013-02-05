@@ -4,13 +4,14 @@ PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter>sync<delimiter>SampleSyncAdapter.java
 %>
 
-SKELETON(contract,item) ::= <<
+SKELETON(contract) ::= <<
 >>
 
-BODY(contract,item) ::= <<
-\<?xml version="1.0" encoding="utf-8"?>
-\<!-- ST:BODY:start -->
-package com.walkernation.db.provider.sync;
+BODY(contract) ::= <<
+
+// ST:BODY:start
+
+package <package(contract)>;
 
 import java.io.IOException;
 
@@ -106,5 +107,7 @@ public class SampleSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 	}
 }
-\<!-- ST:BODY:end -->
+// ST:BODY:end
 >>
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider.sync"

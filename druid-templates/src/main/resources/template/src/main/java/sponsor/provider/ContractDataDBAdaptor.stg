@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><item.name.bactrian>DataDbAdaptor.java
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><contract.root.name.bactrian>DataDBAdaptor.java
 %>
 
 SKELETON(contract) ::= <<
@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class <contract.root.name.bactrian>DataDBAdaptor {
 
-	private static final String LOG_TAG = LocationDataDBAdaptor.class
+	private static final String LOG_TAG = <contract.root.name.bactrian>DataDBAdaptor.class
 			.getCanonicalName();
 
 	private static final String DATABASE_NAME = "myDatabase.db";
@@ -57,7 +57,7 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 	 * 
 	 * @param _context
 	 */
-	public <item.name.bactrian>DataDBAdaptor(Context _context) {
+	public <contract.root.name.bactrian>DataDBAdaptor(Context _context) {
 		Log.d(LOG_TAG, "MyDBAdapter constructor");
 
 		context = _context;
@@ -71,7 +71,7 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 	 * 
 	 * @param _context
 	 */
-	public <item.name.bactrian>DataDBAdaptor(Context _context, boolean memory_only_db) {
+	public <contract.root.name.bactrian>DataDBAdaptor(Context _context, boolean memory_only_db) {
 		Log.d(LOG_TAG, "MyDBAdapter constructor w/ mem only =" + memory_only_db);
 
 		context = _context;
@@ -91,7 +91,7 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 	 * @return
 	 * @throws SQLException
 	 */
-	public <item.name.bactrian>DataDBAdaptor open() throws SQLException {
+	public <contract.root.name.bactrian>DataDBAdaptor open() throws SQLException {
 		Log.d(LOG_TAG, "open()");
 		try {
 			db = dbHelper.getWritableDatabase();
@@ -233,7 +233,7 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d(LOG_TAG, "" + DATABASE_CREATE);
+			Log.d(LOG_TAG, "DATABASE_CREATE: version: "+ DATABASE_VERSION);
 			// ST:createTable:start
 			<contract.root.relations: { relation | <createTable(relation)> }; separator="\n">			
 			// ST:createTable:finish

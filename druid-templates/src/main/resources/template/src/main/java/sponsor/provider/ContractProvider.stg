@@ -24,7 +24,7 @@ import android.util.Log;
 public class <contract.root.name.bactrian>Provider extends ContentProvider {
 
 	// logger TAG
-	private static final String LOG_TAG = <contract.root.name.bactrian>sProvider.class
+	private static final String LOG_TAG = <contract.root.name.bactrian>Provider.class
 			.getCanonicalName();
 
 	// Local backend DB
@@ -108,20 +108,19 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 		final int match = uriMatcher.match(uri);
 		switch (match) {
 	
-	        // ST:createInsertforRelations:begin
-	        <contract.root.relations: { relation | <createInsertforRelations(relation)> }; separator="\n">
-	        // ST:createInsertforRelations:finish
+	           // ST:createInsertforRelations:begin
+	           <contract.root.relations: { relation | <createInsertforRelations(relation)> }; separator="\n">
+	           // ST:createInsertforRelations:finish
 	
-		<contract.root.relations: { relation | <relation.name.cobra>_SINGLE_ROW: }; separator="\n">
-		{
-			value.remove(ContentDescriptor.DataTypeTwo.ColumnNames.ID);
+   		   <contract.root.relations: { relation | case <relation.name.cobra>_SINGLE_ROW: //no break on purpose}; separator="\n">
+		   {
 			throw new IllegalArgumentException( "Unsupported URI, unable to insert into specific row: " + uri);
-		}
-		default:
-		{
+		   }
+		   default:
+		   {
 			throw new IllegalArgumentException("Unsupported URI: " + uri);
-		}
-
+		   }
+	        }
 	}
 
 	@Override
@@ -185,27 +184,27 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 >>
 
 createShortURIMatchingTokens(relation) ::= <<
-private static final int <relation.name.cobra>_ALL_ROWS = ContentDescriptor.<relation.name.camel>.PATH_TOKEN;
-private static final int <relation.name.cobra>_SINGLE_ROW = ContentDescriptor.<relation.name.camel>.PATH_FOR_ID_TOKEN;
+private static final int <relation.name.cobra>_ALL_ROWS = ContentDescriptor.<relation.name.bactrian>.PATH_TOKEN;
+private static final int <relation.name.cobra>_SINGLE_ROW = ContentDescriptor.<relation.name.bactrian>.PATH_FOR_ID_TOKEN;
 >>
 
 createShortContentURIforRelations(relation) ::= <%
-public final static Uri <relation.name.cobra>_CONTENT_URI = ContentDescriptor.<relation.name.camel>.CONTENT_URI;
+public final static Uri <relation.name.cobra>_CONTENT_URI = ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
 %>
 
 createContentTypeReturnsforRelations(relation) ::= <<
-case <relation.name.cobra>_ALL_ROWS: return ContentDescriptor.<relation.name.camel>.CONTENT_TYPE_DIR;
-case <relation.name.cobra>_SINGLE_ROW: return ContentDescriptor.<relation.name.camel>.CONTENT_ITEM_TYPE;
+case <relation.name.cobra>_ALL_ROWS: return ContentDescriptor.<relation.name.bactrian>.CONTENT_TYPE_DIR;
+case <relation.name.cobra>_SINGLE_ROW: return ContentDescriptor.<relation.name.bactrian>.CONTENT_ITEM_TYPE;
 >>
 
 createPublicQueryforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW: {
 	modifiedSelection = modifiedSelection
-		+ ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+		+ ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 		+ uri.getLastPathSegment();
 }
 case <relation.name.cobra>_ALL_ROWS: {
-	return query(uri, ContentDescriptor.<relation.name.camel>.TABLE_NAME,
+	return query(uri, ContentDescriptor.<relation.name.bactrian>.TABLE_NAME,
 		projection, modifiedSelection, selectionArgs, sortOrder);
 }
 >>
@@ -213,12 +212,12 @@ case <relation.name.cobra>_ALL_ROWS: {
 
 createInsertforRelations(relation) ::= <<
 case <relation.name.cobra>_ALL_ROWS: {
-	value.remove(ContentDescriptor.<relation.name.camel>.ColumnNames.ID);
-	long rowID = mDB.insert(ContentDescriptor.<relation.name.camel>.TABLE_NAME, value);
+	value.remove(ContentDescriptor.<relation.name.bactrian>.Cols.ID);
+	long rowID = mDB.insert(ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, value);
 	if (rowID > -1) {
-		Uri insertedID = ContentUris.withAppendedId( ContentDescriptor.<relation.name.camel>.CONTENT_URI, rowID);
+		Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
 		getContext().getContentResolver().notifyChange(insertedID, null);
-		return ContentUris.withAppendedId(CONTENT_URI, rowID);
+		return ContentUris.withAppendedId(<relation.name.cobra>_CONTENT_URI, rowID);
 	} else {
 		Log.e(LOG_TAG, "insert didn't work, return of -1");
 	}
@@ -230,12 +229,12 @@ case <relation.name.cobra>_ALL_ROWS: {
 createDeleteforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-			+ ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+			+ ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 			+ uri.getLastPathSegment();
 	// no break here on purpose
 case <relation.name.cobra>_ALL_ROWS: {
 	return deleteAndNotify(uri,
-			ContentDescriptor.<relation.name.camel>.TABLE_NAME, whereClause,
+			ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, whereClause,
 			whereArgs);
 }
 >>
@@ -246,11 +245,11 @@ case <relation.name.cobra>_ALL_ROWS: {
 createUpdateForRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-		      + ContentDescriptor.<relation.name.camel>.ColumnNames.ID + " = "
+		      + ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 		      + uri.getLastPathSegment();
 case <relation.name.cobra>_ALL_ROWS: {
 	return updateAndNotify(uri,
-			ContentDescriptor.<relation.name.camel>.TABLE_NAME, values,
+			ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, values,
 			whereClause, whereArgs);
 
 }

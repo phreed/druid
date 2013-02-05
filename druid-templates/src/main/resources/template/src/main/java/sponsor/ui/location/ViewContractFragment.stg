@@ -10,7 +10,7 @@ SKELETON(contract,item) ::= <<
 
 BODY(contract,item) ::= <<
 
-package com.walkernation.db.ui.location;
+package <package(contract,item)>;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,26 +26,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.walkernation.db.R;
-import com.walkernation.db.orm.LocationData;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
 
-public class ViewLocationFragment extends LocationFragmentBase {
+public class View<item.name.bactrian>Fragment extends <item.name.bactrian>FragmentBase {
 	// LOG TAG, handles refactoring changes
-	private static final String LOG_TAG = ViewLocationFragment.class
+	private static final String LOG_TAG = View<item.name.bactrian>Fragment.class
 			.getCanonicalName();
 
 	public final static String rowIdentifyerTAG = "index";
 
 	private OnOpenWindowInterface mOpener;
 
-	public final static String LOCATION = "location";
-
-	TextView userIdTV;
-	TextView latitudeTV;
-	TextView longitudeTV;
-	TextView heightTV;
-
-	// LocationData locationData;
+	// ST:putFieldDeclarations:start
+	<item.fields: { field | <putFieldDeclarations(item, field)> }; separator="\n">
+        // ST:putFieldDeclarations:end 
+	
+	// <item.name.bactrian>Data <item.name.camel>Data;
 	Button editButton;
 	Button deleteButton;
 
@@ -54,10 +51,10 @@ public class ViewLocationFragment extends LocationFragmentBase {
 		public void onClick(View view) {
 
 			switch (view.getId()) {
-			case R.id.button_location_view_to_delete:
+			case R.id.button_<item.name.snake>_view_to_delete:
 				deleteButtonPressed();
 				break;
-			case R.id.button_location_view_to_edit:
+			case R.id.button_<item.name.snake>_view_to_edit:
 				editButtonPressed();
 				break;
 			default:
@@ -66,8 +63,8 @@ public class ViewLocationFragment extends LocationFragmentBase {
 		}
 	};
 
-	public static ViewLocationFragment newInstance(int index) {
-		ViewLocationFragment f = new ViewLocationFragment();
+	public static View<item.name.bactrian>Fragment newInstance(int index) {
+		View<item.name.bactrian>Fragment f = new View<item.name.bactrian>Fragment();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
@@ -99,81 +96,78 @@ public class ViewLocationFragment extends LocationFragmentBase {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		userIdTV = (TextView) getView().findViewById(R.id.userID);
-		latitudeTV = (TextView) getView().findViewById(R.id.latitude);
-		longitudeTV = (TextView) getView().findViewById(R.id.longitude);
-		heightTV = (TextView) getView().findViewById(R.id.height);
+		// ST:putTextViewAssignment:start
+		<item.fields: { field | <putTextViewAssignment(item, field)> }; separator="\n">
+               // ST:putTextViewAssignment:end 
+		
 		editButton = (Button) getView().findViewById(
-				R.id.button_location_view_to_edit);
+				R.id.button_<item.name.snake>_view_to_edit);
 		deleteButton = (Button) getView().findViewById(
-				R.id.button_location_view_to_delete);
+				R.id.button_<item.name.snake>_view_to_delete);
 
 		editButton.setOnClickListener(myOnClickListener);
 		deleteButton.setOnClickListener(myOnClickListener);
-		setUiToLocationData(getUniqueKey());
+		setUiTo<item.name.bactrian>Data(getUniqueKey());
 	}
 
-	public void setUiToLocationData(int getUniqueKey) {
-		LocationData location = null;
+	public void setUiTo<item.name.bactrian>Data(int getUniqueKey) {
+		<item.name.bactrian>Data <item.name.camel> = null;
 		try {
-			location = getLocationDataForUserID(getUniqueKey);
+			<item.name.camel> = get<item.name.bactrian>DataForUserID(getUniqueKey);
 		} catch (RemoteException e) {
 			Log.e(LOG_TAG, "RemoteException Caught => " + e.getMessage());
 			e.printStackTrace();
 		}
-		if (location == null) {
+		if (<item.name.camel> == null) {
 			getView().setVisibility(View.GONE);
 		} else { // else it just displays empty screen
-			userIdTV.setText(String.valueOf(location.userID));
-			latitudeTV.setText(String.valueOf(location.latitude));
-			longitudeTV.setText(String.valueOf(location.longitude));
-			heightTV.setText(String.valueOf(location.height));
+			// ST:putSetTextPerField:start
+		        <item.fields: { field | <putSetTextPerField(item, field)> }; separator="\n">
+                       // ST:putSetTextPerField:end 
 		}
 	}
 
 	private void editButtonPressed() {
-		mOpener.openEditLocationFragment(getUniqueKey());
+		mOpener.openEdit<item.name.bactrian>Fragment(getUniqueKey());
 	}
 
 	private void deleteButtonPressed() {
-		String message;
-
-		message = getResources().getString(
-				R.string.location_view_deletion_dialog_message);
+		String message = getResources().getString(
+				R.string.<item.name.snake>_view_deletion_dialog_message);
 
 		new AlertDialog.Builder(getActivity())
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.location_view_deletion_dialog_title)
+				.setTitle(R.string.<item.name.snake>_view_deletion_dialog_title)
 				.setMessage(message)
-				.setPositiveButton(R.string.location_view_deletion_dialog_yes,
+				.setPositiveButton(R.string.<item.name.snake>_view_deletion_dialog_yes,
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								try {
-									deleteAllLocationsWithUserID(getUniqueKey());
+									deleteAll<item.name.bactrian>sWithUserID(getUniqueKey());
 								} catch (RemoteException e) {
 									Log.e(LOG_TAG, "RemoteException Caught => "
 											+ e.getMessage());
 									e.printStackTrace();
 								}
-								mOpener.openListLocationsFragment();
+								mOpener.openList<item.name.bactrian>sFragment();
 								if (getResources().getBoolean(R.bool.isTablet) == true) {
-									mOpener.openViewLocationFragment(-1);
+									mOpener.openView<item.name.bactrian>Fragment(-1);
 								} else {
 									getActivity().finish();
 								}
 							}
 
 						})
-				.setNegativeButton(R.string.location_view_deletion_dialog_no,
+				.setNegativeButton(R.string.<item.name.snake>_view_deletion_dialog_no,
 						null).show();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_view_fragment,
+		View view = inflater.inflate(R.layout.<item.name.snake>_view_fragment,
 				container, false);
 		container.setBackgroundColor(Color.CYAN);
 		return view;
@@ -185,3 +179,21 @@ public class ViewLocationFragment extends LocationFragmentBase {
 
 }
 >>
+
+package(contract,item) ::= <%
+<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
+%>
+
+
+
+putTextViewAssignment(relation,field) ::= <<
+      <field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_<field.name.snake>);
+>>
+
+putSetTextPerField(relation,field) ::= <%
+<field.name.camel>TV.setText(String.valueOf(<field.name.camel>.userID));
+%>
+
+putFieldDeclarations(relation,field) ::= <%
+TextView <field.name.camel>TV;
+%>
