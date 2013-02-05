@@ -87,6 +87,27 @@ androidReadParcelMethodMap ::= [
         default: key
 ]
 
+<! The following is confusing, be careful !>
+
+androidReadParcelMethodTemplate(dtype,fname) ::= <%
+<(androidReadParcelMethodTemplateMap.(dtype))(dtype,fname)>
+%>
+
+androidReadParcelMethodTemplateMap ::= [ 
+       "BLOB": "androidReadParcelMethodTemplateProcedural", 
+       default: "androidReadParcelMethodTemplateFunctional"
+]
+
+androidReadParcelMethodTemplateProcedural(dtype,fname) ::= <%
+ in.<androidReadParcelMethodMap.(dtype)>(<fname.camel>);
+%>
+
+androidReadParcelMethodTemplateFunctional(dtype,fname) ::= <%
+ <fname.camel> = in.<androidReadParcelMethodMap.(dtype)>();
+%>
+
+<! The names of the methods used to read from cursors !>
+
 androidReadFromCursorMethodMap ::= [
         "SERIAL":"getString",
         "FK"    :"getLong",
@@ -137,6 +158,9 @@ auxTupleMap ::= [
        default: "defaultTupleTmpl" 
 ]
 
+auxTuple(type,value,prefix) ::= <%
+<auxTupleMap.(type)>
+%>
 
 javaTypeSQLiteMap ::= [
         "SERIAL":"TEXT",
@@ -159,6 +183,3 @@ javaTypeSQLiteMap ::= [
         default: key
 ]
 
-auxTuple(type,value,prefix) ::= <%
-<auxTupleMap.(type)>
-%>

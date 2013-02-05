@@ -92,7 +92,7 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	private <item.name.bactrian>Data(Parcel in) {
             // ST:constructReadParcel:start
-	    <item.fields: { field | <field.name.camel> = in.<androidReadParcelMethodMap.(field.dtype)>(); }; separator="\n">
+	    <item.fields: { field | <androidReadParcelMethodTemplate(field.dtype, field.name)> }; separator="\n">
 	    // ST:constructReadParcel:finish
 	}
 

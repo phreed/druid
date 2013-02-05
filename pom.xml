@@ -14,7 +14,8 @@
     <module>druid-maven-plugin</module>
     <module>druid-templates</module>
     <module>location-sample</module>
-    <module>druid-archetype</module>
+    <module>all-types-sample</module>
+    <module>archetype</module>
   </modules>
 
  <properties>
