@@ -14,6 +14,7 @@
     <module>druid-maven-plugin</module>
     <module>druid-templates</module>
     <module>location-sample</module>
+    <module>druid-archetype</module>
   </modules>
 
  <properties>
@@ -285,7 +286,7 @@
                   </goals>
                 </pluginExecutionFilter>
                 <action>
-                  <ignore></ignore>
+                  <ignore/>
                 </action>
               </pluginExecution>
 
