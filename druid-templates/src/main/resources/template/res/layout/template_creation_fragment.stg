@@ -41,7 +41,7 @@ BODY(contract,item) ::= <<
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/<item.name.snake>_create_button_save"
         android:layout_centerHorizontal="true"
-        android:text="@string/location_create_button_label_clear" />
+        android:text="@string/<item.name.snake>_create_button_label_clear" />
 
     \<Button
         android:id="@+id/<item.name.snake>_create_button_cancel"
@@ -64,13 +64,13 @@ putFirstLabelAndValue(relation,field) ::= <<
 
 putFirstLabel(relation,field) ::= <<
 \<TextView
-        android:id="@+id/<relation.name.snake>_create_<field.name.snake>_label"
+        android:id="@+id/<relation.name.snake>_create_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
         android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
         android:layout_alignParentLeft="true"
-        android:text="@string/<relation.name.snake>_create_<field.name.snake>_label" />
+        android:text="@string/<relation.name.snake>_create_label_<field.name.snake>" />
 >>
 
 putFirstValue(relation,field) ::= <<
@@ -90,13 +90,13 @@ putLabelAndValue(relation,field) ::= <<
 
 putLabel(relation,field) ::= <<
 \<TextView
-        android:id="@+id/<relation.name.snake>_create_<field.name.snake>_label"
+        android:id="@+id/<relation.name.snake>_create_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
         android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
         android:layout_alignParentLeft="true"
-        android:text="@string/<relation.name.snake>_create_<field.name.snake>_label" />
+        android:text="@string/<relation.name.snake>_create_label_<field.name.snake>" />
 >>
 
 putValue(relation,field) ::= <<

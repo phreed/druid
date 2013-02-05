@@ -24,8 +24,8 @@ import android.os.Parcelable;
 public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	//private static final long serialVersionUID = 5505248865103008665L;
-
-	// ST:putDeclaration:start
+	final long KEY_ID ;
+	// ST:putDeclaration:start	
 	<item.fields: { field | <putDeclaration(field)> }; separator="\n">
 	// ST:putDeclaration:finish
 	
@@ -33,6 +33,18 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 	    // ST:constructorParameters:start
 	    <item.fields: { field | <javaTypeMap.(field.dtype)> <field.name.camel> }; separator=", ">){		
 	    // ST:constructorParameters:finish
+	    KEY_ID = -1;
+	    // ST:constructorAsignments:start
+	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">;
+	    // ST:constructorAsignments:finish
+	}
+	
+	
+	public <item.name.bactrian>Data(long KEY_ID,
+	    // ST:constructorParameters:start
+	    <item.fields: { field | <javaTypeMap.(field.dtype)> <field.name.camel> }; separator=", ">){		
+	    // ST:constructorParameters:finish
+	    this.KEY_ID = KEY_ID;
 	    // ST:constructorAsignments:start
 	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">;
 	    // ST:constructorAsignments:finish

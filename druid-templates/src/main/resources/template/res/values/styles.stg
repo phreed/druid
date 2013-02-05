@@ -8,12 +8,13 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract) ::= <<
+\<?xml version="1.0" encoding="utf-8"?>
 \<!-- ST:BODY:start -->
-
 \<resources>
+
 
     \<style name="AppTheme" parent="android:Theme.Light" />
 
 \</resources>
-
+\<!-- ST:BODY:end -->
 >>

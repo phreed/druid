@@ -70,7 +70,7 @@ putFirstLabel(relation,field) ::= <<
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/<relation.name.snake>_edit_<field.name.snake>"
         android:layout_alignParentLeft="true"
-        android:text="@string/<relation.name.snake>_edit_view_<field.name.snake>_label"
+        android:text="@string/<relation.name.snake>_edit_label_<field.name.snake>"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 >>
 
