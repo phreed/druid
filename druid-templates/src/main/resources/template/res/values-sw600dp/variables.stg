@@ -8,8 +8,8 @@ SKELETON(contract) ::= <<
 >>
 
 BODY(contract) ::= <<
-\<!-- ST:BODY:start -->
 \<?xml version="1.0" encoding="utf-8"?>
+\<!-- ST:BODY:start -->
 \<resources>
 
     \<bool name="isTablet">true\</bool>

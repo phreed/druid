@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><contract.root.sponsor.base>Resolver.java 
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><contract.root.name.bactrian>Resolver.java
 %>
 
 
@@ -12,7 +12,7 @@ BODY(contract) ::= <<
 // ST:BODY:start
 
 // ST:package:inline
-<package(contract)>
+package <package(contract)>;
 // ST:package:complete
 
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.ContentD
  * @author Michael A. Walker
  * 
  */
-public class <contract.root.sponsor.name.bactrian>Resolver {
+public class <contract.root.name.bactrian>Resolver {
 
 	private ContentResolver cr;
 	
@@ -50,7 +50,7 @@ public class <contract.root.sponsor.name.bactrian>Resolver {
 	<contract.root.relations: { relation | <declareRelationURI(relation)> }; separator="\n">
 	// ST:declareRelationURI:finish
 
-	public MultipleResolver(Activity activity) {
+	public <contract.root.name.bactrian>Resolver(Activity activity) {
 		cr = activity.getContentResolver();
 	}
 
@@ -148,7 +148,7 @@ public class <contract.root.sponsor.name.bactrian>Resolver {
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
 declareRelationURI(relation) ::= <%
-private Uri <relation.name.camel>URI = ContentDescriptor.<relation.name.camel>Data.CONTENT_URI;
+private Uri <relation.name.camel>URI = ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
 %>
 
 makeBulkInsertForRelation(relation) ::= <<
@@ -174,7 +174,7 @@ public int delete<relation.name.bactrian>Data(final String selection,
 makeInsertOrmForRelation(relation) ::= <<
 public Uri insert(final <relation.name.bactrian>Data <relation.name.camel>Object) throws RemoteException {
 	ContentValues tempCV = <relation.name.camel>Object.getCV();
-	tempCV.remove(ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID);
+	tempCV.remove(ContentDescriptor.<relation.name.bactrian>.Cols.ID);
 	return cr.insert(<relation.name.camel>URI, tempCV);
 }
 >>
@@ -207,7 +207,7 @@ public int update<relation.name.bactrian>Data(final <relation.name.bactrian>Data
 makeUpdatWithIdOrmForRelation(relation) ::= <<
 public int update<relation.name.bactrian>WithID(<relation.name.bactrian>Data data) throws RemoteException {
 	String selection = "user_id = ?";
-	String[] selectionArgs = { String.valueOf(dataOne._id) };
+	String[] selectionArgs = { String.valueOf(data.KEY_ID) };
 	return update<relation.name.bactrian>Data(data, selection, selectionArgs);
 }
 >>	
@@ -215,7 +215,7 @@ public int update<relation.name.bactrian>WithID(<relation.name.bactrian>Data dat
 makeDeleteAllWithIDOrmForRelation(relation) ::= <<
 public int deleteAll<relation.name.bactrian>WithRowID(long rowID) throws RemoteException {
    String[] args = { String.valueOf(rowID) };
-   return delete<relation.name.bactrian>Data(ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID + " = ? ", args);
+   return delete<relation.name.bactrian>Data(ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = ? ", args);
 }
 >>
 
@@ -224,7 +224,7 @@ public <relation.name.bactrian>Data get<relation.name.bactrian>DataViaRowID(fina
 		throws RemoteException {
 	String[] selectionArgs = { String.valueOf(rowID) };
 	ArrayList\<<relation.name.bactrian>Data> results = query<relation.name.bactrian>Data(null,
-			ContentDescriptor.<relation.name.bactrian>.ColumnNames.ID + "= ?",
+			ContentDescriptor.<relation.name.bactrian>.Cols.ID + "= ?",
 			selectionArgs, null);
 	if (results.size() > 0) {
 		return results.get(0);

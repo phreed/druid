@@ -4,12 +4,13 @@ PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter>sync<delimiter>AccountAuthenticatorService.java
 %>
 
-SKELETON(contract,item) ::= <<
+SKELETON(contract) ::= <<
 >>
 
-BODY(contract,item) ::= <<
-\<?xml version="1.0" encoding="utf-8"?>
-\<!-- ST:BODY:start -->
+BODY(contract) ::= <<
+// ST:BODY:start
+
+package <package(contract)>;
 
 package com.walkernation.db.provider.sync;
 
@@ -174,5 +175,7 @@ public class AccountAuthenticatorService extends Service {
 		}
 	}
 }
-\<!-- ST:BODY:start -->
+// ST:BODY:start 
 >>
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider.sync"

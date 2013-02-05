@@ -24,8 +24,8 @@ import android.os.Parcelable;
 public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	//private static final long serialVersionUID = 5505248865103008665L;
-
-	// ST:putDeclaration:start
+	final long KEY_ID ;
+	// ST:putDeclaration:start	
 	<item.fields: { field | <putDeclaration(field)> }; separator="\n">
 	// ST:putDeclaration:finish
 	
@@ -33,8 +33,20 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 	    // ST:constructorParameters:start
 	    <item.fields: { field | <javaTypeMap.(field.dtype)> <field.name.camel> }; separator=", ">){		
 	    // ST:constructorParameters:finish
+	    KEY_ID = -1;
 	    // ST:constructorAsignments:start
-	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">	
+	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">;
+	    // ST:constructorAsignments:finish
+	}
+	
+	
+	public <item.name.bactrian>Data(long KEY_ID,
+	    // ST:constructorParameters:start
+	    <item.fields: { field | <javaTypeMap.(field.dtype)> <field.name.camel> }; separator=", ">){		
+	    // ST:constructorParameters:finish
+	    this.KEY_ID = KEY_ID;
+	    // ST:constructorAsignments:start
+	    <item.fields: { field | this.<field.name.camel> = <field.name.camel>}; separator=";\n">;
 	    // ST:constructorAsignments:finish
 	}
 
@@ -46,7 +58,7 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 	}
 
 	public ContentValues getCV() {
-		return <item.name.bactrian>Creator.getCVfrom<item.name.camel>(this);
+		return <item.name.bactrian>Creator.getCVfrom<item.name.bactrian>(this);
 	}
 
 	public <item.name.bactrian>Data clone() {
@@ -80,7 +92,7 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	private <item.name.bactrian>Data(Parcel in) {
             // ST:constructReadParcel:start
-	    <item.fields: { field | <field.name.camel> = in.<androidReadParcelMethodMap.(field.dtype)>(); }; separator="\n">\
+	    <item.fields: { field | <field.name.camel> = in.<androidReadParcelMethodMap.(field.dtype)>(); }; separator="\n">
 	    // ST:constructReadParcel:finish
 	}
 
@@ -92,6 +104,11 @@ package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.o
 putDeclaration(field) ::= <%
     public <javaTypeMap.(field.dtype)> <field.name.camel>;
 %>
+
+putWriteParcel(field) ::= <<
+<item.fields: { field | dest.<androidWriteParcelMethodMap.(field.dtype)>(<field.name.camel>); }; separator="\n">
+>>
+
 
 
 

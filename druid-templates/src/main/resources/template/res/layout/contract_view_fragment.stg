@@ -27,25 +27,25 @@ BODY(contract,item) ::= <<
     
     
     \<Button
-        android:id="@+id/button_<item.name.camel>_view_to_edit"
+        android:id="@+id/button_<item.name.snake>_view_to_edit"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/labelHeight"
         android:layout_marginTop="26dp"
         android:padding="3dp"
-        android:text="@string/<item.name.camel>_view_button_label_edit"
+        android:text="@string/<item.name.snake>_view_button_label_edit"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     \<Button
-        android:id="@+id/button_<item.name.camel>_view_to_delete"
+        android:id="@+id/button_<item.name.snake>_view_to_delete"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_<item.name.camel>_view_to_edit"
-        android:layout_alignBottom="@+id/button_<item.name.camel>_view_to_edit"
+        android:layout_alignBaseline="@+id/button_<item.name.snake>_view_to_edit"
+        android:layout_alignBottom="@+id/button_<item.name.snake>_view_to_edit"
         android:layout_alignParentRight="true"
         android:padding="3dp"
-        android:text="@string/<item.name.camel>_view_button_label_delete"
+        android:text="@string/<item.name.snake>_view_button_label_delete"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 \</RelativeLayout>

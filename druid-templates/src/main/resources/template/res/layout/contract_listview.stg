@@ -29,7 +29,7 @@ BODY(contract,item) ::= <<
             android:layout_height="40dp"
             android:layout_weight="1"
             android:onClick="test"
-            android:text="@string/<item.name.snake>_list_button_label_create" />
+            android:text="@string/<item.name.snake>_list_button_label_add" />
 
         \<Button
             android:id="@+id/<item.name.snake>_listview_refresh"

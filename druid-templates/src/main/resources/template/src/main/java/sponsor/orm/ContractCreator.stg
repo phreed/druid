@@ -14,7 +14,7 @@ package <package(contract,item)>;
 
 import java.util.ArrayList;
 // ST:package:inline
-import <package(contract,item)>.provider.ContentDescriptor;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.ContentDescriptor;
 // ST:package:complete
 
 import android.content.ContentValues;
@@ -75,10 +75,10 @@ public class <item.name.bactrian>Creator {
 package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
 putField(field) ::= <%
-rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME, data.<field.name.camel>);
+rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>, data.<field.name.camel>);
 %>
 
 getValue(field) ::= <<
 <javaTypeMap.(field.dtype)> <field.name.camel> = cursor.<androidReadFromCursorMethodMap.(field.dtype)>(cursor 
-        .getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>_NAME));
+        .getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>));
 >>

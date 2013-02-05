@@ -10,8 +10,7 @@ SKELETON(contract,item) ::= <<
 
 BODY(contract,item) ::= <<
 
-
-package com.walkernation.db.ui.location;
+package <package(contract,item)>;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -27,19 +26,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.walkernation.db.R;
-import com.walkernation.db.orm.LocationData;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
 
-public class EditLocationFragment extends LocationFragmentBase {
+public class Edit<item.name.bactrian>Fragment extends <item.name.bactrian>FragmentBase {
 
-	final static public String LOG_TAG = EditLocationFragment.class
+	final static public String LOG_TAG = Edit<item.name.bactrian>Fragment.class
 			.getCanonicalName();
 	final static public String rowIdentifyerTAG = "index";
 
-	EditText userIdTV;
-	EditText latitudeTV;
-	EditText longitudeTV;
-	EditText heightTV;
+	// ST:putFieldDeclarations:start
+	<item.fields: { field | <putFieldDeclarations(item, field)> }; separator="\n">
+        // ST:putFieldDeclarations:end 
 
 	Button saveButton;
 	Button resetButton;
@@ -66,8 +64,8 @@ public class EditLocationFragment extends LocationFragmentBase {
 		}
 	};
 
-	public static EditLocationFragment newInstance(int index) {
-		EditLocationFragment f = new EditLocationFragment();
+	public static Edit<item.name.bactrian>Fragment newInstance(int index) {
+		Edit<item.name.bactrian>Fragment f = new Edit<item.name.bactrian>Fragment();
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
 		args.putInt(rowIdentifyerTAG, index);
@@ -103,12 +101,10 @@ public class EditLocationFragment extends LocationFragmentBase {
 		cancelButton = (Button) getView().findViewById(
 				R.id.edit_location_button_cancel);
 		// Get the EditTexts
-		userIdTV = (EditText) getView().findViewById(R.id.userID);
-		userIdTV.setKeyListener(null);
-		latitudeTV = (EditText) getView().findViewById(R.id.latitude);
-		longitudeTV = (EditText) getView().findViewById(R.id.longitude);
-		heightTV = (EditText) getView().findViewById(R.id.height);
-		// set the EditTexts to this Location's Values
+	
+	
+	
+		// set the EditTexts to this <item.name.bactrian>'s Values
 		setValuesToDefault();
 		// setup the onClick callback methods
 		saveButton.setOnClickListener(myOnClickListener);
@@ -131,10 +127,10 @@ public class EditLocationFragment extends LocationFragmentBase {
 
 	public void doSaveButtonClick() {
 		Toast.makeText(getActivity(), "Updated.", Toast.LENGTH_SHORT).show();
-		LocationData location = makeLocationDataFromUI();
+		<item.name.bactrian>Data location = make<item.name.bactrian>DataFromUI();
 		if (location != null) {
 			try {
-				updateLocationWithUserID(location);
+				update<item.name.bactrian>WithUserID(location);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -144,14 +140,14 @@ public class EditLocationFragment extends LocationFragmentBase {
 			return;
 		}
 		if (getResources().getBoolean(R.bool.isTablet) == true) {
-			mOpener.openViewLocationFragment(getUniqueKey());
+			mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
 		} else {
 			getActivity().finish(); // same as hitting 'back' button
 		}
 	}
 
-	public LocationData makeLocationDataFromUI() {
-		LocationData rValue = null;
+	public <item.name.bactrian>Data make<item.name.bactrian>DataFromUI() {
+		<item.name.bactrian>Data rValue = null;
 
 		Editable longStr = longitudeTV.getText();
 		Editable latStr = latitudeTV.getText();
@@ -163,7 +159,7 @@ public class EditLocationFragment extends LocationFragmentBase {
 			long longitude = Long.valueOf(longStr.toString());
 			long latitude = Long.valueOf(latStr.toString());
 			long height = Long.valueOf(heightStr.toString());
-			rValue = new LocationData(latitude, longitude, height, userID);
+			rValue = new <item.name.bactrian>Data(latitude, longitude, height, userID);
 		}
 
 		return rValue;
@@ -172,7 +168,7 @@ public class EditLocationFragment extends LocationFragmentBase {
 	public void doCancelButtonClick() {
 		if (getResources().getBoolean(R.bool.isTablet) == true) {
 			// put
-			mOpener.openViewLocationFragment(getUniqueKey());
+			mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
 		} else {
 			getActivity().finish(); // same as hitting 'back' button
 		}
@@ -180,21 +176,22 @@ public class EditLocationFragment extends LocationFragmentBase {
 	}
 
 	public boolean setValuesToDefault() {
-		LocationData location;
+		<item.name.bactrian>Data <item.name.camel>;
 		try {
-			location = getLocationDataForUserID(getUniqueKey());
+			<item.name.camel> = get<item.name.bactrian>DataForUserID(getUniqueKey());
 		} catch (RemoteException e) {
 			Log.d(LOG_TAG, "" + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 
-		if (location != null) {
+		if (<item.name.camel> != null) {
 			// set the EditTexts to the current values
-			userIdTV.setText(String.valueOf(location.userID));
-			latitudeTV.setText(String.valueOf(location.latitude));
-			longitudeTV.setText(String.valueOf(location.longitude));
-			heightTV.setText(String.valueOf(location.height));
+			
+			// ST:putFieldToDefaults:start
+	               <item.fields: { field | <putFieldToDefaults(item, field)> }; separator="\n">
+                       // ST:putFieldToDefaults:end 
+			
 			return true;
 		}
 		return false;
@@ -207,3 +204,24 @@ public class EditLocationFragment extends LocationFragmentBase {
 }
 
 >>
+
+
+package(contract,item) ::= <%
+<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
+%>
+
+
+putFieldDeclarations(relation,field) ::= <%
+EditText <field.name.camel>TV;
+%>
+
+putFieldAssignments(relation,field) ::= <%
+<field.name.camel>TV = (EditText) getView().findViewById(R.id.<relation.name.snake>_<field.name.snake>);
+%>
+		
+putFieldToDefaults(relation,field) ::= <%
+<field.name.camel>TV.setText(String.valueOf(<relation.name.camel>.userID));
+%>
+
+
+
