@@ -25,14 +25,26 @@ partConstructionRule
    | simpleCopy 
    ; 
 
-simpleTemplate : 'using' 'template' FILE_PATH ; 
-multiTemplate : 'for-each' subset 'using' 'template' FILE_PATH ; 
-simpleCopy : 'using' 'copy-of' FILE_PATH 'to-path' TEMPLATE ; 
+simpleTemplate : 'make' fileOfType 'using' 'template' FILE_PATH ; 
+multiTemplate :  'for-each' subset 'make' fileOfType 'using' 'template' FILE_PATH ; 
+simpleCopy : 'make' fileOfType 'using' 'copy-of' FILE_PATH 'to-path' TEMPLATE ; 
+multiCopy : 'for-each' subset 'make' fileOfType 'using' 'copy-of' FILE_PATH 'to-path' TEMPLATE ; 
+
+fileOfType
+   : BASE         # FileOfBaseType
+   | SKELETON     # FileOfSkeletonType
+   ;
 
 subset
-   : 'relation'
-   | 'message'
+   : RELATION
+   | MESSAGE
    ;
+
+BASE :  'base' ;
+SKELETON :  'skeleton' ;
+
+RELATION :  'relation' ;
+MESSAGE :  'message' ;
 
 WS :   [ \t\r\n]+  -> skip ;
 NEWLINE : '\r'? '\n' ;
