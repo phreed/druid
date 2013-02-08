@@ -292,6 +292,7 @@ public class Generator {
     private ST initPartUsingTemplate(final STGroup stg, final Contract contract, final ST stFileName)
             throws GeneratorException {
 
+        logger.info("is skeleton {}", this.isSkeleton);
         if (stFileName == null) {
             for (String templateName : stg.getTemplateNames()) {
                 getLogger().error("template name {}", templateName);

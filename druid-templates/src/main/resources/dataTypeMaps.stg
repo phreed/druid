@@ -87,7 +87,6 @@ androidReadParcelMethodMap ::= [
         default: key
 ]
 
-<! The following is confusing, be careful !>
 
 androidReadParcelMethodTemplate(dtype,fname) ::= <%
 <(androidReadParcelMethodTemplateMap.(dtype))(dtype,fname)>
@@ -106,7 +105,6 @@ androidReadParcelMethodTemplateFunctional(dtype,fname) ::= <%
  <fname.camel> = in.<androidReadParcelMethodMap.(dtype)>();
 %>
 
-<! The names of the methods used to read from cursors !>
 
 androidReadFromCursorMethodMap ::= [
         "SERIAL":"getString",

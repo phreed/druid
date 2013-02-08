@@ -90,7 +90,7 @@ public class BuildComponentListener extends ComponentManifestBaseListener {
 
     @Override
     public void enterPartConstructionRule(PartConstructionRuleContext ctx) {
-        this.generator.setSkeleton(true);
+        this.generator.setSkeleton(false);
     }
 
     @Override

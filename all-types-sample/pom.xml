@@ -33,7 +33,8 @@
               <templateKey>beta</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
-              <outputDirectory>${basedir}/target/druid/</outputDirectory>
+              <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
+              <skelOutputDirectory>${basedir}</skelOutputDirectory>
             </configuration>
           </execution>
 
@@ -47,7 +48,8 @@
               <templateKey>alpha</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
               <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
-              <outputDirectory>${basedir}/target/druid/</outputDirectory>
+              <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
+              <skelOutputDirectory>${basedir}</skelOutputDirectory>
             </configuration>
           </execution>
 

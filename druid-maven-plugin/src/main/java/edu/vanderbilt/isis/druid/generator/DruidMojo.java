@@ -126,27 +126,27 @@ public class DruidMojo extends AbstractMojo {
 	private String each = Generator.Each.CONTRACT.val;
 
 	/**
-	 * skelDirectory : the base path for the skeleton files.
+	 * skelOutputDirectory : the base path for the skeleton files.
 	 * A skeleton file is one which is intended to be modified
 	 * by the developer.  If the target file is present it will
 	 * not be replaced.
 	 * <p>
 	 * This indicates where the generated files should be placed.
 	 * 
-	 * @parameter expression="${generate.skelDirectory}"
+	 * @parameter expression="${generate.skelOutputDirectory}"
 	 *            default-value="${basedir}/target/generated-sources/druid"
 	 */
-	private File skelDirectory = new File("skel");
+	private File skelOutputDirectory = new File("skel");
 	
 	/**
-     * baseDirectory : the base path for the base generated files.
+     * baseOutputDirectory : the base path for the base generated files.
      * <p>
      * This indicates where the generated skeleton files should be placed.
      * 
-     * @parameter expression="${generate.baseDirectory}"
+     * @parameter expression="${generate.baseOutputDirectory}"
      *            default-value="${basedir}"
      */
-    private File baseDirectory = new File("base");
+    private File baseOutputDirectory = new File("base");
 
 	/**
 	 * Satisfy the maven execution request.
@@ -200,8 +200,8 @@ public class DruidMojo extends AbstractMojo {
 		generator.setTemplateManifestFileName(this.templateFileManifest);
 
 		generator.setContractPath(this.contractFile);
-		generator.setSkelOutputDir(this.skelDirectory);
-		generator.setBaseOutputDir(this.baseDirectory);
+		generator.setSkelOutputDir(this.skelOutputDirectory);
+		generator.setBaseOutputDir(this.baseOutputDirectory);
 		try {
             generator.setEach(this.each);
         } catch (GeneratorException ex) {
