@@ -289,16 +289,11 @@ public class Generator {
         buildPartUsingTemplate(contract, forEach, templateFileName);
     }
 
-    private ST initPartUsingTemplate(final STGroup stg, final Contract contract, final ST stFileName)
+    private ST initPartUsingTemplate(final Contract contract, final ST stFileName)
             throws GeneratorException {
 
         logger.info("is skeleton {}", this.isSkeleton);
-        if (stFileName == null) {
-            for (String templateName : stg.getTemplateNames()) {
-                getLogger().error("template name {}", templateName);
-            }
-            throw new GeneratorException("no \"PATH\" template provided");
-        }
+       
         stFileName.add("delimiter", File.separatorChar);
         stFileName.add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
         stFileName.add("contract", contract);
@@ -318,7 +313,13 @@ public class Generator {
 
         final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
-        initPartUsingTemplate(stg, contract, stFileName);
+        if (stFileName == null) {
+            for (String templateName : stg.getTemplateNames()) {
+                getLogger().error("template name {}", templateName);
+            }
+            throw new GeneratorException("no \"PATH\" template provided");
+        }
+        initPartUsingTemplate(contract, stFileName);
 
         final ST stFileBody = stg.getInstanceOf("BODY");
         if (stFileBody == null) {
@@ -360,7 +361,13 @@ public class Generator {
 
         final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
-        initPartUsingTemplate(stg, contract, stFileName);
+        if (stFileName == null) {
+            for (String templateName : stg.getTemplateNames()) {
+                getLogger().error("template name {}", templateName);
+            }
+            throw new GeneratorException("no \"PATH\" template provided");
+        }
+        initPartUsingTemplate(contract, stFileName);
 
         final ST stFileBody = stg.getInstanceOf("BODY");
         if (stFileBody == null) {
@@ -411,9 +418,8 @@ public class Generator {
 
     public void buildPartUsingCopy(final Contract contract, final String inputFilePath,
             final String outputPathTemplate) throws GeneratorException {
-        final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = new ST(outputPathTemplate);
-        initPartUsingTemplate(stg, contract, stFileName);
+        initPartUsingTemplate(contract, stFileName);
 
         final String outputFileName = stFileName.render();
         logger.info("building {} using {} copy", outputFileName, inputFilePath);
@@ -484,9 +490,8 @@ public class Generator {
     public void buildPartUsingCopy(final Contract contract, final Each forEach,
             final String inputFilePath,
             final String outputPathTemplate) throws GeneratorException {
-        final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = new ST(outputPathTemplate);
-        initPartUsingTemplate(stg, contract, stFileName);
+        initPartUsingTemplate(contract, stFileName);
 
         final List<?> all;
         switch (forEach) {
