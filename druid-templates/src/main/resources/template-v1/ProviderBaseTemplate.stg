@@ -27,7 +27,7 @@ public interface Tables {
 }>
 }
 <contract.root.relations: { rel |
-<tableKeyClause(sponsor=contract.root.sponsor, name=rel.name, keyset=rel.keycols)> 
+<tableKeyClauseSet(sponsor=contract.root.sponsor, name=rel.name, keys=rel.keys)> 
 }>
 
 // Views.
@@ -48,7 +48,7 @@ private final static Logger logger = LoggerFactory.getLogger(<provNameBase(contr
  /** Projection Maps */
 <contract.root.relations: {rel |
 protected static String[] <rel.name.camel>ProjectionKey;
-protected static HashMap\<String, String\> <projectionMap(name=rel.name)>;
+protected static HashMap\<String, String> <projectionMap(name=rel.name)>;
 }; separator="\n", anchor="true">
    
 /** Uri Matcher tags */
@@ -217,5 +217,8 @@ static {
 }
 
 <helperMethods(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)>
+
+}
+// end of BODY
 >>
  

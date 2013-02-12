@@ -153,7 +153,8 @@ public class DruidMojo extends AbstractMojo {
 	 * 
 	 */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        StaticLoggerBinder.getSingleton().setLog(getLog());
+        final StaticLoggerBinder logbinder = StaticLoggerBinder.getSingleton();
+        logbinder.setLog(getLog());
         final Logger logger = LoggerFactory.getLogger("druid-mojo");
        
         final Artifact artifact;

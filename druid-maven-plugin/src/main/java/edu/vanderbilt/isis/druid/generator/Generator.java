@@ -204,6 +204,7 @@ public class Generator {
      */
     public void build() throws GeneratorException {
         final Contract contract = ContractXmlParser.parseXmlFile(getLogger(), this.contractFile);
+        logger.info("contract {}", contract);
         STGroup.trackCreationEvents = true;
 
         /**
@@ -293,7 +294,11 @@ public class Generator {
     private ST initPartUsingTemplate(final Contract contract, final ST stFileName)
             throws GeneratorException {
 
-        logger.info("is skeleton {}", this.isSkeleton);
+        if (this.isSkeleton) {
+            logger.info("is skeleton part");
+        } else {
+            logger.info("is base part");
+        }
 
         try {
             stFileName.add("delimiter", File.separatorChar);

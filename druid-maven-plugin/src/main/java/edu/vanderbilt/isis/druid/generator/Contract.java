@@ -213,7 +213,7 @@ public class Contract {
         final private Name name;
         final private RMode mode;
         final private List<Field> fields;
-        final private List<FieldRef> keycols;
+        final private List<Key> keys;
         final private List<Message> messages;
 
         public Name getName() {
@@ -228,8 +228,8 @@ public class Contract {
             return fields;
         }
 
-        public List<FieldRef> getKeycols() {
-            return keycols;
+        public List<Key> getKeys() {
+            return this.keys;
         }
         
         public List<Message> getMessages() {
@@ -238,7 +238,7 @@ public class Contract {
 
 
         public Relation(final Name name, final RMode mode,
-                final List<Field> fields, final List<FieldRef> keycols, 
+                final List<Field> fields, final List<Key> key_set, 
                 final List<Message> messages) {
             this.name = name;
             this.mode = mode;
@@ -246,7 +246,7 @@ public class Contract {
                 field.setParent(this);
             }
             this.fields = fields;
-            this.keycols = keycols;
+            this.keys = key_set;
             this.messages = messages;
         }
 
@@ -260,8 +260,8 @@ public class Contract {
             for (Field field : this.fields) {
                 sb.append(field.toString());
             }
-            for (FieldRef ref : this.keycols) {
-                sb.append(ref.toString());
+            for (Key key : this.keys) {
+                sb.append(key.toString());
             }
             for (Message message : this.messages) {
                 if (message == null) continue;
@@ -381,15 +381,21 @@ public class Contract {
         }
     }
 
-    public static class FieldRef {
+    public static class Key {
         private final Name name;
+        private final List<KeyFieldRef> field_set;
 
         public Name getName() {
             return name;
         }
+        
+        public List<KeyFieldRef> getFields() {
+            return this.field_set;
+        }
 
-        public FieldRef(final Name name) {
+        public Key(final Name name, final List<KeyFieldRef> field_set) {
             this.name = name;
+            this.field_set = field_set;
         }
 
         @Override
@@ -398,8 +404,34 @@ public class Contract {
             return this.toString(sb).toString();
         }
         public StringBuilder toString(final StringBuilder sb) {
-            return sb.append("<ref field='").append(name.norm).append("'/>");
+            sb.append("<key name='").append(name.norm).append("'>");
+            for (KeyFieldRef field : this.field_set) {
+                field.toString(sb);
+            }
+            return sb.append("</key>");
         }
+    }
+    
+    public static class KeyFieldRef {
+        private final Name ref;
+
+        public Name getRef() {
+            return ref;
+        }
+
+        public KeyFieldRef(final Name ref) {
+            this.ref = ref;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            return this.toString(sb).toString();
+        }
+        public StringBuilder toString(final StringBuilder sb) {
+            return sb.append("<field ref='").append(ref.norm).append("'/>");
+        }
+       
     }
     
 

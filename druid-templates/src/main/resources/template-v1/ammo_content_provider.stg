@@ -302,7 +302,7 @@ baseFieldTmpl(rel,field) ::= <<
 sqlCreateTmpl(rel) ::= <<
 
 /** 
- * Table Name: <rel.name.norm> \<P\>
+ * Table Name: <rel.name.norm> 
  */
 db.execSQL("CREATE TABLE \"" + <relNameFull(name=rel.name)> + "\" (" 
   <rel.fields: { field | <(auxFieldMap.(field.dtype))(rel,field)> };
@@ -591,7 +591,7 @@ public static class Meta {
 }
 
 <relset: { rel |
-<tableTmpl(sponsor=sponsor, name=rel.name, fieldset=rel.fields, keyset=rel.keycols)> 
+<tableTmpl(sponsor=sponsor, name=rel.name, fieldset=rel.fields, keyset=rel.keyFields)> 
 }>
 
 >>
@@ -603,11 +603,16 @@ for (String path : <rel.name.camel>Serialize(cursor)) {
 }
 >> 
 
-tableKeyClause(sponsor, name, keyset) ::= << 
-private static final String <name.cobra>_KEY_CLAUSE;
+tableKeyClauseSet(sponsor, name, keys) ::= << 
+  <keys: { key | <tableKeyClause(sponsor, name, key)> }; 
+               separator="\n", anchor="true">
+>>
+
+tableKeyClause(sponsor, name, key) ::= << 
+private static final String <name.cobra>_<key.name.cobra>_KEY_CLAUSE;
 static {
   <name.cobra>_KEY_CLAUSE = new StringBuilder()
-  <keyset: { ref | .append(<colSchemaName(rel=name,column=ref.name)>).append("=?") }; 
+  <key.fields: { field | .append(<colSchemaName(rel=name,column=field.ref)>).append("=?") }; 
                separator=".append(\" AND \")\n", anchor="true">
     .toString();
 };
@@ -645,7 +650,7 @@ helperFieldCursor(rel,name) ::= <<
 
 initProjectionMap(rel) ::= <<
 {
-   final HashMap\<String, String\> columns = new HashMap\<String, String\>();
+   final HashMap\<String, String> columns = new HashMap\<String, String>();
    columns.put(<relNameBase(name=rel.name)>._ID, <relNameBase(name=rel.name)>._ID);
    <rel.fields: { field | <(auxStaticFieldMap.(field.dtype))(rel,field)> }; 
         separator="\n", anchor="true">
@@ -656,7 +661,7 @@ initProjectionMap(rel) ::= <<
 >>
 
 customQueryTmpl() ::= <<
-private Cursor customQuery<relNameImpl(name=rel.name)>(final List\<String\> psegs, final SQLiteCursor cursor) {
+private Cursor customQuery<relNameImpl(name=rel.name)>(final List\<String> psegs, final SQLiteCursor cursor) {
     logger.info("no custom cursor <relNameImpl(name=rel.name)> {}", psegs); 
     return cursor;
 }
@@ -757,7 +762,7 @@ final SQLiteDatabase db = this.openHelper.getReadableDatabase();
       
 // Switch on the path in the uri for what we want to query.
 final SQLiteCursor cursor;
-final List\<String\> psegs = uri.getPathSegments();
+final List\<String> psegs = uri.getPathSegments();
 
 switch (uriMatcher.match(uri)) {
 <relset: {rel | <relMatchSetTmpl(rel)>
@@ -803,7 +808,7 @@ case <rel.name.cobra>_SERIAL:
 
    qb.appendWhere(<relNameBase(name=rel.name)>._ID + " = " + uri.getPathSegments().get(1));
 
-   final List\<String\> projectionList = new ArrayList\<String\>();
+   final List\<String> projectionList = new ArrayList\<String>();
    for (final Meta columnMeta : <schemaNameBase(name=contract.root.name)>.<rel.name.cobra>_CURSOR_COLUMNS) {
        switch (columnMeta.type) {
        case <schemaNameBase(name=contract.root.name)>.FIELD_TYPE_BLOB: break;
@@ -825,7 +830,7 @@ case <rel.name.cobra>_SERIAL:
 }
 case <rel.name.cobra>_BLOB:
 {
-   final List\<String\> fieldNameList = new ArrayList\<String\>();
+   final List\<String> fieldNameList = new ArrayList\<String>();
 
    for (Meta columnMeta : <schemaNameBase(name=contract.root.name)>.<rel.name.cobra>_CURSOR_COLUMNS) {
        switch (columnMeta.type) {
@@ -874,7 +879,7 @@ case <rel.name.cobra>_SET:
          return playerURI;
       }
 
-      final List\<String\> selectArgsList = new ArrayList\<String\>();
+      final List\<String> selectArgsList = new ArrayList\<String>();
       for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_KEY_COLUMNS) {
          selectArgsList.add(values.getAsString(item));
       } 
@@ -931,7 +936,7 @@ case <rel.name.cobra>_DESERIAL:
           }
       }
 
-      final List\<String\> selectArgsList = new ArrayList\<String\>();
+      final List\<String> selectArgsList = new ArrayList\<String>();
       for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_KEY_COLUMNS) {
          selectArgsList.add(values.getAsString(item));
       } 
@@ -1227,5 +1232,6 @@ protected static void recursiveDelete(File dir) {
         return;
     }
 }
+// end of helper
 >>
 
