@@ -1,0 +1,26 @@
+
+import "template-v1/ammo_content_provider.stg"
+
+PATH(delimiter, directory, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>ProviderMock.java
+%>
+
+BODY(contract) ::= <<
+// THIS IS GENERATED CODE, MAKE SURE ANY CHANGES MADE HERE ARE PROPAGATED INTO THE GENERATOR TEMPLATES
+<providerImportTemplate(cp=contract.root)>
+
+import android.test.mock.MockContentProvider;
+
+// BEGIN CUSTOM <contract.root.name.bactrian> IMPORTS
+// END   CUSTOM  <contract.root.name.bactrian> IMPORTS
+
+public abstract class <provNameBase(name=contract.root.name)> extends MockContentProvider {
+  <versionTemplate()>
+<providerBaseTmpl(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)> 
+}
+
+>>

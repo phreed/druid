@@ -1,0 +1,27 @@
+
+import "template-v1/ammo_content_provider.stg"
+
+PATH(delimiter, directory, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>SchemaBase.java
+%>
+
+BODY(contract) ::= <<
+// THIS IS GENERATED CODE, MAKE SURE ANY CHANGES MADE HERE ARE PROPAGATED INTO THE GENERATOR TEMPLATES
+<packageTmpl(sponsor=contract.root.sponsor)>
+
+import android.net.Uri;
+import android.provider.BaseColumns;
+import android.content.ContentResolver;
+import android.database.Cursor;
+
+public abstract class <schemaNameBase(name=contract.root.name)> {
+  <versionTemplate()>
+<schemaTmpl(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)> 
+}
+
+>>
+

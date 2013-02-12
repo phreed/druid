@@ -1,0 +1,221 @@
+
+import "template-v1/ammo_content_provider.stg"
+
+PATH(delimiter, directory, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>ProviderBase.java
+%>
+
+
+BODY(contract) ::= <<
+// THIS IS GENERATED CODE, MAKE SURE ANY CHANGES MADE HERE ARE PROPAGATED INTO THE GENERATOR TEMPLATES
+<providerImportTemplate(contract)>
+
+// BEGIN CUSTOM <contract.root.name.bactrian> IMPORTS
+// END   CUSTOM  <contract.root.name.bactrian> IMPORTS
+
+public abstract class <provNameBase(name=contract.root.name)> extends ContentProvider {
+<versionTemplate()>
+
+// Table definitions 
+public interface Tables {
+<contract.root.relations: { rel |
+   public static final String <rel.name.cobra>_TBL = "<rel.name.snake>";
+}>
+}
+<contract.root.relations: { rel |
+<tableKeyClause(sponsor=contract.root.sponsor, name=rel.name, keyset=rel.keycols)> 
+}>
+
+// Views.
+public interface Views {
+   // Nothing to put here yet.
+}
+
+<buildDatabaseHelperTmpl(name=contract.root.name,relset=contract.root.relations)>
+   
+// ===========================================================
+// Constants
+// ===========================================================
+private final static Logger logger = LoggerFactory.getLogger(<provNameBase(contract.root.name)>.class);
+
+// ===========================================================
+// Fields
+// ===========================================================
+ /** Projection Maps */
+<contract.root.relations: {rel |
+protected static String[] <rel.name.camel>ProjectionKey;
+protected static HashMap\<String, String\> <projectionMap(name=rel.name)>;
+}; separator="\n", anchor="true">
+   
+/** Uri Matcher tags */
+<contract.root.relations: {rel |
+protected static final int <rel.name.cobra>_BLOB = <i>0;
+protected static final int <rel.name.cobra>_SET = <i>1;
+protected static final int <rel.name.cobra>_ID = <i>2;
+protected static final int <rel.name.cobra>_SERIAL = <i>3;
+protected static final int <rel.name.cobra>_DESERIAL = <i>4;
+protected static final int <rel.name.cobra>_META = <i>5;
+
+private static final MatrixCursor <rel.name.camel>FieldTypeCursor;
+}; separator="\n", anchor="true">
+   
+/** Uri matcher */
+protected static final UriMatcher uriMatcher;
+   
+/** Database helper */
+protected <dbHelperName(name=contract.root.name)> openHelper;
+protected abstract boolean createDatabaseHelper();
+
+/**
+ * In support of cr.openInputStream
+ */
+private static final UriMatcher blobUriMatcher;
+static {
+  blobUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+  <contract.root.relations: { rel |
+  blobUriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)>+"/#/*", <rel.name.cobra>_BLOB);
+  }; separator="\n", anchor="true">
+}
+    
+/**
+ * Examines uri's from clients:
+ *  long fkId = cursor.getLong(cursor.getColumnIndex(Table.FK));
+ *    Drawable icon = null;
+ *    Uri fkUri = ContentUris.withAppendedId(TableSchema.CONTENT_URI, fkId);
+ *  // then the fkUri can be used to get a tuple using a query.
+ *    Cursor categoryCursor = this.managedQuery(categoryUri, null, null, null, null);
+ *  // ...or the fkUri can be used to get a file descriptor.
+ *    Uri iconUri = Uri.withAppendedPath(categoryUri, CategoryTableSchema.ICON);
+ *  InputStream is = this.getContentResolver().openInputStream(iconUri);
+ *  Drawableicon = Drawable.createFromStream(is, null);
+ *  
+ *  It is expected that the uri passed in will be of the form \<content_uri>/\<table>/\<id>/\<column>
+ *  This is simple enough that a UriMatcher is not needed and 
+ *  a simple uri.getPathSegments will suffice to identify the file.
+ */
+
+// ===========================================================
+// Content Provider Overrides
+// ===========================================================
+
+/**
+ * This is used to get fields which are too large to store in the
+ * database or would exceed the Binder data size limit of 1MiB.
+ * The blob matcher expects a URI post-pended with 
+ * Absence of a "a" on a write operation implies truncate.
+ * Absence of a "t" on a read operation implies append (unless a write it present).
+ *
+ * @param mode Access mode for the file. May be "r" for read-only access,
+ * "w" for write-only access (erasing whatever data is currently in the file),
+ * "wa" for write-only access to append to any existing data,
+ * "rw" for read and write access on any existing data, and
+ * "rwt" for read and write access that truncates any existing file.
+ */
+
+@Override
+public synchronized ParcelFileDescriptor openFile (Uri uri, String mode) {
+    logger.info("opening file [{}] {}", mode, uri); 
+    int imode = 0;
+    if (mode.contains("w")) imode |= ParcelFileDescriptor.MODE_WRITE_ONLY;
+    if (mode.contains("r")) imode |= ParcelFileDescriptor.MODE_READ_ONLY;
+    if (mode.contains("a")) imode |= ParcelFileDescriptor.MODE_APPEND;
+    if (mode.contains("t")) imode |= ParcelFileDescriptor.MODE_TRUNCATE;
+    // implicit append and truncate
+    if (0 \< (imode & ParcelFileDescriptor.MODE_WRITE_ONLY)) {
+       imode |= ParcelFileDescriptor.MODE_TRUNCATE;
+    }
+        
+    final List\<String> pseg = uri.getPathSegments();
+    final SQLiteDatabase db = this.openHelper.getReadableDatabase();
+        
+    final int match = blobUriMatcher.match(uri);
+    switch (match) {
+     <contract.root.relations: { rel | <serializeTuple(rel)> }; separator="\n", anchor="true">
+    default:
+        throw new IllegalArgumentException("Unknown URI " + uri);
+    }
+    return null;
+}
+
+@Override
+public synchronized boolean onCreate() {
+   this.createDatabaseHelper();
+   return true;
+}
+
+@Override
+public synchronized Cursor query(Uri uri, String[] projection, String selection,
+      String[] selectionArgs, String sortOrder) {
+   <queryTmpl(relset=contract.root.relations)>
+}
+
+<contract.root.relations: { rel | <customQueryTmpl()> }; separator="\n", anchor="true">
+
+@Override
+public synchronized Uri insert(Uri uri, ContentValues assignedValues) {
+   <insertTmpl(relset=contract.root.relations,name=contract.root.name)>
+}
+
+<contract.root.relations: { rel | <providerRelTmpl(rel,contract.root.name)> }; separator="\n", anchor="true">
+   
+   
+@Override
+public synchronized int delete(Uri uri, String selection, String[] selectionArgs) {
+   <deleteTmpl(relset=contract.root.relations)>
+}
+
+@Override
+public synchronized int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+   <updateTmpl(relset=contract.root.relations)>
+}
+
+@Override
+public synchronized String getType(Uri uri) {
+   switch (uriMatcher.match(uri)) {
+   <contract.root.relations: { rel |
+   case <rel.name.cobra>_SET:
+   case <rel.name.cobra>_ID:
+      return <relNameBase(name=rel.name)>.CONTENT_TOPIC;
+   }; separator="\n", anchor="true">
+         
+   default:
+      throw new IllegalArgumentException("Unknown URI " + uri);
+   }   
+}
+   
+// ===========================================================
+// Static declarations
+// ===========================================================
+
+static {
+   uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+   <contract.root.relations: { rel |
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)>, <rel.name.cobra>_SET);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#", <rel.name.cobra>_ID);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_serial/*", <rel.name.cobra>_SERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_deserial/*", <rel.name.cobra>_DESERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_serial", <rel.name.cobra>_SERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_deserial", <rel.name.cobra>_DESERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_blob", <rel.name.cobra>_BLOB);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_data_type", <rel.name.cobra>_META);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_data_type", <rel.name.cobra>_META);
+
+   <helperFieldCursor(rel,contract.root.name)>
+   }; separator="\n", anchor="true">
+   
+   <contract.root.relations: { rel |
+   <rel.name.camel>ProjectionKey = new String[1];
+   <rel.name.camel>ProjectionKey[0] = <relNameBase(name=rel.name)>._ID;
+
+   <initProjectionMap(rel=rel)>
+
+   }; separator="\n", anchor="true">
+}
+
+<helperMethods(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)>
+>>
+ 

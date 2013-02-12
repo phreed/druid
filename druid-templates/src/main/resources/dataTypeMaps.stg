@@ -1,4 +1,5 @@
 
+import "foo.stg"
 
 literalValueMap ::= [
         "SERIAL":    {"<value>"},

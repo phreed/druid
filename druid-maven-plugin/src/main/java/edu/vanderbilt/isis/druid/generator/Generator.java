@@ -17,6 +17,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -293,11 +294,20 @@ public class Generator {
             throws GeneratorException {
 
         logger.info("is skeleton {}", this.isSkeleton);
-       
-        stFileName.add("delimiter", File.separatorChar);
-        stFileName.add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
-        stFileName.add("contract", contract);
-        stFileName.add("isSkeleton", this.isSkeleton);
+
+        try {
+            stFileName.add("delimiter", File.separatorChar);
+            stFileName
+                    .add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
+            stFileName.add("contract", contract);
+            stFileName.add("isSkeleton", this.isSkeleton);
+        } catch (IllegalArgumentException ex) {
+            logger.error("file name argument {}", ex.getLocalizedMessage());
+            for (Entry<String, Object> attr : stFileName.getAttributes().entrySet()) {
+                logger.error("attribute [{}]", attr.getKey());
+            }
+            throw new GeneratorException("undefined attribute", ex);
+        }
         return stFileName;
     }
 
@@ -320,12 +330,20 @@ public class Generator {
             throw new GeneratorException("no \"PATH\" template provided");
         }
         initPartUsingTemplate(contract, stFileName);
-
+        
         final ST stFileBody = stg.getInstanceOf("BODY");
-        if (stFileBody == null) {
-            throw new GeneratorException("no body template provided");
+        try {
+            if (stFileBody == null) {
+                throw new GeneratorException("no body template provided");
+            }
+            stFileBody.add("contract", contract);
+        } catch (IllegalArgumentException ex) {
+            logger.error("illegal argument {}", ex.getLocalizedMessage());
+            for (Entry<String, Object> attr : stFileBody.getAttributes().entrySet()) {
+                logger.error("attribute [{}]", attr.getKey());
+            }
+            throw new GeneratorException("undefined attribute", ex);
         }
-        stFileBody.add("contract", contract);
 
         final String outputFileName = stFileName.render();
         logger.info("building {} using {} single", outputFileName, templateFileName);

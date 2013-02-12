@@ -54,7 +54,7 @@ keywords
 */
 
 COMMENT           :   '{' .*? '}' ;
-ID          :   [a-zA-Z]+ ;
+ID          :   [a-zA-Z][a-zA-Z\-_0-9]* ;
 FILE_PATH   :   '"' .*? '"'  ;
 TEMPLATE   :   '\'' .*? '\''  ;
 
