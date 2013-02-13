@@ -24,7 +24,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.walkernation.db.R;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 
 /**
  * Base class for all activities
@@ -32,12 +32,12 @@ import com.walkernation.db.R;
  * @author Michael A. Walker
  * 
  */
-public class LocationActivityBase extends FragmentActivity implements
+public class <item.name.bactrian>ActivityBase extends FragmentActivity implements
 		OnOpenWindowInterface {
 
 	boolean promptOnBackPressed = false;
-	LocationListFragment fragment;
-	private static final String LOG_TAG = LocationActivityBase.class
+	<item.name.bactrian>ListFragment fragment;
+	private static final String LOG_TAG = <item.name.bactrian>ActivityBase.class
 			.getCanonicalName();
 	boolean mDualPane;
 
@@ -72,8 +72,8 @@ public class LocationActivityBase extends FragmentActivity implements
 		}
 	}
 
-	public void openViewLocationFragment(int index) {
-		Log.d(LOG_TAG, "openViewLocationFragment(" + index + ")");
+	public void openView<item.name.bactrian>Fragment(long index) {
+		Log.d(LOG_TAG, "open<item.name.bactrian>ViewFragment(" + index + ")");
 		if (determineDualPane()) {
 
 			Fragment test = getSupportFragmentManager().findFragmentById(
@@ -82,8 +82,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != ViewLocationFragment.class) {
-				ViewLocationFragment details = ViewLocationFragment
+			if (test != null && test.getClass() != <item.name.bactrian>ViewFragment.class) {
+				<item.name.bactrian>ViewFragment details = <item.name.bactrian>ViewFragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -92,11 +92,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				ViewLocationFragment details = (ViewLocationFragment) getSupportFragmentManager()
+				<item.name.bactrian>ViewFragment details = (<item.name.bactrian>ViewFragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null || details.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					details = ViewLocationFragment.newInstance(index);
+					details = <item.name.bactrian>ViewFragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -111,13 +111,13 @@ public class LocationActivityBase extends FragmentActivity implements
 		} else {
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newViewLocationIntent(this, index);
+			Intent intent = new<item.name.bactrian>ViewIntent(this, index);
 			startActivity(intent);
 		}
 	}
 
-	public void openEditLocationFragment(final int index) {
-		Log.d(LOG_TAG, "openEditLocationFragment(" + index + ")");
+	public void openEdit<item.name.bactrian>Fragment(final long index) {
+		Log.d(LOG_TAG, "openEdit<item.name.bactrian>Fragment(" + index + ")");
 		if (determineDualPane()) {
 
 			Fragment test = getSupportFragmentManager().findFragmentById(
@@ -126,8 +126,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != EditLocationFragment.class) {
-				EditLocationFragment editor = EditLocationFragment
+			if (test != null && test.getClass() != Edit<item.name.bactrian>Fragment.class) {
+				Edit<item.name.bactrian>Fragment editor = Edit<item.name.bactrian>Fragment
 						.newInstance(index);
 
 				// Execute a transaction, replacing any existing
@@ -137,11 +137,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				EditLocationFragment editor = (EditLocationFragment) getSupportFragmentManager()
+				Edit<item.name.bactrian>Fragment editor = (Edit<item.name.bactrian>Fragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (editor == null || editor.getUniqueKey() != index) {
 					// Make new fragment to show this selection.
-					editor = EditLocationFragment.newInstance(index);
+					editor = Edit<item.name.bactrian>Fragment.newInstance(index);
 
 				}
 				// Execute a transaction, replacing any existing
@@ -156,7 +156,7 @@ public class LocationActivityBase extends FragmentActivity implements
 		} else {
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newEditLocationIntent(this, index);
+			Intent intent = newEdit<item.name.bactrian>Intent(this, index);
 			startActivity(intent);
 		}
 	}
@@ -167,8 +167,8 @@ public class LocationActivityBase extends FragmentActivity implements
 				Toast.LENGTH_SHORT).show();
 	}
 
-	public void openCreateLocationFragment() {
-		Log.d(LOG_TAG, "openCreateLocationFragment");
+	public void openCreate<item.name.bactrian>Fragment() {
+		Log.d(LOG_TAG, "openCreate<item.name.bactrian>Fragment");
 		if (determineDualPane()) {
 
 			Fragment test = getSupportFragmentManager().findFragmentById(
@@ -177,8 +177,8 @@ public class LocationActivityBase extends FragmentActivity implements
 			// Log.d(LOG_TAG, "open view class:" + test.getClass());
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			if (test != null && test.getClass() != CreateLocationFragment.class) {
-				CreateLocationFragment details = CreateLocationFragment
+			if (test != null && test.getClass() != Create<item.name.bactrian>Fragment.class) {
+				Create<item.name.bactrian>Fragment details = Create<item.name.bactrian>Fragment
 						.newInstance();
 
 				// Execute a transaction, replacing any existing
@@ -188,11 +188,11 @@ public class LocationActivityBase extends FragmentActivity implements
 
 			} else {
 				// Check what fragment is shown, replace if needed.
-				CreateLocationFragment details = (CreateLocationFragment) getSupportFragmentManager()
+				Create<item.name.bactrian>Fragment details = (Create<item.name.bactrian>Fragment) getSupportFragmentManager()
 						.findFragmentById(R.id.details);
 				if (details == null) {
 					// Make new fragment to show this selection.
-					details = CreateLocationFragment.newInstance();
+					details = Create<item.name.bactrian>Fragment.newInstance();
 
 				}
 				// Execute a transaction, replacing any existing
@@ -207,27 +207,28 @@ public class LocationActivityBase extends FragmentActivity implements
 		} else {
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newCreateLocationIntent(this);
+			Intent intent = newCreate<item.name.bactrian>Intent(this);
 			startActivity(intent);
 		}
 	}
 
 	@Override
-	public void openListLocationsFragment() {
-		Log.d(LOG_TAG, "openCreateLocationFragment");
+	public void openList<item.name.bactrian>Fragment() {
+		Log.d(LOG_TAG, "openCreate<item.name.bactrian>Fragment");
 		if (determineDualPane()) {
 			// already displayed
 			Fragment test = getSupportFragmentManager().findFragmentByTag(
 					"imageFragmentTag");
 			if (test != null) {
-				LocationListFragment t = (LocationListFragment) test;
-				t.updateLocationLocationData();
+				<item.name.bactrian>ListFragment t = (<item.name.bactrian>ListFragment) test;
+			// TODO: FIX THIS... resolver?
+				t.update<item.name.bactrian>Data();
 			}
 
 		} else {
 			// Otherwise we need to launch a new activity to display
 			// the dialog fragment with selected text.
-			Intent intent = newListLocationIntent(this);
+			Intent intent = newList<item.name.bactrian>Intent(this);
 			startActivity(intent);
 		}
 	}
@@ -238,29 +239,29 @@ public class LocationActivityBase extends FragmentActivity implements
 	 */
 	/*************************************************************************/
 
-	public static Intent newViewLocationIntent(Activity activity, int index) {
+	public static Intent new<item.name.bactrian>ViewIntent(Activity activity, long index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ViewLocationActivity.class);
-		intent.putExtra(ViewLocationFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, View<item.name.bactrian>Activity.class);
+		intent.putExtra(<item.name.bactrian>ViewFragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
-	public static Intent newEditLocationIntent(Activity activity, int index) {
+	public static Intent newEdit<item.name.bactrian>Intent(Activity activity, long index) {
 		Intent intent = new Intent();
-		intent.setClass(activity, EditLocationActivity.class);
-		intent.putExtra(EditLocationFragment.rowIdentifyerTAG, index);
+		intent.setClass(activity, Edit<item.name.bactrian>Activity.class);
+		intent.putExtra(Edit<item.name.bactrian>Fragment.rowIdentifyerTAG, index);
 		return intent;
 	}
 
-	public static Intent newListLocationIntent(Activity activity) {
+	public static Intent newList<item.name.bactrian>Intent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, ListLocationsActivity.class);
+		intent.setClass(activity, <item.name.bactrian>ListActivity.class);
 		return intent;
 	}
 
-	public static Intent newCreateLocationIntent(Activity activity) {
+	public static Intent newCreate<item.name.bactrian>Intent(Activity activity) {
 		Intent intent = new Intent();
-		intent.setClass(activity, CreateLocationActivity.class);
+		intent.setClass(activity, Create<item.name.bactrian>Activity.class);
 		return intent;
 	}
 }

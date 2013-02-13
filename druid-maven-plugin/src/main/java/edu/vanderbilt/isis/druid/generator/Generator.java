@@ -14,15 +14,18 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.codehaus.plexus.util.FileUtils;
 import org.slf4j.Logger;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -335,13 +338,13 @@ public class Generator {
             throw new GeneratorException("no \"PATH\" template provided");
         }
         initPartUsingTemplate(contract, stFileName);
-        
+
         final ST stFileBody = stg.getInstanceOf("BODY");
         try {
-            if (stFileBody == null) {
-                throw new GeneratorException("no body template provided");
-            }
-            stFileBody.add("contract", contract);
+        if (stFileBody == null) {
+            throw new GeneratorException("no body template provided");
+        }
+        stFileBody.add("contract", contract);
         } catch (IllegalArgumentException ex) {
             logger.error("illegal argument {}", ex.getLocalizedMessage());
             for (Entry<String, Object> attr : stFileBody.getAttributes().entrySet()) {
@@ -415,7 +418,6 @@ public class Generator {
             if (this.isSkeleton && outputFile.exists()) {
                 continue;
             }
-
             final File outputDir = outputFile.getParentFile();
             outputDir.mkdirs();
 

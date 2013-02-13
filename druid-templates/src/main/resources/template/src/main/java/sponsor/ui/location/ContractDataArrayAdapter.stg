@@ -1,0 +1,116 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter><item.name.bactrian>DataArrayAdaptor.java
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract, item) ::= <<
+// ST:BODY:start
+
+package <package(contract,item)>;
+
+import java.util.List;
+
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
+
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
+
+public class <item.name.bactrian>DataArrayAdaptor extends ArrayAdapter\< <item.name.bactrian>Data > {
+
+	private static final String LOG_TAG = <item.name.bactrian>DataArrayAdaptor.class
+			.getCanonicalName();
+
+	int resource;
+
+	public <item.name.bactrian>DataArrayAdaptor(Context _context, int _resource,
+			List\< <item.name.bactrian>Data > _items) {
+		super(_context, _resource, _items);
+		Log.d(LOG_TAG, "constructor()");
+		resource = _resource;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Log.d(LOG_TAG, "getView()");
+		LinearLayout todoView = null;
+		try {
+			<item.name.bactrian>Data item = getItem(position);
+
+			long KEY_ID = item.KEY_ID;
+	               // ST:putDeclaration:start	
+	               <item.fields: { field | <putDeclaration(field)> }; separator="\n">
+	               // ST:putDeclaration:end
+	               
+	               
+	               
+	
+
+			if (convertView == null) {
+				todoView = new LinearLayout(getContext());
+				String inflater = Context.LAYOUT_INFLATER_SERVICE;
+				LayoutInflater vi = (LayoutInflater) getContext()
+						.getSystemService(inflater);
+				vi.inflate(resource, todoView, true);
+			} else {
+				todoView = (LinearLayout) convertView;
+			}
+	
+	               // ST:putTextViewRowIDDeclarations:start
+	               <putTextViewRowIDDeclarations(item)>
+	               // ST:putTextViewRowIDDeclarations:end
+	               
+	               // ST:putTextViewDeclarations:start	
+	               <item.fields: { field | <putTextViewDeclarations(item,field)> }; separator="\n">
+	               // ST:putTextViewDeclarations:end
+	               
+	               KEY_IDTV.setText("" + KEY_ID);
+                       // ST:putSetValuesToDisplay:start
+                       <item.fields: { field | <putSetValuesToDisplay(field)> }; separator="\n">
+	               // ST:putSetValuesToDisplay:end
+
+		} catch (Exception e) {
+			Toast.makeText(getContext(), "exception in ArrayAdpter: " + e.getMessage(),
+					Toast.LENGTH_SHORT).show();
+		}
+		return todoView;
+	}
+
+}
+
+>>
+
+
+package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"
+
+putDeclaration(field) ::= <%
+<if(field.IsInUICols)><javaTypeMap.(field.dtype)> <field.name.camel> = item.<field.name.camel>;
+<else><endif>
+%>
+
+putTextViewRowIDDeclarations(relation) ::= <<
+TextView  KEY_IDTV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_KEY_ID_textView);
+>>
+
+putTextViewDeclarations(relation,field) ::= <%
+<if(field.IsInUICols)>TextView  <field.name.camel>TV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_<field.name.snake>_textView);
+<else><endif>
+%>
+
+putSetValuesToDisplay(field) ::= <%
+<if(field.IsInUICols)><field.name.camel>TV.setText("" + <field.name.camel>);
+<else><endif>
+%>

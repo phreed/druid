@@ -1,5 +1,6 @@
 import "dataTypeMaps.stg"
 
+
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>orm<delimiter><item.name.bactrian>Creator.java
 %>
@@ -24,9 +25,9 @@ public class <item.name.bactrian>Creator {
 
   public static ContentValues getCVfrom<item.name.bactrian>(final <item.name.bactrian>Data data) {
     ContentValues rValue = new ContentValues();
-    // ST:putField:inline
-    <item.fields: { field | <putField(field)> }; separator="\n">
-    // ST:putField:complete
+    // ST:ormCreatorputFieldIntoCVTemplate:inline
+    <item.fields: { field | <ormCreatorputFieldIntoCVTemplate(field)> }; separator="\n">
+    // ST:ormCreatorputFieldIntoCVTemplate:complete
     return rValue;
   }
 
@@ -41,10 +42,11 @@ public class <item.name.bactrian>Creator {
       Cursor cursor) {
     ArrayList\<<item.name.bactrian>Data> rValue = new ArrayList\<<item.name.bactrian>Data>();
     if (cursor != null) {
-      cursor.moveToFirst();
-      do {
-        rValue.add(get<item.name.bactrian>DataFromCursor(cursor));
-      } while (cursor.moveToNext() == true);
+      if (cursor.moveToFirst()){
+        do {
+          rValue.add(get<item.name.bactrian>DataFromCursor(cursor));
+        } while (cursor.moveToNext() == true);
+      }
     }
     return rValue;
   }
@@ -58,13 +60,15 @@ public class <item.name.bactrian>Creator {
    */
   public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
 
-    // ST:getValue:inline
-    <item.fields: { field | <getValue(field)> }; separator="\n">
-    // ST:getValue:complete
+   long rowID = cursor.getLong(cursor 
+              .getColumnIndex(ContentDescriptor.Table1.Cols.ID));
+    // ST:ormCreatorGetFieldFromCursorTemplate:inline
+    <item.fields: { field | <ormCreatorGetFieldFromCursorTemplate(field)> }; separator="\n">
+    // ST:ormCreatorGetFieldFromCursorTemplate:complete
 
     // construct the returned object
     <item.name.bactrian>Data rValue = 
-       new <item.name.bactrian>Data(<item.fields:{ field | <field.name.camel>}; separator=", ">);
+       new <item.name.bactrian>Data(rowID,<item.fields:{ field | <field.name.camel>}; separator=", ">);
         
     return rValue;
   }
@@ -74,11 +78,99 @@ public class <item.name.bactrian>Creator {
 
 package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
-putField(field) ::= <%
-rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>, data.<field.name.camel>);
-%>
 
-getValue(field) ::= <<
+ormCreatorputFieldIntoCVDefualtTemplate(field) ::= <<
+rValue.put(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>, data.<field.name.camel>);
+>>
+
+ormCreatorGetFieldFromCursorDefualtTemplate(field) ::= <<
 <javaTypeMap.(field.dtype)> <field.name.camel> = cursor.<androidReadFromCursorMethodMap.(field.dtype)>(cursor 
         .getColumnIndex(ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>));
 >>
+
+ormCreatorputFieldIntoCVTemplate(field) ::= << <(ormCreatorputFieldIntoCVMap.(field.dtype))(field) > >>
+
+ormCreatorGetFieldFromCursorTemplate(field) ::= << <(ormCreatorGetFieldFromCursorMap.(field.dtype))(field) > >>
+
+
+ormCreatorputFieldIntoCVINTEGER(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVREAL(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVGUID(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVBLOB(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVINCLUSIVE(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVBOOL(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVDOUBLE(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVSHORT(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVFLOAT(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVEXCLUSIVE(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVTEXT(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVFK(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVFILE(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVLONG(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVSERIAL(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVTIMESTAMP(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >> 
+ormCreatorputFieldIntoCVTYPE(field) ::= << <ormCreatorputFieldIntoCVDefualtTemplate(field) > >>  
+
+
+
+ormCreatorGetFieldFromCursorINTEGER(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorREAL(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorGUID(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorBLOB(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorINCLUSIVE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorBOOL(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorDOUBLE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorSHORT(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorFLOAT(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorEXCLUSIVE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorTEXT(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorFK(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorFILE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorLONG(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorSERIAL(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorTIMESTAMP(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
+ormCreatorGetFieldFromCursorTYPE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >>  
+
+
+ormCreatorputFieldIntoCVMap ::= [ 
+   "INTEGER" : "ormCreatorputFieldIntoCVINTEGER",
+   "REAL" : "ormCreatorputFieldIntoCVREAL",
+   "GUID" : "ormCreatorputFieldIntoCVGUID",
+   "BLOB" : "ormCreatorputFieldIntoCVBLOB",
+   "INCLUSIVE" : "ormCreatorputFieldIntoCVINCLUSIVE",
+   "BOOL" : "ormCreatorputFieldIntoCVBOOL",
+   "DOUBLE" : "ormCreatorputFieldIntoCVDOUBLE",
+   "SHORT" : "ormCreatorputFieldIntoCVSHORT",
+   "FLOAT" : "ormCreatorputFieldIntoCVFLOAT",
+   "EXCLUSIVE" : "ormCreatorputFieldIntoCVEXCLUSIVE",
+   "TEXT" : "ormCreatorputFieldIntoCVTEXT",
+   "FK" : "ormCreatorputFieldIntoCVFK",
+   "FILE" : "ormCreatorputFieldIntoCVFILE",
+   "LONG" : "ormCreatorputFieldIntoCVLONG",
+   "SERIAL" : "ormCreatorputFieldIntoCVSERIAL",
+   "TIMESTAMP" : "ormCreatorputFieldIntoCVTIMESTAMP",
+   "TYPE" : "ormCreatorputFieldIntoCVTYPE", 
+   default: key
+]
+
+ormCreatorGetFieldFromCursorMap ::= [ 
+   "INTEGER" : "ormCreatorGetFieldFromCursorINTEGER",
+   "REAL" : "ormCreatorGetFieldFromCursorREAL",
+   "GUID" : "ormCreatorGetFieldFromCursorGUID",
+   "BLOB" : "ormCreatorGetFieldFromCursorBLOB",
+   "INCLUSIVE" : "ormCreatorGetFieldFromCursorINCLUSIVE",
+   "BOOL" : "ormCreatorGetFieldFromCursorBOOL",
+   "DOUBLE" : "ormCreatorGetFieldFromCursorDOUBLE",
+   "SHORT" : "ormCreatorGetFieldFromCursorSHORT",
+   "FLOAT" : "ormCreatorGetFieldFromCursorFLOAT",
+   "EXCLUSIVE" : "ormCreatorGetFieldFromCursorEXCLUSIVE",
+   "TEXT" : "ormCreatorGetFieldFromCursorTEXT",
+   "FK" : "ormCreatorGetFieldFromCursorFK",
+   "FILE" : "ormCreatorGetFieldFromCursorFILE",
+   "LONG" : "ormCreatorGetFieldFromCursorLONG",
+   "SERIAL" : "ormCreatorGetFieldFromCursorSERIAL",
+   "TIMESTAMP" : "ormCreatorGetFieldFromCursorTIMESTAMP",
+   "TYPE" : "ormCreatorGetFieldFromCursorTYPE", 
+   default: key
+]
+

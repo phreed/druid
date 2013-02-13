@@ -9,23 +9,15 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
-
-
+// ST:BODY:start
 package <package(contract,item)>;
 
 public interface OnOpenWindowInterface {
-	public void openEdit<item.name.bactrian>Fragment(int index);
-
-	public void openView<item.name.bactrian>Fragment(int index);
-
+	public void openEdit<item.name.bactrian>Fragment(long index);
+	public void openView<item.name.bactrian>Fragment(long index);
 	public void openCreate<item.name.bactrian>Fragment();
-
 	public void openList<item.name.bactrian>Fragment();
-
-	// ADD HERE FOR EACH : activity/Fragment
-	// implement in LocationActivityBase.java
 }
-
-
+// ST:BODY:end
 >>
 package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<relation.name.camel>"

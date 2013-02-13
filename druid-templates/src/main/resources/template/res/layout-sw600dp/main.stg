@@ -5,13 +5,13 @@ PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 %>
 
 SKELETON(contract,item) ::= <<
-<?xml version="1.0" encoding="utf-8"?>
+\<?xml version="1.0" encoding="utf-8"?>
 \<!-- ST:BODY:start -->
 \<!-- ST:BODY:end -->
 >>
 
 BODY(contract) ::= <<
-<?xml version="1.0" encoding="utf-8"?>
+\<?xml version="1.0" encoding="utf-8"?>
 \<!-- ST:BODY:start -->
 \<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

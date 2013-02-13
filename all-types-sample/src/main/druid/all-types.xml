@@ -3,26 +3,42 @@
 
 <content-provider name="all types">
   <sponsor name="edu.vanderbilt.isis.ammo.all_types"/>
+  <version>1</version>
 
   <relation name="table 1">
     <field type="TEXT" name="a text field" default="" />
     <field type="LONG" name="a long field" default="0" />
     <field type="TIMESTAMP" name="a time field" default="now"/>
-    <field type="BLOB" name="a blob field" />
+    <field type="BLOB" name="a blob field" abrv="blob"/>
     <field type="SHORT" name="a short field" />
-    <field type="INTEGER" name="an integer field" />
+    <field type="INTEGER" name="an integer field" abrv="int"/>
     <field type="FLOAT" name="a float field" />
     <field type="DOUBLE" name="a double field" />
     <field type="BOOL" name="a boolean field" />
     <field type="FK" name="a foreign key field" />
     
-    <key name="update">
+    <key>
       <ref field="a text field"/>
+      <ref field="a long field"/>
+      <ref field="a double field"/>
     </key>
     
+    <ui-selection-subset>
+      <ref field="a text field"/>
+      <ref field="a long field"/>
+      <ref field="a double field"/>
+      <ref field="int"/>
+    </ui-selection-subset>
+    
     <message encoding="terse">
-      <field ref="a text field" />
-      <field ref="a long field" type="INTEGER" />
+      <ref ref="a text field" />
+      <ref ref="a long field" />
     </message>
+    
+    <message encoding="protoBuff">
+      <ref ref="a text field" order="1"/>
+      <ref ref="a long field" order="2"/>
+    </message>
+    
   </relation>
 </content-provider>

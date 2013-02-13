@@ -16,7 +16,7 @@ BODY(contract) ::= <<
     \<string name="app_name"><contract.root.sponsor.base>\</string>
     \<string name="menu_settings">Settings\</string>
     \<string name="title_activity_main"><contract.root.sponsor.base>\</string>
-    \<string name="authority"><contract.root.sponsor.base>.<contract.root.name.snake>.<contract.root.name.snake>_provider\</string>
+    \<string name="authority"><contract.root.sponsor.base>.<contract.root.name.snake>.<contract.root.name.snake>provider\</string>
     
     \<!-- ******************* Defined Colors ****************** -->
     \<color name="cyan">#00ffff\</color>
@@ -94,16 +94,26 @@ putViewFragmentLabelInline(relation,field) ::= << \<string name="<relation.name.
 buildListFragmentStrings(relation) ::= <<
     \<!-- <relation.name.snake> List Fragment Strings -->
     \<string name="<relation.name.snake>_list_button_label_add">ADD\</string>
-    \<string name="<relation.name.snake>_list_button_label_refresh">REFRESH\</string>
+    \<string name="<relation.name.snake>_list_button_label_refresh">REFRESH\</string>   
 >>
+
+putListCustomRow(relation, field) ::= <%
+\<string name="<relation.name.snake>_edit_default_value_<field.name.snake>">\</string>
+%>
 
 
 
 buildEditFragmentStrings(relation) ::= <<
     \<!-- <relation.name.snake> Edit Fragment Strings : Labels -->
+    \<!-- ST:putEditLabels:start -->    
     <relation.fields: { field | <putEditLabels(relation, field)> }; separator="\n">
+    \<!-- ST:putEditLabels:end -->    
+  
     \<!-- <relation.name.snake> View Fragment Strings : Default Values -->
+    \<!-- ST:putEditDefualtValues:start -->    
     <relation.fields: { field | <putEditDefualtValues(relation, field)> }; separator="\n">
+    \<!-- ST:putEditDefualtValues:end -->    
+    
     \<!-- <relation.name.snake> Edit Fragment Strings : Buttons -->    
     \<string name="<relation.name.snake>_edit_button_message_save">Save\</string>
     \<string name="<relation.name.snake>_edit_button_message_reset">Reset\</string>
@@ -111,11 +121,11 @@ buildEditFragmentStrings(relation) ::= <<
 
 >>
 
-putEditDefualtValues(relation,field) :: <%
+putEditDefualtValues(relation, field) ::= <%
 \<string name="<relation.name.snake>_edit_default_value_<field.name.snake>">\</string>
 %>
 
-putEditLabels(relation,field) :: <%
+putEditLabels(relation, field) ::= <%
 \<string name="<relation.name.snake>_edit_label_<field.name.snake>">boolean\</string>
 %>
 
@@ -124,6 +134,10 @@ buildCreateFragmentStrings(relation) ::= <<
     \<!-- ST:putCreateFragmentLabelInline:start: -->    
     <relation.fields: { field | <putCreateFragmentLabelInline(relation, field)> }; separator="\n">
     \<!-- ST:putCreateFragmentLabelInline:end -->
+    
+    \<!-- ST:putCreateFragmentDefaultValueInline:start: -->    
+    <relation.fields: { field | <putCreateFragmentDefaultValueInline(relation, field)> }; separator="\n">
+    \<!-- ST:putCreateFragmentDefaultValueInline:end -->
     
     \<string name="<relation.name.snake>_create_button_label_clear">Clear\</string>
     \<string name="<relation.name.snake>_create_button_label_cancel">Cancel\</string>
@@ -134,13 +148,415 @@ buildCreateFragmentStrings(relation) ::= <<
     \<string name="<relation.name.snake>_create_button_message_cancel">Cancel\</string>
 >>
     
-putCreateFragmentLabelInlineWithInitial(relation,field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.initial>\</string> >>
+putCreateFragmentLabelInlineWithInitial(relation, field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.default>\</string> >>
 
-putCreateFragmentLabelInline(relation,field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.initial>\</string> >>
+putCreateFragmentLabelInline(relation, field) ::= << \<string name="<relation.name.snake>_create_label_<field.name.snake>"><field.name.camel>:\</string> >>
+   
+putCreateFragmentDefaultValueInline(relation, field) ::= << \<string name="<relation.name.snake>_create_<field.name.snake>_default_value"><field.default>\</string> >>
+   
+   
+   
+   
    
 
+valuesStringsViewLabelDefualtTemplate(relation, field) ::= <<
+>>
+
+valuesStringsViewValueDefualtTemplate(relation, field) ::= <<
+>>
+
+
+
+valuesStringsEditLabelDefualtTemplate(relation, field) ::= <<
+>>
+
+
+
+
+valuesStringsCreateLabelDefualtTemplate(relation, field) ::= <<
+>>
+
+valuesStringsListValueDefualtTemplate(relation, field) ::= <<
+>>
+
+valuesStringsCreateValueDefualtTemplate(relation, field) ::= <<
+>>
+
+
+
+valuesStringsListLabelDefualtTemplate(relation, field) ::= <<
+>>
+
+
+valuesStringsEditValueDefualtTemplate(relation, field) ::= <<
+>>
+
+
    
-   
-   
-   
-   
+valuesStringsViewLabelTemplate(relation, field) ::= << <(valuesStringsViewLabelMap.(field.dtype))(relation, field) > >>
+
+valuesStringsViewValueTemplate(relation, field) ::= << <(valuesStringsViewValueMap.(field.dtype))(relation, field) > >>
+
+
+valuesStringsEditLabelTemplate(relation, field) ::= << <(valuesStringsEditLabelMap.(field.dtype))(relation, field) > >>
+
+
+
+
+
+
+valuesStringsCreateLabelTemplate(relation, field) ::= << <(valuesStringsCreateLabelMap.(field.dtype))(relation, field) > >>
+
+valuesStringsListValueTemplate(relation, field) ::= << <(valuesStringsListValueMap.(field.dtype))(relation, field) > >>
+
+valuesStringsCreateValueTemplate(relation, field) ::= << <(valuesStringsCreateValueMap.(field.dtype))(relation, field) > >>
+
+
+
+
+
+valuesStringsListLabelTemplate(relation, field) ::= << <(valuesStringsListLabelMap.(field.dtype))(relation, field) > >>
+
+
+
+valuesStringsEditValueTemplate(relation, field) ::= << <(valuesStringsEditValueMap.(field.dtype))(relation, field) > >>
+
+
+
+
+
+
+  
+
+valuesStringsViewLabelINTEGER(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelREAL(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelGUID(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelBLOB(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelINCLUSIVE(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelBOOL(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelDOUBLE(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelSHORT(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelFLOAT(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelEXCLUSIVE(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelTEXT(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelFK(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelFILE(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelLONG(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelSERIAL(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelTIMESTAMP(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >> 
+valuesStringsViewLabelTYPE(relation, field) ::= << <valuesStringsViewLabelDefualtTemplate(relation, field) > >>  
+
+valuesStringsViewValueINTEGER(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueREAL(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueGUID(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueBLOB(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueINCLUSIVE(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueBOOL(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueDOUBLE(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueSHORT(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueFLOAT(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueEXCLUSIVE(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueTEXT(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueFK(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueFILE(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueLONG(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueSERIAL(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueTIMESTAMP(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >> 
+valuesStringsViewValueTYPE(relation, field) ::= << <valuesStringsViewValueDefualtTemplate(relation, field) > >>  
+
+
+valuesStringsEditLabelINTEGER(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelREAL(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelGUID(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelBLOB(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelINCLUSIVE(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelBOOL(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelDOUBLE(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelSHORT(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelFLOAT(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelEXCLUSIVE(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelTEXT(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelFK(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelFILE(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelLONG(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelSERIAL(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelTIMESTAMP(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >> 
+valuesStringsEditLabelTYPE(relation, field) ::= << <valuesStringsEditLabelDefualtTemplate(relation, field) > >>  
+
+ 
+
+
+
+
+
+valuesStringsCreateLabelINTEGER(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelREAL(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelGUID(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelBLOB(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelINCLUSIVE(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelBOOL(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelDOUBLE(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelSHORT(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelFLOAT(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelEXCLUSIVE(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelTEXT(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelFK(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelFILE(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelLONG(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelSERIAL(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelTIMESTAMP(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >> 
+valuesStringsCreateLabelTYPE(relation, field) ::= << <valuesStringsCreateLabelDefualtTemplate(relation, field) > >>  
+
+valuesStringsListValueINTEGER(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueREAL(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueGUID(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueBLOB(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueINCLUSIVE(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueBOOL(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueDOUBLE(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueSHORT(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueFLOAT(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueEXCLUSIVE(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueTEXT(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueFK(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueFILE(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueLONG(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueSERIAL(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueTIMESTAMP(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >> 
+valuesStringsListValueTYPE(relation, field) ::= << <valuesStringsListValueDefualtTemplate(relation, field) > >>  
+
+valuesStringsCreateValueINTEGER(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueREAL(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueGUID(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueBLOB(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueINCLUSIVE(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueBOOL(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueDOUBLE(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueSHORT(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueFLOAT(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueEXCLUSIVE(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueTEXT(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueFK(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueFILE(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueLONG(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueSERIAL(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueTIMESTAMP(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >> 
+valuesStringsCreateValueTYPE(relation, field) ::= << <valuesStringsCreateValueDefualtTemplate(relation, field) > >>  
+ 
+
+valuesStringsListLabelINTEGER(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelREAL(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelGUID(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelBLOB(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelINCLUSIVE(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelBOOL(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelDOUBLE(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelSHORT(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelFLOAT(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelEXCLUSIVE(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelTEXT(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelFK(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelFILE(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelLONG(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelSERIAL(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelTIMESTAMP(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >> 
+valuesStringsListLabelTYPE(relation, field) ::= << <valuesStringsListLabelDefualtTemplate(relation, field) > >>  
+
+
+
+valuesStringsEditValueINTEGER(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueREAL(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueGUID(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueBLOB(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueINCLUSIVE(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueBOOL(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueDOUBLE(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueSHORT(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueFLOAT(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueEXCLUSIVE(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueTEXT(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueFK(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueFILE(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueLONG(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueSERIAL(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueTIMESTAMP(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >> 
+valuesStringsEditValueTYPE(relation, field) ::= << <valuesStringsEditValueDefualtTemplate(relation, field) > >>  
+
+
+
+valuesStringsViewLabelMap ::= [ 
+   "INTEGER" : "valuesStringsViewLabelINTEGER",
+   "REAL" : "valuesStringsViewLabelREAL",
+   "GUID" : "valuesStringsViewLabelGUID",
+   "BLOB" : "valuesStringsViewLabelBLOB",
+   "INCLUSIVE" : "valuesStringsViewLabelINCLUSIVE",
+   "BOOL" : "valuesStringsViewLabelBOOL",
+   "DOUBLE" : "valuesStringsViewLabelDOUBLE",
+   "SHORT" : "valuesStringsViewLabelSHORT",
+   "FLOAT" : "valuesStringsViewLabelFLOAT",
+   "EXCLUSIVE" : "valuesStringsViewLabelEXCLUSIVE",
+   "TEXT" : "valuesStringsViewLabelTEXT",
+   "FK" : "valuesStringsViewLabelFK",
+   "FILE" : "valuesStringsViewLabelFILE",
+   "LONG" : "valuesStringsViewLabelLONG",
+   "SERIAL" : "valuesStringsViewLabelSERIAL",
+   "TIMESTAMP" : "valuesStringsViewLabelTIMESTAMP",
+   "TYPE" : "valuesStringsViewLabelTYPE", 
+   default: key
+]
+
+valuesStringsViewValueMap ::= [ 
+   "INTEGER" : "valuesStringsViewValueINTEGER",
+   "REAL" : "valuesStringsViewValueREAL",
+   "GUID" : "valuesStringsViewValueGUID",
+   "BLOB" : "valuesStringsViewValueBLOB",
+   "INCLUSIVE" : "valuesStringsViewValueINCLUSIVE",
+   "BOOL" : "valuesStringsViewValueBOOL",
+   "DOUBLE" : "valuesStringsViewValueDOUBLE",
+   "SHORT" : "valuesStringsViewValueSHORT",
+   "FLOAT" : "valuesStringsViewValueFLOAT",
+   "EXCLUSIVE" : "valuesStringsViewValueEXCLUSIVE",
+   "TEXT" : "valuesStringsViewValueTEXT",
+   "FK" : "valuesStringsViewValueFK",
+   "FILE" : "valuesStringsViewValueFILE",
+   "LONG" : "valuesStringsViewValueLONG",
+   "SERIAL" : "valuesStringsViewValueSERIAL",
+   "TIMESTAMP" : "valuesStringsViewValueTIMESTAMP",
+   "TYPE" : "valuesStringsViewValueTYPE", 
+   default: key
+]
+
+
+
+
+valuesStringsEditLabelMap ::= [ 
+   "INTEGER" : "valuesStringsEditLabelINTEGER",
+   "REAL" : "valuesStringsEditLabelREAL",
+   "GUID" : "valuesStringsEditLabelGUID",
+   "BLOB" : "valuesStringsEditLabelBLOB",
+   "INCLUSIVE" : "valuesStringsEditLabelINCLUSIVE",
+   "BOOL" : "valuesStringsEditLabelBOOL",
+   "DOUBLE" : "valuesStringsEditLabelDOUBLE",
+   "SHORT" : "valuesStringsEditLabelSHORT",
+   "FLOAT" : "valuesStringsEditLabelFLOAT",
+   "EXCLUSIVE" : "valuesStringsEditLabelEXCLUSIVE",
+   "TEXT" : "valuesStringsEditLabelTEXT",
+   "FK" : "valuesStringsEditLabelFK",
+   "FILE" : "valuesStringsEditLabelFILE",
+   "LONG" : "valuesStringsEditLabelLONG",
+   "SERIAL" : "valuesStringsEditLabelSERIAL",
+   "TIMESTAMP" : "valuesStringsEditLabelTIMESTAMP",
+   "TYPE" : "valuesStringsEditLabelTYPE", 
+   default: key
+]
+
+valuesStringsCreateLabelMap ::= [ 
+   "INTEGER" : "valuesStringsCreateLabelINTEGER",
+   "REAL" : "valuesStringsCreateLabelREAL",
+   "GUID" : "valuesStringsCreateLabelGUID",
+   "BLOB" : "valuesStringsCreateLabelBLOB",
+   "INCLUSIVE" : "valuesStringsCreateLabelINCLUSIVE",
+   "BOOL" : "valuesStringsCreateLabelBOOL",
+   "DOUBLE" : "valuesStringsCreateLabelDOUBLE",
+   "SHORT" : "valuesStringsCreateLabelSHORT",
+   "FLOAT" : "valuesStringsCreateLabelFLOAT",
+   "EXCLUSIVE" : "valuesStringsCreateLabelEXCLUSIVE",
+   "TEXT" : "valuesStringsCreateLabelTEXT",
+   "FK" : "valuesStringsCreateLabelFK",
+   "FILE" : "valuesStringsCreateLabelFILE",
+   "LONG" : "valuesStringsCreateLabelLONG",
+   "SERIAL" : "valuesStringsCreateLabelSERIAL",
+   "TIMESTAMP" : "valuesStringsCreateLabelTIMESTAMP",
+   "TYPE" : "valuesStringsCreateLabelTYPE", 
+   default: key
+]
+
+valuesStringsListValueMap ::= [ 
+   "INTEGER" : "valuesStringsListValueINTEGER",
+   "REAL" : "valuesStringsListValueREAL",
+   "GUID" : "valuesStringsListValueGUID",
+   "BLOB" : "valuesStringsListValueBLOB",
+   "INCLUSIVE" : "valuesStringsListValueINCLUSIVE",
+   "BOOL" : "valuesStringsListValueBOOL",
+   "DOUBLE" : "valuesStringsListValueDOUBLE",
+   "SHORT" : "valuesStringsListValueSHORT",
+   "FLOAT" : "valuesStringsListValueFLOAT",
+   "EXCLUSIVE" : "valuesStringsListValueEXCLUSIVE",
+   "TEXT" : "valuesStringsListValueTEXT",
+   "FK" : "valuesStringsListValueFK",
+   "FILE" : "valuesStringsListValueFILE",
+   "LONG" : "valuesStringsListValueLONG",
+   "SERIAL" : "valuesStringsListValueSERIAL",
+   "TIMESTAMP" : "valuesStringsListValueTIMESTAMP",
+   "TYPE" : "valuesStringsListValueTYPE", 
+   default: key
+]
+
+valuesStringsCreateValueMap ::= [ 
+   "INTEGER" : "valuesStringsCreateValueINTEGER",
+   "REAL" : "valuesStringsCreateValueREAL",
+   "GUID" : "valuesStringsCreateValueGUID",
+   "BLOB" : "valuesStringsCreateValueBLOB",
+   "INCLUSIVE" : "valuesStringsCreateValueINCLUSIVE",
+   "BOOL" : "valuesStringsCreateValueBOOL",
+   "DOUBLE" : "valuesStringsCreateValueDOUBLE",
+   "SHORT" : "valuesStringsCreateValueSHORT",
+   "FLOAT" : "valuesStringsCreateValueFLOAT",
+   "EXCLUSIVE" : "valuesStringsCreateValueEXCLUSIVE",
+   "TEXT" : "valuesStringsCreateValueTEXT",
+   "FK" : "valuesStringsCreateValueFK",
+   "FILE" : "valuesStringsCreateValueFILE",
+   "LONG" : "valuesStringsCreateValueLONG",
+   "SERIAL" : "valuesStringsCreateValueSERIAL",
+   "TIMESTAMP" : "valuesStringsCreateValueTIMESTAMP",
+   "TYPE" : "valuesStringsCreateValueTYPE", 
+   default: key
+]
+
+
+
+
+
+
+valuesStringsListLabelMap ::= [ 
+   "INTEGER" : "valuesStringsListLabelINTEGER",
+   "REAL" : "valuesStringsListLabelREAL",
+   "GUID" : "valuesStringsListLabelGUID",
+   "BLOB" : "valuesStringsListLabelBLOB",
+   "INCLUSIVE" : "valuesStringsListLabelINCLUSIVE",
+   "BOOL" : "valuesStringsListLabelBOOL",
+   "DOUBLE" : "valuesStringsListLabelDOUBLE",
+   "SHORT" : "valuesStringsListLabelSHORT",
+   "FLOAT" : "valuesStringsListLabelFLOAT",
+   "EXCLUSIVE" : "valuesStringsListLabelEXCLUSIVE",
+   "TEXT" : "valuesStringsListLabelTEXT",
+   "FK" : "valuesStringsListLabelFK",
+   "FILE" : "valuesStringsListLabelFILE",
+   "LONG" : "valuesStringsListLabelLONG",
+   "SERIAL" : "valuesStringsListLabelSERIAL",
+   "TIMESTAMP" : "valuesStringsListLabelTIMESTAMP",
+   "TYPE" : "valuesStringsListLabelTYPE", 
+   default: key
+]
+
+
+valuesStringsEditValueMap ::= [ 
+   "INTEGER" : "valuesStringsEditValueINTEGER",
+   "REAL" : "valuesStringsEditValueREAL",
+   "GUID" : "valuesStringsEditValueGUID",
+   "BLOB" : "valuesStringsEditValueBLOB",
+   "INCLUSIVE" : "valuesStringsEditValueINCLUSIVE",
+   "BOOL" : "valuesStringsEditValueBOOL",
+   "DOUBLE" : "valuesStringsEditValueDOUBLE",
+   "SHORT" : "valuesStringsEditValueSHORT",
+   "FLOAT" : "valuesStringsEditValueFLOAT",
+   "EXCLUSIVE" : "valuesStringsEditValueEXCLUSIVE",
+   "TEXT" : "valuesStringsEditValueTEXT",
+   "FK" : "valuesStringsEditValueFK",
+   "FILE" : "valuesStringsEditValueFILE",
+   "LONG" : "valuesStringsEditValueLONG",
+   "SERIAL" : "valuesStringsEditValueSERIAL",
+   "TIMESTAMP" : "valuesStringsEditValueTIMESTAMP",
+   "TYPE" : "valuesStringsEditValueTYPE", 
+   default: key
+]

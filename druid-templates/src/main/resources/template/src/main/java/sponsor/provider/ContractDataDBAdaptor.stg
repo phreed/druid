@@ -32,7 +32,7 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 	<contract.root.relations: { relation | <databaseTableVariableDeclaration(relation)> }; separator="\n">
 	// ST:databaseTableVariableDeclaration:finish
 	
-	static final int DATABASE_VERSION = 0;
+	static final int DATABASE_VERSION = 1;
 
 	// The SHORT name of each column in your table
 	// ST:createShortVariables:start
@@ -276,7 +276,7 @@ private static final String <field.name.bactrian> = ContentDescriptor.<relation.
 
 
 tableCreateVariables(field) ::= <%
-+ <field.name.bactrian> + " <javaTypeSQLiteMap.(field.dtype)>," //
++ <field.name.bactrian> + " <javaTypeSQLiteMap.(field.dtype)>
 %>
 
 
@@ -294,7 +294,7 @@ private static final String DATABASE_CREATE_<relation.name.cobra> = "create tabl
 		+ DATABASE_TABLE_<relation.name.cobra> + " (" // start table
 		+ KEY_ID + " integer primary key autoincrement, " // setup auto-inc.
 		// ST:tableCreateVariables:start
-		<relation.fields: { field | <tableCreateVariables(field)> }; separator="\n">			
+		<relation.fields: { field | <tableCreateVariables(field)> }; separator=",\" //\n"> " //
 		// ST:tableCreateVariables:finish
 		+ " );"; // end table
 >>

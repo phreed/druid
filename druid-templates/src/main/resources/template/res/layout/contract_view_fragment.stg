@@ -10,28 +10,44 @@ SKELETON(contract,item) ::= <<
 BODY(contract,item) ::= <<
 \<?xml version="1.0" encoding="utf-8"?>
 \<!-- ST:BODY:start -->
-\<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/<item.name.bactrian>ViewRelativeLayout"
+
+\<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/<item.name.bactrian>EditRelativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal" >
     
+   \<ScrollView 
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" >
+        
+      \<RelativeLayout 
+	  android:id="@+id/<item.name.bactrian>ViewRelativeLayout"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:orientation="horizontal" >
     
-    \<!-- ST:putFirstLabelAndValue:start -->
-    <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n">
-    \<!-- ST:putFirstLabelAndValue:end -->
     
-    \<!-- ST:putLabelAndValue:start -->
-    <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n">
-    \<!-- ST:putLabelAndValue:end -->
-    
+	  \<!-- ST:putFirstLabelAndValue:start -->
+	  <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n">
+	  \<!-- ST:putFirstLabelAndValue:end -->
+	
+	  \<!-- ST:putLabelAndValue:start -->
+	  <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n">
+	  \<!-- ST:putLabelAndValue:end -->
+      \</RelativeLayout>
+  \</ScrollView>
     
     \<Button
         android:id="@+id/button_<item.name.snake>_view_to_edit"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/labelHeight"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="26dp"
         android:padding="3dp"
         android:text="@string/<item.name.snake>_view_button_label_edit"
@@ -59,7 +75,7 @@ putFirstLabelAndValue(relation,field) ::= <<
 
 putFirstLabel(relation,field) ::= <<
 \<TextView
-        android:id="@+id/label_<relation.name.snake>_<field.name.snake>"
+        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -71,10 +87,13 @@ putFirstLabel(relation,field) ::= <<
 
 putFirstValue(relation,field) ::= <<
 \<TextView
-        android:id="@+id/<relation.name.snake>_<field.name.snake>"
+        android:id="@+id/<relation.name.snake>_view_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        <if(!field.predecessor)>
+            android:layout_below="@+id/<relation.name.snake>_view_label_<field.predecessor.name.snake>"
+        <endif>        
         android:layout_alignParentTop="true"
         android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -88,11 +107,11 @@ putLabelAndValue(relation,field) ::= <<
 
 putLabel(relation,field) ::= <<
 \<TextView
-        android:id="@+id/<relation.name.snake>_<field.name.snake>_label"
+        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/<relation.name.snake>_<(field.predecessor).name.snake>_label"
+        android:layout_below="@+id/<relation.name.snake>_view_label_<field.predecessor.name.snake>"
         android:layout_gravity="left"
         android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -101,11 +120,100 @@ putLabel(relation,field) ::= <<
 
 putValue(relation,field) ::= <<
  \<TextView
-        android:id="@+id/<relation.name.snake>_<field.name.snake>"
+        android:id="@+id/<relation.name.snake>_view_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/<relation.name.snake>_<field.predecessor.name.snake>"
+        android:layout_below="@+id/<relation.name.snake>_view_<field.predecessor.name.snake>"
         android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 >>
+
+
+
+
+resLayoutViewValueDefualtTemplate(relation,field) ::= <<
+>>
+
+resLayoutViewLabelDefualtTemplate(relation,field) ::= <<
+>>
+
+resLayoutViewValueTemplate(relation,field) ::= << <(resLayoutViewValueMap.(field.dtype))(relation,field) > >>
+resLayoutViewLabelTemplate(relation,field) ::= << <(resLayoutViewLabelMap.(field.dtype))(relation,field) > >>
+
+resLayoutViewLabelINTEGER(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelREAL(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelGUID(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelBLOB(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelINCLUSIVE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelBOOL(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelDOUBLE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelSHORT(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelFLOAT(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelEXCLUSIVE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelTEXT(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelFK(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelFILE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelLONG(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelSERIAL(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelTIMESTAMP(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelTYPE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >>  
+
+resLayoutViewValueINTEGER(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueREAL(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueGUID(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueBLOB(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueINCLUSIVE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueBOOL(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueDOUBLE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueSHORT(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueFLOAT(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueEXCLUSIVE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueTEXT(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueFK(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueFILE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueLONG(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueSERIAL(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueTIMESTAMP(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueTYPE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >>  
+
+resLayoutViewLabelMap ::= [ 
+   "INTEGER" : "resLayoutViewLabelINTEGER",
+   "REAL" : "resLayoutViewLabelREAL",
+   "GUID" : "resLayoutViewLabelGUID",
+   "BLOB" : "resLayoutViewLabelBLOB",
+   "INCLUSIVE" : "resLayoutViewLabelINCLUSIVE",
+   "BOOL" : "resLayoutViewLabelBOOL",
+   "DOUBLE" : "resLayoutViewLabelDOUBLE",
+   "SHORT" : "resLayoutViewLabelSHORT",
+   "FLOAT" : "resLayoutViewLabelFLOAT",
+   "EXCLUSIVE" : "resLayoutViewLabelEXCLUSIVE",
+   "TEXT" : "resLayoutViewLabelTEXT",
+   "FK" : "resLayoutViewLabelFK",
+   "FILE" : "resLayoutViewLabelFILE",
+   "LONG" : "resLayoutViewLabelLONG",
+   "SERIAL" : "resLayoutViewLabelSERIAL",
+   "TIMESTAMP" : "resLayoutViewLabelTIMESTAMP",
+   "TYPE" : "resLayoutViewLabelTYPE", 
+   default: key
+]
+resLayoutViewValueMap ::= [ 
+   "INTEGER" : "resLayoutViewValueINTEGER",
+   "REAL" : "resLayoutViewValueREAL",
+   "GUID" : "resLayoutViewValueGUID",
+   "BLOB" : "resLayoutViewValueBLOB",
+   "INCLUSIVE" : "resLayoutViewValueINCLUSIVE",
+   "BOOL" : "resLayoutViewValueBOOL",
+   "DOUBLE" : "resLayoutViewValueDOUBLE",
+   "SHORT" : "resLayoutViewValueSHORT",
+   "FLOAT" : "resLayoutViewValueFLOAT",
+   "EXCLUSIVE" : "resLayoutViewValueEXCLUSIVE",
+   "TEXT" : "resLayoutViewValueTEXT",
+   "FK" : "resLayoutViewValueFK",
+   "FILE" : "resLayoutViewValueFILE",
+   "LONG" : "resLayoutViewValueLONG",
+   "SERIAL" : "resLayoutViewValueSERIAL",
+   "TIMESTAMP" : "resLayoutViewValueTIMESTAMP",
+   "TYPE" : "resLayoutViewValueTYPE", 
+   default: key
+]
