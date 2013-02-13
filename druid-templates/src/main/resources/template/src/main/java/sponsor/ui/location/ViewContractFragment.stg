@@ -1,7 +1,7 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter>View<item.name.bactrian>Fragment.java
+<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter><item.name.bactrian>ViewFragment.java
 %>
 
 
@@ -9,6 +9,7 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
+
 
 package <package(contract,item)>;
 
@@ -18,182 +19,209 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import <contract.root.sponsor.base>.<contract.root.name.camel>.R
+<item.dataTypes: {dataType | <androidViewDefaultViewTypeImportMap.(dataType)> }; separator="\n">
+
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<contract.root.name.bactrian>Resolver;
 
-public class View<item.name.bactrian>Fragment extends <item.name.bactrian>FragmentBase {
-	// LOG TAG, handles refactoring changes
-	private static final String LOG_TAG = View<item.name.bactrian>Fragment.class
-			.getCanonicalName();
+public class <item.name.bactrian>ViewFragment extends Fragment {
+    // LOG TAG, handles refactoring changes
+    private static final String LOG_TAG = <item.name.bactrian>ViewFragment.class
+            .getCanonicalName();
 
-	public final static String rowIdentifyerTAG = "index";
+    private <contract.root.name.bactrian>Resolver resolver;
+    public final static String rowIdentifyerTAG = "index";
 
-	private OnOpenWindowInterface mOpener;
+    private OnOpenWindowInterface mOpener;
+    
+    <item.name.bactrian>Data <item.name.camel>Data;
+    
+    // ST:uiViewDisplayFieldDeclarationTemplate:start
+    <item.fields: { field | <uiViewDisplayFieldDeclarationTemplate(item, field)> }; separator="\n">
+    // ST:uiViewDisplayFieldDeclarationTemplate:end
+    
+    // buttons for edit and delete
+    Button editButton;
+    Button deleteButton;
 
-	// ST:putFieldDeclarations:start
-	<item.fields: { field | <putFieldDeclarations(item, field)> }; separator="\n">
-        // ST:putFieldDeclarations:end 
-	
-	// <item.name.bactrian>Data <item.name.camel>Data;
-	Button editButton;
-	Button deleteButton;
+    // on-click listener, calls appropriate methods on user click on buttons
+    // TODO what pattern is this... ?
+    OnClickListener myOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
 
-	OnClickListener myOnClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
+            switch (view.getId()) {
+            case R.id.button_<item.name.snake>_view_to_delete:
+                deleteButtonPressed();
+                break;
+            case R.id.button_<item.name.snake>_view_to_edit:
+                editButtonPressed();
+                break;
+            default:
+                break;
+            }
+        }
+    };
 
-			switch (view.getId()) {
-			case R.id.button_<item.name.snake>_view_to_delete:
-				deleteButtonPressed();
-				break;
-			case R.id.button_<item.name.snake>_view_to_edit:
-				editButtonPressed();
-				break;
-			default:
-				break;
-			}
-		}
-	};
+    public static <item.name.bactrian>ViewFragment newInstance(long index) {
+        <item.name.bactrian>ViewFragment f = new <item.name.bactrian>ViewFragment();
 
-	public static View<item.name.bactrian>Fragment newInstance(int index) {
-		View<item.name.bactrian>Fragment f = new View<item.name.bactrian>Fragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putLong(rowIdentifyerTAG, index);
+        f.setArguments(args);
 
-		// Supply index input as an argument.
-		Bundle args = new Bundle();
-		args.putInt(rowIdentifyerTAG, index);
-		f.setArguments(args);
+        return f;
+    }
 
-		return f;
-	}
+    // this fragment was attached to an activity
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mOpener = (OnOpenWindowInterface) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnOpenWindowListener");
-		}
-	}
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mOpener = (OnOpenWindowInterface) activity;
+            resolver = new <contract.root.name.bactrian>Resolver(activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnOpenWindowListener");
+        }
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+    // this fragment is being created.
 
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    }
 
-		// ST:putTextViewAssignment:start
-		<item.fields: { field | <putTextViewAssignment(item, field)> }; separator="\n">
-               // ST:putTextViewAssignment:end 
-		
-		editButton = (Button) getView().findViewById(
-				R.id.button_<item.name.snake>_view_to_edit);
-		deleteButton = (Button) getView().findViewById(
-				R.id.button_<item.name.snake>_view_to_delete);
+    // this fragment is creating its view before it can be modified
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.<item.name.snake>_view_fragment,
+                container, false);
+        container.setBackgroundColor(Color.CYAN);
+        return view;
+    }
 
-		editButton.setOnClickListener(myOnClickListener);
-		deleteButton.setOnClickListener(myOnClickListener);
-		setUiTo<item.name.bactrian>Data(getUniqueKey());
-	}
+    // this fragment is modifying its view before display
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-	public void setUiTo<item.name.bactrian>Data(int getUniqueKey) {
-		<item.name.bactrian>Data <item.name.camel> = null;
-		try {
-			<item.name.camel> = get<item.name.bactrian>DataForUserID(getUniqueKey);
-		} catch (RemoteException e) {
-			Log.e(LOG_TAG, "RemoteException Caught => " + e.getMessage());
-			e.printStackTrace();
-		}
-		if (<item.name.camel> == null) {
-			getView().setVisibility(View.GONE);
-		} else { // else it just displays empty screen
-			// ST:putSetTextPerField:start
-		        <item.fields: { field | <putSetTextPerField(item, field)> }; separator="\n">
-                       // ST:putSetTextPerField:end 
-		}
-	}
+        // ST:uiViewDisplayFieldLinkToXMLTemplate:start
+        <item.fields: { field | <uiViewDisplayFieldLinkToXMLTemplate(item,field)> }; separator="\n">
+        // ST:uiViewDisplayFieldLinkToXMLTemplate:end 
+        
+        // TODO: thread the lookup
+        // set the displayed values to 'defualts' until the screen loads (threading & progress bar not yet implmented)
+        // really shouldn't need a progress bar... since the ContentProvider should be local, but will add it in just incase
+        
+        // ST:uiViewDisplayFieldViewToDefaultTemplate:start
+        <item.fields: { field | <uiViewDisplayFieldViewToDefaultTemplate(item,field)> }; separator="\n">
+        // ST:uiViewDisplayFieldViewToDefaultTemplate:end 
+        
+        
+        editButton = (Button) getView().findViewById(
+                R.id.button_<item.name.snake>_view_to_edit);
+        deleteButton = (Button) getView().findViewById(
+                R.id.button_<item.name.snake>_view_to_delete);
 
-	private void editButtonPressed() {
-		mOpener.openEdit<item.name.bactrian>Fragment(getUniqueKey());
-	}
+        editButton.setOnClickListener(myOnClickListener);
+        deleteButton.setOnClickListener(myOnClickListener);
 
-	private void deleteButtonPressed() {
-		String message = getResources().getString(
-				R.string.<item.name.snake>_view_deletion_dialog_message);
+        try {
+            setUiTo<item.name.bactrian>Data(getUniqueKey());
+        } catch (RemoteException e) {
+            Toast.makeText(getActivity(),
+                    "Error retrieving information from local data store.",
+                    Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "Error getting <item.name.bactrian> data from C.P.");
+            // e.printStackTrace();
+        }
+    }   
+    
+    public void setUiTo<item.name.bactrian>Data(int getUniqueKey) throws RemoteException {
+        <item.name.bactrian>Data <item.name.camel> = null;
+        
+        <item.name.camel> = resolver.get<item.name.bactrian>DataViaRowID(getUniqueKey);
+       
+        if (<item.name.camel> == null) {
+            getView().setVisibility(View.GONE);
+        } else { // else it just displays empty screen
+            // ST:uiViewSetDisplayViewFromOrmObjectTemplate:start
+            <item.fields: { field | <uiViewSetDisplayViewFromOrmObjectTemplate(item, field)> }; separator="\n">
+            // ST:uiViewSetDisplayViewFromOrmObjectTemplate:end 
+        }
+    }
 
-		new AlertDialog.Builder(getActivity())
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.<item.name.snake>_view_deletion_dialog_title)
-				.setMessage(message)
-				.setPositiveButton(R.string.<item.name.snake>_view_deletion_dialog_yes,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								try {
-									deleteAll<item.name.bactrian>sWithUserID(getUniqueKey());
-								} catch (RemoteException e) {
-									Log.e(LOG_TAG, "RemoteException Caught => "
-											+ e.getMessage());
-									e.printStackTrace();
-								}
-								mOpener.openList<item.name.bactrian>sFragment();
-								if (getResources().getBoolean(R.bool.isTablet) == true) {
-									mOpener.openView<item.name.bactrian>Fragment(-1);
-								} else {
-									getActivity().finish();
-								}
-							}
+    // action to be performed when the edit button is pressed
+    private void editButtonPressed() {
+        mOpener.openEdit<item.name.bactrian>Fragment(<item.name.camel>Data.KEY_ID);
+    }
 
-						})
-				.setNegativeButton(R.string.<item.name.snake>_view_deletion_dialog_no,
-						null).show();
-	}
+    // action to be performed when the delete button is pressed
+    private void deleteButtonPressed() {
+        String message;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.<item.name.snake>_view_fragment,
-				container, false);
-		container.setBackgroundColor(Color.CYAN);
-		return view;
-	}
+        message = getResources().getString(
+                R.string.<item.name.snake>_view_deletion_dialog_message);
 
-	public int getUniqueKey() {
-		return getArguments().getInt(rowIdentifyerTAG, 0);
-	}
+        new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.<item.name.snake>_view_deletion_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.<item.name.snake>_view_deletion_dialog_yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                try {
+                                    resolver.deleteAll<item.name.bactrian>WithRowID(<item.name.camel>Data.KEY_ID);
+                                } catch (RemoteException e) {
+                                    Log.e(LOG_TAG, "RemoteException Caught => "
+                                            + e.getMessage());
+                                    e.printStackTrace();
+                                }
+                                mOpener.openList<item.name.bactrian>Fragment();
+                                if (getResources().getBoolean(R.bool.isTablet) == true) {
+                                    mOpener.openView<item.name.bactrian>Fragment(-1);
+                                } else {
+                                    getActivity().finish();
+                                }
+                            }
 
+                        })
+                .setNegativeButton(R.string.<item.name.snake>_view_deletion_dialog_no,
+                        null).show();
+    }
+
+    public int getUniqueKey() {
+        return getArguments().getInt(rowIdentifyerTAG, 0);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mOpener = null;
+        resolver = null;
+    }
 }
 >>
 
 package(contract,item) ::= <%
 <contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
-%>
-
-
-
-putTextViewAssignment(relation,field) ::= <<
-      <field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_<field.name.snake>);
->>
-
-putSetTextPerField(relation,field) ::= <%
-<field.name.camel>TV.setText(String.valueOf(<field.name.camel>.userID));
-%>
-
-putFieldDeclarations(relation,field) ::= <%
-TextView <field.name.camel>TV;
 %>

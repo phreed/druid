@@ -13,7 +13,7 @@ BODY(contract) ::= <<
      android:versionName="0.1.0-SNAPSHOT" 
      package="<contract.root.sponsor.base>.<contract.root.name.camel>">
 
-    \<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15"/>
+    \<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>
     \<!-- START PERMISSIONS FOR APPLICATIONS WITH SYNC ADAPTERS -->
     \<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     \<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
@@ -21,7 +21,7 @@ BODY(contract) ::= <<
     \<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     \<!-- END PERMISSIONS FOR APPLICATIONS WITH SYNC ADAPTERS -->
 
-    \<application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
+    \<application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme" android:allowBackup="true">
 
         <contract.root.relations: { relation | <buildActivity(relation)> }; separator="\n">
 
@@ -31,7 +31,7 @@ BODY(contract) ::= <<
               android:name=".provider.<contract.root.name.bactrian>Provider" tools:ignore="ExportedContentProvider">
         \</provider>
         \<!-- THIS IS THE SYNC ADAPTOR ACCESS SERVICE -->
-        \<service android:exported="true" android:name=".provider.AccountAuthenticatorService" android:process=":auth">
+        \<service android:exported="true" android:name=".provider.AccountAuthenticatorService" android:process=":auth" tools:ignore="ExportedService">
             \<intent-filter>
                 \<action android:name="android.accounts.sync.AccountAuthenticator"/>
             \</intent-filter>
@@ -51,7 +51,7 @@ buildActivity(relation) ::= <<
 \<!-- ST:buildActivity:start -->
 \<activity 
         android:label="@string/title_activity_main"
-        android:name=".ui.<relation.name.camel>.List<relation.name.bactrian>Activity">
+        android:name=".ui.<relation.name.camel>.<relation.name.bactrian>ListActivity">
     \<intent-filter>
         \<action android:name="android.intent.action.MAIN"/>
         \<category android:name="android.intent.category.LAUNCHER"/>

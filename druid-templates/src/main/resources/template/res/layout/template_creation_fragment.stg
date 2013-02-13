@@ -11,27 +11,39 @@ BODY(contract,item) ::= <<
 \<?xml version="1.0" encoding="utf-8"?> <! this HAS to be first line in file !>
 \<!-- ST:BODY:start -->
 
-\<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/<item.name.snake>RelativeLayout"
+\<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/<item.name.bactrian>EditRelativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    \<!-- ST:putFirstLabelAndValue:start -->
-    <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n\n">
-    \<!-- ST:putFirstLabelAndValue:end -->
-    
-    \<!-- ST:putLabelAndValue:start -->
-    <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n\n">
-    \<!-- ST:putLabelAndValue:end -->
-     
+  \<ScrollView 
+      android:id="@+id/scrollView1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginBottom="55dp" >
+
+    \<RelativeLayout 
+	android:id="@+id/<item.name.snake>RelativeLayout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal" >
+	
+	\<!-- ST:printPairLabelValue:start -->
+	<item.fields: { field | <printPairLabelValue(item, field)> }; separator="\n\n">
+	\<!-- ST:printPairLabelValue:end -->
+   
+    \</RelativeLayout>
+  \</ScrollView>
         
     \<Button
         android:id="@+id/<item.name.snake>_create_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="32dp"
         android:text="@string/<item.name.snake>_create_button_label_create" />
 
@@ -39,7 +51,7 @@ BODY(contract,item) ::= <<
         android:id="@+id/<item.name.snake>_create_button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/<item.name.snake>_create_button_save"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/<item.name.snake>_create_button_label_clear" />
 
@@ -47,68 +59,171 @@ BODY(contract,item) ::= <<
         android:id="@+id/<item.name.snake>_create_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/<item.name.snake>_create_button_reset"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="21dp"
         android:text="@string/<item.name.snake>_create_button_label_cancel" />
 
 \</RelativeLayout>
-
 >>
 
-putFirstLabelAndValue(relation,field) ::= <<
-\<!-- <field.name.snake> -->
-<putFirstLabel(relation,field)>
-<putFirstValue(relation,field)>
+
+printPairLabelValue(relation,field) ::= <<
+\<!-- <field.name.snake> label/value pair -->
+<resLayoutCreateLabelTemplate(item, field)>
+<resLayoutCreateValueTemplate(item, field)>
 >>
 
-putFirstLabel(relation,field) ::= <<
+
+resLayoutCreateLabelDefualtTemplate(relation,field) ::= <<
 \<TextView
         android:id="@+id/<relation.name.snake>_create_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
-        android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_create_value_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_create_value_<field.name.snake>"       
         android:layout_alignParentLeft="true"
         android:text="@string/<relation.name.snake>_create_label_<field.name.snake>" />
 >>
 
-putFirstValue(relation,field) ::= <<
+resLayoutCreateValueDefualtTemplate(relation,field) ::= <<
 \<EditText
-        android:id="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:id="@+id/<relation.name.snake>_create_value_<field.name.snake>"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        <if(field.predecessor)>android:layout_below="@+id/<relation.name.snake>_create_value_<field.predecessor.name.snake>"
+        <else>android:layout_alignParentTop="true"
+        <endif>
+        android:text="@string/<relation.name.snake>_create_<field.name.snake>_default_value"
+        android:inputType="text" />
 >>
 
-putLabelAndValue(relation,field) ::= <<
-\<!-- <field.name.snake> -->
-<putLabel(relation,field)>
-<putValue(relation,field)>
->>
+resLayoutCreateLabelTemplate(relation,field) ::= << <(resLayoutCreateLabelMap.(field.dtype))(relation,field) > >>
+resLayoutCreateValueTemplate(relation,field) ::= << <(resLayoutCreateValueMap.(field.dtype))(relation,field) > >>
 
-putLabel(relation,field) ::= <<
+
+
+
+resLayoutCreateValueINTEGER(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueREAL(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueGUID(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueBLOB(relation,field) ::= << 
+\<EditText
+        android:id="@+id/<relation.name.snake>_create_value_<field.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        <if(field.predecessor)>android:layout_below="@+id/<relation.name.snake>_create_value_<field.predecessor.name.snake>"
+        <else>android:layout_alignParentTop="true"
+        <endif>
+        android:visibility="gone"
+        android:text="@string/<relation.name.snake>_create_<field.name.snake>_default_value"
+        android:inputType="text" />
+>> 
+resLayoutCreateValueINCLUSIVE(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueBOOL(relation,field) ::= << 
+\<ToggleButton
+        android:id="@+id/<relation.name.snake>_create_value_<field.name.snake>"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        <if(field.predecessor)>android:layout_below="@+id/<relation.name.snake>_create_value_<field.predecessor.name.snake>"
+        <else>android:layout_alignParentTop="true"
+        <endif>
+        android:textOff="false"
+        android:textOn="true" />
+>> 
+resLayoutCreateValueDOUBLE(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueSHORT(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueFLOAT(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueEXCLUSIVE(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueTEXT(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueFK(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueFILE(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueLONG(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueSERIAL(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueTIMESTAMP(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >> 
+resLayoutCreateValueTYPE(relation,field) ::= << <resLayoutCreateValueDefualtTemplate(relation,field) > >>  
+
+resLayoutCreateLabelINTEGER(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelREAL(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelGUID(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelBLOB(relation,field) ::= << 
 \<TextView
         android:id="@+id/<relation.name.snake>_create_label_<field.name.snake>"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
-        android:layout_alignBottom="@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_create_value_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_create_value_<field.name.snake>"       
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:text="@string/<relation.name.snake>_create_label_<field.name.snake>" />
+>> 
+resLayoutCreateLabelINCLUSIVE(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelBOOL(relation,field) ::= << 
+\<TextView
+        android:id="@+id/<relation.name.snake>_create_label_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_create_value_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_create_value_<field.name.snake>"       
         android:layout_alignParentLeft="true"
         android:text="@string/<relation.name.snake>_create_label_<field.name.snake>" />
->>
+>> 
+resLayoutCreateLabelDOUBLE(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelSHORT(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelFLOAT(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelEXCLUSIVE(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelTEXT(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelFK(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelFILE(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelLONG(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelSERIAL(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelTIMESTAMP(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
+resLayoutCreateLabelTYPE(relation,field) ::= << <resLayoutCreateLabelDefualtTemplate(relation,field) > >> 
 
-putValue(relation,field) ::= <<
-\<EditText
-        android:id="@+id/@+id/<relation.name.snake>_create_edittext_<item.name.snake>"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/<relation.name.snake>_create_<field.predecessor.name.snake>"
-        android:inputType="number" />
->>
+
+resLayoutCreateValueMap ::= [ 
+   "INTEGER" : "resLayoutCreateValueINTEGER",
+   "REAL" : "resLayoutCreateValueREAL",
+   "GUID" : "resLayoutCreateValueGUID",
+   "BLOB" : "resLayoutCreateValueBLOB",
+   "INCLUSIVE" : "resLayoutCreateValueINCLUSIVE",
+   "BOOL" : "resLayoutCreateValueBOOL",
+   "DOUBLE" : "resLayoutCreateValueDOUBLE",
+   "SHORT" : "resLayoutCreateValueSHORT",
+   "FLOAT" : "resLayoutCreateValueFLOAT",
+   "EXCLUSIVE" : "resLayoutCreateValueEXCLUSIVE",
+   "TEXT" : "resLayoutCreateValueTEXT",
+   "FK" : "resLayoutCreateValueFK",
+   "FILE" : "resLayoutCreateValueFILE",
+   "LONG" : "resLayoutCreateValueLONG",
+   "SERIAL" : "resLayoutCreateValueSERIAL",
+   "TIMESTAMP" : "resLayoutCreateValueTIMESTAMP",
+   "TYPE" : "resLayoutCreateValueTYPE", 
+   default: key
+]
 
 
 
-
+resLayoutCreateLabelMap ::= [ 
+   "INTEGER" : "resLayoutCreateLabelINTEGER",
+   "REAL" : "resLayoutCreateLabelREAL",
+   "GUID" : "resLayoutCreateLabelGUID",
+   "BLOB" : "resLayoutCreateLabelBLOB",
+   "INCLUSIVE" : "resLayoutCreateLabelINCLUSIVE",
+   "BOOL" : "resLayoutCreateLabelBOOL",
+   "DOUBLE" : "resLayoutCreateLabelDOUBLE",
+   "SHORT" : "resLayoutCreateLabelSHORT",
+   "FLOAT" : "resLayoutCreateLabelFLOAT",
+   "EXCLUSIVE" : "resLayoutCreateLabelEXCLUSIVE",
+   "TEXT" : "resLayoutCreateLabelTEXT",
+   "FK" : "resLayoutCreateLabelFK",
+   "FILE" : "resLayoutCreateLabelFILE",
+   "LONG" : "resLayoutCreateLabelLONG",
+   "SERIAL" : "resLayoutCreateLabelSERIAL",
+   "TIMESTAMP" : "resLayoutCreateLabelTIMESTAMP",
+   "TYPE" : "resLayoutCreateLabelTYPE", 
+   default: key
+]

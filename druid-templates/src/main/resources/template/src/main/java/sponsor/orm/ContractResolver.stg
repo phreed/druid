@@ -220,7 +220,7 @@ public int deleteAll<relation.name.bactrian>WithRowID(long rowID) throws RemoteE
 >>
 
 makeGetDataViaRowIDOrmForRelation(relation) ::= <<
-public <relation.name.bactrian>Data get<relation.name.bactrian>DataViaRowID(final int rowID)
+public <relation.name.bactrian>Data get<relation.name.bactrian>DataViaRowID(final long rowID)
 		throws RemoteException {
 	String[] selectionArgs = { String.valueOf(rowID) };
 	ArrayList\<<relation.name.bactrian>Data> results = query<relation.name.bactrian>Data(null,

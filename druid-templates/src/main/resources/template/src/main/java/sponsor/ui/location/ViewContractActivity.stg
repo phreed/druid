@@ -23,9 +23,9 @@ public class View<item.name.bactrian>Activity extends <item.name.bactrian>Activi
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
 			int index = getIntent().getExtras().getInt(
-					View<item.name.bactrian>Fragment.rowIdentifyerTAG);
+					<item.name.bactrian>ViewFragment.rowIdentifyerTAG);
 
-			View<item.name.bactrian>Fragment details = View<item.name.bactrian>Fragment
+			<item.name.bactrian>ViewFragment details = <item.name.bactrian>ViewFragment
 					.newInstance(index);
 
 			details.setArguments(getIntent().getExtras());

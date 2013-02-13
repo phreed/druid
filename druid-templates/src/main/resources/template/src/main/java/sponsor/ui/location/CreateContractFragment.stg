@@ -9,155 +9,206 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
-
-package com.walkernation.db.ui.location;
+// ST:BODY:start
+package <package(contract,item)>;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.walkernation.db.R;
-import com.walkernation.db.orm.LocationData;
-import com.walkernation.db.provider.ContentDescriptor;
+<item.dataTypes: {dataType | <androidCreateDefaultViewTypeImportMap.(dataType)> }; separator="\n">
 
-public class CreateLocationFragment extends LocationFragmentBase {
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<contract.root.name.bactrian>Resolver;
 
-	public final static String LOG_TAG = CreateLocationFragment.class
-			.getCanonicalName();
-	final static Uri uri = ContentDescriptor.Location.CONTENT_URI;
+public class Create<item.name.bactrian>Fragment extends Fragment {
 
-	EditText userIdET;
-	EditText latitudeET;
-	EditText longitudeET;
-	EditText heightET;
+    public final static String LOG_TAG = Create<item.name.bactrian>Fragment.class
+            .getCanonicalName();
 
-	Button buttonCreate;
-	Button buttonClear;
-	Button buttonCancel;
+    // EditText(s) used
+ 
+    // ST:uiCreateDisplayFieldDeclarationTemplate:start
+    <item.fields: { field | <uiCreateDisplayFieldDeclarationTemplate(item, field)> }; separator="\n">
+    // ST:uiCreateDisplayFieldDeclarationTemplate:end 
 
-	int index;
-	OnOpenWindowInterface mOpener;
+    Button buttonCreate;
+    Button buttonClear;
+    Button buttonCancel;
 
-	public final static String LOCATION = "location";
+    // int index;
+    OnOpenWindowInterface mOpener;
+    <contract.root.name.bactrian>Resolver resolver;
 
-	public static CreateLocationFragment newInstance() {
-		CreateLocationFragment f = new CreateLocationFragment();
-		return f;
-	}
+    public final static String LOCATION = "<item.name.camel>";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+    
+     // listener to button presses.
+    // TODO determine/label pattern.
+    OnClickListener myOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+            case R.id.<item.name.snake>_create_button_save:
+                doSaveButtonClick();
+                break;
+            case R.id.<item.name.snake>_create_button_reset:
+                doResetButtonClick();
+                break;
+            case R.id.<item.name.snake>_create_button_cancel:
+                doCancelButtonClick();
+                break;
+            default:
+                break;
+            }
+        }
+    };
+    
+    void doSaveButtonClick() {}
+    
+    void doCancelButtonClick(){}
+    void doResetButtonClick(){}
+    
+    public static Create<item.name.bactrian>Fragment newInstance() {
+        Create<item.name.bactrian>Fragment f = new Create<item.name.bactrian>Fragment();
+        return f;
+    }
 
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-		try {
-			mOpener = (OnOpenWindowInterface) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnOpenWindowListener");
-		}
-	}
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        try {
+            mOpener = (OnOpenWindowInterface) activity;
+            resolver = new <contract.root.name.bactrian>Resolver(activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnOpenWindowListener");
+        }
+    }
 
-		userIdET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_userID);
-		latitudeET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_latitude);
-		longitudeET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_longitude);
-		heightET = (EditText) getView().findViewById(
-				R.id.location_create_edittext_height);
-		buttonClear = (Button) getView().findViewById(
-				R.id.location_create_button_reset);
-		buttonCancel = (Button) getView().findViewById(
-				R.id.location_create_button_cancel);
-		buttonCreate = (Button) getView().findViewById(
-				R.id.location_create_button_save);
+    @Override
+    public void onDetach() {
+        mOpener = null;
+        resolver = null;
+        super.onDetach();
+    }
 
-		buttonClear.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-			@Override
-			public void onClick(View v) {
-				userIdET.setText("");
-				latitudeET.setText("");
-				longitudeET.setText("");
-				heightET.setText("");
-			}
-		});
+        // Get the EditTexts
+        // ST:uiCreateDisplayFieldLinkToXMLTemplate:start
+        <item.fields: { field | <uiCreateDisplayFieldLinkToXMLTemplate(item,field)> }; separator="\n">
+        // ST:uiCreateDisplayFieldLinkToXMLTemplate:end 
 
-		buttonCancel.setOnClickListener(new OnClickListener() {
+        buttonClear = (Button) getView().findViewById(
+                R.id.<item.name.snake>_create_button_reset);
+        buttonCancel = (Button) getView().findViewById(
+                R.id.<item.name.snake>_create_button_cancel);
+        buttonCreate = (Button) getView().findViewById(
+                R.id.<item.name.snake>_create_button_save);
 
-			@Override
-			public void onClick(View v) {
-				if (getResources().getBoolean(R.bool.isTablet) == true) {
-					// put
-					mOpener.openViewLocationFragment(0);
-				} else {
-					getActivity().finish(); // same as hitting 'back' button
-				}
-			}
-		});
+        buttonClear.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            // ST:uiCreateDisplayFieldViewToDefaultTemplate:start
+            <item.fields: { field | <uiCreateDisplayFieldViewToDefaultTemplate(item,field)> }; separator="\n">
+            // ST:uiCreateDisplayFieldViewToDefaultTemplate:end 
+            }
+        });
 
-		buttonCreate.setOnClickListener(new OnClickListener() {
+        buttonCancel.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				int userID = Integer.valueOf(userIdET.getText().toString());
-				int latitude = Integer.valueOf(latitudeET.getText().toString());
-				int longitude = Integer.valueOf(longitudeET.getText()
-						.toString());
-				int hieght = Integer.valueOf(heightET.getText().toString());
+            @Override
+            public void onClick(View v) {
+                if (getResources().getBoolean(R.bool.isTablet) == true) {
+                    // put
+                    mOpener.openView<item.name.bactrian>Fragment(0);
+                } else {
+                    getActivity().finish(); // same as hitting 'back' button
+                }
+            }
+        });
 
-				LocationData location = new LocationData(latitude, longitude,
-						hieght, userID);
-				try {
-					insertNewLocation(location);
-				} catch (RemoteException e) {
-					Log.e(LOG_TAG,
-							"Caught RemoteException => " + e.getMessage());
-					e.printStackTrace();
-				}
+        buttonCreate.setOnClickListener(new OnClickListener() {
 
-				// Toast.makeText(getActivity(), "Created...(not really)",
-				// Toast.LENGTH_SHORT).show();
-				if (getResources().getBoolean(R.bool.isTablet) == true) {
-					// put
-					mOpener.openViewLocationFragment(0);
-				} else {
-					getActivity().finish(); // same as hitting 'back' button
-				}
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                // local Editables
+                // ST:uiCreateGetValuesFromViewsTemplate:start
+                <item.fields: { field | <uiCreateGetValuesFromViewsTemplate(item,field)> }; separator="\n">
+                // ST:uiCreateGetValuesFromViewsTemplate:end 
 
-	}
+                // ST:uiCreateJavaFieldDeclarationAndInitializationTemplate:start
+                <item.fields: { field | <uiCreateJavaFieldDeclarationAndInitializationTemplate(item,field)> }; separator="\n">
+                // ST:uiCreateJavaFieldDeclarationAndInitializationTemplate:end 
+                
+                // pull values from Editables
+                // ST:uiCreateConvertValuesFromViewsToJavaTemplate:start
+                <item.fields: { field | <uiCreateConvertValuesFromViewsToJavaTemplate(item,field)> }; separator="\n">
+                // ST:uiCreateConvertValuesFromViewsToJavaTemplate:end 
+               
+                // new <item.name.bactrian>Data object with above info
+                <item.name.bactrian>Data newData = new <item.name.bactrian>Data(-1, 
+                // -1 row index, because there is no way to know which row it will go into
+                // ST:uiCreateOrmConstructorFieldNameTemplate:start
+                <item.fields: { field | <uiCreateOrmConstructorFieldNameTemplate(item,field)> }; separator=",\n">
+                // ST:uiCreateOrmConstructorFieldNameTemplate:end 
+                );
+                
+                // insert it through Resolver to be put into ContentProvider
+                try {
+                    resolver.insert(newData);
+                } catch (RemoteException e) {
+                    Log.e(LOG_TAG,
+                            "Caught RemoteException => " + e.getMessage());
+                    e.printStackTrace();
+                }
+                // return back to proper state
+                if (getResources().getBoolean(R.bool.isTablet) == true) {
+                    // put
+                    mOpener.openView<item.name.bactrian>Fragment(0);
+                } else {
+                    getActivity().finish(); // same as hitting 'back' button
+                }
+            }
+        });
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_creation_fragment,
-				container, false);
-		container.setBackgroundColor(Color.CYAN);
-		return view;
-	}
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.<item.name.snake>_creation_fragment,
+                container, false);
+        container.setBackgroundColor(Color.CYAN);
+        return view;
+    }
 
 }
-
+// ST:BODY:end
 >>
+
+package(contract,item) ::= <%
+<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
+%>
+

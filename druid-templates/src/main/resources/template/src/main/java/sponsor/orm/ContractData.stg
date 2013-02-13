@@ -15,16 +15,13 @@ BODY(contract,item) ::= <<
 package <package(contract)>;
 // ST:package:finish
 
-import java.io.Serializable;
-
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class <item.name.bactrian>Data implements Parcelable, Serializable {
+public class <item.name.bactrian>Data implements Parcelable{
 
-	//private static final long serialVersionUID = 5505248865103008665L;
-	final long KEY_ID ;
+	public final long KEY_ID ;
 	// ST:putDeclaration:start	
 	<item.fields: { field | <putDeclaration(field)> }; separator="\n">
 	// ST:putDeclaration:finish
@@ -75,6 +72,7 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+	    dest.writeLong(KEY_ID);
 	    // ST:constructWriteParcel:start
 	    <item.fields: { field | dest.<androidWriteParcelMethodMap.(field.dtype)>(<field.name.camel>); }; separator="\n">
 	    // ST:constructWriteParcel:finish
@@ -91,6 +89,7 @@ public class <item.name.bactrian>Data implements Parcelable, Serializable {
 	};
 
 	private <item.name.bactrian>Data(Parcel in) {
+	    KEY_ID = in.readLong();
             // ST:constructReadParcel:start
 	    <item.fields: { field | <androidReadParcelMethodTemplate(field.dtype, field.name)> }; separator="\n">
 	    // ST:constructReadParcel:finish
@@ -111,4 +110,307 @@ putWriteParcel(field) ::= <<
 
 
 
+ormDataObjectConstructReadParcelDefualtTemplate(field) ::= <<
+>>
 
+ormDataObjectConstructWriteParcelDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectPutDeclarationDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectConstructorAssignmentsDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectConstructCloneDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectToStringDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectCosntructorParametersDefualtTemplate(field) ::= <<
+>>
+
+ormDataObjectConstructReadParcelTemplate(field) ::= << <(ormDataObjectConstructReadParcelMap.(field.dtype))(field) > >>
+ormDataObjectConstructWriteParcelTemplate(field) ::= << <(ormDataObjectConstructWriteParcelMap.(field.dtype))(field) > >>
+ormDataObjectCosntructorParametersTemplate(field) ::= << <(ormDataObjectCosntructorParametersMap.(field.dtype))(field) > >>
+ormDataObjectToStringTemplate(field) ::= << <(ormDataObjectToStringMap.(field.dtype))(field) > >>
+ormDataObjectConstructCloneTemplate(field) ::= << <(ormDataObjectConstructCloneMap.(field.dtype))(field) > >>
+ormDataObjectConstructorAssignmentsTemplate(field) ::= << <(ormDataObjectConstructorAssignmentsMap.(field.dtype))(field) > >>
+ormDataObjectPutDeclarationTemplate(field) ::= << <(ormDataObjectPutDeclarationMap.(field.dtype))(field) > >>
+
+ormDataObjectToStringINTEGER(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringREAL(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringGUID(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringBLOB(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringINCLUSIVE(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringBOOL(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringDOUBLE(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringSHORT(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringFLOAT(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringEXCLUSIVE(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringTEXT(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringFK(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringFILE(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringLONG(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringSERIAL(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringTIMESTAMP(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+ormDataObjectToStringTYPE(field) ::= << <ormDataObjectToStringDefualtTemplate(field) > >> 
+
+
+ormDataObjectCosntructorParametersINTEGER(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersREAL(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersGUID(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersBLOB(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersINCLUSIVE(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersBOOL(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersDOUBLE(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersSHORT(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersFLOAT(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersEXCLUSIVE(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersTEXT(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersFK(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersFILE(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersLONG(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersSERIAL(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersTIMESTAMP(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >> 
+ormDataObjectCosntructorParametersTYPE(field) ::= << <ormDataObjectCosntructorParametersDefualtTemplate(field) > >>  
+
+ormDataObjectConstructCloneINTEGER(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneREAL(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneGUID(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneBLOB(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneINCLUSIVE(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneBOOL(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneDOUBLE(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneSHORT(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneFLOAT(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneEXCLUSIVE(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneTEXT(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneFK(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneFILE(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneLONG(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneSERIAL(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneTIMESTAMP(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >> 
+ormDataObjectConstructCloneTYPE(field) ::= << <ormDataObjectConstructCloneDefualtTemplate(field) > >>  
+
+ormDataObjectConstructorAssignmentsINTEGER(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsREAL(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsGUID(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsBLOB(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsINCLUSIVE(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsBOOL(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsDOUBLE(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsSHORT(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsFLOAT(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsEXCLUSIVE(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsTEXT(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsFK(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsFILE(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsLONG(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsSERIAL(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsTIMESTAMP(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >> 
+ormDataObjectConstructorAssignmentsTYPE(field) ::= << <ormDataObjectConstructorAssignmentsDefualtTemplate(field) > >>  
+
+ormDataObjectConstructWriteParcelINTEGER(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelREAL(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelGUID(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelBLOB(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelINCLUSIVE(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelBOOL(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelDOUBLE(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelSHORT(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelFLOAT(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelEXCLUSIVE(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelTEXT(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelFK(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelFILE(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelLONG(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelSERIAL(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelTIMESTAMP(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructWriteParcelTYPE(field) ::= << <ormDataObjectConstructWriteParcelDefualtTemplate(field) > >>  
+
+ormDataObjectPutDeclarationINTEGER(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationREAL(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationGUID(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationBLOB(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationINCLUSIVE(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationBOOL(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationDOUBLE(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationSHORT(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationFLOAT(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationEXCLUSIVE(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationTEXT(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationFK(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationFILE(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationLONG(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationSERIAL(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationTIMESTAMP(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >> 
+ormDataObjectPutDeclarationTYPE(field) ::= << <ormDataObjectPutDeclarationDefualtTemplate(field) > >>  
+
+
+ormDataObjectConstructReadParcelINTEGER(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelREAL(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelGUID(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelBLOB(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelINCLUSIVE(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelBOOL(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelDOUBLE(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelSHORT(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelFLOAT(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelEXCLUSIVE(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelTEXT(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelFK(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelFILE(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelLONG(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelSERIAL(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelTIMESTAMP(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >> 
+ormDataObjectConstructReadParcelTYPE(field) ::= << <ormDataObjectConstructReadParcelDefualtTemplate(field) > >>  
+
+
+ormDataObjectConstructReadParcelMap ::= [ 
+   "INTEGER" : "ormDataObjectConstructReadParcelINTEGER",
+   "REAL" : "ormDataObjectConstructReadParcelREAL",
+   "GUID" : "ormDataObjectConstructReadParcelGUID",
+   "BLOB" : "ormDataObjectConstructReadParcelBLOB",
+   "INCLUSIVE" : "ormDataObjectConstructReadParcelINCLUSIVE",
+   "BOOL" : "ormDataObjectConstructReadParcelBOOL",
+   "DOUBLE" : "ormDataObjectConstructReadParcelDOUBLE",
+   "SHORT" : "ormDataObjectConstructReadParcelSHORT",
+   "FLOAT" : "ormDataObjectConstructReadParcelFLOAT",
+   "EXCLUSIVE" : "ormDataObjectConstructReadParcelEXCLUSIVE",
+   "TEXT" : "ormDataObjectConstructReadParcelTEXT",
+   "FK" : "ormDataObjectConstructReadParcelFK",
+   "FILE" : "ormDataObjectConstructReadParcelFILE",
+   "LONG" : "ormDataObjectConstructReadParcelLONG",
+   "SERIAL" : "ormDataObjectConstructReadParcelSERIAL",
+   "TIMESTAMP" : "ormDataObjectConstructReadParcelTIMESTAMP",
+   "TYPE" : "ormDataObjectConstructReadParcelTYPE", 
+   default: key
+]
+
+ormDataObjectConstructWriteParcelMap ::= [ 
+   "INTEGER" : "ormDataObjectConstructWriteParcelINTEGER",
+   "REAL" : "ormDataObjectConstructWriteParcelREAL",
+   "GUID" : "ormDataObjectConstructWriteParcelGUID",
+   "BLOB" : "ormDataObjectConstructWriteParcelBLOB",
+   "INCLUSIVE" : "ormDataObjectConstructWriteParcelINCLUSIVE",
+   "BOOL" : "ormDataObjectConstructWriteParcelBOOL",
+   "DOUBLE" : "ormDataObjectConstructWriteParcelDOUBLE",
+   "SHORT" : "ormDataObjectConstructWriteParcelSHORT",
+   "FLOAT" : "ormDataObjectConstructWriteParcelFLOAT",
+   "EXCLUSIVE" : "ormDataObjectConstructWriteParcelEXCLUSIVE",
+   "TEXT" : "ormDataObjectConstructWriteParcelTEXT",
+   "FK" : "ormDataObjectConstructWriteParcelFK",
+   "FILE" : "ormDataObjectConstructWriteParcelFILE",
+   "LONG" : "ormDataObjectConstructWriteParcelLONG",
+   "SERIAL" : "ormDataObjectConstructWriteParcelSERIAL",
+   "TIMESTAMP" : "ormDataObjectConstructWriteParcelTIMESTAMP",
+   "TYPE" : "ormDataObjectConstructWriteParcelTYPE", 
+   default: key
+]
+
+ormDataObjectPutDeclarationMap ::= [ 
+   "INTEGER" : "ormDataObjectPutDeclarationINTEGER",
+   "REAL" : "ormDataObjectPutDeclarationREAL",
+   "GUID" : "ormDataObjectPutDeclarationGUID",
+   "BLOB" : "ormDataObjectPutDeclarationBLOB",
+   "INCLUSIVE" : "ormDataObjectPutDeclarationINCLUSIVE",
+   "BOOL" : "ormDataObjectPutDeclarationBOOL",
+   "DOUBLE" : "ormDataObjectPutDeclarationDOUBLE",
+   "SHORT" : "ormDataObjectPutDeclarationSHORT",
+   "FLOAT" : "ormDataObjectPutDeclarationFLOAT",
+   "EXCLUSIVE" : "ormDataObjectPutDeclarationEXCLUSIVE",
+   "TEXT" : "ormDataObjectPutDeclarationTEXT",
+   "FK" : "ormDataObjectPutDeclarationFK",
+   "FILE" : "ormDataObjectPutDeclarationFILE",
+   "LONG" : "ormDataObjectPutDeclarationLONG",
+   "SERIAL" : "ormDataObjectPutDeclarationSERIAL",
+   "TIMESTAMP" : "ormDataObjectPutDeclarationTIMESTAMP",
+   "TYPE" : "ormDataObjectPutDeclarationTYPE", 
+   default: key
+]
+
+ormDataObjectCosntructorParametersMap ::= [ 
+   "INTEGER" : "ormDataObjectCosntructorParametersINTEGER",
+   "REAL" : "ormDataObjectCosntructorParametersREAL",
+   "GUID" : "ormDataObjectCosntructorParametersGUID",
+   "BLOB" : "ormDataObjectCosntructorParametersBLOB",
+   "INCLUSIVE" : "ormDataObjectCosntructorParametersINCLUSIVE",
+   "BOOL" : "ormDataObjectCosntructorParametersBOOL",
+   "DOUBLE" : "ormDataObjectCosntructorParametersDOUBLE",
+   "SHORT" : "ormDataObjectCosntructorParametersSHORT",
+   "FLOAT" : "ormDataObjectCosntructorParametersFLOAT",
+   "EXCLUSIVE" : "ormDataObjectCosntructorParametersEXCLUSIVE",
+   "TEXT" : "ormDataObjectCosntructorParametersTEXT",
+   "FK" : "ormDataObjectCosntructorParametersFK",
+   "FILE" : "ormDataObjectCosntructorParametersFILE",
+   "LONG" : "ormDataObjectCosntructorParametersLONG",
+   "SERIAL" : "ormDataObjectCosntructorParametersSERIAL",
+   "TIMESTAMP" : "ormDataObjectCosntructorParametersTIMESTAMP",
+   "TYPE" : "ormDataObjectCosntructorParametersTYPE", 
+   default: key
+]
+
+ormDataObjectToStringMap ::= [ 
+   "INTEGER" : "ormDataObjectToStringINTEGER",
+   "REAL" : "ormDataObjectToStringREAL",
+   "GUID" : "ormDataObjectToStringGUID",
+   "BLOB" : "ormDataObjectToStringBLOB",
+   "INCLUSIVE" : "ormDataObjectToStringINCLUSIVE",
+   "BOOL" : "ormDataObjectToStringBOOL",
+   "DOUBLE" : "ormDataObjectToStringDOUBLE",
+   "SHORT" : "ormDataObjectToStringSHORT",
+   "FLOAT" : "ormDataObjectToStringFLOAT",
+   "EXCLUSIVE" : "ormDataObjectToStringEXCLUSIVE",
+   "TEXT" : "ormDataObjectToStringTEXT",
+   "FK" : "ormDataObjectToStringFK",
+   "FILE" : "ormDataObjectToStringFILE",
+   "LONG" : "ormDataObjectToStringLONG",
+   "SERIAL" : "ormDataObjectToStringSERIAL",
+   "TIMESTAMP" : "ormDataObjectToStringTIMESTAMP",
+   "TYPE" : "ormDataObjectToStringTYPE", 
+   default: key
+]
+
+ormDataObjectConstructCloneMap ::= [ 
+   "INTEGER" : "ormDataObjectConstructCloneINTEGER",
+   "REAL" : "ormDataObjectConstructCloneREAL",
+   "GUID" : "ormDataObjectConstructCloneGUID",
+   "BLOB" : "ormDataObjectConstructCloneBLOB",
+   "INCLUSIVE" : "ormDataObjectConstructCloneINCLUSIVE",
+   "BOOL" : "ormDataObjectConstructCloneBOOL",
+   "DOUBLE" : "ormDataObjectConstructCloneDOUBLE",
+   "SHORT" : "ormDataObjectConstructCloneSHORT",
+   "FLOAT" : "ormDataObjectConstructCloneFLOAT",
+   "EXCLUSIVE" : "ormDataObjectConstructCloneEXCLUSIVE",
+   "TEXT" : "ormDataObjectConstructCloneTEXT",
+   "FK" : "ormDataObjectConstructCloneFK",
+   "FILE" : "ormDataObjectConstructCloneFILE",
+   "LONG" : "ormDataObjectConstructCloneLONG",
+   "SERIAL" : "ormDataObjectConstructCloneSERIAL",
+   "TIMESTAMP" : "ormDataObjectConstructCloneTIMESTAMP",
+   "TYPE" : "ormDataObjectConstructCloneTYPE", 
+   default: key
+]
+
+ormDataObjectConstructorAssignmentsMap ::= [ 
+   "INTEGER" : "ormDataObjectConstructorAssignmentsINTEGER",
+   "REAL" : "ormDataObjectConstructorAssignmentsREAL",
+   "GUID" : "ormDataObjectConstructorAssignmentsGUID",
+   "BLOB" : "ormDataObjectConstructorAssignmentsBLOB",
+   "INCLUSIVE" : "ormDataObjectConstructorAssignmentsINCLUSIVE",
+   "BOOL" : "ormDataObjectConstructorAssignmentsBOOL",
+   "DOUBLE" : "ormDataObjectConstructorAssignmentsDOUBLE",
+   "SHORT" : "ormDataObjectConstructorAssignmentsSHORT",
+   "FLOAT" : "ormDataObjectConstructorAssignmentsFLOAT",
+   "EXCLUSIVE" : "ormDataObjectConstructorAssignmentsEXCLUSIVE",
+   "TEXT" : "ormDataObjectConstructorAssignmentsTEXT",
+   "FK" : "ormDataObjectConstructorAssignmentsFK",
+   "FILE" : "ormDataObjectConstructorAssignmentsFILE",
+   "LONG" : "ormDataObjectConstructorAssignmentsLONG",
+   "SERIAL" : "ormDataObjectConstructorAssignmentsSERIAL",
+   "TIMESTAMP" : "ormDataObjectConstructorAssignmentsTIMESTAMP",
+   "TYPE" : "ormDataObjectConstructorAssignmentsTYPE", 
+   default: key
+]

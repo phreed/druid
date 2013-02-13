@@ -1,0 +1,124 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name.snake>_BLAH_BLAH.txt
+%>
+
+SKELETON(contract) ::= <<
+>>
+
+BODY(contract) ::= <<
+
+<UItemplateMethodsToMake.keys:{templateName|<printOutTemplateDefaultTemplate(templateName)>};separator="\n\n">
+
+<UItemplateMethodsToMake.keys:{templateName|<printOutTemplateLookupTemplate(templateName)>};separator="\n\n">
+
+<UItemplateMethodsToMake.keys:{templateName|<makeTemplateDataTypeMap(templateName)>};separator="\n\n">
+
+<UItemplateMethodsToMake.keys:{templateName|<printOutTemplatStubsByTemplate(templateName)>};separator="\n\n">
+
+>>	
+
+printouttemplatesbyTYPE() ::= <<
+<javaTypeSQLiteMap2.keys:{dataType|<printOutTemplatStubs(dataType)>};separator="\n\n">
+>>
+
+javaTypeSQLiteMap2 ::= [
+        "SERIAL":"TEXT",
+        "FK"    :"INTEGER",
+        "EXCLUSIVE"  :"INTEGER",
+        "INCLUSIVE"  :"INTEGER",
+        "SHORT":"INTEGER",
+        "INTEGER":"INTEGER",
+        "BOOL"  :"INTEGER",
+        "LONG"  :"INTEGER",
+        "TIMESTAMP":"INTEGER",
+        "REAL"  :"REAL",
+        "GUID"  :"TEXT",
+        "TEXT"  :"TEXT",
+        "BLOB"  :"BLOB",
+        "FILE"  :"TEXT",
+        "TYPE"  :"TEXT",
+        "FLOAT" :"REAL",
+        "DOUBLE":"REAL",
+]
+
+UItemplateMethodsToMake ::= [
+  "uiViewDisplayFieldDeclaration" : "(relation,field)",
+  "uiViewDisplayFieldLinkToXML" : "(relation,field)",
+  "uiViewDisplayFieldViewToDefault" : "(relation,field)",
+  "uiViewSetDisplayViewFromOrmObject" : "(relation,field)",
+  "uiEditDisplayFieldDeclaration" : "(relation,field)",  
+  "uiEditDisplayFieldLinkToXML" : "(relation,field)",
+  "uiEditDisplayFieldViewToDefault" : "(relation,field)",
+  "uiEditSetDisplayViewFromOrmObject" : "(relation,field)",
+  "uiEditJavaFieldDeclarationAndInitialization" : "(relation,field)",
+  "uiEditGetValuesFromViews" : "(relation,field)",
+  "uiEditConvertValuesFromViewsToJava" : "(relation,field)",
+  "uiEditOrmConstructorFieldName" : "(relation,field)"
+]
+
+UItemplateMethodsToMakeSTABLE ::= [
+  "resLayoutViewLabel" : "(relation,field)",
+  "resLayoutViewValue" : "(relation,field)",
+  "resLayoutCreateLabel" : "(relation,field)",
+  "resLayoutCreateValue" : "(relation,field)",
+  "resLayoutEditLabel" : "(relation,field)",
+  "resLayoutEditValue" : "(relation,field)",
+  
+  "resLayoutCustomRowPutDisplayViews" : "(relation,field)",
+
+  "valuesStringsListLabel" : "(relation, field)",
+  "valuesStringsListValue" : "(relation, field)",
+  "valuesStringsViewLabel" : "(relation, field)",
+  "valuesStringsViewValue" : "(relation, field)",
+  "valuesStringsCreateLabel" : "(relation, field)",
+  "valuesStringsCreateValue" : "(relation, field)",
+  "valuesStringsEditLabel" : "(relation, field)",
+  "valuesStringsEditValue" : "(relation, field)",
+
+  "ormDataObjectCosntructorParameters" : "(field)",
+  "ormDataObjectConstructorAssignments" : "(field)",
+  "ormDataObjectPutDeclaration" : "(field)",
+  "ormDataObjectToString" : "(field)",
+  "ormDataObjectConstructClone" : "(field)",
+  "ormDataObjectConstructWriteParcel" : "(field)",
+  "ormDataObjectConstructReadParcel" : "(field)",
+
+  "ormCreatorputFieldIntoCV" : "(field)",
+  "ormCreatorGetFieldFromCursor" : "(field)"
+]
+
+printOutTemplateDefaultTemplate(templateName) ::= <<
+<templateName>DefualtTemplate<UItemplateMethodsToMake.(templateName)> ::= \<\<
+\>>
+>>
+
+printOutTemplateLookupTemplate(templateName) ::= <<
+<templateName>Template<UItemplateMethodsToMake.(templateName)> ::= \<\< \<(<templateName>Map.(field.dtype))<UItemplateMethodsToMake.(templateName)> > \>>
+>>
+
+makeTemplateDataTypeMap(templateName) ::= <<
+<templateName>Map ::= [ 
+   <javaTypeSQLiteMap2.keys:{dataType|<makeEachMappingPair(templateName,dataType)>};separator="\n"> 
+   default: key
+]
+>>
+
+makeEachMappingPair(templateName,dataType) ::= <%
+    "<dataType>" : "<templateName><dataType>",
+%>
+
+printOutTemplatStubs(dataType) ::= <%
+<UItemplateMethodsToMake.keys:{templateName|<printRow(dataType,templateName)>};separator="\n">
+%>
+
+printOutTemplatStubsByTemplate(templateName) ::= <<
+<javaTypeSQLiteMap2.keys:{dataType|<printRow(dataType,templateName)>};separator="\n"> 
+>>
+
+printRow(dataType,templateName) ::= <%
+<templateName><dataType><makeTemplateStuff(templateName)>
+%>
+
+makeTemplateStuff(templateName) ::= << <UItemplateMethodsToMake.(templateName)> ::= \<\< \<<templateName>DefualtTemplate<UItemplateMethodsToMake.(templateName)> > \>> >>

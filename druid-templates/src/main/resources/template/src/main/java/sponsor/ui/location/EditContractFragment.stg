@@ -9,219 +9,249 @@ SKELETON(contract,item) ::= <<
 >>
 
 BODY(contract,item) ::= <<
-
+// ST:BODY:start
 package <package(contract,item)>;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Button;
 
-import <contract.root.sponsor.base>.<contract.root.name.camel>.R
+<item.dataTypes: {dataType | <androidEditDefaultViewTypeImportMap.(dataType)> }; separator="\n">
+
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<contract.root.name.bactrian>Resolver;
 
-public class Edit<item.name.bactrian>Fragment extends <item.name.bactrian>FragmentBase {
+public class Edit<item.name.bactrian>Fragment extends Fragment {
 
-	final static public String LOG_TAG = Edit<item.name.bactrian>Fragment.class
-			.getCanonicalName();
-	final static public String rowIdentifyerTAG = "index";
+    final static public String LOG_TAG = Edit<item.name.bactrian>Fragment.class
+            .getCanonicalName();
+    // variable for passing around row index
+    final static public String rowIdentifyerTAG = "index";
 
-	// ST:putFieldDeclarations:start
-	<item.fields: { field | <putFieldDeclarations(item, field)> }; separator="\n">
-        // ST:putFieldDeclarations:end 
+    // ST:uiEditDisplayFieldDeclarationTemplate:start
+    <item.fields: { field | <uiEditDisplayFieldDeclarationTemplate(item, field)> }; separator="\n">
+    // ST:uiEditDisplayFieldDeclarationTemplate:end 
+        
+    // Button(s) used
+    Button saveButton;
+    Button resetButton;
+    Button cancelButton;
 
-	Button saveButton;
-	Button resetButton;
-	Button cancelButton;
+    // parent Activity
+    OnOpenWindowInterface mOpener;
+    // custom ContentResolver wrapper.
+    <contract.root.name.bactrian>Resolver resolver;
 
-	OnOpenWindowInterface mOpener;
+    // listener to button presses.
+    // TODO determine/label pattern.
+    OnClickListener myOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+            case R.id.<item.name.snake>_edit_button_save:
+                doSaveButtonClick();
+                break;
+            case R.id.<item.name.snake>_edit_button_reset:
+                doResetButtonClick();
+                break;
+            case R.id.<item.name.snake>_edit_button_cancel:
+                doCancelButtonClick();
+                break;
+            default:
+                break;
+            }
+        }
+    };
 
-	OnClickListener myOnClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.edit_location_button_save:
-				doSaveButtonClick();
-				break;
-			case R.id.edit_location_button_reset:
-				doResetButtonClick();
-				break;
-			case R.id.edit_location_button_cancel:
-				doCancelButtonClick();
-				break;
-			default:
-				break;
-			}
-		}
-	};
+    public static Edit<item.name.bactrian>Fragment newInstance(long index) {
+        Edit<item.name.bactrian>Fragment f = new Edit<item.name.bactrian>Fragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putLong(rowIdentifyerTAG, index);
+        f.setArguments(args);
+        return f;
+    }
 
-	public static Edit<item.name.bactrian>Fragment newInstance(int index) {
-		Edit<item.name.bactrian>Fragment f = new Edit<item.name.bactrian>Fragment();
-		// Supply index input as an argument.
-		Bundle args = new Bundle();
-		args.putInt(rowIdentifyerTAG, index);
-		f.setArguments(args);
-		return f;
-	}
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mOpener = (OnOpenWindowInterface) activity;
+            resolver = new <contract.root.name.bactrian>Resolver(activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnOpenWindowListener");
+        }
+    }
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mOpener = (OnOpenWindowInterface) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnOpenWindowListener");
-		}
-	}
+    @Override
+    public void onDetach() {
+        mOpener = null;
+        resolver = null;
+        super.onDetach();
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		// Get the Buttons
-		saveButton = (Button) getView().findViewById(
-				R.id.edit_location_button_save);
-		resetButton = (Button) getView().findViewById(
-				R.id.edit_location_button_reset);
-		cancelButton = (Button) getView().findViewById(
-				R.id.edit_location_button_cancel);
-		// Get the EditTexts
-	
-	
-	
-		// set the EditTexts to this <item.name.bactrian>'s Values
-		setValuesToDefault();
-		// setup the onClick callback methods
-		saveButton.setOnClickListener(myOnClickListener);
-		resetButton.setOnClickListener(myOnClickListener);
-		cancelButton.setOnClickListener(myOnClickListener);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Get the Buttons
+        saveButton = (Button) getView().findViewById(
+                R.id.<item.name.snake>_edit_button_save);
+        resetButton = (Button) getView().findViewById(
+                R.id.<item.name.snake>_edit_button_reset);
+        cancelButton = (Button) getView().findViewById(
+                R.id.<item.name.snake>_edit_button_cancel);
+                
+        
+        // Get the EditTexts
+        // ST:uiEditDisplayFieldLinkToXMLTemplate:start
+        <item.fields: { field | <uiEditDisplayFieldLinkToXMLTemplate(item,field)> }; separator="\n">
+        // ST:uiEditDisplayFieldLinkToXMLTemplate:end 
+                        
+        // setup the onClick callback methods
+        saveButton.setOnClickListener(myOnClickListener);
+        resetButton.setOnClickListener(myOnClickListener);
+        cancelButton.setOnClickListener(myOnClickListener);
+        // set the EditTexts to this <item.name.bactrian>'s Values
+        setValuesToDefault();
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.location_edit_fragment,
-				container, false);
-		container.setBackgroundColor(Color.CYAN);
-		return view;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.<item.name.snake>_edit_fragment,
+                container, false);
+        container.setBackgroundColor(Color.CYAN);
+        return view;
+    }
 
-	public void doResetButtonClick() {
-		setValuesToDefault();
-	}
+    public void doResetButtonClick() {
+        setValuesToDefault();
+    }
 
-	public void doSaveButtonClick() {
-		Toast.makeText(getActivity(), "Updated.", Toast.LENGTH_SHORT).show();
-		<item.name.bactrian>Data location = make<item.name.bactrian>DataFromUI();
-		if (location != null) {
-			try {
-				update<item.name.bactrian>WithUserID(location);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
-		} else {
-			return;
-		}
-		if (getResources().getBoolean(R.bool.isTablet) == true) {
-			mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
-		} else {
-			getActivity().finish(); // same as hitting 'back' button
-		}
-	}
+    public void doSaveButtonClick() {
+        Toast.makeText(getActivity(), "Updated.", Toast.LENGTH_SHORT).show();
+        <item.name.bactrian>Data location = make<item.name.bactrian>DataFromUI();
+        if (location != null) {
+            try {
+                resolver.update<item.name.bactrian>WithID(location);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+        } else {
+            return;
+        }
+        if (getResources().getBoolean(R.bool.isTablet) == true) {
+            mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
+        } else {
+            getActivity().finish(); // same as hitting 'back' button
+        }
+    }
 
-	public <item.name.bactrian>Data make<item.name.bactrian>DataFromUI() {
-		<item.name.bactrian>Data rValue = null;
+    public <item.name.bactrian>Data make<item.name.bactrian>DataFromUI() {
 
-		Editable longStr = longitudeTV.getText();
-		Editable latStr = latitudeTV.getText();
-		Editable heightStr = heightTV.getText();
+        // local Editables
+        // ST:uiEditGetValuesFromViewsTemplate:start
+        <item.fields: { field | <uiEditGetValuesFromViewsTemplate(item,field)> }; separator="\n">
+        // ST:uiEditGetValuesFromViewsTemplate:end 
+        
+        // ST:uiEditJavaFieldDeclarationAndInitializationTemplate:start
+        <item.fields: { field | <uiEditJavaFieldDeclarationAndInitializationTemplate(item,field)> }; separator="\n">
+        // ST:uiEditJavaFieldDeclarationAndInitializationTemplate:end 
+        
+        // pull values from Editables
+        // ST:uiEditConvertValuesFromViewsToJavaTemplate:start
+        <item.fields: { field | <uiEditConvertValuesFromViewsToJavaTemplate(item,field)> }; separator="\n">
+        // ST:uiEditConvertValuesFromViewsToJavaTemplate:end 
+                
+        // return new <item.name.bactrian>Data object with
+        return new <item.name.bactrian>Data(getUniqueKey(),        
+        // ST:uiEditOrmConstructorFieldNameTemplate:start
+        <item.fields: { field | <uiEditOrmConstructorFieldNameTemplate(item,field)> }; separator=",\n">
+        // ST:uiEditOrmConstructorFieldNameTemplate:end 
+        );
 
-		if ((longStr.length() > 0) && (longStr.length() > 0)
-				&& (longStr.length() > 0)) {
-			long userID = getUniqueKey();
-			long longitude = Long.valueOf(longStr.toString());
-			long latitude = Long.valueOf(latStr.toString());
-			long height = Long.valueOf(heightStr.toString());
-			rValue = new <item.name.bactrian>Data(latitude, longitude, height, userID);
-		}
+    }
 
-		return rValue;
-	}
+    public void doCancelButtonClick() {
+        if (getResources().getBoolean(R.bool.isTablet) == true) {
+            // put
+            mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
+        } else {
+            getActivity().finish(); // same as hitting 'back' button
+        }
 
-	public void doCancelButtonClick() {
-		if (getResources().getBoolean(R.bool.isTablet) == true) {
-			// put
-			mOpener.openView<item.name.bactrian>Fragment(getUniqueKey());
-		} else {
-			getActivity().finish(); // same as hitting 'back' button
-		}
+    }
 
-	}
+    public boolean setValuesToDefault() {
 
-	public boolean setValuesToDefault() {
-		<item.name.bactrian>Data <item.name.camel>;
-		try {
-			<item.name.camel> = get<item.name.bactrian>DataForUserID(getUniqueKey());
-		} catch (RemoteException e) {
-			Log.d(LOG_TAG, "" + e.getMessage());
-			e.printStackTrace();
-			return false;
-		}
+        <item.name.bactrian>Data <item.name.camel>Data;
+        try {
+            <item.name.camel>Data = resolver.get<item.name.bactrian>DataViaRowID(getUniqueKey());
+        } catch (RemoteException e) {
+            Log.d(LOG_TAG, "" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
 
-		if (<item.name.camel> != null) {
-			// set the EditTexts to the current values
-			
-			// ST:putFieldToDefaults:start
-	               <item.fields: { field | <putFieldToDefaults(item, field)> }; separator="\n">
-                       // ST:putFieldToDefaults:end 
-			
-			return true;
-		}
-		return false;
-	}
+        if (<item.name.camel>Data != null) {
+            Log.d(LOG_TAG, "setValuesToDefualt :" + <item.name.camel>Data.toString());
+            // set the EditTexts to the current values
+            // ST:uiEditSetDisplayViewFromOrmObjectTemplate:start         
+            <item.fields: { field | <uiEditSetDisplayViewFromOrmObjectTemplate(item,field)> }; separator="\n">
+            // ST:uiEditSetDisplayViewFromOrmObjectTemplate:end 
+            return true;
+        }
+        return false;
+    }
 
-	public int getUniqueKey() {
-		return getArguments().getInt(rowIdentifyerTAG, 0);
-	}
+    public int getUniqueKey() {
+        return getArguments().getInt(rowIdentifyerTAG, 0);
+    }
 
 }
-
+// ST:BODY:end
 >>
-
 
 package(contract,item) ::= <%
 <contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
 %>
 
 
-putFieldDeclarations(relation,field) ::= <%
-EditText <field.name.camel>TV;
+putDisplayFieldDeclaration(relation,field) ::= <%
+EditText <field.name.camel>ET;
 %>
 
 putFieldAssignments(relation,field) ::= <%
-<field.name.camel>TV = (EditText) getView().findViewById(R.id.<relation.name.snake>_<field.name.snake>);
-%>
-		
-putFieldToDefaults(relation,field) ::= <%
-<field.name.camel>TV.setText(String.valueOf(<relation.name.camel>.userID));
+<field.name.camel>ET = (EditText) getView().findViewById(R.id.<relation.name.snake>_edit_<field.name.snake>);
 %>
 
 
 
+putGetValuesFromViews(field) ::= <<
+Editable <field.name.camel>Editable = <field.name.camel>ET.getText();
+>>
+
+
+putConstructorValues(field) ::= <<
+<field.name.camel>
+>>

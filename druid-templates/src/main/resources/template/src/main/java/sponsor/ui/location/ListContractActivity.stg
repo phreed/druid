@@ -18,8 +18,8 @@ import android.view.KeyEvent;
 import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 
 // "FragmentActivity" is the Activity Version needed for support library 
-public class List<item.name.bactrian>Activity extends LocationActivityBase {
-	private static final String LOG_TAG = List<item.name.bactrian>Activity.class
+public class <item.name.bactrian>ListActivity extends <item.name.bactrian>ActivityBase {
+	private static final String LOG_TAG = <item.name.bactrian>ListActivity.class
 			.getCanonicalName();
 
 	@Override
@@ -29,11 +29,11 @@ public class List<item.name.bactrian>Activity extends LocationActivityBase {
 		promptOnBackPressed = true;
 		// set the Layout of main Activity.
 		// (contains only the fragment holder)
-		setContentView(R.layout.list<item.name.snake>activity);
-		<item.name.camel>ListFragment fragment;
+		setContentView(R.layout.main);
+		<item.name.bactrian>ListFragment fragment;
 		String imageFragmentTag = "imageFragmentTag";
 		if (savedInstanceState == null) {
-			fragment = new <item.name.camel>ListFragment();
+			fragment = new <item.name.bactrian>ListFragment();
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.locations, fragment, imageFragmentTag).commit();
 		}

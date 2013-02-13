@@ -27,18 +27,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import <contract.root.sponsor.base>.<item.name.camel>.R;
-import <contract.root.sponsor.base>.<item.name.camel>.orm.<item.name.camel>Data;
-import <contract.root.sponsor.base>.<item.name.camel>.orm.<item.name.bactrian>Resolver;
-import <contract.root.sponsor.base>.<item.name.camel>.provider.<item.name.camel>ArrayAdapter;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<contract.root.name.bactrian>Resolver;
 
 public class <item.name.bactrian>ListFragment extends ListFragment {
 
 	static final String LOG_TAG = <item.name.bactrian>ListFragment.class.getCanonicalName();
 
 	OnOpenWindowInterface mOpener;
-	MultipleResolver resolver;
-	ArrayList\<DataOneData> dataOneData;
+	<contract.root.name.bactrian>Resolver resolver;
+	ArrayList\<<item.name.bactrian>Data> <item.name.bactrian>Data;
+	private <item.name.bactrian>DataArrayAdaptor aa;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -69,15 +69,15 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(LOG_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		resolver = new MultipleResolver(getActivity());
-		dataOneData = new ArrayList\<DataOneData>();
+		resolver = new <contract.root.name.bactrian>Resolver(getActivity());
+		<item.name.bactrian>Data = new ArrayList\<<item.name.bactrian>Data>();
 		setRetainInstance(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.data_one_listview_fragment, container,
+		View view = inflater.inflate(R.layout.<item.name.snake>_listview, container,
 				false);
 		// get the ListView that will be displayed
 		ListView lv = (ListView) view.findViewById(android.R.id.list);
@@ -88,14 +88,14 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 		return view;
 	}
 
-	public void updateLocationLocationData() {
-		Log.d(LOG_TAG, "updateLocationLocationData");
+	public void update<item.name.bactrian>Data() {
+		Log.d(LOG_TAG, "update<item.name.bactrian>Data");
 		try {
-			dataOneData.clear();
+			<item.name.bactrian>Data.clear();
 
-			ArrayList\<DataOneData> currentList = resolver.getAllDataOneData();
+			ArrayList\< <item.name.bactrian>Data > currentList = resolver.getAll<item.name.bactrian>Data();
 
-			dataOneData.addAll(currentList);
+			<item.name.bactrian>Data.addAll(currentList);
 			aa.notifyDataSetChanged();
 		} catch (Exception e) {
 			Log.e(LOG_TAG,
@@ -110,32 +110,32 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 		// layouts
 		super.onActivityCreated(savedInstanceState);
 		Log.d(LOG_TAG, "onActivityCreated");
-		aa = new DataOneArrayAdapter(getActivity(),
-				R.layout.data_one_listview_custom_row, dataOneData);
+		aa = new <item.name.bactrian>DataArrayAdaptor(getActivity(),
+				R.layout.<item.name.snake>_listview_custom_row, <item.name.bactrian>Data );
 
 		// update the back end data.
-		updateLocationLocationData();
+		update<item.name.bactrian>Data();
 
 		setListAdapter(aa);
 
 		// TODO see why I have to manually "setOnClickListener"
 
 		Button createNewButton = (Button) getView().findViewById(
-				R.id.location_listview_create);
+				R.id.<item.name.snake>_listview_create);
 		createNewButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				mOpener.openCreateLocationFragment();
+				mOpener.openCreate<item.name.bactrian>Fragment();
 			}
 		});
 
 		Button refreshListButton = (Button) getView().findViewById(
-				R.id.location_listview_refreshed);
+				R.id.<item.name.snake>_listview_refresh);
 		refreshListButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				updateLocationLocationData();
+				update<item.name.bactrian>Data();
 			}
 		});
 	}
@@ -145,17 +145,9 @@ public class <item.name.bactrian>ListFragment extends ListFragment {
 		Log.d(LOG_TAG, "onListItemClick");
 		Log.d(LOG_TAG,
 				"position: " + position + "id = "
-						+ (dataOneData.get(position))._id);
-		mOpener.openViewLocationFragment((dataOneData.get(position))._id);
+						+ (<item.name.bactrian>Data.get(position)).KEY_ID);
+		mOpener.openView<item.name.bactrian>Fragment((<item.name.bactrian>Data.get(position)).KEY_ID);
 	}
-
-	/**
-	 * 
-	 * CUSTOMIZED VARIABLES
-	 * 
-	 */
-
-	private DataOneArrayAdapter aa;
 
 }
 
