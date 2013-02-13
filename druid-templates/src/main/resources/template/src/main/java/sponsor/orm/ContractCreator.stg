@@ -60,13 +60,15 @@ public class <item.name.bactrian>Creator {
    */
   public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
 
+   long rowID = cursor.getLong(cursor 
+              .getColumnIndex(ContentDescriptor.Table1.Cols.ID));
     // ST:ormCreatorGetFieldFromCursorTemplate:inline
     <item.fields: { field | <ormCreatorGetFieldFromCursorTemplate(field)> }; separator="\n">
     // ST:ormCreatorGetFieldFromCursorTemplate:complete
 
     // construct the returned object
     <item.name.bactrian>Data rValue = 
-       new <item.name.bactrian>Data(<item.fields:{ field | <field.name.camel>}; separator=", ">);
+       new <item.name.bactrian>Data(rowID,<item.fields:{ field | <field.name.camel>}; separator=", ">);
         
     return rValue;
   }

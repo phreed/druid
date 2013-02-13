@@ -123,6 +123,18 @@ public class Contract {
 			return capitalize(camel);
 		}
 
+		@Override
+		public boolean equals(Object name) {
+			if (this == name) {
+				return true;
+			}
+			if (!(name instanceof Name)) {
+				return false;
+			}
+			Name testName = (Name) name;
+
+			return (this.norm.equals(testName.getNorm()));
+		}
 	}
 
 	/**
@@ -221,7 +233,7 @@ public class Contract {
 		final private List<Field> fields;
 		final private List<FieldRef> keycols;
 		final private List<Message> messages;
-		final private List<FieldRef> uicols;
+		final private List<UIFieldRef> uicols;
 		final private ArrayList<String> dataTypes;
 
 		public Name getName() {
@@ -248,35 +260,49 @@ public class Contract {
 			return this.messages;
 		}
 
-		public List<FieldRef> getUI() {
+		public List<UIFieldRef> getUicols() {
 			return this.uicols;
 		}
 
 		public Relation(final Name name, final RMode mode,
 				final List<Field> fields, final List<FieldRef> keycols,
-				final List<Message> messages, List<FieldRef> uicols)
+				final List<Message> messages, List<UIFieldRef> uicols)
 				throws Exception {
 			this.name = name;
 			this.mode = mode;
-
 			this.dataTypes = new ArrayList<String>();
-		//	System.out.println("\n\n\n");
 			for (Field field : fields) {
-			//	System.out.print(""+field.getDtype()+"");
 				if (this.dataTypes.contains(field.getDtype()) == false) {
 					this.dataTypes.add(field.getDtype());
-				//	System.out.println("     was not found, was added");
-				}else
-				{
-				//	System.out.println("     was found, was not added");
+				} else {
 				}
 			}
-		//	System.out.println("\n\n\n");
 			final ArrayList<Name> fieldNames = new ArrayList<Name>();
 			for (Field field : fields) {
 				field.setParent(this);
 				fieldNames.add(field.getName());
 			}
+
+			ArrayList<UIFieldRef> tempList = new ArrayList<UIFieldRef>();
+			eachUIFieldRef: for (UIFieldRef uiField : uicols) {
+				if (fieldNames.contains(uiField.getName()) == false) {
+					for (Field field : fields) {
+						// see if field has abrv that matches fieldRef
+						if (field.abrv.getNorm().equals(
+								uiField.getName().getNorm()) == true) {
+							uiField = new UIFieldRef(field.getName());
+							uiField.setParent(this);
+							tempList.add(uiField);
+							continue eachUIFieldRef;
+						}
+					}// end each field
+					throw new Exception("Error with FieldRef '"
+							+ uiField.getName() + "', no matching Field found.");
+				}
+				uiField.setParent(this);
+				tempList.add(uiField);
+			}
+
 			this.fields = fields;
 			// check every fieldRef
 			eachFieldRef: for (FieldRef fieldRef : keycols) {
@@ -298,7 +324,7 @@ public class Contract {
 			}
 			this.keycols = keycols;
 			this.messages = messages;
-			this.uicols = uicols;
+			this.uicols = tempList;
 
 		}
 
@@ -432,6 +458,15 @@ public class Contract {
 			return null;
 		}
 
+		public String getIsInUICols() {
+			for (UIFieldRef ref : parent.uicols) {
+				if (ref.getName().getSnake().equals(this.getName().getSnake())) {
+					return "yes";
+				}
+			}
+			return null;
+		}
+		
 		/**
 		 * The object must be found in the list and it cannot be the first item
 		 * for this to work.
@@ -487,7 +522,6 @@ public class Contract {
 
 		public Predecessor getPredecessor() {
 			final int ix = parent.keycols.indexOf(this) - 1;
-			System.out.println("\n\n\n Index in keycols: " + ix + "\n\n\n");
 			if (ix < 0) {
 				return null;
 			}
@@ -500,6 +534,42 @@ public class Contract {
 		}
 
 		public FieldRef(final Name name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			final StringBuilder sb = new StringBuilder();
+			return this.toString(sb).toString();
+		}
+
+		public StringBuilder toString(final StringBuilder sb) {
+			return sb.append("<ref field='").append(name.norm).append("'/>");
+		}
+	}
+
+	public static class UIFieldRef implements Predecessor {
+		private final Name name;
+		private Relation parent;
+
+		public Name getName() {
+			return name;
+		}
+
+		public Predecessor getPredecessor() {
+			final int ix = parent.uicols.indexOf(this) - 1;
+			if (ix < 0) {
+				return null;
+			}
+			return parent.uicols.get(ix);
+
+		}
+
+		public void setParent(final Relation parent) {
+			this.parent = parent;
+		}
+
+		public UIFieldRef(final Name name) {
 			this.name = name;
 		}
 

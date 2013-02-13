@@ -33,19 +33,19 @@ putFieldsForDisplay(relation) ::= <<
      android:textStyle="bold" />
 
 \<!-- ST:putDisplayViews:start -->    
-<relation.keycols: { fieldRef | <putDisplayViews(relation, fieldRef)>}; separator="\n">
+<relation.uicols: { uIFieldRef | <putDisplayViews(relation, uIFieldRef)>}; separator="\n">
 \<!-- ST:putDisplayViews:end -->
 >>
 
-putDisplayViews(relation,fieldRef) ::= <<
+putDisplayViews(relation,uIFieldRef) ::= <<
 \<TextView                       
-     android:id="@+id/<relation.name.snake>_listview_custom_row_<fieldRef.name.snake>_textView"
+     android:id="@+id/<relation.name.snake>_listview_custom_row_<uIFieldRef.name.snake>_textView"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:paddingLeft="20dp"
-     android:text="<fieldRef.name.snake>"
+     android:text="<uIFieldRef.name.snake>"
      android:textSize="16sp" 
-     <if(fieldRef.predecessor)>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_<fieldRef.predecessor.name.snake>_textView"
+     <if(uIFieldRef.predecessor)>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_<uIFieldRef.predecessor.name.snake>_textView"
      <else>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_KEY_ID_textView"
      <endif>
      />

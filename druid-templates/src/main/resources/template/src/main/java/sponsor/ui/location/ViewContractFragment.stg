@@ -154,7 +154,7 @@ public class <item.name.bactrian>ViewFragment extends Fragment {
         }
     }   
     
-    public void setUiTo<item.name.bactrian>Data(int getUniqueKey) throws RemoteException {
+    public void setUiTo<item.name.bactrian>Data(long getUniqueKey) throws RemoteException {
         <item.name.bactrian>Data <item.name.camel> = null;
         
         <item.name.camel> = resolver.get<item.name.bactrian>DataViaRowID(getUniqueKey);
@@ -209,8 +209,8 @@ public class <item.name.bactrian>ViewFragment extends Fragment {
                         null).show();
     }
 
-    public int getUniqueKey() {
-        return getArguments().getInt(rowIdentifyerTAG, 0);
+    public long getUniqueKey() {
+        return getArguments().getLong(rowIdentifyerTAG, 0);
     }
 
     @Override

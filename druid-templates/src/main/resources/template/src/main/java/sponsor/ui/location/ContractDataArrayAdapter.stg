@@ -97,7 +97,7 @@ public class <item.name.bactrian>DataArrayAdaptor extends ArrayAdapter\< <item.n
 package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"
 
 putDeclaration(field) ::= <%
-<if(field.IsInKeys)><javaTypeMap.(field.dtype)> <field.name.camel> = item.<field.name.camel>;
+<if(field.IsInUICols)><javaTypeMap.(field.dtype)> <field.name.camel> = item.<field.name.camel>;
 <else><endif>
 %>
 
@@ -106,11 +106,11 @@ TextView  KEY_IDTV  = (TextView) todoView.findViewById(R.id.<relation.name.snake
 >>
 
 putTextViewDeclarations(relation,field) ::= <%
-<if(field.IsInKeys)>TextView  <field.name.camel>TV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_<field.name.snake>_textView);
+<if(field.IsInUICols)>TextView  <field.name.camel>TV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_<field.name.snake>_textView);
 <else><endif>
 %>
 
 putSetValuesToDisplay(field) ::= <%
-<if(field.IsInKeys)><field.name.camel>TV.setText("" + <field.name.camel>);
+<if(field.IsInUICols)><field.name.camel>TV.setText("" + <field.name.camel>);
 <else><endif>
 %>

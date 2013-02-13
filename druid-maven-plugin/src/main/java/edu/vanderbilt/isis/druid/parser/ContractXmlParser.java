@@ -79,7 +79,7 @@ public class ContractXmlParser {
 		} catch (Exception ex) {
 			logger.error("Error Parsing Contract : ", ex);
 			return null;
-			
+
 		}
 	}
 
@@ -151,7 +151,7 @@ public class ContractXmlParser {
 
 		final List<Contract.Field> field_set = new ArrayList<Contract.Field>();
 		final List<Contract.FieldRef> keycol_set = new ArrayList<Contract.FieldRef>();
-		final List<Contract.FieldRef> uicol_set = new ArrayList<Contract.FieldRef>();
+		final List<Contract.UIFieldRef> uicol_set = new ArrayList<Contract.UIFieldRef>();
 		Contract.RMode mode = null;
 		final List<Contract.Message> message_set = new ArrayList<Contract.Message>();
 
@@ -178,7 +178,7 @@ public class ContractXmlParser {
 					continue;
 				}
 				if ("ui-selection-subset".equals(tagName)) {
-					uicol_set.addAll(parseXmlFieldRef(currentElement));
+					uicol_set.addAll(parseXmlUIFieldRef(currentElement));
 					continue;
 				}
 			}
@@ -261,6 +261,27 @@ public class ContractXmlParser {
 			}
 		}
 		return refs;
+	}
+
+	static public List<Contract.UIFieldRef> parseXmlUIFieldRef(final Element xml) {
+
+		List<Contract.UIFieldRef> refs = new ArrayList<Contract.UIFieldRef>();
+		final NodeList nodeList = xml.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			final Node currentNode = nodeList.item(i);
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				// System.out.println("\n\nFOUND A NODE : " +
+				// nodeList.getLength() + "\n\n");
+				final Element currentElement = (Element) currentNode;
+				refs.add(parseXmlUIRef(currentElement));
+				continue;
+			}
+		}
+		return refs;
+	}
+
+	static public Contract.UIFieldRef parseXmlUIRef(final Element xml) {
+		return new Contract.UIFieldRef(extract_name(xml, "field"));
 	}
 
 	static public Contract.FieldRef parseXmlRef(final Element xml) {
