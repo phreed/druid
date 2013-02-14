@@ -1,3 +1,4 @@
+
 package edu.vanderbilt.isis.druid.parser;
 
 import java.io.File;
@@ -10,16 +11,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import edu.vanderbilt.isis.druid.generator.Contract;
 import edu.vanderbilt.isis.druid.generator.Contract.Name;
-import edu.vanderbilt.isis.druid.generator.Contract.Predecessor;
-import edu.vanderbilt.isis.druid.generator.Contract.Relation;
 import edu.vanderbilt.isis.druid.generator.GeneratorException;
 
 /**
@@ -28,63 +29,62 @@ import edu.vanderbilt.isis.druid.generator.GeneratorException;
  * @see GenerateMojo.java for a description of the fields.
  */
 public class ContractXmlParser {
+    final Logger logger;
 
-	/**
-	 * 
-	 * @param logger
-	 * @param contractFile
-	 * @return
-	 * @throws GeneratorException
-	 */
-	public static Contract parseXmlFile(final Logger logger,
-			final File contractFile) throws GeneratorException {
+    public ContractXmlParser(final Logger logger) {
+        this.logger = logger;
+    }
 
-		final File contractPath = contractFile;
-		try {
-			if (contractFile == null) {
-				throw new GeneratorException("no contract specified");
-			}
-			if (!contractFile.exists()) {
-				throw new GeneratorException("invalid contract specified "
-						+ contractFile);
-			}
-			logger.debug("contract: {}", contractPath.getCanonicalPath());
-		} catch (IOException e1) {
-			throw new GeneratorException("bad path for contract "
-					+ contractFile);
-		}
-		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		final Document contractXml;
-		try {
-			final DocumentBuilder db = dbf.newDocumentBuilder();
-			contractXml = db.parse(contractPath);
-			logger.info("Namespace: {}", contractXml.getNamespaceURI());
-		} catch (ParserConfigurationException pce) {
-			throw new GeneratorException("could not parse configuration" + pce);
-		} catch (SAXException se) {
-			throw new GeneratorException("could not parse via sax " + se);
-		} catch (IOException ioe) {
-			throw new GeneratorException("could not open configuration " + ioe);
-		}
+    /**
+     * @param logger
+     * @param contractFile
+     * @return
+     * @throws GeneratorException
+     */
+    public Contract parseFile(final File contractFile)
+            throws GeneratorException {
 
-		/**
-		 * Build from templates based on contract
-		 */
+        final File contractPath = contractFile;
+        try {
+            if (contractFile == null) {
+                throw new GeneratorException("no contract specified");
+            }
+            if (!contractFile.exists()) {
+                throw new GeneratorException("invalid contract specified " + contractFile);
+            }
+            logger.info("contract: {}",
+                    contractPath.getCanonicalPath());
+        } catch (IOException e1) {
+            throw new GeneratorException("bad path for contract " + contractFile);
+        }
+        final DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+        final Document contractXml;
+        try
+        {
+            final DocumentBuilder db = dbf.newDocumentBuilder();
+            contractXml = db.parse(contractPath);
+            // logger.info("Namespace: {}", contractXml.getNamespaceURI());
+        } catch (ParserConfigurationException pce) {
+            throw new GeneratorException("could not parse configuration" + pce);
+        } catch (SAXException se) {
+            throw new GeneratorException("could not parse via sax " + se);
+        } catch (IOException ioe) {
+            throw new GeneratorException("could not open configuration " + ioe);
+        }
 
-		final Element de = contractXml.getDocumentElement();
-		try {
-			final Contract.Root root = parseXmlRoot(de);
-			logger.trace("contract {}", root);
-			return new Contract(logger, root);
-		} catch (Exception ex) {
-			logger.error("Error Parsing Contract : ", ex);
-			return null;
+        /**
+         * Build from templates based on contract
+         */
 
-		}
-	}
+        final Element de = contractXml.getDocumentElement();
+        final Contract.Root root = parseRoot(de);
+        logger.info("contract {}", root);
+        return new Contract(logger, root);
+    }
 
-	/**
-	 * <code>
+    /**
+     * <code>
 <content-provider name="pli">
   <sponsor name="transapps.pli"/>
 
@@ -93,40 +93,38 @@ public class ContractXmlParser {
   </relation>
 </content-provider>
      </code>
-	 * 
-	 * @param xml
-	 * @return
-	 * @throws Exception
-	 */
-	static public Contract.Root parseXmlRoot(final Element xml)
-			throws Exception {
-		final Name name = extract_name(xml, "name");
+     * 
+     * @param xml
+     * @return
+     */
+    public Contract.Root parseRoot(final Element xml) {
+        final Name name = extract_attr_name(xml, "name");
 
-		String sponsor = "";
-		final List<Contract.Relation> relation_set = new ArrayList<Contract.Relation>();
-		final NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				final Element currentElement = (Element) currentNode;
-				final String tagName = currentElement.getTagName();
-				if ("relation".equals(tagName)) {
-					Relation tempR = parseXmlRelation(currentElement);
-					// System.out.println(tempR.toString());
-					relation_set.add(tempR);
-					continue;
-				}
-				if ("sponsor".equals(tagName)) {
-					sponsor = currentElement.getAttribute("name");
-					continue;
-				}
-			}
-		}
-		return new Contract.Root(name, sponsor, relation_set);
-	}
+        String sponsor = "";
+        final List<Contract.Relation> relation_set = new ArrayList<Contract.Relation>();
+        final NodeList nodeList = xml.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                final Element currentElement = (Element) currentNode;
+                final String tagName = currentElement.getTagName();
+                if ("relation".equals(tagName)) {
+                    relation_set.add(parseRelation(currentElement));
+                    continue;
+                }
+                if ("sponsor".equals(tagName)) {
+                    sponsor = currentElement.getAttribute("name");
+                    continue;
+                }
+            }
+        }
+        final Contract.Root root = new Contract.Root(name, sponsor, relation_set);
+        // logger.info("root element {}", root);
+        return root;
+    }
 
-	/**
-	 * <code>
+    /**
+     * <code>
   <relation name="locations">
     <field type="TEXT" name="name" default="" />
     ...
@@ -140,71 +138,83 @@ public class ContractXmlParser {
     </message>
   </relation>
   </code>
-	 * 
-	 * @param xml
-	 * @return
-	 * @throws Exception
-	 */
-	static public Contract.Relation parseXmlRelation(final Element xml)
-			throws Exception {
-		final Name name = extract_name(xml, "name");
+     * 
+     * @param xml
+     * @return
+     */
+    public Contract.Relation parseRelation(final Element xml) {
+        final Name name = extract_attr_name(xml, "name");
 
-		final List<Contract.Field> field_set = new ArrayList<Contract.Field>();
-		final List<Contract.FieldRef> keycol_set = new ArrayList<Contract.FieldRef>();
-		final List<Contract.UIFieldRef> uicol_set = new ArrayList<Contract.UIFieldRef>();
-		Contract.RMode mode = null;
-		final List<Contract.Message> message_set = new ArrayList<Contract.Message>();
+        final List<Contract.Field> field_set = new ArrayList<Contract.Field>();
+        final List<Contract.Key> key_set = new ArrayList<Contract.Key>();
+        Contract.RelationMode mode = null;
+        final List<Contract.Message> message_set = new ArrayList<Contract.Message>();
 
-		NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				final Element currentElement = (Element) currentNode;
-				final String tagName = currentElement.getTagName();
-				if ("field".equals(tagName)) {
-					field_set.add(parseXmlField(currentElement));
-					continue;
-				}
-				if ("key".equals(tagName)) {
-					keycol_set.addAll(parseXmlFieldRef(currentElement));
-					continue;
-				}
-				if ("message".equals(tagName)) {
-					message_set.add(parseXmlMessage(currentElement));
-					continue;
-				}
-				if ("mode".equals(tagName)) {
-					mode = parseXmlRMode(currentElement);
-					continue;
-				}
-				if ("ui-selection-subset".equals(tagName)) {
-					uicol_set.addAll(parseXmlUIFieldRef(currentElement));
-					continue;
-				}
-			}
-		}
-		return new Contract.Relation(name, mode, field_set, keycol_set,
-				message_set, uicol_set);
-	}
+        NodeList nodeList = xml.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                final Element currentElement = (Element) currentNode;
+                final String tagName = currentElement.getTagName();
+                if ("field".equals(tagName)) {
+                    field_set.add(parseField(currentElement));
+                    continue;
+                }
+                if ("key".equals(tagName)) {
+                    key_set.add(parseKey(currentElement));
+                    continue;
+                }
+                if ("message".equals(tagName)) {
+                    message_set.add(parseMessage(currentElement));
+                    continue;
+                }
+                if ("mode".equals(tagName)) {
+                    mode = parseRelationMode(currentElement);
+                    continue;
+                }
+            }
+        }
+        final Contract.Relation relation = new Contract.Relation(name, mode, field_set, key_set, message_set);
+        // logger.info("relation element {}", relation);
+        return relation;
+    }
 
-	static public Contract.RMode parseXmlRMode(Element xml) {
-		final String type = xml.getAttribute("type");
-		return new Contract.RMode(extract_name(xml, "name"), type,
-				xml.getTextContent());
-	}
+    public Contract.RelationMode parseRelationMode(Element xml) {
+        final String type = xml.getAttribute("type");
+        final Contract.RelationMode rm = new Contract.RelationMode(extract_attr_name(xml, "name"), type,
+                xml.getTextContent());
+        // logger.info("relation mode element {}", rm);
+        return rm;
+    }
 
-	static public Contract.Name extract_name(final Element xml,
-			final String attr) {
-		return new Contract.Name(xml.getAttribute(attr));
-	}
+    public Contract.Name extract_attr_name(final Element xml, final String attrName) {
+        final String value = xml.getAttribute(attrName);   
+        
+        if (!value.isEmpty()) {
+            return new Contract.Name(value);
+        }
+        
+        final NamedNodeMap attrMap = xml.getAttributes();
+        final int attrCount = attrMap.getLength();
+        final StringBuilder sb = new StringBuilder();
+        for (int ix = 0; ix < attrCount; ix++) {
+            final Attr attr = (Attr) attrMap.item(ix);
+            sb.append(attr.getName()).append(":").append(attr.getNodeValue()).append(" ");
+        }
+        logger.warn("attr {} map {}", attrCount, sb.toString());
+        if (!value.isEmpty()) {
+            return new Contract.Name(value);
+        }
+        return new Contract.Name("");
+    }
 
-	static public Contract.RMode extract_mode(final Element xml) {
-		return null;
-	}
+    public Contract.RelationMode extract_mode(final Element xml) {
+        return null;
+    }
 
-	/**
-	 * <code>
-    field type="LONG" name="lat" default="0" />
+    /**
+     * <code>
+    <field type="LONG" name="lat" default="0" />
     <field type="LONG" name="lon" default="0"/>
     <field type="LONG" name="altitude" default="0" />
     <field type="LONG" name="accuracy" default="0" />
@@ -213,89 +223,76 @@ public class ContractXmlParser {
     <field type="LONG" name="hops" default="0" />
     <field type="BLOB" name="delta locations" />
     </code>
-	 * 
-	 * @param xml
-	 * @return
-	 */
-	static public Contract.Field parseXmlField(final Element xml) {
-		final String initial = xml.getAttribute("default");
+     * 
+     * @param xml
+     * @return
+     */
+    public Contract.Field parseField(final Element xml) {
+        final String initial = xml.getAttribute("default");
 
-		final List<Contract.Enumeration> enum_set = new ArrayList<Contract.Enumeration>();
+        final List<Contract.Enumeration> enum_set = new ArrayList<Contract.Enumeration>();
 
-		final NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				final Element currentElement = (Element) currentNode;
-				final String tagName = currentElement.getTagName();
-				if ("enum".equals(tagName)) {
-					enum_set.add(parseXmlEnumeration(currentElement));
-					continue;
-				}
-			}
-		}
+        final NodeList nodeList = xml.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                final Element currentElement = (Element) currentNode;
+                final String tagName = currentElement.getTagName();
+                if ("enum".equals(tagName)) {
+                    enum_set.add(parseEnumeration(currentElement));
+                    continue;
+                }
+            }
+        }
+        final String type = xml.getAttribute("type");
 
-		final String type = xml.getAttribute("type");
-		final Name name = extract_name(xml, "name");
-		Name abrv = extract_name(xml, "abrv");
-		if (abrv.getNorm().equals("") == true) {
-			abrv = name;
-		}
+        final Contract.Field field = new Contract.Field(extract_attr_name(xml, "name"), type, initial,
+                xml.getTextContent(), enum_set);
+        // logger.info("field element {}", field);
+        return field;
+    }
 
-		return new Contract.Field(name, abrv, type, initial,
-				xml.getTextContent(), enum_set);
-	}
+    /**
+     * <code>
+    <key name="update">
+      <field ref="foo"/>
+      <field ref="bar"/>
+      ...
+    </key>
+    * </code>
+     */
 
-	static public List<Contract.FieldRef> parseXmlFieldRef(final Element xml) {
+    public Contract.Key parseKey(final Element xml) {
+        final Name keyName = extract_attr_name(xml, "name");
+        final List<Contract.KeyFieldRef> field_set = new ArrayList<Contract.KeyFieldRef>();
 
-		List<Contract.FieldRef> refs = new ArrayList<Contract.FieldRef>();
-		final NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				// System.out.println("\n\nFOUND A NODE : " +
-				// nodeList.getLength() + "\n\n");
-				final Element currentElement = (Element) currentNode;
-				refs.add(parseXmlRef(currentElement));
-				continue;
-			}
-		}
-		return refs;
-	}
+        final NodeList nodeList = xml.getChildNodes();
+        for (int ix = 0; ix < nodeList.getLength(); ix++) {
+            final Node currentNode = nodeList.item(ix);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                final Element currentElement = (Element) currentNode;
+                final String tagName = currentElement.getTagName();
+                if ("field".equals(tagName)) {
+                    field_set
+                            .add(new Contract.KeyFieldRef(extract_attr_name(currentElement, "ref")));
+                }
+            }
+        }
+        final Contract.Key key = new Contract.Key(keyName, field_set);
+        // logger.info("key element {}", key);
+        return key;
+    }
 
-	static public List<Contract.UIFieldRef> parseXmlUIFieldRef(final Element xml) {
+    public Contract.Message parseMessage(final Element xml) {
+        // logger.info("message element {}", xml);
+        return null;
+    }
 
-		List<Contract.UIFieldRef> refs = new ArrayList<Contract.UIFieldRef>();
-		final NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				// System.out.println("\n\nFOUND A NODE : " +
-				// nodeList.getLength() + "\n\n");
-				final Element currentElement = (Element) currentNode;
-				refs.add(parseXmlUIRef(currentElement));
-				continue;
-			}
-		}
-		return refs;
-	}
-
-	static public Contract.UIFieldRef parseXmlUIRef(final Element xml) {
-		return new Contract.UIFieldRef(extract_name(xml, "field"));
-	}
-
-	static public Contract.FieldRef parseXmlRef(final Element xml) {
-		return new Contract.FieldRef(extract_name(xml, "field"));
-	}
-
-	static public Contract.Message parseXmlMessage(final Element xml) {
-		return null;
-	}
-
-	static public Contract.Enumeration parseXmlEnumeration(final Element xml) {
-		Contract.Name key = new Contract.Name(xml.getAttribute("key"));
-		int ordinal = Integer.parseInt(xml.getAttribute("value"));
-		return new Contract.Enumeration(key, ordinal);
-	}
-
+    public Contract.Enumeration parseEnumeration(final Element xml) {
+        final Contract.Name key = new Contract.Name(xml.getAttribute("key"));
+        final int ordinal = Integer.parseInt(xml.getAttribute("value"));
+        final Contract.Enumeration enumeration = new Contract.Enumeration(key, ordinal);
+        // logger.info("enumeration element {}", enumeration);
+        return enumeration;
+    }
 }

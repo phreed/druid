@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.StaticLoggerBinder;
@@ -127,21 +126,35 @@ public class DruidMojo extends AbstractMojo {
 	private String each = Generator.Each.CONTRACT.val;
 
 	/**
-	 * outputDirectory : the base path for the generated files.
+	 * skelOutputDirectory : the base path for the skeleton files.
+	 * A skeleton file is one which is intended to be modified
+	 * by the developer.  If the target file is present it will
+	 * not be replaced.
 	 * <p>
 	 * This indicates where the generated files should be placed.
 	 * 
-	 * @parameter expression="${generate.outputDirectory}"
+	 * @parameter expression="${generate.skelOutputDirectory}"
 	 *            default-value="${basedir}/target/generated-sources/druid"
 	 */
-	private File outputDirectory = new File("gen");
+	private File skelOutputDirectory = new File("skel");
+	
+	/**
+     * baseOutputDirectory : the base path for the base generated files.
+     * <p>
+     * This indicates where the generated skeleton files should be placed.
+     * 
+     * @parameter expression="${generate.baseOutputDirectory}"
+     *            default-value="${basedir}"
+     */
+    private File baseOutputDirectory = new File("base");
 
 	/**
 	 * Satisfy the maven execution request.
 	 * 
 	 */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        StaticLoggerBinder.getSingleton().setLog(getLog());
+        final StaticLoggerBinder logbinder = StaticLoggerBinder.getSingleton();
+        logbinder.setLog(getLog());
         final Logger logger = LoggerFactory.getLogger("druid-mojo");
        
         final Artifact artifact;
@@ -188,7 +201,8 @@ public class DruidMojo extends AbstractMojo {
 		generator.setTemplateManifestFileName(this.templateFileManifest);
 
 		generator.setContractPath(this.contractFile);
-		generator.setOutputDir(this.outputDirectory);
+		generator.setSkelOutputDir(this.skelOutputDirectory);
+		generator.setBaseOutputDir(this.baseOutputDirectory);
 		try {
             generator.setEach(this.each);
         } catch (GeneratorException ex) {

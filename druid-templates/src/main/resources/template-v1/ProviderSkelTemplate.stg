@@ -1,0 +1,57 @@
+
+import "template-v1/ammo_content_provider.stg"
+
+PATH(delimiter, directory, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>ProviderSkel.java
+%>
+
+BODY(contract) ::= <<
+// THIS IS GENERATED CODE, WHEN YOU COMPLETE YOUR HAND EDITS REMOVE THIS LINE
+<packageTmpl(sponsor=contract.root.sponsor)>
+
+import android.content.Context;
+
+/**
+ * Implements and overrides those elements not completed
+ * 
+ * @author \<yourself\>
+ *    
+ */
+public class <provNameImpl(name=contract.root.name)> extends <provNameBase(name=contract.root.name)> {
+   <versionTemplate()>
+   protected class <dbHelperName(name=contract.root.name)> extends <provNameBase(name=contract.root.name)>.<dbHelperName(name=contract.root.name)> {
+      protected <dbHelperName(name=contract.root.name)>(Context context) { 
+         super(context, <schemaNameImpl(name=contract.root.name)>.DATABASE_NAME, <schemaNameImpl(name=contract.root.name)>.DATABASE_VERSION);
+      }
+
+/**
+   @Override
+   protected void preloadTables(SQLiteDatabase db) {
+      db.execSQL("INSERT INTO \""+Tables.*_TBL+"\" (" + *Schema.*+") "+"VALUES ('" + *TableSchema.* + "');");
+   }
+*/
+   }
+   
+   // ===========================================================
+   // Content Provider Overrides
+   // ===========================================================
+
+   @Override
+   public synchronized boolean onCreate() {
+       super.onCreate();
+       this.openHelper = new <dbHelperName(name=contract.root.name)>(getContext());
+           
+       return true;
+   }
+
+   @Override
+   protected synchronized boolean createDatabaseHelper() {
+      return false;
+   }
+   
+}
+>>

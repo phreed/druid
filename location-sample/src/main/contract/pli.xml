@@ -16,7 +16,7 @@
     <field type="BLOB" name="delta locations" />
     
     <key name="update">
-      <ref field="name"/>
+      <field ref="name"/>
     </key>
     
     <message encoding="terse">

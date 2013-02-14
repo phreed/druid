@@ -1,0 +1,25 @@
+
+import "template-v1/ammo_content_provider.stg"
+
+PATH(delimiter, directory, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>SchemaSkel.java
+%>
+
+BODY(contract) ::= <<
+// THIS IS GENERATED CODE, WHEN YOU COMPLETE YOUR HAND EDITS REMOVE THIS LINE
+<packageTmpl(sponsor=contract.root.sponsor)>
+
+public class <schemaNameImpl(contract.root.name)> extends <schemaNameBase(name=contract.root.name)> {
+   <versionTemplate()>
+   public static final int DATABASE_VERSION = 1;
+
+   <contract.root.relations: { rel |
+   <schemaSkelTmpl(sponsor=contract.root.sponsor, name=contract.root.name, rel=rel)>
+   }>
+}
+>>
+

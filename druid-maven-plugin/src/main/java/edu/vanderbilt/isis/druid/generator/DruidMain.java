@@ -167,7 +167,8 @@ public class DruidMain {
             }
             if (keyMatch("output", key)) {
             	final File outputDir = new File(param[1]);
-                that.setOutputDir(outputDir);
+                that.setSkelOutputDir(outputDir);
+                that.setBaseOutputDir(outputDir);
                 continue;
             }
         }

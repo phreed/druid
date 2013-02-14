@@ -1,0 +1,33 @@
+<!-- Simplified version of the Transapps PLI contract, showing the new way to
+     handle custom field subsets in terse serialization. -->
+
+<content-provider name="all types">
+  <sponsor name="edu.vanderbilt.isis.ammo.all_types"/>
+
+  <relation name="table 1">
+    <field type="TEXT" name="a text field" default="" />
+    <field type="LONG" name="a long field" default="0" />
+    <field type="TIMESTAMP" name="a time field" default="now"/>
+    <field type="BLOB" name="a blob field" />
+    <field type="SHORT" name="a short field" />
+    <field type="INTEGER" name="an integer field" />
+    <field type="FLOAT" name="a float field" />
+    <field type="DOUBLE" name="a double field" />
+    <field type="BOOL" name="a boolean field" />
+    <field type="FK" name="a foreign key field" />
+    
+    <key name="update">
+      <field ref="a text field" />
+    </key>
+
+    <key name="ui">
+      <field ref="a text field"/>
+      <field ref="a long field"/>
+    </key>
+    
+    <message encoding="terse">
+      <field ref="a text field" />
+      <field ref="a long field" type="INTEGER" />
+    </message>
+  </relation>
+</content-provider>

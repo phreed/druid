@@ -25,6 +25,18 @@
     <aether.version>1.8</aether.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>vanderbilt.release.repository</id>
+      <url>${vanderbilt.release.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>vanderbilt.snapshot.repository</id>
+      <url>${vanderbilt.snapshot.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+
   <dependencyManagement>
     <dependencies>
 

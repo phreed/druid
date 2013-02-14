@@ -22,32 +22,16 @@
         <version>2.0.0</version>
         <executions>
 
-          <!-- root directory of project -->
-          <execution> <!-- AndroidManifest.xml -->
+          <execution> 
             <id>generate-android-source-beta-files</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <templateKey>beta</templateKey>
+              <templateKey>ammo-v1</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
-              <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
-              <skelOutputDirectory>${basedir}</skelOutputDirectory>
-            </configuration>
-          </execution>
-
-          <execution> <!-- AndroidManifest.xml -->
-            <id>generate-android-source-alpha-files</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <templateKey>alpha</templateKey>
-              <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
+              <contractFile>${basedir}/src/main/druid/contract.xml</contractFile>
               <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
               <skelOutputDirectory>${basedir}</skelOutputDirectory>
             </configuration>
