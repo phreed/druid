@@ -17,7 +17,12 @@
     <field type="FK" name="a foreign key field" />
     
     <key name="update">
+      <field ref="a text field" />
+    </key>
+
+    <key name="ui">
       <field ref="a text field"/>
+      <field ref="a long field"/>
     </key>
     
     <message encoding="terse">

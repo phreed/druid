@@ -1,13 +1,11 @@
-
 package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
-import org.stringtemplate.v4.AttributeRenderer;
 import org.w3c.dom.NodeList;
 
 /**
@@ -21,8 +19,7 @@ public class Contract {
 
     public final Root root;
 
-	public Contract(final Logger logger, final Root root)
-			throws GeneratorException {
+    public Contract(final Logger logger, final Root root) throws GeneratorException {
         this.logger = logger;
         this.root = root;
     }
@@ -123,19 +120,23 @@ public class Contract {
         public String getPascal() {
             return capitalize(camel);
         }
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) { return true; }
+            if (!(obj instanceof Name)) {
+                return false;
+            }
+            final Name that = (Name) obj;
+            if (! this.norm.equals(that.norm)) {
+                return false;
+            }
+            return true;
+        }
+        @Override
+        public int hashCode() {
+            return this.norm.hashCode();
+        }
         
-		@Override
-		public boolean equals(Object name) {
-			if (this == name) {
-				return true;
-			}
-			if (!(name instanceof Name)) {
-				return false;
-			}
-			Name testName = (Name) name;
-
-			return (this.norm.equals(testName.getNorm()));
-		}
     }
 
     /**
@@ -173,6 +174,26 @@ public class Contract {
         public String toString() {
         return this.base;
     }
+        
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof Sponsor)) {
+                return false;
+            }
+            final Sponsor that = (Sponsor) obj;
+            if (!this.base.equals(that.base)) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.base.hashCode();
+        }
     }
 
     /**
@@ -227,18 +248,17 @@ public class Contract {
      */
     public static class Relation {
         final private Name name;
-        final private RMode mode;
+        final private RelationMode mode;
         final private List<Field> fields;
         final private List<Key> keys;
+        final private Map<String,Key> keyMap;
         final private List<Message> messages;
-		final private List<UIFieldRef> uicols;
-		final private ArrayList<String> dataTypes;
 
         public Name getName() {
             return name;
         }
 
-        public RMode getMode() {
+        public RelationMode getMode() {
             return mode;
         }
 
@@ -249,77 +269,30 @@ public class Contract {
         public List<Key> getKeys() {
             return this.keys;
         }
+        public Map<String, Key> getKeyMap() {
+            return this.keyMap;
+        }
         
-		public List<String> getDataTypes() {
-			return dataTypes;
-		}
         public List<Message> getMessages() {
             return this.messages;
         }
 
-		public List<UIFieldRef> getUicols() {
-			return this.uicols;
-		}
 
-        public Relation(final Name name, final RMode mode,
-                final List<Field> fields, final List<FieldRef> keycols, 
-				final List<Message> messages, List<UIFieldRef> uicols)
-				throws Exception {
+        public Relation(final Name name, final RelationMode mode,
+                final List<Field> fields, final List<Key> key_set, 
+                final List<Message> messages) {
             this.name = name;
             this.mode = mode;
-			this.dataTypes = new ArrayList<String>();
-			for (Field field : fields) {
-				if (this.dataTypes.contains(field.getDtype()) == false) {
-					this.dataTypes.add(field.getDtype());
-				} else {
-				}
-			}
-			final ArrayList<Name> fieldNames = new ArrayList<Name>();
             for (Field field : fields) {
                 field.setParent(this);
-				fieldNames.add(field.getName());
             }
-			ArrayList<UIFieldRef> tempList = new ArrayList<UIFieldRef>();
-			eachUIFieldRef: for (UIFieldRef uiField : uicols) {
-				if (fieldNames.contains(uiField.getName()) == false) {
-					for (Field field : fields) {
-						// see if field has abrv that matches fieldRef
-						if (field.abrv.getNorm().equals(
-								uiField.getName().getNorm()) == true) {
-							uiField = new UIFieldRef(field.getName());
-							uiField.setParent(this);
-							tempList.add(uiField);
-							continue eachUIFieldRef;
-						}
-					}// end each field
-					throw new Exception("Error with FieldRef '"
-							+ uiField.getName() + "', no matching Field found.");
-				}
-				uiField.setParent(this);
-				tempList.add(uiField);
-			}
             this.fields = fields;
-			// check every fieldRef
-			eachFieldRef: for (FieldRef fieldRef : keycols) {
-				// check to see if is abrv or full length.
-				if (fieldNames.contains(fieldRef.getName()) == false) {
-					for (Field field : fields) {
-						// see if field has abrv that matches fieldRef
-						if (field.abrv.getNorm().equals(
-								fieldRef.getName().getNorm()) == true) {
-							fieldRef = new FieldRef(field.getName());
-							continue eachFieldRef;
-						}
-					}// end each field
-					throw new Exception("Error with FieldRef '"
-							+ fieldRef.getName()
-							+ "', no matching Field found.");
-				}// end check if field.name already
-				fieldRef.setParent(this);
-			}
-            this.keycols = keycols;
+            this.keys = key_set;
+            this.keyMap = new HashMap<String,Key>(key_set.size());
+            for (Key key : key_set) {
+                this.keyMap.put(key.name.norm, key);
+            }
             this.messages = messages;
-			this.uicols = tempList;
         }
 
         @Override
@@ -332,12 +305,11 @@ public class Contract {
             for (Field field : this.fields) {
                 sb.append(field.toString());
             }
-            for (FieldRef ref : this.keycols) {
-                sb.append(ref.toString());
+            for (Key key : this.keys) {
+                sb.append(key.toString());
             }
             for (Message message : this.messages) {
-				if (message == null)
-					continue;
+                if (message == null) continue;
                 sb.append(message.toString());
             }
             sb.append("\n</relation>");
@@ -345,7 +317,7 @@ public class Contract {
         }
     }
 
-    public static class RMode {
+    public static class RelationMode {
         private final Name name;
         private final String dtype;
         private final String description;
@@ -362,7 +334,7 @@ public class Contract {
             return description;
         }
 
-        public RMode(final Name name, final String dtype,
+        public RelationMode(final Name name, final String dtype,
                 final String description) {
             this.name = name;
             this.dtype = dtype;
@@ -381,39 +353,11 @@ public class Contract {
         }
     }
     
-	public static class UI {
-		private final Name name;
-		private final List<FieldRef> fields;
-		private Relation parent;
-
-		public List<FieldRef> getFields() {
-			return fields;
-		}
-
-		public Name getName() {
-			return this.name;
-		}
-
-		UI(List<FieldRef> fields, Name name) {
-			this.fields = fields;
-			this.name = name;
-		}
-
-		public void setParent(final Relation parent) {
-			this.parent = parent;
-		}
-
-		public Relation getParent() {
-			return this.parent;
-		}
-
-	}
     /**
      * A column in a table (relation).
      */
     public static class Field implements Predecessor {
         private final Name name;
-		private final Name abrv;
         private final String dtype;
         private final String initial;
         private final String description;
@@ -440,26 +384,9 @@ public class Contract {
             return enums;
         }
         
-		public String getIsInKeys() {
-			for (FieldRef ref : parent.keycols) {
-				if (ref.getName().getSnake().equals(this.getName().getSnake())) {
-					return "yes";
-				}
-			}
-			return null;
-		}
-
-		public String getIsInUICols() {
-			for (UIFieldRef ref : parent.uicols) {
-				if (ref.getName().getSnake().equals(this.getName().getSnake())) {
-					return "yes";
-				}
-			}
-			return null;
-		}
         /**
-		 * The object must be found in the list and it cannot be the first item
-		 * for this to work.
+         * The object must be found in the list and 
+         * it cannot be the first item for this to work.
          */
         public Predecessor getPredecessor() {
             final int ix = parent.fields.indexOf(this) - 1;
@@ -469,12 +396,11 @@ public class Contract {
             return parent.fields.get(ix);
         }
 
-		public Field(final Name name, Name abrv, final String dtype,
+        public Field(final Name name, final String dtype,
                 final String initial, final String description,
                 final List<Enumeration> enum_set) {
             this.name = name;
             this.dtype = dtype;
-			this.abrv = abrv;
             this.initial = initial;
             this.description = description.trim();
             this.enums = enum_set;
@@ -500,31 +426,20 @@ public class Contract {
         }
     }
 
+    /**
+     * A named set of field references.
+     */
     public static class Key {
         private final Name name;
         private final List<KeyFieldRef> field_set;
-		private Relation parent;
 
         public Name getName() {
             return name;
         }
-
+        
         public List<KeyFieldRef> getFields() {
             return this.field_set;
         }
-
-		public Predecessor getPredecessor() {
-			final int ix = parent.keycols.indexOf(this) - 1;
-			if (ix < 0) {
-				return null;
-			}
-			return parent.keycols.get(ix);
-
-		}
-
-		public void setParent(final Relation parent) {
-			this.parent = parent;
-		}
 
         public Key(final Name name, final List<KeyFieldRef> field_set) {
             this.name = name;
@@ -540,36 +455,12 @@ public class Contract {
             sb.append("<key name='").append(name.norm).append("'>");
             for (KeyFieldRef field : this.field_set) {
                 field.toString(sb);
+            }
+            return sb.append("</key>");
         }
-        return sb.append("</key>");
     }
     
-	public static class UIFieldRef implements Predecessor {
-		private final Name name;
-		private Relation parent;
-
-		public Name getName() {
-			return name;
-		}
-
-		public Predecessor getPredecessor() {
-			final int ix = parent.uicols.indexOf(this) - 1;
-			if (ix < 0) {
-				return null;
-			}
-			return parent.uicols.get(ix);
-
-		}
-
-		public void setParent(final Relation parent) {
-			this.parent = parent;
-		}
-
-		public UIFieldRef(final Name name) {
-			this.name = name;
-		}
-
-     public static class KeyFieldRef {
+    public static class KeyFieldRef {
         private final Name ref;
 
         public Name getRef() {
@@ -590,17 +481,7 @@ public class Contract {
         }
        
     }
-
-		@Override
-		public String toString() {
-			final StringBuilder sb = new StringBuilder();
-			return this.toString(sb).toString();
-		}
-
-		public StringBuilder toString(final StringBuilder sb) {
-            return sb.append("<field ref='").append(ref.norm).append("'/>");
-		}
-	}
+    
 
     public static class Message {
         private final Name encoding;
@@ -678,10 +559,11 @@ public class Contract {
             return this.toString(sb).toString();
         }
         public StringBuilder toString(final StringBuilder sb) {
-			return sb.append("<enum key=\"").append(key).append('"')
-					.append(' ').append("value=\"").append(ordinal)
+            return sb.append("<enum key=\"").append(key)
+                    .append('"').append(' ').append("value=\"").append(ordinal)
                     .append("\"/>\n");
         }
     }
+
 
 }

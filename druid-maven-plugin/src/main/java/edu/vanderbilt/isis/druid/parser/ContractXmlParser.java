@@ -11,8 +11,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -27,15 +29,19 @@ import edu.vanderbilt.isis.druid.generator.GeneratorException;
  * @see GenerateMojo.java for a description of the fields.
  */
 public class ContractXmlParser {
+    final Logger logger;
+
+    public ContractXmlParser(final Logger logger) {
+        this.logger = logger;
+    }
 
     /**
-   
      * @param logger
      * @param contractFile
      * @return
      * @throws GeneratorException
      */
-    public static Contract parseXmlFile(final Logger logger, final File contractFile)
+    public Contract parseFile(final File contractFile)
             throws GeneratorException {
 
         final File contractPath = contractFile;
@@ -58,7 +64,7 @@ public class ContractXmlParser {
         {
             final DocumentBuilder db = dbf.newDocumentBuilder();
             contractXml = db.parse(contractPath);
-            logger.info("Namespace: {}", contractXml.getNamespaceURI());
+            // logger.info("Namespace: {}", contractXml.getNamespaceURI());
         } catch (ParserConfigurationException pce) {
             throw new GeneratorException("could not parse configuration" + pce);
         } catch (SAXException se) {
@@ -72,7 +78,7 @@ public class ContractXmlParser {
          */
 
         final Element de = contractXml.getDocumentElement();
-        final Contract.Root root = parseXmlRoot(de);
+        final Contract.Root root = parseRoot(de);
         logger.info("contract {}", root);
         return new Contract(logger, root);
     }
@@ -87,13 +93,13 @@ public class ContractXmlParser {
   </relation>
 </content-provider>
      </code>
-     *
+     * 
      * @param xml
      * @return
      */
-    static public Contract.Root parseXmlRoot(final Element xml) {
+    public Contract.Root parseRoot(final Element xml) {
         final Name name = extract_attr_name(xml, "name");
-        
+
         String sponsor = "";
         final List<Contract.Relation> relation_set = new ArrayList<Contract.Relation>();
         final NodeList nodeList = xml.getChildNodes();
@@ -103,7 +109,7 @@ public class ContractXmlParser {
                 final Element currentElement = (Element) currentNode;
                 final String tagName = currentElement.getTagName();
                 if ("relation".equals(tagName)) {
-                    relation_set.add(parseXmlRelation(currentElement));
+                    relation_set.add(parseRelation(currentElement));
                     continue;
                 }
                 if ("sponsor".equals(tagName)) {
@@ -112,7 +118,9 @@ public class ContractXmlParser {
                 }
             }
         }
-        return new Contract.Root(name, sponsor, relation_set);
+        final Contract.Root root = new Contract.Root(name, sponsor, relation_set);
+        // logger.info("root element {}", root);
+        return root;
     }
 
     /**
@@ -134,16 +142,14 @@ public class ContractXmlParser {
      * @param xml
      * @return
      */
-    static public Contract.Relation parseXmlRelation(final Element xml) {
+    public Contract.Relation parseRelation(final Element xml) {
         final Name name = extract_attr_name(xml, "name");
-        
+
         final List<Contract.Field> field_set = new ArrayList<Contract.Field>();
         final List<Contract.Key> key_set = new ArrayList<Contract.Key>();
-        final List<Contract.UIFieldRef> uicol_set = new ArrayList<Contract.UIFieldRef>();
-
-        Contract.RMode mode = null;
+        Contract.RelationMode mode = null;
         final List<Contract.Message> message_set = new ArrayList<Contract.Message>();
-        
+
         NodeList nodeList = xml.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node currentNode = nodeList.item(i);
@@ -151,46 +157,64 @@ public class ContractXmlParser {
                 final Element currentElement = (Element) currentNode;
                 final String tagName = currentElement.getTagName();
                 if ("field".equals(tagName)) {
-                    field_set.add(parseXmlField(currentElement));
+                    field_set.add(parseField(currentElement));
                     continue;
                 }
                 if ("key".equals(tagName)) {
-                    key_set.add(parseXmlKey(currentElement));
+                    key_set.add(parseKey(currentElement));
                     continue;
                 }
                 if ("message".equals(tagName)) {
-                    message_set.add(parseXmlMessage(currentElement));
+                    message_set.add(parseMessage(currentElement));
                     continue;
                 }
                 if ("mode".equals(tagName)) {
-                    mode = parseXmlRMode(currentElement);
+                    mode = parseRelationMode(currentElement);
                     continue;
                 }
-				if ("ui-selection-subset".equals(tagName)) {
-					uicol_set.addAll(parseXmlUIFieldRef(currentElement));
-					continue;
             }
         }
-        return new Contract.Relation(name, mode, field_set, key_set, message_set);
+        final Contract.Relation relation = new Contract.Relation(name, mode, field_set, key_set, message_set);
+        // logger.info("relation element {}", relation);
+        return relation;
     }
 
-    static public Contract.RMode parseXmlRMode(Element xml) {
+    public Contract.RelationMode parseRelationMode(Element xml) {
         final String type = xml.getAttribute("type");
-        return new Contract.RMode(extract_attr_name(xml, "name"), type,
+        final Contract.RelationMode rm = new Contract.RelationMode(extract_attr_name(xml, "name"), type,
                 xml.getTextContent());
+        // logger.info("relation mode element {}", rm);
+        return rm;
     }
 
-    static public Contract.Name extract_attr_name(final Element xml, final String attr) {
-        return new Contract.Name(xml.getAttribute(attr));
+    public Contract.Name extract_attr_name(final Element xml, final String attrName) {
+        final String value = xml.getAttribute(attrName);   
+        
+        if (!value.isEmpty()) {
+            return new Contract.Name(value);
+        }
+        
+        final NamedNodeMap attrMap = xml.getAttributes();
+        final int attrCount = attrMap.getLength();
+        final StringBuilder sb = new StringBuilder();
+        for (int ix = 0; ix < attrCount; ix++) {
+            final Attr attr = (Attr) attrMap.item(ix);
+            sb.append(attr.getName()).append(":").append(attr.getNodeValue()).append(" ");
+        }
+        logger.warn("attr {} map {}", attrCount, sb.toString());
+        if (!value.isEmpty()) {
+            return new Contract.Name(value);
+        }
+        return new Contract.Name("");
     }
 
-    static public Contract.RMode extract_mode(final Element xml) {
+    public Contract.RelationMode extract_mode(final Element xml) {
         return null;
     }
 
     /**
      * <code>
-    field type="LONG" name="lat" default="0" />
+    <field type="LONG" name="lat" default="0" />
     <field type="LONG" name="lon" default="0"/>
     <field type="LONG" name="altitude" default="0" />
     <field type="LONG" name="accuracy" default="0" />
@@ -199,15 +223,15 @@ public class ContractXmlParser {
     <field type="LONG" name="hops" default="0" />
     <field type="BLOB" name="delta locations" />
     </code>
-     *
+     * 
      * @param xml
      * @return
      */
-    static public Contract.Field parseXmlField(final Element xml) {
+    public Contract.Field parseField(final Element xml) {
         final String initial = xml.getAttribute("default");
 
-        final List<Contract.Enumeration> enum_set = new ArrayList<Contract.Enumeration>(); 
-        
+        final List<Contract.Enumeration> enum_set = new ArrayList<Contract.Enumeration>();
+
         final NodeList nodeList = xml.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node currentNode = nodeList.item(i);
@@ -215,15 +239,17 @@ public class ContractXmlParser {
                 final Element currentElement = (Element) currentNode;
                 final String tagName = currentElement.getTagName();
                 if ("enum".equals(tagName)) {
-                    enum_set.add(parseXmlEnumeration(currentElement));
+                    enum_set.add(parseEnumeration(currentElement));
                     continue;
                 }
             }
         }
         final String type = xml.getAttribute("type");
-        
-        return new Contract.Field(extract_attr_name(xml, "name"), type, initial,
+
+        final Contract.Field field = new Contract.Field(extract_attr_name(xml, "name"), type, initial,
                 xml.getTextContent(), enum_set);
+        // logger.info("field element {}", field);
+        return field;
     }
 
     /**
@@ -236,7 +262,7 @@ public class ContractXmlParser {
     * </code>
      */
 
-    static public Contract.Key parseXmlKey(final Element xml) {
+    public Contract.Key parseKey(final Element xml) {
         final Name keyName = extract_attr_name(xml, "name");
         final List<Contract.KeyFieldRef> field_set = new ArrayList<Contract.KeyFieldRef>();
 
@@ -247,45 +273,26 @@ public class ContractXmlParser {
                 final Element currentElement = (Element) currentNode;
                 final String tagName = currentElement.getTagName();
                 if ("field".equals(tagName)) {
-                    field_set.add(new Contract.KeyFieldRef(extract_attr_name(currentElement, "ref")));
+                    field_set
+                            .add(new Contract.KeyFieldRef(extract_attr_name(currentElement, "ref")));
                 }
             }
         }
-        return new Contract.Key(keyName, field_set);
+        final Contract.Key key = new Contract.Key(keyName, field_set);
+        // logger.info("key element {}", key);
+        return key;
     }
-    static public List<Contract.UIFieldRef> parseXmlUIFieldRef(final Element xml) {
 
-		List<Contract.UIFieldRef> refs = new ArrayList<Contract.UIFieldRef>();
-		final NodeList nodeList = xml.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			final Node currentNode = nodeList.item(i);
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				// System.out.println("\n\nFOUND A NODE : " +
-				// nodeList.getLength() + "\n\n");
-				final Element currentElement = (Element) currentNode;
-				refs.add(parseXmlUIRef(currentElement));
-				continue;
-			}
-		}
-		return refs;
-	}
-
-	static public Contract.UIFieldRef parseXmlUIRef(final Element xml) {
-		return new Contract.UIFieldRef(extract_name(xml, "field"));
-	}
-
-	static public Contract.FieldRef parseXmlRef(final Element xml) {
-		return new Contract.FieldRef(extract_name(xml, "field"));
-	}
-
-    static public Contract.Message parseXmlMessage(final Element xml) {
+    public Contract.Message parseMessage(final Element xml) {
+        // logger.info("message element {}", xml);
         return null;
     }
 
-    static public Contract.Enumeration parseXmlEnumeration(final Element xml) {
-        Contract.Name key = new Contract.Name(xml.getAttribute("key"));
-        int ordinal = Integer.parseInt(xml.getAttribute("value"));
-        return new Contract.Enumeration(key, ordinal);
+    public Contract.Enumeration parseEnumeration(final Element xml) {
+        final Contract.Name key = new Contract.Name(xml.getAttribute("key"));
+        final int ordinal = Integer.parseInt(xml.getAttribute("value"));
+        final Contract.Enumeration enumeration = new Contract.Enumeration(key, ordinal);
+        // logger.info("enumeration element {}", enumeration);
+        return enumeration;
     }
-
 }

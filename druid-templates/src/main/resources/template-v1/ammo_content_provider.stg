@@ -178,10 +178,7 @@ public static final Meta[] <name.cobra>_CURSOR_COLUMNS = new Meta[] {
     separator=",\n   ", anchor="true">
 };
 
-public static final String[] <name.cobra>_KEY_COLUMNS = new String[] {
-  <keyset: { ref | <colSchemaName(rel=name,column=ref.name)> }; 
-               separator=",\n   ", anchor="true">
-};
+<tableKeyColumnsSet(sponsor, name, keyset)>
 
 public static class <relNameBase(name=name)> implements BaseColumns {
    protected <relNameBase(name=name)>() {} // No instantiation.
@@ -591,7 +588,7 @@ public static class Meta {
 }
 
 <relset: { rel |
-<tableTmpl(sponsor=sponsor, name=rel.name, fieldset=rel.fields, keyset=rel.keyFields)> 
+<tableTmpl(sponsor=sponsor, name=rel.name, fieldset=rel.fields, keyset=rel.keys)> 
 }>
 
 >>
@@ -611,10 +608,22 @@ tableKeyClauseSet(sponsor, name, keys) ::= <<
 tableKeyClause(sponsor, name, key) ::= << 
 private static final String <name.cobra>_<key.name.cobra>_KEY_CLAUSE;
 static {
-  <name.cobra>_KEY_CLAUSE = new StringBuilder()
+  <name.cobra>_<key.name.cobra>_KEY_CLAUSE = new StringBuilder()
   <key.fields: { field | .append(<colSchemaName(rel=name,column=field.ref)>).append("=?") }; 
                separator=".append(\" AND \")\n", anchor="true">
     .toString();
+};
+>>
+
+tableKeyColumnsSet(sponsor, name, keys) ::= << 
+  <keys: { key | <tableKeyColumns(sponsor, name, key)> }; 
+               separator="\n", anchor="true">
+>>
+
+tableKeyColumns(sponsor, name, key) ::= << 
+public static final String[] <name.cobra>_<key.name.cobra>_KEY_COLUMNS = new String[] {
+  <key.fields: { field | <colSchemaName(rel=name,column=field.ref)> }; 
+               separator=",\n   ", anchor="true">
 };
 >>
 
@@ -868,19 +877,9 @@ insertRelTmpl(rel) ::= <<
 case <rel.name.cobra>_SET:
    try {
       final ContentValues values = this.initialize<rel.name.bactrian>WithDefaults(assignedValues);
-      if ( <schemaNameBase(name=name)>.<rel.name.cobra>_KEY_COLUMNS.length \< 1 ) {
-         final SQLiteDatabase db = openHelper.getWritableDatabase();
-         final long rowID = db.insert(<relNameFull(name=rel.name)>, <relNameBase(name=rel.name)>.<first(rel.fields).name.cobra>, values);
-         if (rowID \< 1) {
-            throw new SQLiteException("Failed to insert row into " + uri);
-         }
-         final Uri playerURI = ContentUris.withAppendedId(<relNameBase(name=rel.name)>.CONTENT_URI, rowID);
-         getContext().getContentResolver().notifyChange(uri, null);
-         return playerURI;
-      }
-
+<if(rel.keyMap.update)>
       final List\<String> selectArgsList = new ArrayList\<String>();
-      for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_KEY_COLUMNS) {
+      for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_COLUMNS) {
          selectArgsList.add(values.getAsString(item));
       } 
       final String[] selectArgs = selectArgsList.toArray(new String[0]);
@@ -888,7 +887,7 @@ case <rel.name.cobra>_SET:
    
       final long rowID;
       final int count = db.update(<relNameFull(name=rel.name)>, values, 
-            <provNameBase(name=name)>.<rel.name.cobra>_KEY_CLAUSE, selectArgs);
+            <provNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_CLAUSE, selectArgs);
       if ( count \< 1 ) {
          rowID = db.insert(<relNameFull(name=rel.name)>, <relNameBase(name=rel.name)>.<first(rel.fields).name.cobra>, values);
          if (rowID \< 1) {
@@ -897,15 +896,23 @@ case <rel.name.cobra>_SET:
       }
       else {
          final Cursor cursor = db.query(<relNameFull(name=rel.name)>, null, 
-             <provNameBase(name=name)>.<rel.name.cobra>_KEY_CLAUSE, selectArgs, 
+             <provNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_CLAUSE, selectArgs, 
              null, null, null);
          cursor.moveToFirst();
          rowID = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
          cursor.close();
       }
+<else>
+      final SQLiteDatabase db = openHelper.getWritableDatabase();
+      final long rowID = db.insert(<relNameFull(name=rel.name)>, <relNameBase(name=rel.name)>.<first(rel.fields).name.cobra>, values);
+      if (rowID \< 1) {
+         throw new SQLiteException("Failed to insert row into " + uri);
+      }
+<endif>
       final Uri playerURI = ContentUris.withAppendedId(<relNameBase(name=rel.name)>.CONTENT_URI, rowID);
       getContext().getContentResolver().notifyChange(uri, null);
       return playerURI;
+
    } catch (SQLiteException ex) {
       logger.warn("bad column set {}", ex.getLocalizedMessage());
    }
@@ -936,15 +943,16 @@ case <rel.name.cobra>_DESERIAL:
           }
       }
 
+ <if(rel.keyMap.update)>
       final List\<String> selectArgsList = new ArrayList\<String>();
-      for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_KEY_COLUMNS) {
+      for (String item : <schemaNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_COLUMNS) {
          selectArgsList.add(values.getAsString(item));
       } 
       final String[] selectArgs = selectArgsList.toArray(new String[0]);
       final SQLiteDatabase db = this.openHelper.getWritableDatabase();
       final long rowID;
       final int count = db.update(<relNameFull(name=rel.name)>, values, 
-              <provNameBase(name=name)>.<rel.name.cobra>_KEY_CLAUSE, selectArgs);
+              <provNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_CLAUSE, selectArgs);
       if ( count \< 1 ) {
          rowID = db.insert(<relNameFull(name=rel.name)>, <relNameBase(name=rel.name)>.<first(rel.fields).name.cobra>, values);
          if (rowID \< 1) {
@@ -953,12 +961,20 @@ case <rel.name.cobra>_DESERIAL:
       }
       else {
          final Cursor cursor = db.query(<relNameFull(name=rel.name)>, null, 
-              <provNameBase(name=name)>.<rel.name.cobra>_KEY_CLAUSE, selectArgs, 
+              <provNameBase(name=name)>.<rel.name.cobra>_UPDATE_KEY_CLAUSE, selectArgs, 
               null, null, null);
          cursor.moveToFirst();
          rowID = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
          cursor.close();
       }
+<else>
+      final SQLiteDatabase db = this.openHelper.getWritableDatabase();
+      final long rowID = db.insert(<relNameFull(name=rel.name)>, <relNameBase(name=rel.name)>.<first(rel.fields).name.cobra>, values);
+      if (rowID \< 1) {
+         throw new SQLiteException("Failed to insert row into " + uri);
+      }
+<endif>
+
       final Uri playerURI = ContentUris.withAppendedId(<relNameBase(name=rel.name)>.CONTENT_URI, rowID);
       getContext().getContentResolver().notifyChange(uri, null);
       return playerURI;
