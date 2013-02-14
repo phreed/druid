@@ -333,7 +333,7 @@ uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) ::= <<
 
 
 uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) ::= <<
-<field.name.camel>TV.setText(<javaMethodTypeMap.(field.dtype)>.valueOf(<relation.name.camel>.<field.name.camel>).toString());
+<field.name.camel>TV.setText(<javaMethodTypeMap.(field.dtype)>.valueOf(<relation.name.camel>Data.<field.name.camel>).toString());
 >>
 
 uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) ::= <<
@@ -345,7 +345,7 @@ TextView <field.name.camel>TV;
 >>
 
 uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) ::= <<
-<field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_view_<field.name.snake>);
+<field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_view_value_<field.name.snake>);
 >>
 
 
@@ -1161,7 +1161,15 @@ uiViewSetDisplayViewFromOrmObjectREAL(relation,field) ::= << <uiViewSetDisplayVi
 uiViewSetDisplayViewFromOrmObjectGUID(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
 uiViewSetDisplayViewFromOrmObjectBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
 uiViewSetDisplayViewFromOrmObjectINCLUSIVE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
+uiViewSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << 
+final String <field.name.camel>String;
+if (Integer.valueOf(<relation.name.camel>Data.<field.name.camel>) == 0){
+    <field.name.camel>String = "False";
+} else {
+    <field.name.camel>String = "True";
+}
+<field.name.camel>TV.setText(<field.name.camel>String);
+>> 
 uiViewSetDisplayViewFromOrmObjectDOUBLE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
 uiViewSetDisplayViewFromOrmObjectSHORT(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
 uiViewSetDisplayViewFromOrmObjectFLOAT(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 

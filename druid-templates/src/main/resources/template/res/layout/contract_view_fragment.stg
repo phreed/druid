@@ -31,14 +31,12 @@ BODY(contract,item) ::= <<
 	  android:layout_height="match_parent"
 	  android:orientation="horizontal" >
     
-    
 	  \<!-- ST:putFirstLabelAndValue:start -->
-	  <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n">
+	  <item.fields: { field | <putFirstLabelAndValue(item, field)> }; separator="\n">
 	  \<!-- ST:putFirstLabelAndValue:end -->
 	
-	  \<!-- ST:putLabelAndValue:start -->
-	  <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n">
-	  \<!-- ST:putLabelAndValue:end -->
+	  
+	  
       \</RelativeLayout>
   \</ScrollView>
     
@@ -69,73 +67,35 @@ BODY(contract,item) ::= <<
 
 putFirstLabelAndValue(relation,field) ::= <<
 \<!-- <field.name.camel> -->
-<putFirstLabel(relation,field)>
-<putFirstValue(relation,field)>
+<resLayoutViewLabelTemplate(relation,field)>
+<resLayoutViewValueTemplate(relation,field)>
 >>
-
-putFirstLabel(relation,field) ::= <<
-\<TextView
-        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="left"
-        android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
->>
-
-putFirstValue(relation,field) ::= <<
-\<TextView
-        android:id="@+id/<relation.name.snake>_view_<field.name.snake>"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        <if(!field.predecessor)>
-            android:layout_below="@+id/<relation.name.snake>_view_label_<field.predecessor.name.snake>"
-        <endif>        
-        android:layout_alignParentTop="true"
-        android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
->>
-
-putLabelAndValue(relation,field) ::= <<
-\<!-- <field.name.camel> -->
-<putLabel(relation,field)>
-<putValue(relation,field)>
->>
-
-putLabel(relation,field) ::= <<
-\<TextView
-        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/<relation.name.snake>_view_label_<field.predecessor.name.snake>"
-        android:layout_gravity="left"
-        android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-        
->>
-
-putValue(relation,field) ::= <<
- \<TextView
-        android:id="@+id/<relation.name.snake>_view_<field.name.snake>"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/<relation.name.snake>_view_<field.predecessor.name.snake>"
-        android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
->>
-
-
 
 
 resLayoutViewValueDefualtTemplate(relation,field) ::= <<
+\<TextView
+        android:id="@+id/<relation.name.snake>_view_value_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        <if(field.predecessor)>android:layout_below="@+id/<relation.name.snake>_view_value_<field.predecessor.name.snake>"
+        <else>android:layout_alignParentTop="true"
+        <endif>
+        android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 >>
 
 resLayoutViewLabelDefualtTemplate(relation,field) ::= <<
+\<TextView
+        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_view_value_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_view_value_<field.name.snake>"   
+        android:layout_gravity="left"
+        android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 >>
 
 resLayoutViewValueTemplate(relation,field) ::= << <(resLayoutViewValueMap.(field.dtype))(relation,field) > >>
@@ -144,7 +104,19 @@ resLayoutViewLabelTemplate(relation,field) ::= << <(resLayoutViewLabelMap.(field
 resLayoutViewLabelINTEGER(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
 resLayoutViewLabelREAL(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
 resLayoutViewLabelGUID(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
-resLayoutViewLabelBLOB(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
+resLayoutViewLabelBLOB(relation,field) ::= << 
+\<TextView
+        android:id="@+id/<relation.name.snake>_view_label_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBaseline="@+id/<relation.name.snake>_view_value_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_view_value_<field.name.snake>"   
+        android:layout_gravity="left"
+        android:visibility="gone"
+        android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+>> 
 resLayoutViewLabelINCLUSIVE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
 resLayoutViewLabelBOOL(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
 resLayoutViewLabelDOUBLE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate(relation,field) > >> 
@@ -162,7 +134,19 @@ resLayoutViewLabelTYPE(relation,field) ::= << <resLayoutViewLabelDefualtTemplate
 resLayoutViewValueINTEGER(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
 resLayoutViewValueREAL(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
 resLayoutViewValueGUID(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
-resLayoutViewValueBLOB(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
+resLayoutViewValueBLOB(relation,field) ::= <<
+\<TextView
+        android:id="@+id/<relation.name.snake>_view_value_<field.name.snake>"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        <if(field.predecessor)>android:layout_below="@+id/<relation.name.snake>_view_value_<field.predecessor.name.snake>"
+        <else>android:layout_alignParentTop="true"
+        <endif>
+        android:text="@string/<relation.name.snake>_view_edittext_<field.name.snake>_default_value"
+        android:visibility="gone"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+>> 
 resLayoutViewValueINCLUSIVE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
 resLayoutViewValueBOOL(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 
 resLayoutViewValueDOUBLE(relation,field) ::= << <resLayoutViewValueDefualtTemplate(relation,field) > >> 

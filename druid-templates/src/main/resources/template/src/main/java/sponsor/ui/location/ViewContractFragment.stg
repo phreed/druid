@@ -155,11 +155,8 @@ public class <item.name.bactrian>ViewFragment extends Fragment {
     }   
     
     public void setUiTo<item.name.bactrian>Data(long getUniqueKey) throws RemoteException {
-        <item.name.bactrian>Data <item.name.camel> = null;
-        
-        <item.name.camel> = resolver.get<item.name.bactrian>DataViaRowID(getUniqueKey);
-       
-        if (<item.name.camel> == null) {
+        <item.name.camel>Data = resolver.get<item.name.bactrian>DataViaRowID(getUniqueKey);
+        if (<item.name.camel>Data == null) {
             getView().setVisibility(View.GONE);
         } else { // else it just displays empty screen
             // ST:uiViewSetDisplayViewFromOrmObjectTemplate:start
