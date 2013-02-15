@@ -23,7 +23,7 @@ public class Edit<item.name.bactrian>Activity extends <item.name.bactrian>Activi
 
 		if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
-			int index = getIntent().getExtras().getInt(
+			long index = getIntent().getExtras().getLong(
 					Edit<item.name.bactrian>Fragment.rowIdentifyerTAG);
 
 			Edit<item.name.bactrian>Fragment editor = Edit<item.name.bactrian>Fragment
