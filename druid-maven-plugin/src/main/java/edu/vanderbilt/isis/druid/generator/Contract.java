@@ -17,11 +17,23 @@ public class Contract {
     @SuppressWarnings("unused")
     final private Logger logger;
 
-    public final Root root;
+    private final Root root;
+    private final Map<String,Mode> mode;
+    
+    public Root getRoot() {
+        return this.root;
+    }
+    public List<Relation> getRelations() {
+        return this.root.relations;
+    }
+    public Map<String,Mode> getMode() {
+        return this.mode;
+    }
 
-    public Contract(final Logger logger, final Root root) throws GeneratorException {
+    public Contract(final Logger logger, final Root root, final Map<String, Mode> mode) throws GeneratorException {
         this.logger = logger;
         this.root = root;
+        this.mode = mode;
     }
 
     /**
@@ -31,6 +43,9 @@ public class Contract {
      * @return
      */
     static public String snake_case(final String name) {
+        if (name == null) {
+            return "<null-snake>";
+        }
         final StringBuilder sb = new StringBuilder();
         for (String seg : name.split(" ")) {
             sb.append(seg.toLowerCase());
@@ -47,6 +62,9 @@ public class Contract {
      * @return
      */
     static public String camelCase(final String name) {
+        if (name == null) {
+            return "<null-camel>";
+        }
         if (name.length() < 1)
             return "";
         final StringBuilder sb = new StringBuilder();
@@ -203,9 +221,13 @@ public class Contract {
         final private Name name;
         final private Sponsor sponsor;
         final private List<Relation> relations;
+        final private Map<String, Mode> mode;
 
         public Name getName() {
             return name;
+        }
+        public Map<String,Mode> getMode() {
+            return this.mode;
         }
 
         public Sponsor getSponsor() {
@@ -216,9 +238,10 @@ public class Contract {
             return relations;
         }
 
-        public Root(final Name name, final String sponsor,
+        public Root(final Name name, final Map<String, Mode> mode_set, final String sponsor,
                 List<Relation> relations) {
             this.name = name;
+            this.mode = mode_set;
             this.sponsor = new Sponsor(sponsor);
             this.relations = relations;
         }
@@ -248,7 +271,7 @@ public class Contract {
      */
     public static class Relation {
         final private Name name;
-        final private RelationMode mode;
+        final private Map<String, Mode> mode;
         final private List<Field> fields;
         final private List<Key> keys;
         final private Map<String,Key> keyMap;
@@ -258,7 +281,7 @@ public class Contract {
             return name;
         }
 
-        public RelationMode getMode() {
+        public Map<String, Mode> getMode() {
             return mode;
         }
 
@@ -278,7 +301,7 @@ public class Contract {
         }
 
 
-        public Relation(final Name name, final RelationMode mode,
+        public Relation(final Name name, final Map<String,Mode> mode,
                 final List<Field> fields, final List<Key> key_set, 
                 final List<Message> messages) {
             this.name = name;
@@ -317,27 +340,31 @@ public class Contract {
         }
     }
 
-    public static class RelationMode {
-        private final Name name;
-        private final String dtype;
+    /**
+     * Carries the properties which turn on/off various things.
+     * The mode is a map.
+     */
+    public static class Mode {
+        private final Name value;
+        private final String type;
         private final String description;
 
-        public Name getName() {
-            return name;
+        public Name getValue() {
+            return this.value;
         }
 
-        public String getDtype() {
-            return dtype;
+        public String getType() {
+            return this.type;
         }
 
         public String getDescription() {
             return description;
         }
 
-        public RelationMode(final Name name, final String dtype,
+        public Mode(final String type, final Name value, 
                 final String description) {
-            this.name = name;
-            this.dtype = dtype;
+            this.value = value;
+            this.type = type;
             this.description = description.trim();
         }
 
@@ -347,8 +374,8 @@ public class Contract {
             return this.toString(sb).toString();
         }
         public StringBuilder toString(final StringBuilder sb) {
-            return sb.append("<mode name='").append(name.norm)
-                    .append("' type='").append(dtype).append("'>")
+            return sb.append("<mode type='").append(this.type)
+                    .append("' value='").append(this.value).append("'>")
                     .append(description).append("</mode>");
         }
     }

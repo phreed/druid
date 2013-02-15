@@ -4,7 +4,9 @@ package edu.vanderbilt.isis.druid.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,7 +43,7 @@ public class ContractXmlParser {
      * @return
      * @throws GeneratorException
      */
-    public Contract parseFile(final File contractFile)
+    public Contract parseFile(final File contractFile, final Map<String,Contract.Mode> mode)
             throws GeneratorException {
 
         final File contractPath = contractFile;
@@ -80,7 +82,7 @@ public class ContractXmlParser {
         final Element de = contractXml.getDocumentElement();
         final Contract.Root root = parseRoot(de);
         logger.info("contract {}", root);
-        return new Contract(logger, root);
+        return new Contract(logger, root, mode);
     }
 
     /**
@@ -98,6 +100,7 @@ public class ContractXmlParser {
      * @return
      */
     public Contract.Root parseRoot(final Element xml) {
+        final Map<String,Contract.Mode> mode_set = new HashMap<String,Contract.Mode>();
         final Name name = extract_attr_name(xml, "name");
 
         String sponsor = "";
@@ -116,9 +119,14 @@ public class ContractXmlParser {
                     sponsor = currentElement.getAttribute("name");
                     continue;
                 }
+                if ("mode".equals(tagName)) {
+                    final Contract.Mode mode = parseMode(currentElement);
+                    mode_set.put(mode.getType(), mode);
+                    continue;
+                }
             }
         }
-        final Contract.Root root = new Contract.Root(name, sponsor, relation_set);
+        final Contract.Root root = new Contract.Root(name, mode_set, sponsor, relation_set);
         // logger.info("root element {}", root);
         return root;
     }
@@ -147,7 +155,7 @@ public class ContractXmlParser {
 
         final List<Contract.Field> field_set = new ArrayList<Contract.Field>();
         final List<Contract.Key> key_set = new ArrayList<Contract.Key>();
-        Contract.RelationMode mode = null;
+        final Map<String,Contract.Mode> mode_set = new HashMap<String,Contract.Mode>();
         final List<Contract.Message> message_set = new ArrayList<Contract.Message>();
 
         NodeList nodeList = xml.getChildNodes();
@@ -169,25 +177,37 @@ public class ContractXmlParser {
                     continue;
                 }
                 if ("mode".equals(tagName)) {
-                    mode = parseRelationMode(currentElement);
+                    final Contract.Mode mode = parseMode(currentElement);
+                    mode_set.put(mode.getType(), mode);
                     continue;
                 }
             }
         }
-        final Contract.Relation relation = new Contract.Relation(name, mode, field_set, key_set, message_set);
+        final Contract.Relation relation = new Contract.Relation(name, mode_set, field_set, key_set, message_set);
         // logger.info("relation element {}", relation);
         return relation;
     }
 
-    public Contract.RelationMode parseRelationMode(Element xml) {
+    /**
+     * The relation mode is an optionally repeated element.
+     * <code>
+      ...
+      <mode type="isAmmo" value="foo">some text</mode> 
+     * </code
+     * 
+     * 
+     * @param xmldtype
+     * @return
+     */
+    public Contract.Mode parseMode(Element xml) {
         final String type = xml.getAttribute("type");
-        final Contract.RelationMode rm = new Contract.RelationMode(extract_attr_name(xml, "name"), type,
+        final Contract.Mode rm = new Contract.Mode(type, extract_attr_name(xml, "value"),
                 xml.getTextContent());
         // logger.info("relation mode element {}", rm);
         return rm;
     }
 
-    public Contract.Name extract_attr_name(final Element xml, final String attrName) {
+    private Contract.Name extract_attr_name(final Element xml, final String attrName) {
         final String value = xml.getAttribute(attrName);   
         
         if (!value.isEmpty()) {
@@ -206,10 +226,6 @@ public class ContractXmlParser {
             return new Contract.Name(value);
         }
         return new Contract.Name("");
-    }
-
-    public Contract.RelationMode extract_mode(final Element xml) {
-        return null;
     }
 
     /**

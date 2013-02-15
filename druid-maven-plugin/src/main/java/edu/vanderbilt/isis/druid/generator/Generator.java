@@ -15,7 +15,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -27,6 +29,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import edu.vanderbilt.isis.druid.generator.Contract.Name;
 import edu.vanderbilt.isis.druid.parser.BuildComponentListener;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestLexer;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestParser;
@@ -50,6 +53,7 @@ public class Generator {
     }
 
     private File contractFile = new File("contract.xml");
+    private Map<String,Contract.Mode> mode = new HashMap<String,Contract.Mode>();
 
     private String templateJarName = null;
     private String templateFileName = null;
@@ -67,6 +71,16 @@ public class Generator {
 
     public void setBaseOutputDir(final File val) {
         this.baseOutputDir = val;
+    }
+    public void setMode(final Map<String,String> modeMap) {
+        final StringBuilder sb = new StringBuilder();
+        int ix = 0;
+        for (final Entry<String,String> entry : modeMap.entrySet() ) {
+            final String key = entry.getKey();
+            sb.append("[").append(ix++).append("] ").append(key).append(" : ").append(entry.getValue()).append("  ");
+            this.mode.put(key, new Contract.Mode(key, new Contract.Name(entry.getValue()), ""));
+        }
+        logger.info("mode : {}", sb);
     }
 
     /**
@@ -203,7 +217,7 @@ public class Generator {
      * @throws GeneratorException
      */
     public void build() throws GeneratorException {
-        final Contract contract = new ContractXmlParser(getLogger()).parseFile(this.contractFile);
+        final Contract contract = new ContractXmlParser(getLogger()).parseFile(this.contractFile, this.mode);
         logger.info("contract {}", contract);
         STGroup.trackCreationEvents = true;
 
@@ -401,7 +415,7 @@ public class Generator {
         final List<?> all;
         switch (forEach) {
             case RELATION:
-                all = contract.root.getRelations();
+                all = contract.getRelations();
                 break;
             case MESSAGE:
             default:
@@ -519,7 +533,7 @@ public class Generator {
         final List<?> all;
         switch (forEach) {
             case RELATION:
-                all = contract.root.getRelations();
+                all = contract.getRelations();
                 break;
             case MESSAGE:
             default:
