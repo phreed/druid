@@ -2,6 +2,7 @@ package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -147,7 +148,16 @@ public class DruidMojo extends AbstractMojo {
      *            default-value="${basedir}"
      */
     private File baseOutputDirectory = new File("base");
-
+    
+    /**
+     * mode : the base path for the base generated files.
+     * <p>
+     * This controls the details of the generated element.
+     * 
+     * @parameter expression="${generate.mode}"
+     */
+    private Map<String,String> mode;
+    
 	/**
 	 * Satisfy the maven execution request.
 	 * 
@@ -210,6 +220,7 @@ public class DruidMojo extends AbstractMojo {
         }
 
 		generator.setSkeleton(this.skeleton);
+		generator.setMode(this.mode);
 
 		try {
 			generator.build();

@@ -10,6 +10,12 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 // ST:BODY:start
 
+<if(contract.mode.isAmmo)>
+// this comment appears if ammo is enabled
+<else>
+// this comment appears if ammo is disabled
+<endif>
+
 package <package(contract)>;
 
 import android.content.ContentProvider;
