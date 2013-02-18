@@ -23,260 +23,261 @@ import android.util.Log;
 
 public class <contract.root.name.bactrian>DataDBAdaptor {
 
-	private static final String LOG_TAG = <contract.root.name.bactrian>DataDBAdaptor.class
-			.getCanonicalName();
+  private static final String LOG_TAG = <contract.root.name.bactrian>DataDBAdaptor.class
+      .getCanonicalName();
 
-	private static final String DATABASE_NAME = "myDatabase.db";
+  private static final String DATABASE_NAME = "myDatabase.db";
 
-	// ST:databaseTableVariableDeclaration:start
-	<contract.root.relations: { relation | <databaseTableVariableDeclaration(relation)> }; separator="\n">
-	// ST:databaseTableVariableDeclaration:finish
-	
-	static final int DATABASE_VERSION = 1;
+  // ST:databaseTableVariableDeclaration:start
+  <contract.root.relations: { relation | <databaseTableVariableDeclaration(relation)> }; separator="\n">
+  // ST:databaseTableVariableDeclaration:finish
+  
+  static final int DATABASE_VERSION = 1;
 
-	// The SHORT name of each column in your table
-	// ST:createShortVariables:start
-	<contract.root.relations: { relation | <createShortVariables(contract,relation)> }; separator="\n">
-	// ST:createShortVariables:finish
+  // The SHORT name of each column in your table
+  // ST:createShortVariables:start
+  <contract.root.relations: { relation | <createShortVariables(contract,relation)> }; separator="\n">
+  // ST:createShortVariables:finish
 
-	// ST:databaseTableCreationStrings:start
-	<contract.root.relations: { relation | <databaseTableCreationStrings(relation)> }; separator="\n">
-	// ST:databaseTableCreationStrings:finish
+  // ST:databaseTableCreationStrings:start
+  <contract.root.relations: { relation | <databaseTableCreationStrings(contract,relation)> }; separator="\n">
+  // ST:databaseTableCreationStrings:finish
 
-	// Variable to hold the database instance.
-	private SQLiteDatabase db;
-	// Context of the application using the database.
-	private final Context context;
-	// Database open/upgrade helper
-	private myDbHelper dbHelper;
-	// if the DB is in memory or to file.
-	private boolean MEMORY_ONLY_DB = false;
+  // Variable to hold the database instance.
+  private SQLiteDatabase db;
+  // Context of the application using the database.
+  private final Context context;
+  // Database open/upgrade helper
+  private myDbHelper dbHelper;
+  // if the DB is in memory or to file.
+  private boolean MEMORY_ONLY_DB = false;
 
-	/**
-	 * constructor that accepts the context to be associated with
-	 * 
-	 * @param _context
-	 */
-	public <contract.root.name.bactrian>DataDBAdaptor(Context _context) {
-		Log.d(LOG_TAG, "MyDBAdapter constructor");
+  /**
+   * constructor that accepts the context to be associated with
+   * 
+   * @param _context
+   */
+  public <contract.root.name.bactrian>DataDBAdaptor(Context _context) {
+    Log.d(LOG_TAG, "MyDBAdapter constructor");
 
-		context = _context;
-		dbHelper = new myDbHelper(context, DATABASE_NAME, null,
-				DATABASE_VERSION);
-	}
+    context = _context;
+    dbHelper = new myDbHelper(context, DATABASE_NAME, null,
+        DATABASE_VERSION);
+  }
 
-	/**
-	 * constructor that accepts the context to be associated with, and if this
-	 * DB should be created in memory only.
-	 * 
-	 * @param _context
-	 */
-	public <contract.root.name.bactrian>DataDBAdaptor(Context _context, boolean memory_only_db) {
-		Log.d(LOG_TAG, "MyDBAdapter constructor w/ mem only =" + memory_only_db);
+  /**
+   * constructor that accepts the context to be associated with, and if this
+   * DB should be created in memory only.
+   * 
+   * @param _context
+   */
+  public <contract.root.name.bactrian>DataDBAdaptor(Context _context, boolean memory_only_db) {
+    Log.d(LOG_TAG, "MyDBAdapter constructor w/ mem only =" + memory_only_db);
 
-		context = _context;
-		MEMORY_ONLY_DB = memory_only_db;
-		if (MEMORY_ONLY_DB == true) {
-			dbHelper = new myDbHelper(context, null, null, DATABASE_VERSION);
-		} else {
-			dbHelper = new myDbHelper(context, DATABASE_NAME, null,
-					DATABASE_VERSION);
-		}
-	}
+    context = _context;
+    MEMORY_ONLY_DB = memory_only_db;
+    if (MEMORY_ONLY_DB == true) {
+      dbHelper = new myDbHelper(context, null, null, DATABASE_VERSION);
+    } else {
+      dbHelper = new myDbHelper(context, DATABASE_NAME, null,
+          DATABASE_VERSION);
+    }
+  }
 
-	/**
-	 * open the DB Get Memory or File version of DB, and write/read access or
-	 * just read access if that is all that is possible.
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
-	public <contract.root.name.bactrian>DataDBAdaptor open() throws SQLException {
-		Log.d(LOG_TAG, "open()");
-		try {
-			db = dbHelper.getWritableDatabase();
-		} catch (SQLException ex) {
-			db = dbHelper.getReadableDatabase();
-		}
-		return this;
-	}
+  /**
+   * open the DB Get Memory or File version of DB, and write/read access or
+   * just read access if that is all that is possible.
+   * 
+   * @return
+   * @throws SQLException
+   */
+  public <contract.root.name.bactrian>DataDBAdaptor open() throws SQLException {
+    Log.d(LOG_TAG, "open()");
+    try {
+      db = dbHelper.getWritableDatabase();
+    } catch (SQLException ex) {
+      db = dbHelper.getReadableDatabase();
+    }
+    return this;
+  }
 
-	/**
-	 * Remove a row of the DB where the rowIndex matches.
-	 * 
-	 * @param rowIndex
-	 *            row to remove from DB
-	 * @return if the row was removed
-	 */
-	public int delete(final String table, long _id) {
-		Log.d(LOG_TAG, "delete(" + _id + ") ");
-		return db.delete(table, KEY_ID + " = " + _id, null);
-	}
+  /**
+   * Remove a row of the DB where the rowIndex matches.
+   * 
+   * @param rowIndex
+   *            row to remove from DB
+   * @return if the row was removed
+   */
+  public int delete(final String table, long _id) {
+    Log.d(LOG_TAG, "delete(" + _id + ") ");
+    return db.delete(table, android.provider.BaseColumns._ID + " = " + _id, null);
+  }
 
-	/**
-	 * Delete row(s) that match the whereClause and whereArgs(if used).
-	 * \<p>
-	 * the whereArgs is an String[] of values to substitute for the '?'s in the
-	 * whereClause
-	 * 
-	 * @param whereClause
-	 * @param whereArgs
-	 * @return
-	 */
-	public int delete(final String table, final String whereClause,
-			final String[] whereArgs) {
-		Log.d(LOG_TAG, "delete(" + whereClause + ") ");
-		return db.delete(table, whereClause, whereArgs);
-	}
+  /**
+   * Delete row(s) that match the whereClause and whereArgs(if used).
+   * \<p>
+   * the whereArgs is an String[] of values to substitute for the '?'s in the
+   * whereClause
+   * 
+   * @param whereClause
+   * @param whereArgs
+   * @return
+   */
+  public int delete(final String table, final String whereClause,
+      final String[] whereArgs) {
+    Log.d(LOG_TAG, "delete(" + whereClause + ") ");
+    return db.delete(table, whereClause, whereArgs);
+  }
 
-	/**
-	 * Query the Database with the provided specifics.
-	 * 
-	 * @param projection
-	 * @param selection
-	 * @param selectionArgs
-	 * @param sortOrder
-	 * @return
-	 */
-	public Cursor query(final String table, final String[] projection,
-			final String selection, final String[] selectionArgs,
-			final String sortOrder) {
-		Log.d(LOG_TAG, "query: " + projection.toString() + ", " + selection
-				+ ", " + selectionArgs.toString() + ", " + sortOrder);
+  /**
+   * Query the Database with the provided specifics.
+   * 
+   * @param projection
+   * @param selection
+   * @param selectionArgs
+   * @param sortOrder
+   * @return
+   */
+  public Cursor query(final String table, final String[] projection,
+      final String selection, final String[] selectionArgs,
+      final String sortOrder) {
+    Log.d(LOG_TAG, "query: " + projection.toString() + ", " + selection
+        + ", " + selectionArgs.toString() + ", " + sortOrder);
 
-		return db.query(table, projection, selection, selectionArgs,
-				null, null, sortOrder);	}
+    return db.query(table, projection, selection, selectionArgs,
+        null, null, sortOrder);  }
 
-	/**
-	 * close the DB.
-	 */
-	public void close() {
-		Log.d(LOG_TAG, "close()");
-		db.close();
-	}
+  /**
+   * close the DB.
+   */
+  public void close() {
+    Log.d(LOG_TAG, "close()");
+    db.close();
+  }
 
-	/**
-	 * Start a transaction.
-	 */
-	public void startTransaction() {
-		Log.d(LOG_TAG, "startTransaction()");
-		db.beginTransaction();
-	}
+  /**
+   * Start a transaction.
+   */
+  public void startTransaction() {
+    Log.d(LOG_TAG, "startTransaction()");
+    db.beginTransaction();
+  }
 
-	/**
-	 * End a transaction.
-	 */
-	public void endTransaction() {
-		Log.d(LOG_TAG, "endTransaction()");
-		db.endTransaction();
-	}
+  /**
+   * End a transaction.
+   */
+  public void endTransaction() {
+    Log.d(LOG_TAG, "endTransaction()");
+    db.endTransaction();
+  }
 
-	/**
-	 * Get the underlying Database.
-	 * 
-	 * @return
-	 */
-	SQLiteDatabase getDB() {
-		return db;
-	}
+  /**
+   * Get the underlying Database.
+   * 
+   * @return
+   */
+  SQLiteDatabase getDB() {
+    return db;
+  }
 
-	/**
-	 * Insert a ContentValues into the DB.
-	 * 
-	 * @param location
-	 * @return
-	 */
-	public long insert(final String table, final ContentValues cv) {
-		Log.d(LOG_TAG, "insert<item.name.bactrian>(CV)");
-		return db.insert(table, null, cv);
-	}
+  /**
+   * Insert a ContentValues into the DB.
+   * 
+   * @param location
+   * @return
+   */
+  public long insert(final String table, final ContentValues cv) {
+    Log.d(LOG_TAG, "insert<item.name.bactrian>(CV)");
+    return db.insert(table, null, cv);
+  }
 
-	/**
-	 * Update Value(s) in the DB.
-	 * 
-	 * @param values
-	 * @param whereClause
-	 * @param whereArgs
-	 * @return
-	 */
-	public int update(final String table, final ContentValues values,
-			final String whereClause, final String[] whereArgs) {
-		return db.update(table, values, whereClause, whereArgs);
-	}
+  /**
+   * Update Value(s) in the DB.
+   * 
+   * @param values
+   * @param whereClause
+   * @param whereArgs
+   * @return
+   */
+  public int update(final String table, final ContentValues values,
+      final String whereClause, final String[] whereArgs) {
+    return db.update(table, values, whereClause, whereArgs);
+  }
 
-	@Override
-	protected void finalize() throws Throwable {
-		try {
-			db.close();
-		} catch (Exception e) {
-			Log.d(LOG_TAG, "exception on finalize():" + e.getMessage());
-		}
-		super.finalize();
-	}
+  @Override
+  protected void finalize() throws Throwable {
+    try {
+      db.close();
+    } catch (Exception e) {
+      Log.d(LOG_TAG, "exception on finalize():" + e.getMessage());
+    }
+    super.finalize();
+  }
 
-	public boolean isMemoryOnlyDB() {
-		return MEMORY_ONLY_DB;
-	}
+  public boolean isMemoryOnlyDB() {
+    return MEMORY_ONLY_DB;
+  }
 
-	/**
-	 * DB Helper Class.
-	 * 
-	 * @author mwalker
-	 * 
-	 */
-	private static class myDbHelper extends SQLiteOpenHelper {
+  /**
+   * DB Helper Class.
+   * 
+   * @author mwalker
+   * 
+   */
+  private static class myDbHelper extends SQLiteOpenHelper {
 
-		public myDbHelper(Context context, String name, CursorFactory factory,
-				int version) {
-			super(context, name, factory, version);
-		}
+    public myDbHelper(Context context, String name, CursorFactory factory,
+        int version) {
+      super(context, name, factory, version);
+    }
 
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			Log.d(LOG_TAG, "DATABASE_CREATE: version: "+ DATABASE_VERSION);
-			// ST:createTable:start
-			<contract.root.relations: { relation | <createTable(relation)> }; separator="\n">			
-			// ST:createTable:finish
-			
-		}
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+      Log.d(LOG_TAG, "DATABASE_CREATE: version: "+ DATABASE_VERSION);
+      // ST:createTable:start
+      <contract.root.relations: { relation | <createTable(relation)> }; separator="\n">      
+      // ST:createTable:finish
+      
+    }
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// Log version upgrade.
-			Log.w(LOG_TAG + "DBHelper", "Upgrading from version " + oldVersion
-					+ " to " + newVersion + ", which will destroy all old data");
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+      // Log version upgrade.
+      Log.w(LOG_TAG + "DBHelper", "Upgrading from version " + oldVersion
+          + " to " + newVersion + ", which will destroy all old data");
 
-			// **** Upgrade DB ****
-			// TODO: migrate data?? from old DB to new DB
-			// drop old DB
-			
-			// ST:dropTableIfExists:start
-			<contract.root.relations: { relation | <dropTableIfExists(relation)> }; separator="\n">			
-			// ST:dropTableIfExists:finish
-			
-			// Create a new one.
-			onCreate(db);
+      // **** Upgrade DB ****
+      // TODO: migrate data?? from old DB to new DB
+      // drop old DB
+      
+      // ST:dropTableIfExists:start
+      <contract.root.relations: { relation | <dropTableIfExists(relation)> }; separator="\n">      
+      // ST:dropTableIfExists:finish
+      
+      // Create a new one.
+      onCreate(db);
 
-		}
+    }
 
-	}
+  }
 
 }
 
 >>
 
 createShortVariables(contract,relation) ::= <<
-private static final String KEY_ID = ContentDescriptor.<relation.name.bactrian>.Cols.ID;
+// private static final String KEY_ID = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID;
 <relation.fields: { field | <createShortVariable(contract,relation,field)> }; separator="\n">
 >>
 
 createShortVariable(contract,relation,field) ::= <%
-private static final String <field.name.bactrian> = ContentDescriptor.<relation.name.bactrian>.Cols.<field.name.cobra>;
+// private static final String <field.name.bactrian> = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.<field.name.cobra>;
 %>
 
 
-tableCreateVariables(field) ::= <%
-+ <field.name.bactrian> + " <javaTypeSQLiteMap.(field.dtype)>
+tableCreateVariables(contract,relation,field) ::= <%
++ <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.<field.name.cobra>
+ + " <javaTypeSQLiteMap.(field.dtype)>
 %>
 
 
@@ -284,19 +285,20 @@ tableCreateVariables(field) ::= <%
 
 
 databaseTableVariableDeclaration(relation) ::= <%
-static final String DATABASE_TABLE_<relation.name.cobra> = ContentDescriptor.<relation.name.bactrian>.TABLE_NAME;
+static final String DATABASE_TABLE_<relation.name.cobra> = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME;
 %>
 
 
-databaseTableCreationStrings(relation) ::= <<
+databaseTableCreationStrings(contract,relation) ::= <<
 // SQL Statement to create a new database.
 private static final String DATABASE_CREATE_<relation.name.cobra> = "create table "
-		+ DATABASE_TABLE_<relation.name.cobra> + " (" // start table
-		+ KEY_ID + " integer primary key autoincrement, " // setup auto-inc.
-		// ST:tableCreateVariables:start
-		<relation.fields: { field | <tableCreateVariables(field)> }; separator=",\" //\n"> " //
-		// ST:tableCreateVariables:finish
-		+ " );"; // end table
+  + DATABASE_TABLE_<relation.name.cobra> + " (" // start table
+  + <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " integer primary key autoincrement, " // setup auto-inc.
+  // ST:tableCreateVariables:start
+  <relation.fields: { field | <tableCreateVariables(contract,relation,field)> }; 
+                     separator=",\" //\n"> " //
+  // ST:tableCreateVariables:finish
+  + " );"; // end table
 >>
 
 

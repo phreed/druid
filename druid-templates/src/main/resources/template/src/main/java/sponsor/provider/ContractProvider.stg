@@ -1,7 +1,12 @@
 import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>provider<delimiter><contract.root.name.bactrian>Provider.java
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+<contract.root.name.camel><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>Provider.java
 %>
 
 SKELETON(contract,item) ::= <<
@@ -27,7 +32,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-public class <contract.root.name.bactrian>Provider extends ContentProvider {
+public class <contract.root.name.bactrian>Provider 
+    extends <contract.root.name.bactrian>ProviderBase  {
 
 	// logger TAG
 	private static final String LOG_TAG = <contract.root.name.bactrian>Provider.class
@@ -42,14 +48,14 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 	<contract.root.relations: { relation | <createShortContentURIforRelations(relation)> }; separator="\n">
 	// ST:createShortContentURIforRelations:finish
 	
-	public static String AUTHORITY = ContentDescriptor.AUTHORITY;
+	public static String AUTHORITY = <contract.root.name.bactrian>ContentDescriptor.AUTHORITY;
 	
 	// ST:createShortURIMatchingTokens:begin
 	<contract.root.relations: { relation | <createShortURIMatchingTokens(relation)> }; separator="\n">
 	// ST:createShortURIMatchingTokens:finish
 	
         	
-	private static final UriMatcher uriMatcher = ContentDescriptor.URI_MATCHER;
+	private static final UriMatcher uriMatcher = <contract.root.name.bactrian>ContentDescriptor.URI_MATCHER;
 
 	@Override
 	public boolean onCreate() {
@@ -190,27 +196,27 @@ public class <contract.root.name.bactrian>Provider extends ContentProvider {
 >>
 
 createShortURIMatchingTokens(relation) ::= <<
-private static final int <relation.name.cobra>_ALL_ROWS = ContentDescriptor.<relation.name.bactrian>.PATH_TOKEN;
-private static final int <relation.name.cobra>_SINGLE_ROW = ContentDescriptor.<relation.name.bactrian>.PATH_FOR_ID_TOKEN;
+private static final int <relation.name.cobra>_ALL_ROWS = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.PATH_TOKEN;
+private static final int <relation.name.cobra>_SINGLE_ROW = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.PATH_FOR_ID_TOKEN;
 >>
 
 createShortContentURIforRelations(relation) ::= <%
-public final static Uri <relation.name.cobra>_CONTENT_URI = ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
+public final static Uri <relation.name.cobra>_CONTENT_URI = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
 %>
 
 createContentTypeReturnsforRelations(relation) ::= <<
-case <relation.name.cobra>_ALL_ROWS: return ContentDescriptor.<relation.name.bactrian>.CONTENT_TYPE_DIR;
-case <relation.name.cobra>_SINGLE_ROW: return ContentDescriptor.<relation.name.bactrian>.CONTENT_ITEM_TYPE;
+case <relation.name.cobra>_ALL_ROWS: return <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_TYPE_DIR;
+case <relation.name.cobra>_SINGLE_ROW: return <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_ITEM_TYPE;
 >>
 
 createPublicQueryforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW: {
 	modifiedSelection = modifiedSelection
-		+ ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+		+ <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 		+ uri.getLastPathSegment();
 }
 case <relation.name.cobra>_ALL_ROWS: {
-	return query(uri, ContentDescriptor.<relation.name.bactrian>.TABLE_NAME,
+	return query(uri, <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME,
 		projection, modifiedSelection, selectionArgs, sortOrder);
 }
 >>
@@ -218,8 +224,8 @@ case <relation.name.cobra>_ALL_ROWS: {
 
 createInsertforRelations(relation) ::= <<
 case <relation.name.cobra>_ALL_ROWS: {
-	value.remove(ContentDescriptor.<relation.name.bactrian>.Cols.ID);
-	long rowID = mDB.insert(ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, value);
+	value.remove(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID);
+	long rowID = mDB.insert(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, value);
 	if (rowID > -1) {
 		Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
 		getContext().getContentResolver().notifyChange(insertedID, null);
@@ -235,12 +241,12 @@ case <relation.name.cobra>_ALL_ROWS: {
 createDeleteforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-			+ ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+			+ <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 			+ uri.getLastPathSegment();
 	// no break here on purpose
 case <relation.name.cobra>_ALL_ROWS: {
 	return deleteAndNotify(uri,
-			ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, whereClause,
+			<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, whereClause,
 			whereArgs);
 }
 >>
@@ -251,11 +257,11 @@ case <relation.name.cobra>_ALL_ROWS: {
 createUpdateForRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-		      + ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+		      + <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
 		      + uri.getLastPathSegment();
 case <relation.name.cobra>_ALL_ROWS: {
 	return updateAndNotify(uri,
-			ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, values,
+			<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, values,
 			whereClause, whereArgs);
 
 }
