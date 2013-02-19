@@ -185,12 +185,6 @@ public class ContractXmlParser {
 		}
 		final Contract.Relation relation = new Contract.Relation(name,
 				mode_set, field_set, key_set, message_set);
-		// set the field dataType info.
-		for (Field field : relation.getFields()) {
-			// field.getBaseDataType();
-			 field.getBaseDataType().setField(field);
-			 field.getBaseDataType().setRelation(relation);
-		}
 		// logger.info("relation element {}", relation);
 		return relation;
 	}
