@@ -152,6 +152,9 @@ getColumnNames(field) ::="Cols.<field.name.cobra>"
 
 getColumnDeclaration(field) ::= <%
 public static final String <field.name.cobra> = "<field.name.cobra>";
+<if(isFieldTyped.(field.dtype))>
+public static final String <field.name.cobra>_TYPE = "<field.name.cobra>_TYPE";
+<endif>
 %>
 
 
