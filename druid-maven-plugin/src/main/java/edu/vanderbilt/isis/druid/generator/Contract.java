@@ -8,6 +8,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.w3c.dom.NodeList;
 
+import edu.vanderbilt.isis.druid.generator.datatypes.BaseDataType;
+import edu.vanderbilt.isis.druid.generator.datatypes.DataTypeFactory;
+
 /**
  * The actual generator code.
  * 
@@ -386,6 +389,7 @@ public class Contract {
     public static class Field implements Predecessor {
         private final Name name;
         private final String dtype;
+        private final BaseDataType dataType;
         private final String initial;
         private final String description;
         private final List<Enumeration> enums;
@@ -411,6 +415,14 @@ public class Contract {
             return enums;
         }
         
+        public BaseDataType getBaseDataType(){
+        	return dataType;
+        }
+        
+        public BaseDataType getDataType(){
+        	return dataType;
+        }
+        
         /**
          * The object must be found in the list and 
          * it cannot be the first item for this to work.
@@ -425,9 +437,10 @@ public class Contract {
 
         public Field(final Name name, final String dtype,
                 final String initial, final String description,
-                final List<Enumeration> enum_set) {
+                final List<Enumeration> enum_set) throws Exception {
             this.name = name;
             this.dtype = dtype;
+            this.dataType = DataTypeFactory.getType(dtype);
             this.initial = initial;
             this.description = description.trim();
             this.enums = enum_set;

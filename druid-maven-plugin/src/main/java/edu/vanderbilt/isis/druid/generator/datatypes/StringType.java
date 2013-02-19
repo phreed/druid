@@ -1,9 +1,6 @@
 package edu.vanderbilt.isis.druid.generator.datatypes;
 
-public class StringType extends BaseDataType {
+public class StringType extends TEXT_BASE_Type {
 
-	StringType() {
-		// TODO Auto-generated constructor stub
-	}
-
+	
 }

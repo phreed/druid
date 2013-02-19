@@ -1,45 +1,45 @@
 package edu.vanderbilt.isis.druid.generator.datatypes;
 
-public class DoubleType extends BaseDataType {
+public class INTEGER_BASE_TYPE extends BaseDataType {
 
 	@Override
 	public String getDefaultJavaValue() {
 		return "0";
 	}
-	
-	@Override
-	public String wrapperClass() {
-		return "Double";
-	}
 
 	@Override
 	public String getDefaultUIValue() {
-		return "0.0";
+		return "0";
+	}
+	@Override
+	public String wrapperClass() {
+		// TODO Auto-generated method stub
+		return "Integer";
 	}
 
 	@Override
 	String SqlDataType() {
-		return "REAL";
+		return "INTEGER";
 	}
 
 	@Override
 	String getJavaDataType() {
-		return "double";
+		return "int";
 	}
 
 	@Override
 	String ReadParcelMethod() {
-		return "readDouble";
+		return "readInt";
 	}
 
 	@Override
 	String WriteParcelMethod() {
-		return "writeDouble";
+		return "writeInt";
 	}
 
 	@Override
 	String ReadFromCursorMethod() {
-		return null;
+		return "getInt";
 	}
 
 	@Override
@@ -82,5 +82,4 @@ public class DoubleType extends BaseDataType {
 		return "TV";
 	}
 
-	
 }

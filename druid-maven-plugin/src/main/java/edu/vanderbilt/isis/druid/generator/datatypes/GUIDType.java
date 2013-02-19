@@ -1,5 +1,7 @@
 package edu.vanderbilt.isis.druid.generator.datatypes;
 
-public class GUIDType extends BaseDataType {
+public class GUIDType extends TEXT_BASE_Type {
+
+	
 
 }

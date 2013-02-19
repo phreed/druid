@@ -1,19 +1,15 @@
 package edu.vanderbilt.isis.druid.generator.datatypes;
 
-public class BlobType extends BaseDataType {
-
-	String typeName = "blob";
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return typeName;
-	}
+public class SerialType extends BaseDataType {
 
 	@Override
 	public String getDefaultJavaValue() {
+		return "\"\"";
+	}
+	@Override
+	public String wrapperClass() {
 		// TODO Auto-generated method stub
-		return null;
+		return "String";
 	}
 
 	@Override
@@ -24,13 +20,12 @@ public class BlobType extends BaseDataType {
 
 	@Override
 	String SqlDataType() {
-		// TODO Auto-generated method stub
-		return "BLOB";
+		return "Text";
 	}
 
 	@Override
 	String getJavaDataType() {
-		return "byte[]";
+		return "String";
 	}
 
 	@Override
@@ -97,12 +92,6 @@ public class BlobType extends BaseDataType {
 	String CustomRowViewTypeAbbrv() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	@Override
-	public String wrapperClass() {
-		// TODO Auto-generated method stub
-		return "";
 	}
 
 }

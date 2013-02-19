@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class DataTypeFactory {
 
-	static BaseDataType getType(String str) throws Exception {
+	public static BaseDataType getType(String str) throws Exception {
+		System.out.println("\n\n" + str + "\n\n");
 		return DataTypes.getType(str);
 	}
 
@@ -25,6 +26,7 @@ public class DataTypeFactory {
 		TIMESTAMP("TIMESTAMP"), //
 		SHORT("SHORT"), //
 		FILE("FILE"), //
+		SERIAL("SERIAL"), //
 		// **** New DRUID supported types 1.0 **** //
 		DOUBLE("DOUBLE"), //
 		STRING("STRING"); //
@@ -49,6 +51,7 @@ public class DataTypeFactory {
 			map.put(TIMESTAMP.getText(), TIMESTAMP);
 			map.put(SHORT.getText(), SHORT);
 			map.put(FILE.getText(), FILE);
+			map.put(SERIAL.getText(), SERIAL);
 			// **** New DRUID supported types 1.0 **** //
 			map.put(DOUBLE.getText(), DOUBLE);
 			map.put(STRING.getText(), STRING);
@@ -63,6 +66,7 @@ public class DataTypeFactory {
 				return new NullType();
 			}
 			case BOOL: {
+				// System.out.println("               FOUND A BOOL ");
 				return new BoolType();
 			}
 			case BLOB: {
@@ -101,12 +105,18 @@ public class DataTypeFactory {
 			case FILE: {
 				return new FileType();
 			}
+			case FLOAT: {
+				return new FloatType();
+			}
 			// **** New DRUID supported types 1.0 **** //
 			case STRING: {
 				return new StringType();
 			}
-			case FLOAT: {
-				return new FloatType();
+			case DOUBLE: {
+				return new DoubleType();
+			}
+			case SERIAL: {
+				return new SerialType();
 			}
 			default:
 				return null;

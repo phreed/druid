@@ -3,67 +3,19 @@ package edu.vanderbilt.isis.druid.generator.datatypes;
 import edu.vanderbilt.isis.druid.generator.Contract.Field;
 import edu.vanderbilt.isis.druid.generator.Contract.Relation;
 
-public class BaseDataType {
+public abstract class BaseDataType {
 
 	// parental stuff
 	Relation relation;
 	Field field;
 
-	// for use in the other values
-	String javaType;
-	String defaultJavaValue;
-	String defaultUIValue;
+	public void setRelation(Relation rel) {
+		relation = rel;
+	}
 
-	/** ORM package **/
-	// orm data object
-	String ormDataObjectConstructReadParcelTemplate;
-	String ormDataObjectConstructWriteParcelTemplate;
-	String ormDataObjectCosntructorParametersTemplate;
-	String ormDataObjectToStringTemplate;
-	String ormDataObjectConstructCloneTemplate;
-	String ormDataObjectConstructorAssignmentsTemplate;
-	String ormDataObjectPutDeclarationTemplate;
-	// orm creator
-	String ormCreatorputFieldIntoCVTemplate;
-	String ormCreatorGetFieldFromCursorTemplate;
-	// orm constructor
-	String ormConstructToString;
-	String ormConstructClone;
-	String ormConstructorAsignments;
-	String ormConstructorParameters;
-	String ormDataDeclaration;
-
-	/** PROVIDER package **/
-	// DB adaptor
-	String providerSQLTableCreationFieldAndType;
-
-	/** UI **/
-	// view
-	String putDeclaration;
-	String putTextViewRowIDDeclarations;
-	String putTextViewDeclarations;
-	String putSetValuesToDisplay;
-	// view
-	String uiViewDisplayFieldDeclarationTemplate;
-	String uiViewDisplayFieldLinkToXMLTemplate;
-	String uiViewDisplayFieldViewToDefaultTemplate;
-	String uiViewSetDisplayViewFromOrmObjectTemplate;
-	// create
-	String uiCreateDisplayFieldDeclarationTemplate;
-	String uiCreateDisplayFieldLinkToXMLTemplate;
-	String uiCreateDisplayFieldViewToDefaultTemplate;
-	String uiCreateGetValuesFromViewsTemplate;
-	String uiCreateJavaFieldDeclarationAndInitializationTemplate;
-	String uiCreateConvertValuesFromViewsToJavaTemplate;
-	String uiCreateOrmConstructorFieldNameTemplate;
-	// edit
-	String uiEditDisplayFieldDeclarationTemplate;
-	String uiEditDisplayFieldLinkToXMLTemplate;
-	String uiEditGetValuesFromViewsTemplate;
-	String uiEditJavaFieldDeclarationAndInitializationTemplate;
-	String uiEditConvertValuesFromViewsToJavaTemplate;
-	String uiEditOrmConstructorFieldNameTemplate;
-	String uiEditSetDisplayViewFromOrmObjectTemplate;
+	public void setField(Field field) {
+		this.field = field;
+	}
 
 	public Relation getRelation() {
 		return relation;
@@ -73,164 +25,290 @@ public class BaseDataType {
 		return field;
 	}
 
-	public String getJavaType() {
-		return javaType;
-	}
+	abstract String getDefaultJavaValue();
 
-	public String getDefaultJavaValue() {
-		return defaultJavaValue;
-	}
+	abstract String getDefaultUIValue();
 
-	public String getDefaultUIValue() {
-		return defaultUIValue;
-	}
+	abstract String wrapperClass();
+
+	/**
+	 * what SQLite data Type should this 'Type' be stored as?
+	 * 
+	 * @return
+	 */
+	abstract String SqlDataType();
+
+	/**
+	 * what Java data Type should this 'Type' be stored as?
+	 * 
+	 * @return
+	 */
+	abstract String getJavaDataType();
+
+	/**
+	 * What 'method' should be used when reading this type from a parcel
+	 * 
+	 * @return
+	 */
+	abstract String ReadParcelMethod();
+
+	/**
+	 * What 'method' should be used when writing this type to a parcel
+	 * 
+	 * @return
+	 */
+	abstract String WriteParcelMethod();
+
+	/**
+	 * what 'method' should be used to read this 'type' from a cursor
+	 * 
+	 * @return
+	 */
+	abstract String ReadFromCursorMethod();
+
+	/**
+	 * What is the 'Type' of View that should be used on the Creation fragment
+	 * 
+	 * @return
+	 */
+	abstract String CreationViewType();
+
+	/**
+	 * What is the 'Type' of View that should be used on the Edit fragment
+	 * 
+	 * @return
+	 */
+	abstract String EditViewType();
+
+	/**
+	 * What is the 'Type' of View that should be used on the View fragment
+	 * 
+	 * @return
+	 */
+	abstract String ViewViewType();
+
+	/**
+	 * What is the 'Type' of View that should be used on the CustomRow Adaptor
+	 * in the ListView
+	 * 
+	 * @return
+	 */
+	abstract String CustomRowViewType();
+
+	/**
+	 * Abbreviation for the View Type for Creation
+	 * 
+	 * @return
+	 */
+	abstract String CreationViewTypeAbbrv();
+
+	/**
+	 * Abbreviation for the View Type for Edit
+	 * 
+	 * @return
+	 */
+	abstract String EditViewTypeAbbrv();
+
+	/**
+	 * Abbreviation for the View Type for View
+	 * 
+	 * @return
+	 */
+	abstract String ViewViewTypeAbbrv();
+
+	/**
+	 * Abbreviation for the View Type for CustomRow
+	 * 
+	 * @return
+	 */
+	abstract String CustomRowViewTypeAbbrv();
+
+	/** ORM **/
 
 	public String getOrmDataObjectConstructReadParcelTemplate() {
-		return ormDataObjectConstructReadParcelTemplate;
+		String rValue = field.getName().getCamel() + " = in."
+				+ ReadParcelMethod() + "();";
+		return rValue;
 	}
 
 	public String getOrmDataObjectConstructWriteParcelTemplate() {
-		return ormDataObjectConstructWriteParcelTemplate;
+		return "dest." + WriteParcelMethod() + "(" + field.getName().getCamel()
+				+ ");";
 	}
 
 	public String getOrmDataObjectCosntructorParametersTemplate() {
-		return ormDataObjectCosntructorParametersTemplate;
+		return "this." + field.getName().getCamel() + " = "
+				+ field.getName().getCamel();
 	}
 
 	public String getOrmDataObjectToStringTemplate() {
-		return ormDataObjectToStringTemplate;
+		return "\" " + field.getName().getCamel() + ": \" + "
+				+ field.getName().getCamel();
 	}
 
 	public String getOrmDataObjectConstructCloneTemplate() {
-		return ormDataObjectConstructCloneTemplate;
+		return getOrmDataObjectCosntructorParametersTemplate();
 	}
 
 	public String getOrmDataObjectConstructorAssignmentsTemplate() {
-		return ormDataObjectConstructorAssignmentsTemplate;
+		return "";
 	}
 
 	public String getOrmDataObjectPutDeclarationTemplate() {
-		return ormDataObjectPutDeclarationTemplate;
+		return "public " + getJavaDataType() + " " + field.getName().getCamel()
+				+ ";";
 	}
 
 	public String getOrmCreatorputFieldIntoCVTemplate() {
-		return ormCreatorputFieldIntoCVTemplate;
+		return "rValue.put(ContentDescriptor."
+				+ relation.getName().getBactrian() + ".Cols."
+				+ field.getName().getCobra() + ", data."
+				+ field.getName().getCamel() + ");";
 	}
 
 	public String getOrmCreatorGetFieldFromCursorTemplate() {
-		return ormCreatorGetFieldFromCursorTemplate;
-	}
-
-	public String getOrmConstructToString() {
-		return ormConstructToString;
-	}
-
-	public String getOrmConstructClone() {
-		return ormConstructClone;
-	}
-
-	public String getOrmConstructorAsignments() {
-		return ormConstructorAsignments;
+		return getJavaDataType() + " " + field.getName().getCamel()
+				+ " = cursor." + ReadFromCursorMethod()
+				+ "(cursor.getColumnIndex(ContentDescriptor."
+				+ relation.getName().getBactrian() + ".Cols."
+				+ field.getName().getCobra() + "));";
 	}
 
 	public String getOrmConstructorParameters() {
-		return ormConstructorParameters;
+		return getJavaDataType() + " " + field.getName().getCamel();
 	}
 
 	public String getOrmDataDeclaration() {
-		return ormDataDeclaration;
+		return "";
 	}
 
 	public String getProviderSQLTableCreationFieldAndType() {
-		return providerSQLTableCreationFieldAndType;
+		return "";
 	}
 
-	public String getPutDeclaration() {
-		return putDeclaration;
+	public String getPutJavaTypeDeclaration() {
+		String rValue = "";
+		if (getIsThisFieldInUI(field) == true) {
+			rValue = getJavaDataType() + " " + field.getName().getCamel()
+					+ " = item." + field.getName().getCamel() + ";";
+		}
+		return rValue;
 	}
 
-	public String getPutTextViewRowIDDeclarations() {
-		return putTextViewRowIDDeclarations;
-	}
-
-	public String getPutTextViewDeclarations() {
-		return putTextViewDeclarations;
+	public String getPutDisplayViewDeclarations() {
+		String rValue = "";
+		if (getIsThisFieldInUI(field) == true) {
+			rValue = CustomRowViewType() + " " + field.getName().getCamel()
+					+ CustomRowViewTypeAbbrv() + " = (" + CustomRowViewType()
+					+ ") todoView.findViewById(R.id."
+					+ relation.getName().getSnake() + "_listview_custom_row_"
+					+ field.getName().getSnake() + "_" + CustomRowViewType()
+					+ ");";
+		}
+		return rValue;
 	}
 
 	public String getPutSetValuesToDisplay() {
-		return putSetValuesToDisplay;
+		String rValue = "";
+		if (getIsThisFieldInUI(field) == true) {
+			rValue = field.getName().getCamel() + CustomRowViewTypeAbbrv()
+					+ ".setText(\"\" + " + field.getName().getCamel() + ");\n";
+		}
+		return rValue;
+	}
+
+	/** UI package **/
+
+	public boolean getIsThisFieldInUI(Field field) {
+		if (relation.getKeyMap().get("ui").getFields()
+				.contains(field.getName().getNorm()) == true) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String getUiViewDisplayFieldDeclarationTemplate() {
-		return uiViewDisplayFieldDeclarationTemplate;
+		return "";
 	}
 
 	public String getUiViewDisplayFieldLinkToXMLTemplate() {
-		return uiViewDisplayFieldLinkToXMLTemplate;
+		return "";
 	}
 
 	public String getUiViewDisplayFieldViewToDefaultTemplate() {
-		return uiViewDisplayFieldViewToDefaultTemplate;
+		return "" + field.getName().getCamel() + "ET.setText(\"\"+ "
+				+ getDefaultUIValue() + ");";
 	}
 
 	public String getUiViewSetDisplayViewFromOrmObjectTemplate() {
-		return uiViewSetDisplayViewFromOrmObjectTemplate;
+		return "";
 	}
 
 	public String getUiCreateDisplayFieldDeclarationTemplate() {
-		return uiCreateDisplayFieldDeclarationTemplate;
+		return "";
 	}
 
 	public String getUiCreateDisplayFieldLinkToXMLTemplate() {
-		return uiCreateDisplayFieldLinkToXMLTemplate;
+		return "" + field.getName().getCamel() + "" + CreationViewTypeAbbrv()
+				+ " = (" + CreationViewType()
+				+ ") getView().findViewById(R.id."
+				+ relation.getName().getSnake() + "_create_value_"
+				+ field.getName().getSnake() + ");";
 	}
 
 	public String getUiCreateDisplayFieldViewToDefaultTemplate() {
-		return uiCreateDisplayFieldViewToDefaultTemplate;
+		return "" + field.getName().getCamel() + "" + CreationViewTypeAbbrv()
+				+ ".setText(\"\"+ " + getDefaultJavaValue() + ");";
 	}
 
 	public String getUiCreateGetValuesFromViewsTemplate() {
-		return uiCreateGetValuesFromViewsTemplate;
+		return "Editable " + field.getName().getCamel() + "Createable = "
+				+ field.getName().getCamel() + "" + CreationViewTypeAbbrv()
+				+ ".getText();";
 	}
 
 	public String getUiCreateJavaFieldDeclarationAndInitializationTemplate() {
-		return uiCreateJavaFieldDeclarationAndInitializationTemplate;
+		return "" + getJavaDataType() + " " + field.getName().getCamel()
+				+ " = " + getJavaDataType() + ";";
 	}
 
 	public String getUiCreateConvertValuesFromViewsToJavaTemplate() {
-		return uiCreateConvertValuesFromViewsToJavaTemplate;
+		return "" + field.getName().getCamel() + " = " + wrapperClass()
+				+ ".valueOf(" + field.getName().getCamel()
+				+ "Editable.toString());";
 	}
 
 	public String getUiCreateOrmConstructorFieldNameTemplate() {
-		return uiCreateOrmConstructorFieldNameTemplate;
+		return "";
 	}
 
 	public String getUiEditDisplayFieldDeclarationTemplate() {
-		return uiEditDisplayFieldDeclarationTemplate;
+		return "";
 	}
 
 	public String getUiEditDisplayFieldLinkToXMLTemplate() {
-		return uiEditDisplayFieldLinkToXMLTemplate;
+		return "";
 	}
 
 	public String getUiEditGetValuesFromViewsTemplate() {
-		return uiEditGetValuesFromViewsTemplate;
+		return "";
 	}
 
 	public String getUiEditJavaFieldDeclarationAndInitializationTemplate() {
-		return uiEditJavaFieldDeclarationAndInitializationTemplate;
+		return "";
 	}
 
 	public String getUiEditConvertValuesFromViewsToJavaTemplate() {
-		return uiEditConvertValuesFromViewsToJavaTemplate;
+		return "";
 	}
 
 	public String getUiEditOrmConstructorFieldNameTemplate() {
-		return uiEditOrmConstructorFieldNameTemplate;
+		return "";
 	}
 
 	public String getUiEditSetDisplayViewFromOrmObjectTemplate() {
-		return uiEditSetDisplayViewFromOrmObjectTemplate;
+		return "";
 	}
 
 }
