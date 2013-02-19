@@ -40,7 +40,7 @@ javaTypeMap ::= [
         "BLOB"  :"byte[]",
         "FILE"  :"String",
         "TYPE"  :"String",
-        "FLOAT" :"float",
+        "FLOAT      :"float",
         "DOUBLE":"double",
         default: key
 ]
@@ -61,7 +61,7 @@ javaTypeDefaultMap ::= [
         "BLOB"  :"null",
         "FILE"  :" \"\" ",
         "TYPE"  :" \"\" ",
-        "FLOAT" :"0",
+        "FLOAT      :"0",
         "DOUBLE":"0",
         default: key
 ]
@@ -81,7 +81,7 @@ androidWriteParcelMethodMap ::= [
         "BLOB"  :"writeByteArray",
         "FILE"  :"writeString",
         "TYPE"  :"writeString",
-        "FLOAT" :"writeFloat",
+        "FLOAT      :"writeFloat",
         "DOUBLE":"writeDouble",
         default: key
 ]
@@ -101,7 +101,7 @@ androidReadParcelMethodMap ::= [
         "BLOB"  :"readByteArray",
         "FILE"  :"readString",
         "TYPE"  :"readString",
-        "FLOAT" :"readFloat",
+        "FLOAT      :"readFloat",
         "DOUBLE":"readDouble",
         default: key
 ]
@@ -144,7 +144,7 @@ androidReadFromCursorMethodMap ::= [
         "BLOB"  :"getBlob",
         "FILE"  :"getString",
         "TYPE"  :"getString",
-        "FLOAT" :"getFloat",
+        "FLOAT      :"getFloat",
         "DOUBLE":"getDouble",
         default: key
 ]
@@ -166,7 +166,7 @@ javaMethodTypeMap ::= [
         "BLOB"  :"Byte",
         "FILE"  :"String",
         "TYPE"  :"String",
-        "FLOAT" :"Float",
+        "FLOAT      :"Float",
         "DOUBLE":"Double",
         default: key
 ]
@@ -188,7 +188,7 @@ androidCreateDefaultViewTypeImportMap ::= [
         "BLOB"  :"",
         "FILE"  :"import android.widget.EditText;",
         "TYPE"  :"import android.widget.EditText;",
-        "FLOAT" :"import android.widget.EditText;",
+        "FLOAT      :"import android.widget.EditText;",
         "DOUBLE":"import android.widget.EditText;",
         default: key
 ]
@@ -210,7 +210,7 @@ androidEditDefaultViewTypeImportMap ::= [
         "BLOB"  :"",
         "FILE"  :"import android.widget.EditText;",
         "TYPE"  :"import android.widget.EditText;",
-        "FLOAT" :"import android.widget.EditText;",
+        "FLOAT      :"import android.widget.EditText;",
         "DOUBLE":"import android.widget.EditText;",
         default: key
 ]
@@ -232,7 +232,7 @@ androidViewDefaultViewTypeImportMap ::= [
         "BLOB"  :"",
         "FILE"  :"import android.widget.TextView;",
         "TYPE"  :"import android.widget.TextView;",
-        "FLOAT" :"import android.widget.TextView;",
+        "FLOAT      :"import android.widget.TextView;",
         "DOUBLE":"import android.widget.TextView;",
         default: key
 ]
@@ -262,874 +262,358 @@ javaTypeSQLiteMap ::= [
         "BLOB"  :"BLOB",
         "FILE"  :"TEXT",
         "TYPE"  :"TEXT",
-        "FLOAT" :"REAL",
+        "FLOAT      :"REAL",
         "DOUBLE":"REAL",
         default: key
 ]
 
-uiEditGetValuesFromViewsDefualtTemplate(relation,field) ::= <<
+
+uiEditGetValuesFromViewsTemplate(relation,field) ::= <%
+<(uiEditGetValuesFromViewsMap.(field.dtype))(relation,field) >
+%>
+uiEditGetValuesFromViewsMap ::= [ 
+   "INTEGER"   : "uiEditGetValuesFromViewsDefaultTemplate",
+   "REAL"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "GUID"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "BLOB"      : "uiEditGetValuesFromViewsBLOB",
+   "INCLUSIVE" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "BOOL"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "DOUBLE"    : "uiEditGetValuesFromViewsDefaultTemplate",
+   "SHORT"     : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FLOAT"     : "uiEditGetValuesFromViewsDefaultTemplate",
+   "EXCLUSIVE" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TEXT"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FK"        : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FILE"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "LONG"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "SERIAL"    : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TIMESTAMP" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TYPE"      : "uiEditGetValuesFromViewsDefaultTemplate", 
+   default: key
+]
+uiEditGetValuesFromViewsDefaultTemplate(relation,field) ::= <%
 Editable <field.name.camel>Editable = <field.name.camel>ET.getText();
->>
+%>
+uiEditGetValuesFromViewsBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
 
-uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) ::= <<
+
+
+uiEditDisplayFieldViewToDefaultTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) >
+%>
+uiEditDisplayFieldViewToDefaultMap ::= [ 
+   "INTEGER"    : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "REAL"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "GUID"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "BLOB"       : "uiEditDisplayFieldViewToDefaultBLOB",
+   "INCLUSIVE"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "BOOL"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "DOUBLE"     : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "SHORT"      : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FLOAT"      : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "EXCLUSIVE"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TEXT"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FK"         : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FILE"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "LONG"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "SERIAL"     : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TIMESTAMP"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TYPE"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <%
 <field.name.camel>ET.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
->>
+%>
+uiEditDisplayFieldViewToDefaultBLOB(relation,field)  ::= <%
+ // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
 
-uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) ::= <<
+
+
+uiEditDisplayFieldDeclarationTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldDeclarationMap.(field.dtype))(relation,field) >
+%>
+uiEditDisplayFieldDeclarationMap ::= [ 
+   "INTEGER"    : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "REAL"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "GUID"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "BLOB"       : "uiEditDisplayFieldDeclarationBLOB",
+   "INCLUSIVE"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "BOOL"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "DOUBLE"     : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "SHORT"      : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FLOAT"      : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "EXCLUSIVE"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TEXT"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FK"         : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FILE"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "LONG"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "SERIAL"     : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TIMESTAMP"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TYPE"       : "uiEditDisplayFieldDeclarationDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <%
 EditText <field.name.camel>ET;
->>
+%>
+uiEditDisplayFieldDeclarationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
 
-uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) ::= <<
+
+
+
+uiEditJavaFieldDeclarationAndInitializationTemplate(relation,field) ::= <%
+<(uiEditJavaFieldDeclarationAndInitializationMap.(field.dtype))(relation,field) >
+%>
+uiEditJavaFieldDeclarationAndInitializationMap ::= [ 
+   "INTEGER"   : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "REAL"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "GUID"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "BLOB"      : "uiEditJavaFieldDeclarationAndInitializationBLOB",
+   "INCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "BOOL"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "DOUBLE"    : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "SHORT"     : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FLOAT"     : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "EXCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TEXT"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FK"        : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FILE"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "LONG"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "SERIAL"    : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TIMESTAMP" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TYPE"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate", 
+   default: key
+]
+uiEditJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) ::= <%
 <javaTypeMap.(field.dtype)> <field.name.camel> = <javaTypeDefaultMap.(field.dtype)>;
->>
+%>
+uiEditJavaFieldDeclarationAndInitializationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
 
-uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) ::= <<
+
+
+uiEditOrmConstructorFieldNameTemplate(relation,field) ::= <%
+<(uiEditOrmConstructorFieldNameMap.(field.dtype))(relation,field) >
+%>
+uiEditOrmConstructorFieldNameMap ::= [ 
+   "INTEGER"   : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "REAL"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "GUID"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "BLOB"      : "uiEditOrmConstructorFieldNameBLOB",
+   "INCLUSIVE" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "BOOL"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "DOUBLE"    : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "SHORT"     : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FLOAT"     : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "EXCLUSIVE" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TEXT"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FK"        : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FILE"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "LONG"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "SERIAL"    : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TIMESTAMP" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TYPE"      : "uiEditOrmConstructorFieldNameDefaultTemplate", 
+   default: key
+]
+uiEditOrmConstructorFieldNameDefaultTemplate(relation,field) ::= <<
 <field.name.camel>
 >>
+uiEditOrmConstructorFieldNameBLOB(relation,field) ::= <%
+null, // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
 
-uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) ::= <<
+
+
+uiEditDisplayFieldLinkToXMLTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > 
+%>
+uiEditDisplayFieldLinkToXMLMap ::= [ 
+   "INTEGER"   : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "REAL"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "GUID"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "BLOB"      : "uiEditDisplayFieldLinkToXMLBLOB",
+   "INCLUSIVE" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "BOOL"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "DOUBLE"    : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "SHORT"     : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FLOAT"     : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "EXCLUSIVE" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TEXT"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FK"        : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FILE"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "LONG"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "SERIAL"    : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TIMESTAMP" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TYPE"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
 <field.name.camel>ET = (EditText) getView().findViewById(R.id.<relation.name.snake>_edit_<field.name.snake>);
 >>
+uiEditDisplayFieldLinkToXMLBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
 
-uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) ::= <<
+
+
+
+uiEditSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiEditSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
+uiEditSetDisplayViewFromOrmObjectMap ::= [ 
+   "INTEGER"   : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "REAL"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "GUID"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BLOB"      : "uiEditSetDisplayViewFromOrmObjectBLOB",
+   "INCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BOOL"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "DOUBLE"    : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SHORT"     : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FLOAT"     : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "EXCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TEXT"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FK"        : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FILE"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "LONG"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SERIAL"    : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TIMESTAMP" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TYPE"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate", 
+   default: key
+]
+uiEditSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <%
 <field.name.camel>ET.setText(<javaMethodTypeMap.(field.dtype)>.valueOf( <relation.name.camel>Data.<field.name.camel>).toString());
 >>
+uiEditSetDisplayViewFromOrmObjectBLOB(relation,field) ::= <%
+ // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%> 
 
-uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) ::= <<
+
+
+uiEditConvertValuesFromViewsToJavaTemplate(relation,field) ::= <%
+ <(uiEditConvertValuesFromViewsToJavaMap.(field.dtype))(relation,field) > >>
+uiEditConvertValuesFromViewsToJavaMap ::= [ 
+   "INTEGER"   : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "REAL"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "GUID"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "BLOB"      : "uiEditConvertValuesFromViewsToJavaBLOB",
+   "INCLUSIVE" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "BOOL"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "DOUBLE"    : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "SHORT"     : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FLOAT"     : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "EXCLUSIVE" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TEXT"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FK"        : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FILE"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "LONG"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "SERIAL"    : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TIMESTAMP" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TYPE"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate", 
+   default: key
+]
+uiEditConvertValuesFromViewsToJavaDefaultTemplate(relation,field) ::= <<
 <field.name.camel> = <javaMethodTypeMap.(field.dtype)>.valueOf(<field.name.camel>Editable.toString());
 >>
+uiEditConvertValuesFromViewsToJavaBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
 
 
 
-uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) ::= <<
-<field.name.camel>TV.setText(<javaMethodTypeMap.(field.dtype)>.valueOf(<relation.name.camel>Data.<field.name.camel>).toString());
->>
-
-uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) ::= <<
+uiViewDisplayFieldViewToDefaultTemplate(relation,field) ::=  <%
+ <(uiViewDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > 
+%>
+uiViewDisplayFieldViewToDefaultMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldViewToDefaultBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <<
 <field.name.camel>TV.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
 >>
+uiViewDisplayFieldViewToDefaultBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%> 
 
-uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) ::= <<
+
+
+uiViewDisplayFieldDeclarationTemplate(relation,field) ::= <%
+<(uiViewDisplayFieldDeclarationMap.(field.dtype))(relation,field) >
+%>
+uiViewDisplayFieldDeclarationMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldDeclarationBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldDeclarationDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <<
 TextView <field.name.camel>TV;
 >>
-
-uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) ::= <<
-<field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_view_value_<field.name.snake>);
->>
-
+uiViewDisplayFieldDeclarationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
 
 
 
-
-
-
-
-uiCreateGetValuesFromViewsDefualtTemplate(relation,field) ::= <<
-Editable <field.name.camel>Createable = <field.name.camel>ET.getText();
->>
-
-uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) ::= <<
-<field.name.camel>ET.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
->>
-
-uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) ::= <<
-EditText <field.name.camel>ET;
->>
-
-uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) ::= <<
-<javaTypeMap.(field.dtype)> <field.name.camel> = <javaTypeDefaultMap.(field.dtype)>;
->>
-
-uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) ::= <<
-<field.name.camel>
->>
-
-uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) ::= <<
-<field.name.camel>ET = (EditText) getView().findViewById(R.id.<relation.name.snake>_create_value_<field.name.snake>);
->>
-
-uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) ::= <<
-<field.name.camel>ET.setText(<javaMethodTypeMap.(field.dtype)>.valueOf( <relation.name.camel>Data.<field.name.camel>).toString());
->>
-
-uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) ::= <<
-<field.name.camel> = <javaMethodTypeMap.(field.dtype)>.valueOf(<field.name.camel>Createable.toString());
->>
-
-
-
-
-
-uiEditGetValuesFromViewsTemplate(relation,field) ::= << <(uiEditGetValuesFromViewsMap.(field.dtype))(relation,field) > >>
-uiEditDisplayFieldViewToDefaultTemplate(relation,field) ::= << <(uiEditDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > >>
-uiEditDisplayFieldDeclarationTemplate(relation,field) ::= << <(uiEditDisplayFieldDeclarationMap.(field.dtype))(relation,field) > >>
-uiEditJavaFieldDeclarationAndInitializationTemplate(relation,field) ::= << <(uiEditJavaFieldDeclarationAndInitializationMap.(field.dtype))(relation,field) > >>
-uiEditOrmConstructorFieldNameTemplate(relation,field) ::= << <(uiEditOrmConstructorFieldNameMap.(field.dtype))(relation,field) > >>
-uiEditDisplayFieldLinkToXMLTemplate(relation,field) ::= << <(uiEditDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > >>
-uiEditSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiEditSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
-uiEditConvertValuesFromViewsToJavaTemplate(relation,field) ::= << <(uiEditConvertValuesFromViewsToJavaMap.(field.dtype))(relation,field) > >>
-
-uiViewDisplayFieldLinkToXMLTemplate(relation,field) ::= << <(uiViewDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > >>
-uiViewSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiViewSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
-uiViewDisplayFieldViewToDefaultTemplate(relation,field) ::= << <(uiViewDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > >>
-uiViewDisplayFieldDeclarationTemplate(relation,field) ::= << <(uiViewDisplayFieldDeclarationMap.(field.dtype))(relation,field) > >>
-
-
-
-
-uiCreateGetValuesFromViewsTemplate(relation,field) ::= << <(uiCreateGetValuesFromViewsMap.(field.dtype))(relation,field) > >>
-uiCreateDisplayFieldViewToDefaultTemplate(relation,field) ::= << <(uiCreateDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > >>
-uiCreateDisplayFieldDeclarationTemplate(relation,field) ::= << <(uiCreateDisplayFieldDeclarationMap.(field.dtype))(relation,field) > >>
-uiCreateJavaFieldDeclarationAndInitializationTemplate(relation,field) ::= << <(uiCreateJavaFieldDeclarationAndInitializationMap.(field.dtype))(relation,field) > >>
-uiCreateOrmConstructorFieldNameTemplate(relation,field) ::= << <(uiCreateOrmConstructorFieldNameMap.(field.dtype))(relation,field) > >>
-uiCreateDisplayFieldLinkToXMLTemplate(relation,field) ::= << <(uiCreateDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > >>
-uiCreateSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiCreateSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
-uiCreateConvertValuesFromViewsToJavaTemplate(relation,field) ::= << <(uiCreateConvertValuesFromViewsToJavaMap.(field.dtype))(relation,field) > >>
-
-
-
-
-uiEditGetValuesFromViewsMap ::= [ 
-   "INTEGER" : "uiEditGetValuesFromViewsINTEGER",
-   "REAL" : "uiEditGetValuesFromViewsREAL",
-   "GUID" : "uiEditGetValuesFromViewsGUID",
-   "BLOB" : "uiEditGetValuesFromViewsBLOB",
-   "INCLUSIVE" : "uiEditGetValuesFromViewsINCLUSIVE",
-   "BOOL" : "uiEditGetValuesFromViewsBOOL",
-   "DOUBLE" : "uiEditGetValuesFromViewsDOUBLE",
-   "SHORT" : "uiEditGetValuesFromViewsSHORT",
-   "FLOAT" : "uiEditGetValuesFromViewsFLOAT",
-   "EXCLUSIVE" : "uiEditGetValuesFromViewsEXCLUSIVE",
-   "TEXT" : "uiEditGetValuesFromViewsTEXT",
-   "FK" : "uiEditGetValuesFromViewsFK",
-   "FILE" : "uiEditGetValuesFromViewsFILE",
-   "LONG" : "uiEditGetValuesFromViewsLONG",
-   "SERIAL" : "uiEditGetValuesFromViewsSERIAL",
-   "TIMESTAMP" : "uiEditGetValuesFromViewsTIMESTAMP",
-   "TYPE" : "uiEditGetValuesFromViewsTYPE", 
-   default: key
-]
-
-uiEditDisplayFieldViewToDefaultMap ::= [ 
-   "INTEGER" : "uiEditDisplayFieldViewToDefaultINTEGER",
-   "REAL" : "uiEditDisplayFieldViewToDefaultREAL",
-   "GUID" : "uiEditDisplayFieldViewToDefaultGUID",
-   "BLOB" : "uiEditDisplayFieldViewToDefaultBLOB",
-   "INCLUSIVE" : "uiEditDisplayFieldViewToDefaultINCLUSIVE",
-   "BOOL" : "uiEditDisplayFieldViewToDefaultBOOL",
-   "DOUBLE" : "uiEditDisplayFieldViewToDefaultDOUBLE",
-   "SHORT" : "uiEditDisplayFieldViewToDefaultSHORT",
-   "FLOAT" : "uiEditDisplayFieldViewToDefaultFLOAT",
-   "EXCLUSIVE" : "uiEditDisplayFieldViewToDefaultEXCLUSIVE",
-   "TEXT" : "uiEditDisplayFieldViewToDefaultTEXT",
-   "FK" : "uiEditDisplayFieldViewToDefaultFK",
-   "FILE" : "uiEditDisplayFieldViewToDefaultFILE",
-   "LONG" : "uiEditDisplayFieldViewToDefaultLONG",
-   "SERIAL" : "uiEditDisplayFieldViewToDefaultSERIAL",
-   "TIMESTAMP" : "uiEditDisplayFieldViewToDefaultTIMESTAMP",
-   "TYPE" : "uiEditDisplayFieldViewToDefaultTYPE", 
-   default: key
-]
-
-uiEditDisplayFieldDeclarationMap ::= [ 
-   "INTEGER" : "uiEditDisplayFieldDeclarationINTEGER",
-   "REAL" : "uiEditDisplayFieldDeclarationREAL",
-   "GUID" : "uiEditDisplayFieldDeclarationGUID",
-   "BLOB" : "uiEditDisplayFieldDeclarationBLOB",
-   "INCLUSIVE" : "uiEditDisplayFieldDeclarationINCLUSIVE",
-   "BOOL" : "uiEditDisplayFieldDeclarationBOOL",
-   "DOUBLE" : "uiEditDisplayFieldDeclarationDOUBLE",
-   "SHORT" : "uiEditDisplayFieldDeclarationSHORT",
-   "FLOAT" : "uiEditDisplayFieldDeclarationFLOAT",
-   "EXCLUSIVE" : "uiEditDisplayFieldDeclarationEXCLUSIVE",
-   "TEXT" : "uiEditDisplayFieldDeclarationTEXT",
-   "FK" : "uiEditDisplayFieldDeclarationFK",
-   "FILE" : "uiEditDisplayFieldDeclarationFILE",
-   "LONG" : "uiEditDisplayFieldDeclarationLONG",
-   "SERIAL" : "uiEditDisplayFieldDeclarationSERIAL",
-   "TIMESTAMP" : "uiEditDisplayFieldDeclarationTIMESTAMP",
-   "TYPE" : "uiEditDisplayFieldDeclarationTYPE", 
-   default: key
-]
-
-uiEditJavaFieldDeclarationAndInitializationMap ::= [ 
-   "INTEGER" : "uiEditJavaFieldDeclarationAndInitializationINTEGER",
-   "REAL" : "uiEditJavaFieldDeclarationAndInitializationREAL",
-   "GUID" : "uiEditJavaFieldDeclarationAndInitializationGUID",
-   "BLOB" : "uiEditJavaFieldDeclarationAndInitializationBLOB",
-   "INCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationINCLUSIVE",
-   "BOOL" : "uiEditJavaFieldDeclarationAndInitializationBOOL",
-   "DOUBLE" : "uiEditJavaFieldDeclarationAndInitializationDOUBLE",
-   "SHORT" : "uiEditJavaFieldDeclarationAndInitializationSHORT",
-   "FLOAT" : "uiEditJavaFieldDeclarationAndInitializationFLOAT",
-   "EXCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationEXCLUSIVE",
-   "TEXT" : "uiEditJavaFieldDeclarationAndInitializationTEXT",
-   "FK" : "uiEditJavaFieldDeclarationAndInitializationFK",
-   "FILE" : "uiEditJavaFieldDeclarationAndInitializationFILE",
-   "LONG" : "uiEditJavaFieldDeclarationAndInitializationLONG",
-   "SERIAL" : "uiEditJavaFieldDeclarationAndInitializationSERIAL",
-   "TIMESTAMP" : "uiEditJavaFieldDeclarationAndInitializationTIMESTAMP",
-   "TYPE" : "uiEditJavaFieldDeclarationAndInitializationTYPE", 
-   default: key
-]
-
-uiEditOrmConstructorFieldNameMap ::= [ 
-   "INTEGER" : "uiEditOrmConstructorFieldNameINTEGER",
-   "REAL" : "uiEditOrmConstructorFieldNameREAL",
-   "GUID" : "uiEditOrmConstructorFieldNameGUID",
-   "BLOB" : "uiEditOrmConstructorFieldNameBLOB",
-   "INCLUSIVE" : "uiEditOrmConstructorFieldNameINCLUSIVE",
-   "BOOL" : "uiEditOrmConstructorFieldNameBOOL",
-   "DOUBLE" : "uiEditOrmConstructorFieldNameDOUBLE",
-   "SHORT" : "uiEditOrmConstructorFieldNameSHORT",
-   "FLOAT" : "uiEditOrmConstructorFieldNameFLOAT",
-   "EXCLUSIVE" : "uiEditOrmConstructorFieldNameEXCLUSIVE",
-   "TEXT" : "uiEditOrmConstructorFieldNameTEXT",
-   "FK" : "uiEditOrmConstructorFieldNameFK",
-   "FILE" : "uiEditOrmConstructorFieldNameFILE",
-   "LONG" : "uiEditOrmConstructorFieldNameLONG",
-   "SERIAL" : "uiEditOrmConstructorFieldNameSERIAL",
-   "TIMESTAMP" : "uiEditOrmConstructorFieldNameTIMESTAMP",
-   "TYPE" : "uiEditOrmConstructorFieldNameTYPE", 
-   default: key
-]
-
-uiEditDisplayFieldLinkToXMLMap ::= [ 
-   "INTEGER" : "uiEditDisplayFieldLinkToXMLINTEGER",
-   "REAL" : "uiEditDisplayFieldLinkToXMLREAL",
-   "GUID" : "uiEditDisplayFieldLinkToXMLGUID",
-   "BLOB" : "uiEditDisplayFieldLinkToXMLBLOB",
-   "INCLUSIVE" : "uiEditDisplayFieldLinkToXMLINCLUSIVE",
-   "BOOL" : "uiEditDisplayFieldLinkToXMLBOOL",
-   "DOUBLE" : "uiEditDisplayFieldLinkToXMLDOUBLE",
-   "SHORT" : "uiEditDisplayFieldLinkToXMLSHORT",
-   "FLOAT" : "uiEditDisplayFieldLinkToXMLFLOAT",
-   "EXCLUSIVE" : "uiEditDisplayFieldLinkToXMLEXCLUSIVE",
-   "TEXT" : "uiEditDisplayFieldLinkToXMLTEXT",
-   "FK" : "uiEditDisplayFieldLinkToXMLFK",
-   "FILE" : "uiEditDisplayFieldLinkToXMLFILE",
-   "LONG" : "uiEditDisplayFieldLinkToXMLLONG",
-   "SERIAL" : "uiEditDisplayFieldLinkToXMLSERIAL",
-   "TIMESTAMP" : "uiEditDisplayFieldLinkToXMLTIMESTAMP",
-   "TYPE" : "uiEditDisplayFieldLinkToXMLTYPE", 
-   default: key
-]
-
-uiEditSetDisplayViewFromOrmObjectMap ::= [ 
-   "INTEGER" : "uiEditSetDisplayViewFromOrmObjectINTEGER",
-   "REAL" : "uiEditSetDisplayViewFromOrmObjectREAL",
-   "GUID" : "uiEditSetDisplayViewFromOrmObjectGUID",
-   "BLOB" : "uiEditSetDisplayViewFromOrmObjectBLOB",
-   "INCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectINCLUSIVE",
-   "BOOL" : "uiEditSetDisplayViewFromOrmObjectBOOL",
-   "DOUBLE" : "uiEditSetDisplayViewFromOrmObjectDOUBLE",
-   "SHORT" : "uiEditSetDisplayViewFromOrmObjectSHORT",
-   "FLOAT" : "uiEditSetDisplayViewFromOrmObjectFLOAT",
-   "EXCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectEXCLUSIVE",
-   "TEXT" : "uiEditSetDisplayViewFromOrmObjectTEXT",
-   "FK" : "uiEditSetDisplayViewFromOrmObjectFK",
-   "FILE" : "uiEditSetDisplayViewFromOrmObjectFILE",
-   "LONG" : "uiEditSetDisplayViewFromOrmObjectLONG",
-   "SERIAL" : "uiEditSetDisplayViewFromOrmObjectSERIAL",
-   "TIMESTAMP" : "uiEditSetDisplayViewFromOrmObjectTIMESTAMP",
-   "TYPE" : "uiEditSetDisplayViewFromOrmObjectTYPE", 
-   default: key
-]
-
-uiEditConvertValuesFromViewsToJavaMap ::= [ 
-   "INTEGER" : "uiEditConvertValuesFromViewsToJavaINTEGER",
-   "REAL" : "uiEditConvertValuesFromViewsToJavaREAL",
-   "GUID" : "uiEditConvertValuesFromViewsToJavaGUID",
-   "BLOB" : "uiEditConvertValuesFromViewsToJavaBLOB",
-   "INCLUSIVE" : "uiEditConvertValuesFromViewsToJavaINCLUSIVE",
-   "BOOL" : "uiEditConvertValuesFromViewsToJavaBOOL",
-   "DOUBLE" : "uiEditConvertValuesFromViewsToJavaDOUBLE",
-   "SHORT" : "uiEditConvertValuesFromViewsToJavaSHORT",
-   "FLOAT" : "uiEditConvertValuesFromViewsToJavaFLOAT",
-   "EXCLUSIVE" : "uiEditConvertValuesFromViewsToJavaEXCLUSIVE",
-   "TEXT" : "uiEditConvertValuesFromViewsToJavaTEXT",
-   "FK" : "uiEditConvertValuesFromViewsToJavaFK",
-   "FILE" : "uiEditConvertValuesFromViewsToJavaFILE",
-   "LONG" : "uiEditConvertValuesFromViewsToJavaLONG",
-   "SERIAL" : "uiEditConvertValuesFromViewsToJavaSERIAL",
-   "TIMESTAMP" : "uiEditConvertValuesFromViewsToJavaTIMESTAMP",
-   "TYPE" : "uiEditConvertValuesFromViewsToJavaTYPE", 
-   default: key
-]
-
-uiViewDisplayFieldViewToDefaultMap ::= [ 
-   "INTEGER" : "uiViewDisplayFieldViewToDefaultINTEGER",
-   "REAL" : "uiViewDisplayFieldViewToDefaultREAL",
-   "GUID" : "uiViewDisplayFieldViewToDefaultGUID",
-   "BLOB" : "uiViewDisplayFieldViewToDefaultBLOB",
-   "INCLUSIVE" : "uiViewDisplayFieldViewToDefaultINCLUSIVE",
-   "BOOL" : "uiViewDisplayFieldViewToDefaultBOOL",
-   "DOUBLE" : "uiViewDisplayFieldViewToDefaultDOUBLE",
-   "SHORT" : "uiViewDisplayFieldViewToDefaultSHORT",
-   "FLOAT" : "uiViewDisplayFieldViewToDefaultFLOAT",
-   "EXCLUSIVE" : "uiViewDisplayFieldViewToDefaultEXCLUSIVE",
-   "TEXT" : "uiViewDisplayFieldViewToDefaultTEXT",
-   "FK" : "uiViewDisplayFieldViewToDefaultFK",
-   "FILE" : "uiViewDisplayFieldViewToDefaultFILE",
-   "LONG" : "uiViewDisplayFieldViewToDefaultLONG",
-   "SERIAL" : "uiViewDisplayFieldViewToDefaultSERIAL",
-   "TIMESTAMP" : "uiViewDisplayFieldViewToDefaultTIMESTAMP",
-   "TYPE" : "uiViewDisplayFieldViewToDefaultTYPE", 
-   default: key
-]
-
-uiViewDisplayFieldDeclarationMap ::= [ 
-   "INTEGER" : "uiViewDisplayFieldDeclarationINTEGER",
-   "REAL" : "uiViewDisplayFieldDeclarationREAL",
-   "GUID" : "uiViewDisplayFieldDeclarationGUID",
-   "BLOB" : "uiViewDisplayFieldDeclarationBLOB",
-   "INCLUSIVE" : "uiViewDisplayFieldDeclarationINCLUSIVE",
-   "BOOL" : "uiViewDisplayFieldDeclarationBOOL",
-   "DOUBLE" : "uiViewDisplayFieldDeclarationDOUBLE",
-   "SHORT" : "uiViewDisplayFieldDeclarationSHORT",
-   "FLOAT" : "uiViewDisplayFieldDeclarationFLOAT",
-   "EXCLUSIVE" : "uiViewDisplayFieldDeclarationEXCLUSIVE",
-   "TEXT" : "uiViewDisplayFieldDeclarationTEXT",
-   "FK" : "uiViewDisplayFieldDeclarationFK",
-   "FILE" : "uiViewDisplayFieldDeclarationFILE",
-   "LONG" : "uiViewDisplayFieldDeclarationLONG",
-   "SERIAL" : "uiViewDisplayFieldDeclarationSERIAL",
-   "TIMESTAMP" : "uiViewDisplayFieldDeclarationTIMESTAMP",
-   "TYPE" : "uiViewDisplayFieldDeclarationTYPE", 
-   default: key
-]
-
+uiViewSetDisplayViewFromOrmObjectTemplate(relation,field) ::= <%
+<(uiViewSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) >
+%>
 uiViewSetDisplayViewFromOrmObjectMap ::= [ 
-   "INTEGER" : "uiViewSetDisplayViewFromOrmObjectINTEGER",
-   "REAL" : "uiViewSetDisplayViewFromOrmObjectREAL",
-   "GUID" : "uiViewSetDisplayViewFromOrmObjectGUID",
-   "BLOB" : "uiViewSetDisplayViewFromOrmObjectBLOB",
-   "INCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectINCLUSIVE",
-   "BOOL" : "uiViewSetDisplayViewFromOrmObjectBOOL",
-   "DOUBLE" : "uiViewSetDisplayViewFromOrmObjectDOUBLE",
-   "SHORT" : "uiViewSetDisplayViewFromOrmObjectSHORT",
-   "FLOAT" : "uiViewSetDisplayViewFromOrmObjectFLOAT",
-   "EXCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectEXCLUSIVE",
-   "TEXT" : "uiViewSetDisplayViewFromOrmObjectTEXT",
-   "FK" : "uiViewSetDisplayViewFromOrmObjectFK",
-   "FILE" : "uiViewSetDisplayViewFromOrmObjectFILE",
-   "LONG" : "uiViewSetDisplayViewFromOrmObjectLONG",
-   "SERIAL" : "uiViewSetDisplayViewFromOrmObjectSERIAL",
-   "TIMESTAMP" : "uiViewSetDisplayViewFromOrmObjectTIMESTAMP",
-   "TYPE" : "uiViewSetDisplayViewFromOrmObjectTYPE", 
+   "INTEGER"   : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "REAL"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "GUID"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BLOB"      : "uiViewSetDisplayViewFromOrmObjectBLOB",
+   "INCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BOOL"      : "uiViewSetDisplayViewFromOrmObjectBOOL",
+   "DOUBLE"    : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SHORT"     : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FLOAT"     : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "EXCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TEXT"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FK"        : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FILE"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "LONG"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SERIAL"    : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TIMESTAMP" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TYPE"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate", 
    default: key
 ]
-
-uiViewDisplayFieldLinkToXMLMap ::= [ 
-   "INTEGER" : "uiViewDisplayFieldLinkToXMLINTEGER",
-   "REAL" : "uiViewDisplayFieldLinkToXMLREAL",
-   "GUID" : "uiViewDisplayFieldLinkToXMLGUID",
-   "BLOB" : "uiViewDisplayFieldLinkToXMLBLOB",
-   "INCLUSIVE" : "uiViewDisplayFieldLinkToXMLINCLUSIVE",
-   "BOOL" : "uiViewDisplayFieldLinkToXMLBOOL",
-   "DOUBLE" : "uiViewDisplayFieldLinkToXMLDOUBLE",
-   "SHORT" : "uiViewDisplayFieldLinkToXMLSHORT",
-   "FLOAT" : "uiViewDisplayFieldLinkToXMLFLOAT",
-   "EXCLUSIVE" : "uiViewDisplayFieldLinkToXMLEXCLUSIVE",
-   "TEXT" : "uiViewDisplayFieldLinkToXMLTEXT",
-   "FK" : "uiViewDisplayFieldLinkToXMLFK",
-   "FILE" : "uiViewDisplayFieldLinkToXMLFILE",
-   "LONG" : "uiViewDisplayFieldLinkToXMLLONG",
-   "SERIAL" : "uiViewDisplayFieldLinkToXMLSERIAL",
-   "TIMESTAMP" : "uiViewDisplayFieldLinkToXMLTIMESTAMP",
-   "TYPE" : "uiViewDisplayFieldLinkToXMLTYPE", 
-   default: key
-]
-
-
-
-
-
-uiCreateGetValuesFromViewsMap ::= [ 
-   "INTEGER" : "uiCreateGetValuesFromViewsINTEGER",
-   "REAL" : "uiCreateGetValuesFromViewsREAL",
-   "GUID" : "uiCreateGetValuesFromViewsGUID",
-   "BLOB" : "uiCreateGetValuesFromViewsBLOB",
-   "INCLUSIVE" : "uiCreateGetValuesFromViewsINCLUSIVE",
-   "BOOL" : "uiCreateGetValuesFromViewsBOOL",
-   "DOUBLE" : "uiCreateGetValuesFromViewsDOUBLE",
-   "SHORT" : "uiCreateGetValuesFromViewsSHORT",
-   "FLOAT" : "uiCreateGetValuesFromViewsFLOAT",
-   "EXCLUSIVE" : "uiCreateGetValuesFromViewsEXCLUSIVE",
-   "TEXT" : "uiCreateGetValuesFromViewsTEXT",
-   "FK" : "uiCreateGetValuesFromViewsFK",
-   "FILE" : "uiCreateGetValuesFromViewsFILE",
-   "LONG" : "uiCreateGetValuesFromViewsLONG",
-   "SERIAL" : "uiCreateGetValuesFromViewsSERIAL",
-   "TIMESTAMP" : "uiCreateGetValuesFromViewsTIMESTAMP",
-   "TYPE" : "uiCreateGetValuesFromViewsTYPE", 
-   default: key
-]
-
-uiCreateDisplayFieldViewToDefaultMap ::= [ 
-   "INTEGER" : "uiCreateDisplayFieldViewToDefaultINTEGER",
-   "REAL" : "uiCreateDisplayFieldViewToDefaultREAL",
-   "GUID" : "uiCreateDisplayFieldViewToDefaultGUID",
-   "BLOB" : "uiCreateDisplayFieldViewToDefaultBLOB",
-   "INCLUSIVE" : "uiCreateDisplayFieldViewToDefaultINCLUSIVE",
-   "BOOL" : "uiCreateDisplayFieldViewToDefaultBOOL",
-   "DOUBLE" : "uiCreateDisplayFieldViewToDefaultDOUBLE",
-   "SHORT" : "uiCreateDisplayFieldViewToDefaultSHORT",
-   "FLOAT" : "uiCreateDisplayFieldViewToDefaultFLOAT",
-   "EXCLUSIVE" : "uiCreateDisplayFieldViewToDefaultEXCLUSIVE",
-   "TEXT" : "uiCreateDisplayFieldViewToDefaultTEXT",
-   "FK" : "uiCreateDisplayFieldViewToDefaultFK",
-   "FILE" : "uiCreateDisplayFieldViewToDefaultFILE",
-   "LONG" : "uiCreateDisplayFieldViewToDefaultLONG",
-   "SERIAL" : "uiCreateDisplayFieldViewToDefaultSERIAL",
-   "TIMESTAMP" : "uiCreateDisplayFieldViewToDefaultTIMESTAMP",
-   "TYPE" : "uiCreateDisplayFieldViewToDefaultTYPE", 
-   default: key
-]
-
-uiCreateDisplayFieldDeclarationMap ::= [ 
-   "INTEGER" : "uiCreateDisplayFieldDeclarationINTEGER",
-   "REAL" : "uiCreateDisplayFieldDeclarationREAL",
-   "GUID" : "uiCreateDisplayFieldDeclarationGUID",
-   "BLOB" : "uiCreateDisplayFieldDeclarationBLOB",
-   "INCLUSIVE" : "uiCreateDisplayFieldDeclarationINCLUSIVE",
-   "BOOL" : "uiCreateDisplayFieldDeclarationBOOL",
-   "DOUBLE" : "uiCreateDisplayFieldDeclarationDOUBLE",
-   "SHORT" : "uiCreateDisplayFieldDeclarationSHORT",
-   "FLOAT" : "uiCreateDisplayFieldDeclarationFLOAT",
-   "EXCLUSIVE" : "uiCreateDisplayFieldDeclarationEXCLUSIVE",
-   "TEXT" : "uiCreateDisplayFieldDeclarationTEXT",
-   "FK" : "uiCreateDisplayFieldDeclarationFK",
-   "FILE" : "uiCreateDisplayFieldDeclarationFILE",
-   "LONG" : "uiCreateDisplayFieldDeclarationLONG",
-   "SERIAL" : "uiCreateDisplayFieldDeclarationSERIAL",
-   "TIMESTAMP" : "uiCreateDisplayFieldDeclarationTIMESTAMP",
-   "TYPE" : "uiCreateDisplayFieldDeclarationTYPE", 
-   default: key
-]
-
-uiCreateJavaFieldDeclarationAndInitializationMap ::= [ 
-   "INTEGER" : "uiCreateJavaFieldDeclarationAndInitializationINTEGER",
-   "REAL" : "uiCreateJavaFieldDeclarationAndInitializationREAL",
-   "GUID" : "uiCreateJavaFieldDeclarationAndInitializationGUID",
-   "BLOB" : "uiCreateJavaFieldDeclarationAndInitializationBLOB",
-   "INCLUSIVE" : "uiCreateJavaFieldDeclarationAndInitializationINCLUSIVE",
-   "BOOL" : "uiCreateJavaFieldDeclarationAndInitializationBOOL",
-   "DOUBLE" : "uiCreateJavaFieldDeclarationAndInitializationDOUBLE",
-   "SHORT" : "uiCreateJavaFieldDeclarationAndInitializationSHORT",
-   "FLOAT" : "uiCreateJavaFieldDeclarationAndInitializationFLOAT",
-   "EXCLUSIVE" : "uiCreateJavaFieldDeclarationAndInitializationEXCLUSIVE",
-   "TEXT" : "uiCreateJavaFieldDeclarationAndInitializationTEXT",
-   "FK" : "uiCreateJavaFieldDeclarationAndInitializationFK",
-   "FILE" : "uiCreateJavaFieldDeclarationAndInitializationFILE",
-   "LONG" : "uiCreateJavaFieldDeclarationAndInitializationLONG",
-   "SERIAL" : "uiCreateJavaFieldDeclarationAndInitializationSERIAL",
-   "TIMESTAMP" : "uiCreateJavaFieldDeclarationAndInitializationTIMESTAMP",
-   "TYPE" : "uiCreateJavaFieldDeclarationAndInitializationTYPE", 
-   default: key
-]
-
-uiCreateOrmConstructorFieldNameMap ::= [ 
-   "INTEGER" : "uiCreateOrmConstructorFieldNameINTEGER",
-   "REAL" : "uiCreateOrmConstructorFieldNameREAL",
-   "GUID" : "uiCreateOrmConstructorFieldNameGUID",
-   "BLOB" : "uiCreateOrmConstructorFieldNameBLOB",
-   "INCLUSIVE" : "uiCreateOrmConstructorFieldNameINCLUSIVE",
-   "BOOL" : "uiCreateOrmConstructorFieldNameBOOL",
-   "DOUBLE" : "uiCreateOrmConstructorFieldNameDOUBLE",
-   "SHORT" : "uiCreateOrmConstructorFieldNameSHORT",
-   "FLOAT" : "uiCreateOrmConstructorFieldNameFLOAT",
-   "EXCLUSIVE" : "uiCreateOrmConstructorFieldNameEXCLUSIVE",
-   "TEXT" : "uiCreateOrmConstructorFieldNameTEXT",
-   "FK" : "uiCreateOrmConstructorFieldNameFK",
-   "FILE" : "uiCreateOrmConstructorFieldNameFILE",
-   "LONG" : "uiCreateOrmConstructorFieldNameLONG",
-   "SERIAL" : "uiCreateOrmConstructorFieldNameSERIAL",
-   "TIMESTAMP" : "uiCreateOrmConstructorFieldNameTIMESTAMP",
-   "TYPE" : "uiCreateOrmConstructorFieldNameTYPE", 
-   default: key
-]
-
-uiCreateDisplayFieldLinkToXMLMap ::= [ 
-   "INTEGER" : "uiCreateDisplayFieldLinkToXMLINTEGER",
-   "REAL" : "uiCreateDisplayFieldLinkToXMLREAL",
-   "GUID" : "uiCreateDisplayFieldLinkToXMLGUID",
-   "BLOB" : "uiCreateDisplayFieldLinkToXMLBLOB",
-   "INCLUSIVE" : "uiCreateDisplayFieldLinkToXMLINCLUSIVE",
-   "BOOL" : "uiCreateDisplayFieldLinkToXMLBOOL",
-   "DOUBLE" : "uiCreateDisplayFieldLinkToXMLDOUBLE",
-   "SHORT" : "uiCreateDisplayFieldLinkToXMLSHORT",
-   "FLOAT" : "uiCreateDisplayFieldLinkToXMLFLOAT",
-   "EXCLUSIVE" : "uiCreateDisplayFieldLinkToXMLEXCLUSIVE",
-   "TEXT" : "uiCreateDisplayFieldLinkToXMLTEXT",
-   "FK" : "uiCreateDisplayFieldLinkToXMLFK",
-   "FILE" : "uiCreateDisplayFieldLinkToXMLFILE",
-   "LONG" : "uiCreateDisplayFieldLinkToXMLLONG",
-   "SERIAL" : "uiCreateDisplayFieldLinkToXMLSERIAL",
-   "TIMESTAMP" : "uiCreateDisplayFieldLinkToXMLTIMESTAMP",
-   "TYPE" : "uiCreateDisplayFieldLinkToXMLTYPE", 
-   default: key
-]
-
-uiCreateSetDisplayViewFromOrmObjectMap ::= [ 
-   "INTEGER" : "uiCreateSetDisplayViewFromOrmObjectINTEGER",
-   "REAL" : "uiCreateSetDisplayViewFromOrmObjectREAL",
-   "GUID" : "uiCreateSetDisplayViewFromOrmObjectGUID",
-   "BLOB" : "uiCreateSetDisplayViewFromOrmObjectBLOB",
-   "INCLUSIVE" : "uiCreateSetDisplayViewFromOrmObjectINCLUSIVE",
-   "BOOL" : "uiCreateSetDisplayViewFromOrmObjectBOOL",
-   "DOUBLE" : "uiCreateSetDisplayViewFromOrmObjectDOUBLE",
-   "SHORT" : "uiCreateSetDisplayViewFromOrmObjectSHORT",
-   "FLOAT" : "uiCreateSetDisplayViewFromOrmObjectFLOAT",
-   "EXCLUSIVE" : "uiCreateSetDisplayViewFromOrmObjectEXCLUSIVE",
-   "TEXT" : "uiCreateSetDisplayViewFromOrmObjectTEXT",
-   "FK" : "uiCreateSetDisplayViewFromOrmObjectFK",
-   "FILE" : "uiCreateSetDisplayViewFromOrmObjectFILE",
-   "LONG" : "uiCreateSetDisplayViewFromOrmObjectLONG",
-   "SERIAL" : "uiCreateSetDisplayViewFromOrmObjectSERIAL",
-   "TIMESTAMP" : "uiCreateSetDisplayViewFromOrmObjectTIMESTAMP",
-   "TYPE" : "uiCreateSetDisplayViewFromOrmObjectTYPE", 
-   default: key
-]
-
-uiCreateConvertValuesFromViewsToJavaMap ::= [ 
-   "INTEGER" : "uiCreateConvertValuesFromViewsToJavaINTEGER",
-   "REAL" : "uiCreateConvertValuesFromViewsToJavaREAL",
-   "GUID" : "uiCreateConvertValuesFromViewsToJavaGUID",
-   "BLOB" : "uiCreateConvertValuesFromViewsToJavaBLOB",
-   "INCLUSIVE" : "uiCreateConvertValuesFromViewsToJavaINCLUSIVE",
-   "BOOL" : "uiCreateConvertValuesFromViewsToJavaBOOL",
-   "DOUBLE" : "uiCreateConvertValuesFromViewsToJavaDOUBLE",
-   "SHORT" : "uiCreateConvertValuesFromViewsToJavaSHORT",
-   "FLOAT" : "uiCreateConvertValuesFromViewsToJavaFLOAT",
-   "EXCLUSIVE" : "uiCreateConvertValuesFromViewsToJavaEXCLUSIVE",
-   "TEXT" : "uiCreateConvertValuesFromViewsToJavaTEXT",
-   "FK" : "uiCreateConvertValuesFromViewsToJavaFK",
-   "FILE" : "uiCreateConvertValuesFromViewsToJavaFILE",
-   "LONG" : "uiCreateConvertValuesFromViewsToJavaLONG",
-   "SERIAL" : "uiCreateConvertValuesFromViewsToJavaSERIAL",
-   "TIMESTAMP" : "uiCreateConvertValuesFromViewsToJavaTIMESTAMP",
-   "TYPE" : "uiCreateConvertValuesFromViewsToJavaTYPE", 
-   default: key
-]
-
-
-
-
-
-
-uiEditGetValuesFromViewsINTEGER(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsREAL(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsGUID(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditGetValuesFromViewsINCLUSIVE(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsBOOL(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsDOUBLE(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsSHORT(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsFLOAT(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsEXCLUSIVE(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsTEXT(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsFK(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsFILE(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsLONG(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsSERIAL(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsTIMESTAMP(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiEditGetValuesFromViewsTYPE(relation,field) ::= << <uiEditGetValuesFromViewsDefualtTemplate(relation,field) > >>  
-
-uiEditDisplayFieldViewToDefaultINTEGER(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultREAL(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultGUID(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditDisplayFieldViewToDefaultINCLUSIVE(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultBOOL(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultDOUBLE(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultSHORT(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultFLOAT(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultEXCLUSIVE(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultTEXT(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultFK(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultFILE(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultLONG(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultSERIAL(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultTIMESTAMP(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldViewToDefaultTYPE(relation,field) ::= << <uiEditDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >>  
-
-uiEditDisplayFieldDeclarationINTEGER(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationREAL(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationGUID(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditDisplayFieldDeclarationINCLUSIVE(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationBOOL(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationDOUBLE(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationSHORT(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationFLOAT(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationEXCLUSIVE(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationTEXT(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationFK(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationFILE(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationLONG(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationSERIAL(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationTIMESTAMP(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldDeclarationTYPE(relation,field) ::= << <uiEditDisplayFieldDeclarationDefualtTemplate(relation,field) > >>  
-
-uiEditJavaFieldDeclarationAndInitializationINTEGER(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationREAL(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationGUID(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditJavaFieldDeclarationAndInitializationINCLUSIVE(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationBOOL(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationDOUBLE(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationSHORT(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationFLOAT(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationEXCLUSIVE(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationTEXT(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationFK(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationFILE(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationLONG(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationSERIAL(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationTIMESTAMP(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiEditJavaFieldDeclarationAndInitializationTYPE(relation,field) ::= << <uiEditJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >>  
-
-uiEditOrmConstructorFieldNameINTEGER(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameREAL(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameGUID(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameBLOB(relation,field) ::= << null, // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditOrmConstructorFieldNameINCLUSIVE(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameBOOL(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameDOUBLE(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameSHORT(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameFLOAT(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameEXCLUSIVE(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameTEXT(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameFK(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameFILE(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameLONG(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameSERIAL(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameTIMESTAMP(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiEditOrmConstructorFieldNameTYPE(relation,field) ::= << <uiEditOrmConstructorFieldNameDefualtTemplate(relation,field) > >>  
-
-uiEditDisplayFieldLinkToXMLINTEGER(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLREAL(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLGUID(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditDisplayFieldLinkToXMLINCLUSIVE(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLBOOL(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLDOUBLE(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLSHORT(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLFLOAT(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLEXCLUSIVE(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLTEXT(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLFK(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLFILE(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLLONG(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLSERIAL(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLTIMESTAMP(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiEditDisplayFieldLinkToXMLTYPE(relation,field) ::= << <uiEditDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >>  
-
-uiEditSetDisplayViewFromOrmObjectINTEGER(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectREAL(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectGUID(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditSetDisplayViewFromOrmObjectINCLUSIVE(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectDOUBLE(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectSHORT(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectFLOAT(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectEXCLUSIVE(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectTEXT(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectFK(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectFILE(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectLONG(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectSERIAL(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectTIMESTAMP(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiEditSetDisplayViewFromOrmObjectTYPE(relation,field) ::= << <uiEditSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >>  
-
-uiEditConvertValuesFromViewsToJavaINTEGER(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaREAL(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaGUID(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiEditConvertValuesFromViewsToJavaINCLUSIVE(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaBOOL(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaDOUBLE(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaSHORT(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaFLOAT(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaEXCLUSIVE(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaTEXT(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaFK(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaFILE(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaLONG(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaSERIAL(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaTIMESTAMP(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiEditConvertValuesFromViewsToJavaTYPE(relation,field) ::= << <uiEditConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >>  
-
-
-
-uiCreateGetValuesFromViewsINTEGER(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsREAL(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsGUID(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateGetValuesFromViewsINCLUSIVE(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsBOOL(relation,field) ::= << 
-boolean <field.name.camel>Boolean = <field.name.camel>TB.isChecked();
->> 
-uiCreateGetValuesFromViewsDOUBLE(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsSHORT(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsFLOAT(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsEXCLUSIVE(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsTEXT(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsFK(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsFILE(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsLONG(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsSERIAL(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsTIMESTAMP(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >> 
-uiCreateGetValuesFromViewsTYPE(relation,field) ::= << <uiCreateGetValuesFromViewsDefualtTemplate(relation,field) > >>  
-
-uiCreateDisplayFieldViewToDefaultINTEGER(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultREAL(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultGUID(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateDisplayFieldViewToDefaultINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultBOOL(relation,field) ::= << 
-<field.name.camel>TB.setPressed(false);
->> 
-uiCreateDisplayFieldViewToDefaultDOUBLE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultSHORT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultFLOAT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultTEXT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultFK(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultFILE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultLONG(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultSERIAL(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldViewToDefaultTYPE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >>  
-
-uiCreateDisplayFieldDeclarationINTEGER(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationREAL(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationGUID(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateDisplayFieldDeclarationINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationBOOL(relation,field) ::= << 
-ToggleButton <field.name.camel>TB;
->> 
-uiCreateDisplayFieldDeclarationDOUBLE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationSHORT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationFLOAT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationTEXT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationFK(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationFILE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationLONG(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationSERIAL(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldDeclarationTYPE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefualtTemplate(relation,field) > >>  
-
-uiCreateJavaFieldDeclarationAndInitializationINTEGER(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationREAL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationGUID(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateJavaFieldDeclarationAndInitializationINCLUSIVE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationBOOL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationDOUBLE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationSHORT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationFLOAT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationEXCLUSIVE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationTEXT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationFK(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationFILE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationLONG(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationSERIAL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationTIMESTAMP(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >> 
-uiCreateJavaFieldDeclarationAndInitializationTYPE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefualtTemplate(relation,field) > >>  
-
-uiCreateOrmConstructorFieldNameINTEGER(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameREAL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameGUID(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameBLOB(relation,field) ::= << null, // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateOrmConstructorFieldNameINCLUSIVE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameBOOL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameDOUBLE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameSHORT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameFLOAT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameEXCLUSIVE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameTEXT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameFK(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameFILE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameLONG(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameSERIAL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameTIMESTAMP(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >> 
-uiCreateOrmConstructorFieldNameTYPE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefualtTemplate(relation,field) > >>  
-
-uiCreateDisplayFieldLinkToXMLINTEGER(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLREAL(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLGUID(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateDisplayFieldLinkToXMLINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLBOOL(relation,field) ::= << 
-<field.name.camel>TB = (ToggleButton) getView().findViewById(R.id.<relation.name.snake>_create_value_<field.name.snake>);
->> 
-uiCreateDisplayFieldLinkToXMLDOUBLE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLSHORT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLFLOAT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLTEXT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLFK(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLFILE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLLONG(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLSERIAL(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiCreateDisplayFieldLinkToXMLTYPE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >>  
-
-uiCreateSetDisplayViewFromOrmObjectINTEGER(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectREAL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectGUID(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateSetDisplayViewFromOrmObjectINCLUSIVE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectDOUBLE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectSHORT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectFLOAT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectEXCLUSIVE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectTEXT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectFK(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectFILE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectLONG(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectSERIAL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectTIMESTAMP(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiCreateSetDisplayViewFromOrmObjectTYPE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >>  
-
-uiCreateConvertValuesFromViewsToJavaINTEGER(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaREAL(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaGUID(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiCreateConvertValuesFromViewsToJavaINCLUSIVE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaBOOL(relation,field) ::= << 
-if (<field.name.camel>Boolean == true) {
-    <field.name.camel> = 1;
-} else {
-    <field.name.camel> = 0;
-}
->> 
-uiCreateConvertValuesFromViewsToJavaDOUBLE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaSHORT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaFLOAT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaEXCLUSIVE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaTEXT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaFK(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaFILE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaLONG(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaSERIAL(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaTIMESTAMP(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >> 
-uiCreateConvertValuesFromViewsToJavaTYPE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefualtTemplate(relation,field) > >>  
-
-
-
-
-uiViewSetDisplayViewFromOrmObjectINTEGER(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectREAL(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectGUID(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiViewSetDisplayViewFromOrmObjectINCLUSIVE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
+uiViewSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <<
+<field.name.camel>TV.setText(<javaMethodTypeMap.(field.dtype)>.valueOf(<relation.name.camel>Data.<field.name.camel>).toString());
+>>
+uiViewSetDisplayViewFromOrmObjectBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
 uiViewSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << 
 final String <field.name.camel>String;
 if (Integer.valueOf(<relation.name.camel>Data.<field.name.camel>) == 0){
@@ -1139,68 +623,409 @@ if (Integer.valueOf(<relation.name.camel>Data.<field.name.camel>) == 0){
 }
 <field.name.camel>TV.setText(<field.name.camel>String);
 >> 
-uiViewSetDisplayViewFromOrmObjectDOUBLE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectSHORT(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectFLOAT(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectEXCLUSIVE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectTEXT(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectFK(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectFILE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectLONG(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectSERIAL(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectTIMESTAMP(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >> 
-uiViewSetDisplayViewFromOrmObjectTYPE(relation,field) ::= << <uiViewSetDisplayViewFromOrmObjectDefualtTemplate(relation,field) > >>  
 
-uiViewDisplayFieldLinkToXMLINTEGER(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLREAL(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLGUID(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiViewDisplayFieldLinkToXMLINCLUSIVE(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLBOOL(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLDOUBLE(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLSHORT(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLFLOAT(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLEXCLUSIVE(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLTEXT(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLFK(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLFILE(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLLONG(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLSERIAL(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLTIMESTAMP(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldLinkToXMLTYPE(relation,field) ::= << <uiViewDisplayFieldLinkToXMLDefualtTemplate(relation,field) > >>  
 
-uiViewDisplayFieldViewToDefaultINTEGER(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultREAL(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultGUID(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiViewDisplayFieldViewToDefaultINCLUSIVE(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultBOOL(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultDOUBLE(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultSHORT(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultFLOAT(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultEXCLUSIVE(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultTEXT(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultFK(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultFILE(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultLONG(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultSERIAL(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultTIMESTAMP(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldViewToDefaultTYPE(relation,field) ::= << <uiViewDisplayFieldViewToDefaultDefualtTemplate(relation,field) > >>  
+uiViewDisplayFieldLinkToXMLTemplate(relation,field) ::= <%
+<(uiViewDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) >
+%>
+uiViewDisplayFieldLinkToXMLMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldLinkToXMLBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
+<field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_view_value_<field.name.snake>);
+>>
+uiViewDisplayFieldLinkToXMLBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
 
-uiViewDisplayFieldDeclarationINTEGER(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationREAL(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationGUID(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
-uiViewDisplayFieldDeclarationINCLUSIVE(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationBOOL(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationDOUBLE(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationSHORT(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationFLOAT(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationEXCLUSIVE(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationTEXT(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationFK(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationFILE(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationLONG(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationSERIAL(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationTIMESTAMP(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >> 
-uiViewDisplayFieldDeclarationTYPE(relation,field) ::= << <uiViewDisplayFieldDeclarationDefualtTemplate(relation,field) > >>  
+
+
+uiCreateGetValuesFromViewsTemplate(relation,field) ::= << <(uiCreateGetValuesFromViewsMap.(field.dtype))(relation,field) > >>
+uiCreateGetValuesFromViewsMap ::= [ 
+   "INTEGER"   : "uiCreateGetValuesFromViewsINTEGER",
+   "REAL"      : "uiCreateGetValuesFromViewsREAL",
+   "GUID"      : "uiCreateGetValuesFromViewsGUID",
+   "BLOB"      : "uiCreateGetValuesFromViewsBLOB",
+   "INCLUSIVE" : "uiCreateGetValuesFromViewsINCLUSIVE",
+   "BOOL"      : "uiCreateGetValuesFromViewsBOOL",
+   "DOUBLE"    : "uiCreateGetValuesFromViewsDOUBLE",
+   "SHORT"     : "uiCreateGetValuesFromViewsSHORT",
+   "FLOAT"     : "uiCreateGetValuesFromViewsFLOAT",
+   "EXCLUSIVE" : "uiCreateGetValuesFromViewsEXCLUSIVE",
+   "TEXT"      : "uiCreateGetValuesFromViewsTEXT",
+   "FK"        : "uiCreateGetValuesFromViewsFK",
+   "FILE"      : "uiCreateGetValuesFromViewsFILE",
+   "LONG"      : "uiCreateGetValuesFromViewsLONG",
+   "SERIAL"    : "uiCreateGetValuesFromViewsSERIAL",
+   "TIMESTAMP" : "uiCreateGetValuesFromViewsTIMESTAMP",
+   "TYPE"      : "uiCreateGetValuesFromViewsTYPE", 
+   default: key
+]
+uiCreateGetValuesFromViewsDefaultTemplate(relation,field) ::= <<
+Editable <field.name.camel>Createable = <field.name.camel>ET.getText();
+>>
+uiCreateGetValuesFromViewsINTEGER(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsREAL(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsGUID(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateGetValuesFromViewsINCLUSIVE(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsBOOL(relation,field) ::= << 
+boolean <field.name.camel>Boolean = <field.name.camel>TB.isChecked();
+>> 
+uiCreateGetValuesFromViewsDOUBLE(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsSHORT(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsFLOAT(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsEXCLUSIVE(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsTEXT(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsFK(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsFILE(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsLONG(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsSERIAL(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsTIMESTAMP(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >> 
+uiCreateGetValuesFromViewsTYPE(relation,field) ::= << <uiCreateGetValuesFromViewsDefaultTemplate(relation,field) > >>  
+
+
+uiCreateDisplayFieldViewToDefaultTemplate(relation,field) ::= << <(uiCreateDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > >>
+uiCreateDisplayFieldViewToDefaultMap ::= [ 
+   "INTEGER"   : "uiCreateDisplayFieldViewToDefaultINTEGER",
+   "REAL"      : "uiCreateDisplayFieldViewToDefaultREAL",
+   "GUID"      : "uiCreateDisplayFieldViewToDefaultGUID",
+   "BLOB"      : "uiCreateDisplayFieldViewToDefaultBLOB",
+   "INCLUSIVE" : "uiCreateDisplayFieldViewToDefaultINCLUSIVE",
+   "BOOL"      : "uiCreateDisplayFieldViewToDefaultBOOL",
+   "DOUBLE"    : "uiCreateDisplayFieldViewToDefaultDOUBLE",
+   "SHORT"     : "uiCreateDisplayFieldViewToDefaultSHORT",
+   "FLOAT"     : "uiCreateDisplayFieldViewToDefaultFLOAT",
+   "EXCLUSIVE" : "uiCreateDisplayFieldViewToDefaultEXCLUSIVE",
+   "TEXT"      : "uiCreateDisplayFieldViewToDefaultTEXT",
+   "FK"        : "uiCreateDisplayFieldViewToDefaultFK",
+   "FILE"      : "uiCreateDisplayFieldViewToDefaultFILE",
+   "LONG"      : "uiCreateDisplayFieldViewToDefaultLONG",
+   "SERIAL"    : "uiCreateDisplayFieldViewToDefaultSERIAL",
+   "TIMESTAMP" : "uiCreateDisplayFieldViewToDefaultTIMESTAMP",
+   "TYPE"      : "uiCreateDisplayFieldViewToDefaultTYPE", 
+   default: key
+]
+uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <<
+<field.name.camel>ET.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
+>>
+uiCreateDisplayFieldViewToDefaultINTEGER(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultREAL(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultGUID(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateDisplayFieldViewToDefaultINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultBOOL(relation,field) ::= << 
+<field.name.camel>TB.setPressed(false);
+>> 
+uiCreateDisplayFieldViewToDefaultDOUBLE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultSHORT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultFLOAT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultTEXT(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultFK(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultFILE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultLONG(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultSERIAL(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldViewToDefaultTYPE(relation,field) ::= << <uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) > >>  
+
+
+
+
+uiCreateDisplayFieldDeclarationTemplate(relation,field) ::= << <(uiCreateDisplayFieldDeclarationMap.(field.dtype))(relation,field) > >>
+uiCreateDisplayFieldDeclarationMap ::= [ 
+   "INTEGER"   : "uiCreateDisplayFieldDeclarationINTEGER",
+   "REAL"      : "uiCreateDisplayFieldDeclarationREAL",
+   "GUID"      : "uiCreateDisplayFieldDeclarationGUID",
+   "BLOB"      : "uiCreateDisplayFieldDeclarationBLOB",
+   "INCLUSIVE" : "uiCreateDisplayFieldDeclarationINCLUSIVE",
+   "BOOL"      : "uiCreateDisplayFieldDeclarationBOOL",
+   "DOUBLE"    : "uiCreateDisplayFieldDeclarationDOUBLE",
+   "SHORT"     : "uiCreateDisplayFieldDeclarationSHORT",
+   "FLOAT"     : "uiCreateDisplayFieldDeclarationFLOAT",
+   "EXCLUSIVE" : "uiCreateDisplayFieldDeclarationEXCLUSIVE",
+   "TEXT"      : "uiCreateDisplayFieldDeclarationTEXT",
+   "FK"        : "uiCreateDisplayFieldDeclarationFK",
+   "FILE"      : "uiCreateDisplayFieldDeclarationFILE",
+   "LONG"      : "uiCreateDisplayFieldDeclarationLONG",
+   "SERIAL"    : "uiCreateDisplayFieldDeclarationSERIAL",
+   "TIMESTAMP" : "uiCreateDisplayFieldDeclarationTIMESTAMP",
+   "TYPE"      : "uiCreateDisplayFieldDeclarationTYPE", 
+   default: key
+]
+uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <<
+EditText <field.name.camel>ET;
+>>
+uiCreateDisplayFieldDeclarationINTEGER(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationREAL(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationGUID(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateDisplayFieldDeclarationINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationBOOL(relation,field) ::= << 
+ToggleButton <field.name.camel>TB;
+>> 
+uiCreateDisplayFieldDeclarationDOUBLE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationSHORT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationFLOAT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationTEXT(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationFK(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationFILE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationLONG(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationSERIAL(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldDeclarationTYPE(relation,field) ::= << <uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) > >>  
+
+
+
+
+uiCreateJavaFieldDeclarationAndInitializationTemplate(relation,field) ::= << <(uiCreateJavaFieldDeclarationAndInitializationMap.(field.dtype))(relation,field) > >>
+uiCreateJavaFieldDeclarationAndInitializationMap ::= [ 
+   "INTEGER"   : "uiCreateJavaFieldDeclarationAndInitializationINTEGER",
+   "REAL"      : "uiCreateJavaFieldDeclarationAndInitializationREAL",
+   "GUID"      : "uiCreateJavaFieldDeclarationAndInitializationGUID",
+   "BLOB"      : "uiCreateJavaFieldDeclarationAndInitializationBLOB",
+   "INCLUSIVE" : "uiCreateJavaFieldDeclarationAndInitializationINCLUSIVE",
+   "BOOL"      : "uiCreateJavaFieldDeclarationAndInitializationBOOL",
+   "DOUBLE"    : "uiCreateJavaFieldDeclarationAndInitializationDOUBLE",
+   "SHORT"     : "uiCreateJavaFieldDeclarationAndInitializationSHORT",
+   "FLOAT"     : "uiCreateJavaFieldDeclarationAndInitializationFLOAT",
+   "EXCLUSIVE" : "uiCreateJavaFieldDeclarationAndInitializationEXCLUSIVE",
+   "TEXT"      : "uiCreateJavaFieldDeclarationAndInitializationTEXT",
+   "FK"        : "uiCreateJavaFieldDeclarationAndInitializationFK",
+   "FILE"      : "uiCreateJavaFieldDeclarationAndInitializationFILE",
+   "LONG"      : "uiCreateJavaFieldDeclarationAndInitializationLONG",
+   "SERIAL"    : "uiCreateJavaFieldDeclarationAndInitializationSERIAL",
+   "TIMESTAMP" : "uiCreateJavaFieldDeclarationAndInitializationTIMESTAMP",
+   "TYPE"      : "uiCreateJavaFieldDeclarationAndInitializationTYPE", 
+   default: key
+]
+uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) ::= <<
+<javaTypeMap.(field.dtype)> <field.name.camel> = <javaTypeDefaultMap.(field.dtype)>;
+>>
+uiCreateJavaFieldDeclarationAndInitializationINTEGER(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationREAL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationGUID(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateJavaFieldDeclarationAndInitializationINCLUSIVE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationBOOL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationDOUBLE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationSHORT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationFLOAT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationEXCLUSIVE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationTEXT(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationFK(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationFILE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationLONG(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationSERIAL(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationTIMESTAMP(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >> 
+uiCreateJavaFieldDeclarationAndInitializationTYPE(relation,field) ::= << <uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) > >>  
+
+
+
+
+
+uiCreateOrmConstructorFieldNameTemplate(relation,field) ::= << <(uiCreateOrmConstructorFieldNameMap.(field.dtype))(relation,field) > >>
+uiCreateOrmConstructorFieldNameMap ::= [ 
+   "INTEGER"   : "uiCreateOrmConstructorFieldNameINTEGER",
+   "REAL"      : "uiCreateOrmConstructorFieldNameREAL",
+   "GUID"      : "uiCreateOrmConstructorFieldNameGUID",
+   "BLOB"      : "uiCreateOrmConstructorFieldNameBLOB",
+   "INCLUSIVE" : "uiCreateOrmConstructorFieldNameINCLUSIVE",
+   "BOOL"      : "uiCreateOrmConstructorFieldNameBOOL",
+   "DOUBLE"    : "uiCreateOrmConstructorFieldNameDOUBLE",
+   "SHORT"     : "uiCreateOrmConstructorFieldNameSHORT",
+   "FLOAT"     : "uiCreateOrmConstructorFieldNameFLOAT",
+   "EXCLUSIVE" : "uiCreateOrmConstructorFieldNameEXCLUSIVE",
+   "TEXT"      : "uiCreateOrmConstructorFieldNameTEXT",
+   "FK"        : "uiCreateOrmConstructorFieldNameFK",
+   "FILE"      : "uiCreateOrmConstructorFieldNameFILE",
+   "LONG"      : "uiCreateOrmConstructorFieldNameLONG",
+   "SERIAL"    : "uiCreateOrmConstructorFieldNameSERIAL",
+   "TIMESTAMP" : "uiCreateOrmConstructorFieldNameTIMESTAMP",
+   "TYPE"      : "uiCreateOrmConstructorFieldNameTYPE", 
+   default: key
+]
+uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) ::= <<
+<field.name.camel>
+>>
+uiCreateOrmConstructorFieldNameINTEGER(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameREAL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameGUID(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameBLOB(relation,field) ::= << null, // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateOrmConstructorFieldNameINCLUSIVE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameBOOL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameDOUBLE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameSHORT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameFLOAT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameEXCLUSIVE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameTEXT(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameFK(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameFILE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameLONG(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameSERIAL(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameTIMESTAMP(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >> 
+uiCreateOrmConstructorFieldNameTYPE(relation,field) ::= << <uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) > >>  
+
+
+
+
+
+uiCreateDisplayFieldLinkToXMLTemplate(relation,field) ::= << <(uiCreateDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > >>
+uiCreateDisplayFieldLinkToXMLMap ::= [ 
+   "INTEGER"   : "uiCreateDisplayFieldLinkToXMLINTEGER",
+   "REAL"      : "uiCreateDisplayFieldLinkToXMLREAL",
+   "GUID"      : "uiCreateDisplayFieldLinkToXMLGUID",
+   "BLOB"      : "uiCreateDisplayFieldLinkToXMLBLOB",
+   "INCLUSIVE" : "uiCreateDisplayFieldLinkToXMLINCLUSIVE",
+   "BOOL"      : "uiCreateDisplayFieldLinkToXMLBOOL",
+   "DOUBLE"    : "uiCreateDisplayFieldLinkToXMLDOUBLE",
+   "SHORT"     : "uiCreateDisplayFieldLinkToXMLSHORT",
+   "FLOAT"     : "uiCreateDisplayFieldLinkToXMLFLOAT",
+   "EXCLUSIVE" : "uiCreateDisplayFieldLinkToXMLEXCLUSIVE",
+   "TEXT"      : "uiCreateDisplayFieldLinkToXMLTEXT",
+   "FK"        : "uiCreateDisplayFieldLinkToXMLFK",
+   "FILE"      : "uiCreateDisplayFieldLinkToXMLFILE",
+   "LONG"      : "uiCreateDisplayFieldLinkToXMLLONG",
+   "SERIAL"    : "uiCreateDisplayFieldLinkToXMLSERIAL",
+   "TIMESTAMP" : "uiCreateDisplayFieldLinkToXMLTIMESTAMP",
+   "TYPE"      : "uiCreateDisplayFieldLinkToXMLTYPE", 
+   default: key
+]
+uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
+<field.name.camel>ET = (EditText) getView().findViewById(R.id.<relation.name.snake>_create_value_<field.name.snake>);
+>>
+uiCreateDisplayFieldLinkToXMLINTEGER(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLREAL(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLGUID(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateDisplayFieldLinkToXMLINCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLBOOL(relation,field) ::= << 
+<field.name.camel>TB = (ToggleButton) getView().findViewById(R.id.<relation.name.snake>_create_value_<field.name.snake>);
+>> 
+uiCreateDisplayFieldLinkToXMLDOUBLE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLSHORT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLFLOAT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLEXCLUSIVE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLTEXT(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLFK(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLFILE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLLONG(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLSERIAL(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLTIMESTAMP(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >> 
+uiCreateDisplayFieldLinkToXMLTYPE(relation,field) ::= << <uiCreateDisplayFieldLinkToXMLDefaultTemplate(relation,field) > >>  
+
+
+
+
+uiCreateSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiCreateSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
+uiCreateSetDisplayViewFromOrmObjectMap ::= [ 
+   "INTEGER"   : "uiCreateSetDisplayViewFromOrmObjectINTEGER",
+   "REAL"      : "uiCreateSetDisplayViewFromOrmObjectREAL",
+   "GUID"      : "uiCreateSetDisplayViewFromOrmObjectGUID",
+   "BLOB"      : "uiCreateSetDisplayViewFromOrmObjectBLOB",
+   "INCLUSIVE" : "uiCreateSetDisplayViewFromOrmObjectINCLUSIVE",
+   "BOOL"      : "uiCreateSetDisplayViewFromOrmObjectBOOL",
+   "DOUBLE"    : "uiCreateSetDisplayViewFromOrmObjectDOUBLE",
+   "SHORT"     : "uiCreateSetDisplayViewFromOrmObjectSHORT",
+   "FLOAT"     : "uiCreateSetDisplayViewFromOrmObjectFLOAT",
+   "EXCLUSIVE" : "uiCreateSetDisplayViewFromOrmObjectEXCLUSIVE",
+   "TEXT"      : "uiCreateSetDisplayViewFromOrmObjectTEXT",
+   "FK"        : "uiCreateSetDisplayViewFromOrmObjectFK",
+   "FILE"      : "uiCreateSetDisplayViewFromOrmObjectFILE",
+   "LONG"      : "uiCreateSetDisplayViewFromOrmObjectLONG",
+   "SERIAL"    : "uiCreateSetDisplayViewFromOrmObjectSERIAL",
+   "TIMESTAMP" : "uiCreateSetDisplayViewFromOrmObjectTIMESTAMP",
+   "TYPE"      : "uiCreateSetDisplayViewFromOrmObjectTYPE", 
+   default: key
+]
+uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <<
+<field.name.camel>ET.setText(<javaMethodTypeMap.(field.dtype)>.valueOf( <relation.name.camel>Data.<field.name.camel>).toString());
+>>
+uiCreateSetDisplayViewFromOrmObjectINTEGER(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectREAL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectGUID(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateSetDisplayViewFromOrmObjectINCLUSIVE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectDOUBLE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectSHORT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectFLOAT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectEXCLUSIVE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectTEXT(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectFK(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectFILE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectLONG(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectSERIAL(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectTIMESTAMP(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >> 
+uiCreateSetDisplayViewFromOrmObjectTYPE(relation,field) ::= << <uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) > >>  
+
+
+
+uiCreateConvertValuesFromViewsToJavaTemplate(relation,field) ::= << <(uiCreateConvertValuesFromViewsToJavaMap.(field.dtype))(relation,field) > >>
+uiCreateConvertValuesFromViewsToJavaMap ::= [ 
+   "INTEGER"   : "uiCreateConvertValuesFromViewsToJavaINTEGER",
+   "REAL"      : "uiCreateConvertValuesFromViewsToJavaREAL",
+   "GUID"      : "uiCreateConvertValuesFromViewsToJavaGUID",
+   "BLOB"      : "uiCreateConvertValuesFromViewsToJavaBLOB",
+   "INCLUSIVE" : "uiCreateConvertValuesFromViewsToJavaINCLUSIVE",
+   "BOOL"      : "uiCreateConvertValuesFromViewsToJavaBOOL",
+   "DOUBLE"    : "uiCreateConvertValuesFromViewsToJavaDOUBLE",
+   "SHORT"     : "uiCreateConvertValuesFromViewsToJavaSHORT",
+   "FLOAT"     : "uiCreateConvertValuesFromViewsToJavaFLOAT",
+   "EXCLUSIVE" : "uiCreateConvertValuesFromViewsToJavaEXCLUSIVE",
+   "TEXT"      : "uiCreateConvertValuesFromViewsToJavaTEXT",
+   "FK"        : "uiCreateConvertValuesFromViewsToJavaFK",
+   "FILE"      : "uiCreateConvertValuesFromViewsToJavaFILE",
+   "LONG"      : "uiCreateConvertValuesFromViewsToJavaLONG",
+   "SERIAL"    : "uiCreateConvertValuesFromViewsToJavaSERIAL",
+   "TIMESTAMP" : "uiCreateConvertValuesFromViewsToJavaTIMESTAMP",
+   "TYPE"      : "uiCreateConvertValuesFromViewsToJavaTYPE", 
+   default: key
+]
+uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) ::= <<
+<field.name.camel> = <javaMethodTypeMap.(field.dtype)>.valueOf(<field.name.camel>Createable.toString());
+>>
+uiCreateConvertValuesFromViewsToJavaINTEGER(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaREAL(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaGUID(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaBLOB(relation,field) ::= << // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way >> 
+uiCreateConvertValuesFromViewsToJavaINCLUSIVE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaBOOL(relation,field) ::= << 
+if (<field.name.camel>Boolean == true) {
+    <field.name.camel> = 1;
+} else {
+    <field.name.camel> = 0;
+}
+>> 
+uiCreateConvertValuesFromViewsToJavaDOUBLE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaSHORT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaFLOAT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaEXCLUSIVE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaTEXT(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaFK(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaFILE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaLONG(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaSERIAL(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaTIMESTAMP(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >> 
+uiCreateConvertValuesFromViewsToJavaTYPE(relation,field) ::= << <uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) > >>  
+
+
+
