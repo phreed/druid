@@ -1,8 +1,8 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>
-src<delimiter>
+<paths.src_main_java><delimiter>
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>

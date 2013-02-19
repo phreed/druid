@@ -1,7 +1,10 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-  <directory.path><delimiter>res<delimiter>layout<delimiter><item.name.snake>_edit_fragment.xml
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
+  <directory.path>
+  <paths.src_main_resources><delimiter>
+  layout<delimiter>
+  <item.name.snake>_edit_fragment.xml
 %>
 
 SKELETON(contract,item) ::= <<

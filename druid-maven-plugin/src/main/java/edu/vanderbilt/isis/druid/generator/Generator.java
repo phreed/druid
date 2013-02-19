@@ -29,7 +29,6 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import edu.vanderbilt.isis.druid.generator.Contract.Name;
 import edu.vanderbilt.isis.druid.parser.BuildComponentListener;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestLexer;
 import edu.vanderbilt.isis.druid.parser.ComponentManifestParser;
@@ -48,8 +47,21 @@ public class Generator {
         return logger;
     }
 
+    private static String makePath(final String... segs) {
+        final StringBuilder sb = new StringBuilder();
+        for (final String seg : segs) {
+            sb.append(seg).append(File.separatorChar);
+        }
+        return sb.toString(); 
+    }
     public Generator(final Logger logger) {
         this.logger = logger;
+        this.pathSet = new HashMap<String,String>();
+        this.pathSet.put("src_main_java", makePath("src","main","java"));
+        this.pathSet.put("src_main_resource", makePath("src","main","resource"));
+        this.pathSet.put("src_test_java", makePath("src","test","java"));
+        this.pathSet.put("src_test_resource", makePath("src","test","resource"));
+        this.pathSet.put("base", "");
     }
 
     private File contractFile = new File("contract.xml");
@@ -60,18 +72,23 @@ public class Generator {
     private String templateKey;
     private String templateManifestFileName;
 
-    private File skelOutputDir;
+    private Map<String,String> pathSet;
     private File baseOutputDir;
+    private File skelOutputDir;
     private boolean isSkeleton;
     private Each each;
 
-    public void setSkelOutputDir(final File val) {
-        this.skelOutputDir = val;
+    public void setPathSet(final Map<String,String> val) {
+        this.pathSet.putAll(val);
     }
 
     public void setBaseOutputDir(final File val) {
         this.baseOutputDir = val;
     }
+    public void setSkelOutputDir(final File val) {
+        this.skelOutputDir = val;
+    }
+    
     public void setMode(final Map<String,String> modeMap) {
         final StringBuilder sb = new StringBuilder();
         int ix = 0;
@@ -316,8 +333,8 @@ public class Generator {
 
         try {
             stFileName.add("delimiter", File.separatorChar);
-            stFileName
-                    .add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
+            stFileName.add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
+            stFileName.add("paths", this.pathSet);
             stFileName.add("contract", contract);
             stFileName.add("isSkeleton", this.isSkeleton);
         } catch (IllegalArgumentException ex) {

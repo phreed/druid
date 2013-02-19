@@ -1,7 +1,10 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-  <directory.path><delimiter>res<delimiter>values-sw600dp<delimiter>account_preferences.xml
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
+  <directory.path><delimiter>
+  <paths.src_main_resources><delimiter>
+  values-sw600dp<delimiter>
+  account_preferences.xml
 %>
 
 SKELETON(contract) ::= <<
