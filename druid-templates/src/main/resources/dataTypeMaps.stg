@@ -1,5 +1,35 @@
 
 
+isFieldTyped ::= [
+   "FILE"      : true,
+   "BLOB"      : true,
+   default     : false
+]
+
+isFieldWidetSuppressed ::= [
+   "BLOB"      : true,
+   default     : false
+]
+
+isFieldEnumerable ::= [
+        "SERIAL"    : false,
+        "FK"        : false,
+        "EXCLUSIVE" : false,
+        "INCLUSIVE" : false,
+        "SHORT"     : true,
+        "INTEGER"   : true,
+        "BOOL"      : true,
+        "LONG"      : true,
+        "TIMESTAMP" : false,
+        "REAL"      : true,
+        "GUID"      : false,
+        "TEXT"      : true,
+        "BLOB"      : false,
+        "FILE"      : false,
+        "TYPE"      : false,
+        default     : false
+]
+
 literalValueMap ::= [
         "SERIAL":    {"<value>"},
         "FK":        {<value>},
@@ -930,26 +960,4 @@ if (<field.name.camel>Boolean == true) {
     <field.name.camel> = 0;
 }
 %> 
-
-getColumnDeclarationTemplate(field) ::= <%
-<(getColumnDeclarationMap.(field.dtype))(field)>
-%>
-getColumnDeclarationMap ::= [
-  "BLOB"  : "getColumnDeclarationMapTyped",
-  "FILE"  : "getColumnDeclarationMapTyped",
-  default : "getColumnDeclarationMapNotTyped"
-]
-getColumnDeclarationMapTyped(field) ::= <%
-public static final String <field.name.cobra> = "<field.name.cobra>";
-public static final String <field.name.cobra>_TYPE = "<field.name.cobra>_type";
-%>
-getColumnDeclarationMapNotTyped(field) ::= <%
-public static final String <field.name.cobra> = "<field.name.cobra>";
-%>
-
-isFieldTyped ::= [
-   "FILE"      : true,
-   "BLOB"      : true,
-   default     : false
-]
 

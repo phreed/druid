@@ -1,7 +1,8 @@
 
+import "dataTypeMaps.stg"
+
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>
-src<delimiter>
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>
@@ -18,14 +19,40 @@ package <package(contract)>;
 
 public class <contract.root.name.bactrian>ContentDescriptorBase {
 
-   public static final int DATABASE_VERSION = 4;
+   public static final int DATABASE_VERSION = 1;
       
    public static final String DATABASE_NAME = "<contract.root.name.camel>.db";
 
+   // ST:createRelationEnum:inline
+   <contract.root.relations: { relation | <createRelationConstants(contract.root.sponsor,relation)> }; separator="\n">
+   // ST:createRelationEnum:complete
 }
 // ST:BODY:end
 >>
 
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
 
+createRelationConstants(sponsor,relation) ::= <<
+/**
+ * add elements to the enumeration as needed
+ */
+public static class <relation.name.bactrian>Constants {
+}
+>>
+
+createRelationFieldEnum(sponsor,relation,field) ::= <<
+<if(isFieldEnumerable.(field.dtype))>
+/**
+ * add elements to the enumeration as needed
+ */
+public static enum <field.name.bactrian>Enum {
+  DEFAULT(<javaTypeDefaultMap.(field.dtype)>);
+
+  public final <javaTypeMap.(field.dtype)> code;
+  private <field.name.bactrian>Enum(<javaTypeMap.(field.dtype)>int code) {
+     this.code = code;
+  }
+}
+<endif>
+>>
 

@@ -2,7 +2,6 @@ import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>
-src<delimiter>
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>
@@ -73,7 +72,7 @@ public class <contract.root.name.bactrian>ContentDescriptor
 
   }
   // ST:createRelationMetaData:inline
-   <contract.root.relations: { relation | <createRelationMetaData(relation,i)> }; separator="\n">
+   <contract.root.relations: { relation | <createRelationMetaData(contract.root.sponsor,relation,i)> }; separator="\n">
    // ST:createRelationMetaData:complete
   
 }
@@ -88,7 +87,7 @@ matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH, <relation.name.bactrian
 matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH_FOR_ID, <relation.name.bactrian>.PATH_FOR_ID_TOKEN);
 >>
 
-createRelationMetaData(relation, index) ::= <<
+createRelationMetaData(sponsor,relation, index) ::= <<
 // Define a static class that represents description of stored content
 // entity.
 public static class <relation.name.bactrian> {
@@ -109,9 +108,9 @@ public static class <relation.name.bactrian> {
   public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH).build();
 
 <if(contract.mode.isAmmo)>
-        public static final String CONTENT_TOPIC = "ammo/<sponsor>.<name.snake>";
+        public static final String CONTENT_TOPIC = "ammo/<sponsor>.<relation.name.snake>";
 <else>
-        public static final String CONTENT_TOPIC = "topic/<sponsor>.<name.snake>";
+        public static final String CONTENT_TOPIC = "topic/<sponsor>.<relation.name.snake>";
 <endif>
 
   // TODO figure out why 'db' is here...
@@ -127,10 +126,11 @@ public static class <relation.name.bactrian> {
         
 
   // the names and order of ALL columns, including internal use ones
-  public static final String[] ALL_COLUMN_NAMES = { Cols.ID,
+  public static final String[] ALL_COLUMN_NAMES = { 
+        Cols.ID,
   // ST:getColumnNames:inline
         <relation.fields: { field | <getColumnNames(field)> }; separator=",\n">
-        // ST:getColumnNames:complete
+  // ST:getColumnNames:complete
   };
 
   // a static class to store columns in entity
@@ -148,13 +148,18 @@ public static class <relation.name.bactrian> {
 }
 >>
 
-getColumnNames(field) ::="Cols.<field.name.cobra>"
+getColumnNames(field) ::= <<
+<if(isFieldTyped.(field.dtype))>
+Cols.<field.name.cobra>_TYPE,
+<endif>
+Cols.<field.name.cobra>
+>>
 
-getColumnDeclaration(field) ::= <%
-public static final String <field.name.cobra> = "<field.name.cobra>";
+getColumnDeclaration(field) ::= <<
 <if(isFieldTyped.(field.dtype))>
 public static final String <field.name.cobra>_TYPE = "<field.name.cobra>_TYPE";
 <endif>
-%>
+public static final String <field.name.cobra> = "<field.name.cobra>";
+>>
 
 
