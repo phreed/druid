@@ -13,8 +13,8 @@
     <!-- <module>gaia/src/main/resources/locator</module> -->
     <module>druid-maven-plugin</module>
     <module>druid-templates</module>
-    <module>location-sample</module>
-    <module>all-types-sample</module>
+<!--    <module>location-sample</module> -->
+<!--    <module>all-types-sample</module> -->
     <module>archetype</module>
   </modules>
 

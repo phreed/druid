@@ -1,0 +1,31 @@
+
+PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>
+src<delimiter>
+<contract.root.sponsor.path><delimiter>
+<contract.root.name.camel><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>ContentDescriptorBase.java
+%>
+
+SKELETON(contract) ::= <<
+>>
+
+BODY(contract) ::= <<
+// ST:BODY:start
+
+package <package(contract)>;
+
+public class <contract.root.name.bactrian>ContentDescriptorBase {
+
+   public static final int DATABASE_VERSION = 4;
+      
+   public static final String DATABASE_NAME = "<contract.root.name.camel>.db";
+
+}
+// ST:BODY:end
+>>
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
+
+
