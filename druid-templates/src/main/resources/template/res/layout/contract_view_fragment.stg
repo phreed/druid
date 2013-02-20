@@ -1,6 +1,6 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, path, contract, isSkeleton, item) ::= <%
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
   <directory.path><delimiter>
   <paths.src_main_resources><delimiter>
   layout<delimiter>

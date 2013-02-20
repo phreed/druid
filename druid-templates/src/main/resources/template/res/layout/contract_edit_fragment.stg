@@ -35,17 +35,10 @@ BODY(contract,item) ::= <<
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    
-    
-    
-    \<!-- ST:putFirstLabelAndValue:start -->
-    <first(item.fields): { field | <putFirstLabelAndValue(item, field)> }; separator="\n\n">
-    \<!-- ST:putFirstLabelAndValue:end -->
-    
-    \<!-- ST:putLabelAndValue:start -->
-    <rest(item.fields): { field | <putLabelAndValue(item, field)> }; separator="\n\n">
-    \<!-- ST:putLabelAndValue:end -->
-
+    \<!-- ST:printPairLabelValue:start -->
+    <item.fields: { field | <printPairLabelValue(item, field)> }; separator="\n\n">
+    \<!-- ST:printPairLabelValue:end -->
+  
 \</RelativeLayout>
 \</ScrollView>
 
@@ -80,71 +73,38 @@ BODY(contract,item) ::= <<
 \</RelativeLayout>
 >>
 
-
 printPairLabelValue(relation,field) ::= <<
 \<!-- <field.name.snake> label/value pair -->
-<resLayoutEditLabelTemplate(item, field)>
-<resLayoutEditValueTemplate(item, field)>
+<resLayoutEditLabelTemplate(relation, field)>
+<resLayoutEditValueTemplate(relation, field)>
 >>
 
-
-putFirstLabel(relation,field) ::= <<
- \<TextView
-        android:id="@+id/<relation.name.snake>_edit_<field.name.snake>_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/<relation.name.snake>_edit_<field.name.snake>"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBaseline="@+id/<relation.name.snake>_edit_<field.name.snake>"
-        android:text="@string/<relation.name.snake>_edit_label_<field.name.snake>"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
->>
-
-putFirstValue(relation,field) ::= <<
-\<EditText
-        android:id="@+id/<relation.name.snake>_edit_<field.name.snake>"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:hint="@string/<relation.name.snake>_edit_default_value_<field.name.snake>" 
-        />
->>
-
-
-putLabel(relation,field) ::= <<
+resLayoutEditLabelDefualtTemplate(relation,field) ::= <<
 \<TextView
         android:id="@+id/<relation.name.snake>_edit_<field.name.snake>_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="left"
-        android:text="@string/<relation.name.snake>_view_label_<field.name.snake>"
         android:layout_alignBaseline="@+id/<relation.name.snake>_edit_<field.name.snake>"
+        android:layout_alignBottom="@+id/<relation.name.snake>_edit_<field.name.snake>"
+        android:layout_alignParentLeft="true"
+        android:text="@string/<relation.name.snake>_edit_label_<field.name.snake>"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 >>
 
-putValue(relation,field) ::= <<
+resLayoutEditValueDefualtTemplate(relation,field) ::= <<
 \<EditText
         android:id="@+id/<relation.name.snake>_edit_<field.name.snake>"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        <if(field.predecessor)>
         android:layout_below="@+id/<relation.name.snake>_edit_<field.predecessor.name.snake>"
+        <else>
+        android:layout_alignParentTop="true"
+        <endif>
         android:hint="@string/<relation.name.snake>_edit_default_value_<field.name.snake>" 
         />
 >>
-
-
-resLayoutEditLabelDefualtTemplate(relation,field) ::= <<
->>
-
-resLayoutEditValueDefualtTemplate(relation,field) ::= <<
->>
-
-
-resLayoutEditLabelTemplate(relation,field) ::= << <(resLayoutEditLabelMap.(field.dtype))(relation,field) > >>
-resLayoutEditValueTemplate(relation,field) ::= << <(resLayoutEditValueMap.(field.dtype))(relation,field) > >>
 
 resLayoutEditLabelMap ::= [ 
    "INTEGER" : "resLayoutEditLabelINTEGER",
@@ -167,6 +127,27 @@ resLayoutEditLabelMap ::= [
    default: key
 ]
 
+resLayoutEditLabelTemplate(relation,field) ::= << <(resLayoutEditLabelMap.(field.dtype))(relation,field) > >>
+
+resLayoutEditValueINTEGER(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueREAL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueGUID(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueBLOB(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueINCLUSIVE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueBOOL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueDOUBLE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueSHORT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueFLOAT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueEXCLUSIVE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueTEXT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueFK(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueFILE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueLONG(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueSERIAL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueTIMESTAMP(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
+resLayoutEditValueTYPE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >>  
+
+
 resLayoutEditValueMap ::= [ 
    "INTEGER" : "resLayoutEditValueINTEGER",
    "REAL" : "resLayoutEditValueREAL",
@@ -187,25 +168,7 @@ resLayoutEditValueMap ::= [
    "TYPE" : "resLayoutEditValueTYPE", 
    default: key
 ]
-
-
-resLayoutEditValueINTEGER(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueREAL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueGUID(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueBLOB(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueINCLUSIVE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueBOOL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueDOUBLE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueSHORT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueFLOAT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueEXCLUSIVE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueTEXT(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueFK(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueFILE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueLONG(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueSERIAL(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueTIMESTAMP(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >> 
-resLayoutEditValueTYPE(relation,field) ::= << <resLayoutEditValueDefualtTemplate(relation,field) > >>  
+resLayoutEditValueTemplate(relation,field) ::= << <(resLayoutEditValueMap.(field.dtype))(relation,field) > >>
 
 resLayoutEditLabelINTEGER(relation,field) ::= << <resLayoutEditLabelDefualtTemplate(relation,field) > >> 
 resLayoutEditLabelREAL(relation,field) ::= << <resLayoutEditLabelDefualtTemplate(relation,field) > >> 
