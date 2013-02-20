@@ -16,6 +16,7 @@
 <!--    <module>location-sample</module> -->
 <!--    <module>all-types-sample</module> -->
     <module>archetype</module>
+    <module>druid-java-lib</module>
   </modules>
 
  <properties>

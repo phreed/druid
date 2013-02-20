@@ -1,7 +1,13 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
-<directory.path><delimiter>src<delimiter><contract.root.sponsor.path><delimiter><contract.root.name.camel><delimiter>ui<delimiter><item.name.camel><delimiter>Edit<item.name.bactrian>Fragment.java
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>
+<paths.src_main_java><delimiter>
+<contract.root.sponsor.path><delimiter>
+<contract.root.name.camel><delimiter>
+ui<delimiter>
+<item.name.camel><delimiter>
+Edit<item.name.bactrian>Fragment.java
 %>
 
 

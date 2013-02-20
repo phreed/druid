@@ -1,8 +1,8 @@
 import "dataTypeMaps.stg"
 
-PATH(delimiter, directory, contract, isSkeleton, item) ::= <%
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
 <directory.path><delimiter>
-src<delimiter>
+<paths.src_main_java><delimiter>
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>
@@ -24,13 +24,6 @@ BODY(contract) ::= <<
 package <package(contract)>;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
-import android.util.Log;
 
 abstract public class <contract.root.name.bactrian>ProviderBase extends ContentProvider {
 
