@@ -122,9 +122,9 @@ public class Create<item.name.bactrian>Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // Get the EditTexts
-        // ST:uiCreateDisplayFieldLinkToXMLTemplate:start
-        <item.fields: { field | <uiCreateDisplayFieldLinkToXMLTemplate(item,field)> }; separator="\n">
-        // ST:uiCreateDisplayFieldLinkToXMLTemplate:end 
+        // ST:uiCreateDisplayFieldLinkToXmlTemplate:start
+        <item.fields: { field | <uiCreateDisplayFieldLinkToXmlTemplate(item,field)> }; separator="\n">
+        // ST:uiCreateDisplayFieldLinkToXmlTemplate:end 
 
         buttonClear = (Button) getView().findViewById(
                 R.id.<item.name.snake>_create_button_reset);
