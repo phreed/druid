@@ -81,14 +81,13 @@ public class Generator {
     public void setPathSet(final Map<String,String> val) {
         this.pathSet.putAll(val);
     }
+public void setSkelOutputDir(final File val) {
+		this.skelOutputDir = val;
+	}
 
     public void setBaseOutputDir(final File val) {
         this.baseOutputDir = val;
     }
-    public void setSkelOutputDir(final File val) {
-        this.skelOutputDir = val;
-    }
-    
     public void setMode(final Map<String,String> modeMap) {
         final StringBuilder sb = new StringBuilder();
         int ix = 0;
@@ -234,7 +233,8 @@ public class Generator {
      * @throws GeneratorException
      */
     public void build() throws GeneratorException {
-        final Contract contract = new ContractXmlParser(getLogger()).parseFile(this.contractFile, this.mode);
+		final Contract contract = new ContractXmlParser(getLogger()).parseFile(
+				this.contractFile, this.mode);
         logger.info("contract {}", contract);
         STGroup.trackCreationEvents = true;
 
@@ -246,7 +246,8 @@ public class Generator {
             if (Each.CONTRACT.equals(this.each)) {
                 buildPartUsingTemplate(contract, this.templateFileName);
             } else {
-                buildPartUsingTemplate(contract, this.each, this.templateFileName);
+				buildPartUsingTemplate(contract, this.each,
+						this.templateFileName);
             }
             return;
         }
@@ -264,13 +265,15 @@ public class Generator {
 
                 final File templateManifestFile = new File(this.templateManifestFileName);
                 if (!templateManifestFile.isFile()) {
-                    throw new GeneratorException("could not find template manifest "
+					throw new GeneratorException(
+							"could not find template manifest "
                             + this.templateManifestFileName);
                 }
                 try {
                     inputStream = new FileInputStream(templateManifestFile);
                 } catch (FileNotFoundException e) {
-                    throw new GeneratorException("could not open component manifest file "
+					throw new GeneratorException(
+							"could not open component manifest file "
                             + this.templateManifestFileName);
                 }
             } else {
@@ -316,8 +319,9 @@ public class Generator {
      * @return
      * @throws GeneratorException
      */
-    public void buildPartUsingTemplate(final Contract contract, final String eachName,
-            final String templateFileName) throws GeneratorException {
+	public void buildPartUsingTemplate(final Contract contract,
+			final String eachName, final String templateFileName)
+			throws GeneratorException {
         final Each forEach = Each.getValue(eachName);
         buildPartUsingTemplate(contract, forEach, templateFileName);
     }
@@ -333,8 +337,8 @@ public class Generator {
 
         try {
             stFileName.add("delimiter", File.separatorChar);
-            stFileName.add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
-            stFileName.add("paths", this.pathSet);
+            stFileName
+                    .add("directory", (this.isSkeleton ? this.skelOutputDir : this.baseOutputDir));
             stFileName.add("contract", contract);
             stFileName.add("isSkeleton", this.isSkeleton);
         } catch (IllegalArgumentException ex) {
@@ -410,8 +414,9 @@ public class Generator {
 
     }
 
-    public void buildPartUsingTemplate(final Contract contract, final Each forEach,
-            final String templateFileName) throws GeneratorException {
+	public void buildPartUsingTemplate(final Contract contract,
+			final Each forEach, final String templateFileName)
+			throws GeneratorException {
 
         final STGroup stg = getGroup(getLogger(), templateFileName);
         final ST stFileName = stg.getInstanceOf("PATH");
@@ -441,7 +446,8 @@ public class Generator {
         for (Object item : all) {
             stFileName.add("item", item);
             final String outputFileName = stFileName.render();
-            logger.info("building {} using {} for a {}", outputFileName, templateFileName, forEach);
+			logger.info("building {} using {} for a {}", outputFileName,
+					templateFileName, forEach);
             final File outputFile = new File(outputFileName);
             if (this.isSkeleton && outputFile.exists()) {
                 continue;
@@ -464,14 +470,16 @@ public class Generator {
                     try {
                         os.close();
                     } catch (IOException ex) {
-                        throw new GeneratorException("problem closing output file", ex);
+						throw new GeneratorException(
+								"problem closing output file", ex);
                     }
             }
         }
     }
 
-    public void buildPartUsingCopy(final Contract contract, final String inputFilePath,
-            final String outputPathTemplate) throws GeneratorException {
+	public void buildPartUsingCopy(final Contract contract,
+			final String inputFilePath, final String outputPathTemplate)
+			throws GeneratorException {
         final ST stFileName = new ST(outputPathTemplate);
         initPartUsingTemplate(contract, stFileName);
 
@@ -494,7 +502,8 @@ public class Generator {
             if (this.templateJarName == null) {
                 final File inputFile = new File(inputFilePath);
                 if (!inputFile.isFile()) {
-                    throw new GeneratorException("could not find template manifest "
+					throw new GeneratorException(
+							"could not find template manifest "
                             + this.templateManifestFileName);
                 }
                 try {
@@ -578,14 +587,15 @@ public class Generator {
                 if (this.templateJarName == null) {
                     final File inputFile = new File(inputFilePath);
                     if (!inputFile.isFile()) {
-                        throw new GeneratorException("could not find template manifest "
+						throw new GeneratorException(
+								"could not find template manifest "
                                 + this.templateManifestFileName);
                     }
                     try {
                         inputStream = new FileInputStream(inputFile);
                     } catch (FileNotFoundException e) {
-                        throw new GeneratorException("could not open input file "
-                                + inputFilePath);
+						throw new GeneratorException(
+								"could not open input file " + inputFilePath);
                     }
                 } else {
                     final Thread ct = Thread.currentThread();
@@ -595,7 +605,8 @@ public class Generator {
                 try {
                     outputStream = new FileOutputStream(outputFile);
                 } catch (FileNotFoundException ex) {
-                    throw new GeneratorException("problem closing output stream", ex);
+					throw new GeneratorException(
+							"problem closing output stream", ex);
                 }
 
                 final ReadableByteChannel inputChannel = Channels.newChannel(inputStream);
@@ -603,7 +614,8 @@ public class Generator {
                 try {
                     Generator.fastChannelCopy(inputChannel, outputChannel);
                 } catch (IOException ex) {
-                    throw new GeneratorException("problem closing output stream", ex);
+					throw new GeneratorException(
+							"problem closing output stream", ex);
                 }
 
             } finally {
@@ -612,14 +624,16 @@ public class Generator {
                         inputStream.close();
                     }
                 } catch (IOException ex) {
-                    throw new GeneratorException("problem closing input stream", ex);
+					throw new GeneratorException(
+							"problem closing input stream", ex);
                 }
                 try {
                     if (outputStream != null) {
                         outputStream.close();
                     }
                 } catch (IOException ex) {
-                    throw new GeneratorException("problem closing output stream", ex);
+					throw new GeneratorException(
+							"problem closing output stream", ex);
                 }
             }
         }

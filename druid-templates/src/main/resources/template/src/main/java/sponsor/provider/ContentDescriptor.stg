@@ -102,6 +102,7 @@ public static class <relation.name.bactrian> {
   // the token value are used to register path in matcher (see above)
   public static final String PATH = "<relation.name.camel>s";
   public static final int PATH_TOKEN = <index>10;
+
   public static final String PATH_FOR_ID = "<relation.name.camel>/*";
   public static final int PATH_FOR_ID_TOKEN = <index>20;
 
