@@ -30,27 +30,43 @@ isFieldEnumerable ::= [
         default     : false
 ]
 
-literalValueMap ::= [
-        "SERIAL":    {"<value>"},
-        "FK":        {<value>},
-        "EXCLUSIVE": {<prefix>.<value>},
-        "INCLUSIVE": {<prefix>.<value>},
-        "SHORT":     {<value>},
-        "INTEGER":   {<value>},
-        "BOOL":      {<value>},
-        "LONG":      {<value>},
-        "TIMESTAMP": {<value>},
-        "REAL":      {<value>},
-        "GUID":      {"<value>"},
-        "TEXT":      {"<value>"},
-        "BLOB":      {"<value>"},
-        "FILE":      {"<value>"},
-        "TYPE":      {"<value>"},
-        default:     {"<value>"}
+fieldLiteral(field) ::= <%
+<(fieldLiteralMap.(field.dtype))(field)>
+%>
+fieldLiteralMap ::= [
+        "SERIAL":    "fieldLiteralQuoted",
+        "FK":        "fieldLiteralUnquoted",
+        "EXCLUSIVE": "fieldLiteralEnumerated",
+        "INCLUSIVE": "fieldLiteralEnumerated",
+        "SHORT":     "fieldLiteralUnquoted",
+        "INTEGER":   "fieldLiteralUnquoted",
+        "BOOL":      "fieldLiteralUnquoted",
+        "LONG":      "fieldLiteralUnquoted",
+        "TIMESTAMP": "fieldLiteralUnquoted",
+        "REAL":      "fieldLiteralUnquoted",
+        "GUID":      "fieldLiteralQuoted",
+        "TEXT":      "fieldLiteralQuoted",
+        "BLOB":      "fieldLiteralQuoted",
+        "FILE":      "fieldLiteralQuoted",
+        "TYPE":      "fieldLiteralQuoted",
+        default:     "fieldLiteralQuoted"
 ]
-
-literalValue(type,value,prefix) ::= <%
-<literalValueMap.(type)>
+fieldLiteralQuoted(field) ::= <%
+<if(field.default)>
+"<field.default>"
+<else>
+"<javaTypeDefaultMap.(field.dtype)>"
+<endif>
+%>
+fieldLiteralUnquoted(field) ::= <%
+<if(field.default)>
+<field.default>
+<else>
+<javaTypeDefaultMap.(field.dtype)>
+<endif>
+%>
+fieldLiteralEnumerated(field) ::= <%
+<field.name.cobra>.<field.default>
 %>
 
 
