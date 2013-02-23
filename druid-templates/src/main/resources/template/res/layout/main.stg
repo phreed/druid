@@ -2,7 +2,7 @@ import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
   <directory.path><delimiter>
-  <paths.src_main_resources><delimiter>
+  <paths.src_main_resource><delimiter>
   layout<delimiter>
   main.xml
 %>

@@ -32,7 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Button;
 
-<item.dataTypes: {dataType | <androidEditDefaultViewTypeImportMap.(dataType)> }; separator="\n">
+<item.DataTypesUsed: {dataType | <androidEditDefaultViewTypeImportMap.(dataType)> }; separator="\n">
 
 import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
@@ -230,8 +230,8 @@ public class Edit<item.name.bactrian>Fragment extends Fragment {
         return false;
     }
 
-    public int getUniqueKey() {
-        return getArguments().getInt(rowIdentifyerTAG, 0);
+    public long getUniqueKey() {
+        return getArguments().getLong(rowIdentifyerTAG, 0);
     }
 
 }
@@ -261,3 +261,293 @@ Editable <field.name.camel>Editable = <field.name.camel>ET.getText();
 putConstructorValues(field) ::= <<
 <field.name.camel>
 >>
+
+androidEditDefaultViewTypeImportMap ::= [
+        "SERIAL":"import android.widget.EditText;",
+        "FK"    :"import android.widget.EditText;",
+        "EXCLUSIVE"  :"import android.widget.EditText;",
+        "INCLUSIVE"  :"import android.widget.EditText;",
+        "SHORT":"import android.widget.EditText;",
+        "INTEGER":"import android.widget.EditText;",
+        "BOOL"  :"import android.widget.ToggleButton;",
+        "LONG"  :"import android.widget.EditText;",
+        "TIMESTAMP":"import android.widget.EditText;",
+        "REAL"  :"import android.widget.EditText;",
+        "GUID"  :"import android.widget.EditText;",
+        "TEXT"  :"import android.widget.EditText;",
+        "BLOB"  :"",
+        "FILE"  :"import android.widget.EditText;",
+        "TYPE"  :"import android.widget.EditText;",
+        "FLOAT"  :"import android.widget.EditText;",
+        "DOUBLE":"import android.widget.EditText;",
+        default: key
+]
+
+
+uiEditGetValuesFromViewsTemplate(relation,field) ::= <%
+<(uiEditGetValuesFromViewsMap.(field.dtype))(relation,field) >
+%>
+uiEditGetValuesFromViewsMap ::= [ 
+   "INTEGER"   : "uiEditGetValuesFromViewsDefaultTemplate",
+   "REAL"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "GUID"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "BLOB"      : "uiEditGetValuesFromViewsBLOB",
+   "INCLUSIVE" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "BOOL"      : "uiEditGetValuesFromViewsBOOL",
+   "DOUBLE"    : "uiEditGetValuesFromViewsDefaultTemplate",
+   "SHORT"     : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FLOAT"     : "uiEditGetValuesFromViewsDefaultTemplate",
+   "EXCLUSIVE" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TEXT"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FK"        : "uiEditGetValuesFromViewsDefaultTemplate",
+   "FILE"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "LONG"      : "uiEditGetValuesFromViewsDefaultTemplate",
+   "SERIAL"    : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TIMESTAMP" : "uiEditGetValuesFromViewsDefaultTemplate",
+   "TYPE"      : "uiEditGetValuesFromViewsDefaultTemplate", 
+   default: key
+]
+uiEditGetValuesFromViewsDefaultTemplate(relation,field) ::= <%
+Editable <field.name.camel>Editable = <field.name.camel>ET.getText();
+%>
+uiEditGetValuesFromViewsBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
+uiEditGetValuesFromViewsBOOL(relation,field) ::= <%
+// <field.name.snake> omitted, BOOL dataType, this step is un-needed
+%>
+
+
+
+uiEditDisplayFieldViewToDefaultTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) >
+%>
+uiEditDisplayFieldViewToDefaultMap ::= [ 
+   "INTEGER"    : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "REAL"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "GUID"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "BLOB"       : "uiEditDisplayFieldViewToDefaultBLOB",
+   "INCLUSIVE"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "BOOL"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "DOUBLE"     : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "SHORT"      : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FLOAT"      : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "EXCLUSIVE"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TEXT"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FK"         : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "FILE"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "LONG"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "SERIAL"     : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TIMESTAMP"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
+   "TYPE"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <%
+<field.name.camel>ET.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
+%>
+uiEditDisplayFieldViewToDefaultBLOB(relation,field)  ::= <%
+ // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
+
+
+
+uiEditDisplayFieldDeclarationTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldDeclarationMap.(field.dtype))(relation,field) >
+%>
+uiEditDisplayFieldDeclarationMap ::= [ 
+   "INTEGER"    : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "REAL"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "GUID"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "BLOB"       : "uiEditDisplayFieldDeclarationBLOB",
+   "INCLUSIVE"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "BOOL"       : "uiEditDisplayFieldDeclarationBOOL",
+   "DOUBLE"     : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "SHORT"      : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FLOAT"      : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "EXCLUSIVE"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TEXT"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FK"         : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "FILE"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "LONG"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "SERIAL"     : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TIMESTAMP"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
+   "TYPE"       : "uiEditDisplayFieldDeclarationDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <%
+EditText <field.name.camel>ET;
+%>
+uiEditDisplayFieldDeclarationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
+
+uiEditDisplayFieldDeclarationBOOL(relation,field) ::= <% 
+ToggleButton <field.name.camel>TB;
+%> 
+
+
+uiEditJavaFieldDeclarationAndInitializationTemplate(relation,field) ::= <%
+<(uiEditJavaFieldDeclarationAndInitializationMap.(field.dtype))(relation,field) >
+%>
+uiEditJavaFieldDeclarationAndInitializationMap ::= [ 
+   "INTEGER"   : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "REAL"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "GUID"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "BLOB"      : "uiEditJavaFieldDeclarationAndInitializationBLOB",
+   "INCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "BOOL"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "DOUBLE"    : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "SHORT"     : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FLOAT"     : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "EXCLUSIVE" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TEXT"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FK"        : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "FILE"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "LONG"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "SERIAL"    : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TIMESTAMP" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
+   "TYPE"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate", 
+   default: key
+]
+uiEditJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) ::= <%
+<javaTypeMap.(field.dtype)> <field.name.camel> = <javaTypeDefaultMap.(field.dtype)>;
+%>
+uiEditJavaFieldDeclarationAndInitializationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
+
+uiEditOrmConstructorFieldNameTemplate(relation,field) ::= <%
+<(uiEditOrmConstructorFieldNameMap.(field.dtype))(relation,field) >
+%>
+uiEditOrmConstructorFieldNameMap ::= [ 
+   "INTEGER"   : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "REAL"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "GUID"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "BLOB"      : "uiEditOrmConstructorFieldNameBLOB",
+   "INCLUSIVE" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "BOOL"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "DOUBLE"    : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "SHORT"     : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FLOAT"     : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "EXCLUSIVE" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TEXT"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FK"        : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "FILE"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "LONG"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "SERIAL"    : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TIMESTAMP" : "uiEditOrmConstructorFieldNameDefaultTemplate",
+   "TYPE"      : "uiEditOrmConstructorFieldNameDefaultTemplate", 
+   default: key
+]
+uiEditOrmConstructorFieldNameDefaultTemplate(relation,field) ::= <<
+<field.name.camel>
+>>
+uiEditOrmConstructorFieldNameBLOB(relation,field) ::= <%
+null, // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
+
+
+
+uiEditDisplayFieldLinkToXMLTemplate(relation,field) ::= <%
+<(uiEditDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) > 
+%>
+uiEditDisplayFieldLinkToXMLMap ::= [ 
+   "INTEGER"   : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "REAL"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "GUID"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "BLOB"      : "uiEditDisplayFieldLinkToXMLBLOB",
+   "INCLUSIVE" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "BOOL"      : "uiEditDisplayFieldLinkToXMLBOOL",
+   "DOUBLE"    : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "SHORT"     : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FLOAT"     : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "EXCLUSIVE" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TEXT"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FK"        : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "FILE"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "LONG"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "SERIAL"    : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TIMESTAMP" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
+   "TYPE"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate", 
+   default: key
+]
+uiEditDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
+<field.name.camel>ET = (EditText) getView().findViewById(R.id.<relation.name.snake>_edit_<field.name.snake>);
+>>
+uiEditDisplayFieldLinkToXMLBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%>
+
+uiEditDisplayFieldLinkToXMLBOOL(relation,field) ::= <<
+<field.name.camel>TB = (ToggleButton) getView().findViewById(R.id.<relation.name.snake>_edit_<field.name.snake>);
+>>
+
+
+uiEditSetDisplayViewFromOrmObjectTemplate(relation,field) ::= << <(uiEditSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) > >>
+uiEditSetDisplayViewFromOrmObjectMap ::= [ 
+   "INTEGER"   : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "REAL"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "GUID"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BLOB"      : "uiEditSetDisplayViewFromOrmObjectBLOB",
+   "INCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BOOL"      : "uiEditSetDisplayViewFromOrmObjectBOOL",
+   "DOUBLE"    : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SHORT"     : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FLOAT"     : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "EXCLUSIVE" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TEXT"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FK"        : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FILE"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "LONG"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SERIAL"    : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TIMESTAMP" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TYPE"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate", 
+   default: key
+]
+uiEditSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <%
+<field.name.camel>ET.setText(<javaMethodTypeMap.(field.dtype)>.valueOf( <relation.name.camel>Data.<field.name.camel>).toString());
+%>
+uiEditSetDisplayViewFromOrmObjectBLOB(relation,field) ::= <%
+ // <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way 
+%> 
+
+uiEditSetDisplayViewFromOrmObjectBOOL(relation,field) ::= <%
+<field.name.camel>TB.setChecked(<relation.name.camel>Data.<field.name.camel>);  
+%>
+
+
+
+uiEditConvertValuesFromViewsToJavaTemplate(relation,field) ::= <%
+ <(uiEditConvertValuesFromViewsToJavaMap.(field.dtype))(relation,field) >
+%>
+uiEditConvertValuesFromViewsToJavaMap ::= [ 
+   "INTEGER"   : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "REAL"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "GUID"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "BLOB"      : "uiEditConvertValuesFromViewsToJavaBLOB",
+   "INCLUSIVE" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "BOOL"      : "uiEditConvertValuesFromViewsToJavaBOOL",
+   "DOUBLE"    : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "SHORT"     : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FLOAT"     : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "EXCLUSIVE" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TEXT"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FK"        : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "FILE"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "LONG"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "SERIAL"    : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TIMESTAMP" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
+   "TYPE"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate", 
+   default: key
+]
+uiEditConvertValuesFromViewsToJavaDefaultTemplate(relation,field) ::= <%
+<field.name.camel> = <javaMethodTypeMap.(field.dtype)>.valueOf(<field.name.camel>Editable.toString());
+%>
+uiEditConvertValuesFromViewsToJavaBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
+
+uiEditConvertValuesFromViewsToJavaBOOL(relation,field) ::= <%
+<field.name.camel> =<field.name.camel>TB.isChecked();
+%>
+

@@ -1,6 +1,7 @@
 package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -287,6 +288,7 @@ public class Contract {
 		final private List<Key> keys;
 		final private Map<String, Key> keyMap;
 		final private List<Message> messages;
+		final private List<String> dataTypes;
 
 		public Name getName() {
 			return name;
@@ -311,6 +313,10 @@ public class Contract {
 		public List<Message> getMessages() {
 			return this.messages;
 		}
+		
+		public List<String> getDataTypesUsed(){
+			return this.dataTypes;
+		}
 
 		public Relation(final Name name, final Map<String, Mode> mode,
 				final List<Field> fields, final List<Key> key_set,
@@ -321,6 +327,14 @@ public class Contract {
 				field.setParent(this);
 			}
 			this.fields = fields;
+
+			dataTypes = new ArrayList<String>();
+			for (Field field : fields) {
+				if (dataTypes.contains(field.dtype) == false) {
+					dataTypes.add(field.dtype);
+				}
+			}
+
 			this.keys = key_set;
 			this.keyMap = new HashMap<String, Key>(key_set.size());
 			for (Key key : key_set) {

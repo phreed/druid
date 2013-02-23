@@ -58,7 +58,7 @@ public class Generator {
         this.logger = logger;
         this.pathSet = new HashMap<String,String>();
         this.pathSet.put("src_main_java", makePath("src","main","java"));
-        this.pathSet.put("src_main_resource", makePath("src","main","resource"));
+        this.pathSet.put("src_main_resource",makePath("src","main","resource"));
         this.pathSet.put("src_test_java", makePath("src","test","java"));
         this.pathSet.put("src_test_resource", makePath("src","test","resource"));
         this.pathSet.put("base", "");
