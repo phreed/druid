@@ -313,14 +313,28 @@ public class Contract {
 		public List<Message> getMessages() {
 			return this.messages;
 		}
-		
-		public List<String> getDataTypesUsed(){
+
+		public List<String> getDataTypesUsed() {
 			return this.dataTypes;
 		}
 
-		public Relation(final Name name, final Map<String, Mode> mode,
-				final List<Field> fields, final List<Key> key_set,
-				final List<Message> messages) {
+		public List<KeyFieldRef> getUIListViewRowLayout() {
+			System.out
+					.println("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n "
+							+ keyMap.size()
+							+ "    "
+							+ keyMap.containsKey("ui-listview-row-layout")
+							+ "   " + keyMap.toString() + " \n\n\n");
+			if (keyMap.containsKey("ui-listview-row-layout")) {
+				Key uiKey = keyMap.get("ui-listview-row-layout");
+				return uiKey.getFields();
+			}
+			return null;
+		}
+
+		public Relation(Logger logger, final Name name,
+				final Map<String, Mode> mode, final List<Field> fields,
+				final List<Key> key_set, final List<Message> messages) {
 			this.name = name;
 			this.mode = mode;
 			for (Field field : fields) {
@@ -332,6 +346,22 @@ public class Contract {
 			for (Field field : fields) {
 				if (dataTypes.contains(field.dtype) == false) {
 					dataTypes.add(field.dtype);
+				}
+			}
+			for (Key key : key_set) {
+				KeyFieldRef lastFieldRef = null;
+				nextRef: for (KeyFieldRef keyFieldRef : key.field_set) {
+					for (Field field : fields) {
+						if (field.name.getNorm().equals(
+								keyFieldRef.getRef().getNorm())) {
+							keyFieldRef.setPredecessorRef(lastFieldRef);
+							lastFieldRef = keyFieldRef;
+							continue nextRef;
+						}
+					}
+					logger.error(
+							"Key {} referenced {} as a field, and it was not declared in this Relation",
+							key, keyFieldRef);
 				}
 			}
 
@@ -520,6 +550,7 @@ public class Contract {
 
 	public static class KeyFieldRef {
 		private final Name ref;
+		private KeyFieldRef predecessor;
 
 		public Name getRef() {
 			return ref;
@@ -533,6 +564,14 @@ public class Contract {
 		public String toString() {
 			final StringBuilder sb = new StringBuilder();
 			return this.toString(sb).toString();
+		}
+
+		public void setPredecessorRef(KeyFieldRef keyFieldRef) {
+			this.predecessor = keyFieldRef;
+		}
+
+		public Name getPredecessorRef() {
+			return predecessor.ref;
 		}
 
 		public StringBuilder toString(final StringBuilder sb) {

@@ -57,7 +57,7 @@ public class <contract.root.name.bactrian>Provider
 	private static final UriMatcher uriMatcher = <contract.root.name.bactrian>ContentDescriptor.URI_MATCHER;
 
 	@Override
-	public boolean onCreate() {
+	synchronized public boolean onCreate() {
 		Log.d(LOG_TAG, "onCreate()");
 		mDB = new <contract.root.name.bactrian>DataDBAdaptor(getContext());
 		mDB.open();
@@ -65,7 +65,7 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	public String getType(Uri uri) {
+	synchronized public String getType(Uri uri) {
 		Log.d(LOG_TAG, "getType()");
 		switch (uriMatcher.match(uri)) {
 
@@ -80,7 +80,7 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	public Cursor query(final Uri uri, final String[] projection,
+	synchronized public Cursor query(final Uri uri, final String[] projection,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
 		Log.d(LOG_TAG, "query()");
@@ -101,7 +101,7 @@ public class <contract.root.name.bactrian>Provider
 	 * Private query that does the actual query based on the table
 	 */
 
-	private Cursor query(final Uri uri, final String tableName,
+	synchronized private Cursor query(final Uri uri, final String tableName,
 			final String[] projection, final String selection,
 			final String[] selectionArgs, final String sortOrder) {
 
@@ -112,7 +112,7 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	public Uri insert(Uri uri, ContentValues value) {
+	synchronized public Uri insert(Uri uri, ContentValues value) {
 
 		Log.d(LOG_TAG, "insert()");
 
@@ -135,7 +135,7 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	public int delete(Uri uri, String whereClause, String[] whereArgs) {
+	synchronized public int delete(Uri uri, String whereClause, String[] whereArgs) {
 		Log.d(LOG_TAG, "delete()");
 
 		switch (uriMatcher.match(uri)) {
@@ -153,7 +153,7 @@ public class <contract.root.name.bactrian>Provider
 	 * Private method to both attempt the delete command, and then to notify of
 	 * the changes
 	 */
-	private int deleteAndNotify(final Uri uri, final String tableName,
+	synchronized private int deleteAndNotify(final Uri uri, final String tableName,
 			final String whereClause, final String[] whereArgs) {
 		int count = mDB.delete(tableName, whereClause, whereArgs);
 		if (count > 0) {
@@ -163,7 +163,7 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String whereClause,
+	synchronized public int update(Uri uri, ContentValues values, String whereClause,
 			String[] whereArgs) {
 		Log.d(LOG_TAG, "update()");
 
@@ -182,7 +182,7 @@ public class <contract.root.name.bactrian>Provider
 	 * private update function that updates based on parameters, then notifies
 	 * change
 	 */
-	private int updateAndNotify(final Uri uri, final String tableName,
+	synchronized private int updateAndNotify(final Uri uri, final String tableName,
 			final ContentValues values, final String whereClause,
 			final String[] whereArgs) {
 		int count = mDB.update(tableName, values, whereClause, whereArgs);
