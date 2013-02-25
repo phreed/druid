@@ -26,7 +26,6 @@ isFieldEnumerable ::= [
         "TEXT"      : true,
         "BLOB"      : false,
         "FILE"      : false,
-        "TYPE"      : false,
         default     : false
 ]
 
@@ -48,7 +47,6 @@ fieldLiteralMap ::= [
         "TEXT":      "fieldLiteralQuoted",
         "BLOB":      "fieldLiteralQuoted",
         "FILE":      "fieldLiteralQuoted",
-        "TYPE":      "fieldLiteralQuoted",
         default:     "fieldLiteralQuoted"
 ]
 fieldLiteralQuoted(field) ::= <%
@@ -85,7 +83,6 @@ javaTypeMap ::= [
         "TEXT"  :"String",
         "BLOB"  :"byte[]",
         "FILE"  :"String",
-        "TYPE"  :"String",
         "FLOAT" :"float",
         "DOUBLE":"double",
         default: key
@@ -106,7 +103,6 @@ javaTypeDefaultMap ::= [
         "TEXT"  :" \"\" ",
         "BLOB"  :"null",
         "FILE"  :" \"\" ",
-        "TYPE"  :" \"\" ",
         "FLOAT"  :"0",
         "DOUBLE":"0",
         default: key
@@ -126,7 +122,6 @@ androidWriteParcelMethodMap ::= [
         "TEXT"  :"writeString",
         "BLOB"  :"writeByteArray",
         "FILE"  :"writeString",
-        "TYPE"  :"writeString",
         "FLOAT"  :"writeFloat",
         "DOUBLE":"writeDouble",
         default: key
@@ -146,7 +141,6 @@ androidReadParcelMethodMap ::= [
         "TEXT"  :"readString",
         "BLOB"  :"readByteArray",
         "FILE"  :"readString",
-        "TYPE"  :"readString",
         "FLOAT"  :"readFloat",
         "DOUBLE":"readDouble",
         default: key
@@ -189,7 +183,6 @@ androidReadFromCursorMethodMap ::= [
         "TEXT"  :"getString",
         "BLOB"  :"getBlob",
         "FILE"  :"getString",
-        "TYPE"  :"getString",
         "FLOAT"  :"getFloat",
         "DOUBLE":"getDouble",
         default: key
@@ -211,7 +204,6 @@ javaMethodTypeMap ::= [
         "TEXT"  :"String",
         "BLOB"  :"Byte",
         "FILE"  :"String",
-        "TYPE"  :"String",
         "FLOAT"  :"Float",
         "DOUBLE":"Double",
         default: key
@@ -233,7 +225,6 @@ androidCreateDefaultViewTypeImportMap ::= [
         "TEXT"  :"import android.widget.EditText;",
         "BLOB"  :"",
         "FILE"  :"import android.widget.EditText;",
-        "TYPE"  :"import android.widget.EditText;",
         "FLOAT"  :"import android.widget.EditText;",
         "DOUBLE":"import android.widget.EditText;",
         default: key
@@ -255,7 +246,6 @@ androidEditDefaultViewTypeImportMap ::= [
         "TEXT"  :"import android.widget.EditText;",
         "BLOB"  :"",
         "FILE"  :"import android.widget.EditText;",
-        "TYPE"  :"import android.widget.EditText;",
         "FLOAT"  :"import android.widget.EditText;",
         "DOUBLE":"import android.widget.EditText;",
         default: key
@@ -277,7 +267,6 @@ androidViewDefaultViewTypeImportMap ::= [
         "TEXT"  :"import android.widget.TextView;",
         "BLOB"  :"",
         "FILE"  :"import android.widget.TextView;",
-        "TYPE"  :"import android.widget.TextView;",
         "FLOAT"  :"import android.widget.TextView;",
         "DOUBLE":"import android.widget.TextView;",
         default: key
@@ -307,7 +296,6 @@ javaTypeSQLiteMap ::= [
         "TEXT"  :"TEXT",
         "BLOB"  :"BLOB",
         "FILE"  :"TEXT",
-        "TYPE"  :"TEXT",
         "FLOAT" :"REAL",
         "DOUBLE":"REAL",
         default: key
@@ -334,7 +322,6 @@ uiEditGetValuesFromViewsMap ::= [
    "LONG"      : "uiEditGetValuesFromViewsDefaultTemplate",
    "SERIAL"    : "uiEditGetValuesFromViewsDefaultTemplate",
    "TIMESTAMP" : "uiEditGetValuesFromViewsDefaultTemplate",
-   "TYPE"      : "uiEditGetValuesFromViewsDefaultTemplate", 
    default: key
 ]
 uiEditGetValuesFromViewsDefaultTemplate(relation,field) ::= <%
@@ -366,7 +353,6 @@ uiEditDisplayFieldViewToDefaultMap ::= [
    "LONG"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
    "SERIAL"     : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
    "TIMESTAMP"  : "uiEditDisplayFieldViewToDefaultDefaultTemplate",
-   "TYPE"       : "uiEditDisplayFieldViewToDefaultDefaultTemplate", 
    default: key
 ]
 uiEditDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <%
@@ -398,7 +384,6 @@ uiEditDisplayFieldDeclarationMap ::= [
    "LONG"       : "uiEditDisplayFieldDeclarationDefaultTemplate",
    "SERIAL"     : "uiEditDisplayFieldDeclarationDefaultTemplate",
    "TIMESTAMP"  : "uiEditDisplayFieldDeclarationDefaultTemplate",
-   "TYPE"       : "uiEditDisplayFieldDeclarationDefaultTemplate", 
    default: key
 ]
 uiEditDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <%
@@ -431,7 +416,6 @@ uiEditJavaFieldDeclarationAndInitializationMap ::= [
    "LONG"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
    "SERIAL"    : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
    "TIMESTAMP" : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate",
-   "TYPE"      : "uiEditJavaFieldDeclarationAndInitializationDefaultTemplate", 
    default: key
 ]
 uiEditJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) ::= <%
@@ -463,7 +447,6 @@ uiEditOrmConstructorFieldNameMap ::= [
    "LONG"      : "uiEditOrmConstructorFieldNameDefaultTemplate",
    "SERIAL"    : "uiEditOrmConstructorFieldNameDefaultTemplate",
    "TIMESTAMP" : "uiEditOrmConstructorFieldNameDefaultTemplate",
-   "TYPE"      : "uiEditOrmConstructorFieldNameDefaultTemplate", 
    default: key
 ]
 uiEditOrmConstructorFieldNameDefaultTemplate(relation,field) ::= <<
@@ -495,7 +478,6 @@ uiEditDisplayFieldLinkToXMLMap ::= [
    "LONG"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
    "SERIAL"    : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
    "TIMESTAMP" : "uiEditDisplayFieldLinkToXMLDefaultTemplate",
-   "TYPE"      : "uiEditDisplayFieldLinkToXMLDefaultTemplate", 
    default: key
 ]
 uiEditDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
@@ -526,7 +508,6 @@ uiEditSetDisplayViewFromOrmObjectMap ::= [
    "LONG"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
    "SERIAL"    : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
    "TIMESTAMP" : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate",
-   "TYPE"      : "uiEditSetDisplayViewFromOrmObjectDefaultTemplate", 
    default: key
 ]
 uiEditSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <%
@@ -558,7 +539,6 @@ uiEditConvertValuesFromViewsToJavaMap ::= [
    "LONG"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
    "SERIAL"    : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
    "TIMESTAMP" : "uiEditConvertValuesFromViewsToJavaDefaultTemplate",
-   "TYPE"      : "uiEditConvertValuesFromViewsToJavaDefaultTemplate", 
    default: key
 ]
 uiEditConvertValuesFromViewsToJavaDefaultTemplate(relation,field) ::= <%
@@ -590,7 +570,6 @@ uiViewDisplayFieldViewToDefaultMap ::= [
    "LONG"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
    "SERIAL"    : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
    "TIMESTAMP" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
-   "TYPE"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate", 
    default: key
 ]
 uiViewDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <<
@@ -622,7 +601,6 @@ uiViewDisplayFieldDeclarationMap ::= [
    "LONG"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
    "SERIAL"    : "uiViewDisplayFieldDeclarationDefaultTemplate",
    "TIMESTAMP" : "uiViewDisplayFieldDeclarationDefaultTemplate",
-   "TYPE"      : "uiViewDisplayFieldDeclarationDefaultTemplate", 
    default: key
 ]
 uiViewDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <<
@@ -654,7 +632,6 @@ uiViewSetDisplayViewFromOrmObjectMap ::= [
    "LONG"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
    "SERIAL"    : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
    "TIMESTAMP" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
-   "TYPE"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate", 
    default: key
 ]
 uiViewSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <<
@@ -694,7 +671,6 @@ uiViewDisplayFieldLinkToXMLMap ::= [
    "LONG"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
    "SERIAL"    : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
    "TIMESTAMP" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
-   "TYPE"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate", 
    default: key
 ]
 uiViewDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
@@ -726,7 +702,6 @@ uiCreateGetValuesFromViewsMap ::= [
    "LONG"      : "uiCreateGetValuesFromViewsDefaultTemplate",
    "SERIAL"    : "uiCreateGetValuesFromViewsDefaultTemplate",
    "TIMESTAMP" : "uiCreateGetValuesFromViewsDefaultTemplate",
-   "TYPE"      : "uiCreateGetValuesFromViewsDefaultTemplate", 
    default: key
 ]
 uiCreateGetValuesFromViewsDefaultTemplate(relation,field) ::= <%
@@ -760,7 +735,6 @@ uiCreateDisplayFieldViewToDefaultMap ::= [
    "LONG"      : "uiCreateDisplayFieldViewToDefaultDefaultTemplate",
    "SERIAL"    : "uiCreateDisplayFieldViewToDefaultDefaultTemplate",
    "TIMESTAMP" : "uiCreateDisplayFieldViewToDefaultDefaultTemplate",
-   "TYPE"      : "uiCreateDisplayFieldViewToDefaultDefaultTemplate", 
    default: key
 ]
 uiCreateDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <%
@@ -795,7 +769,6 @@ uiCreateDisplayFieldDeclarationMap ::= [
    "LONG"      : "uiCreateDisplayFieldDeclarationDefaultTemplate",
    "SERIAL"    : "uiCreateDisplayFieldDeclarationDefaultTemplate",
    "TIMESTAMP" : "uiCreateDisplayFieldDeclarationDefaultTemplate",
-   "TYPE"      : "uiCreateDisplayFieldDeclarationDefaultTemplate", 
    default: key
 ]
 uiCreateDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <<
@@ -829,7 +802,6 @@ uiCreateJavaFieldDeclarationAndInitializationMap ::= [
    "LONG"      : "uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate",
    "SERIAL"    : "uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate",
    "TIMESTAMP" : "uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate",
-   "TYPE"      : "uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate", 
    default: key
 ]
 uiCreateJavaFieldDeclarationAndInitializationDefaultTemplate(relation,field) ::= <%
@@ -861,7 +833,6 @@ uiCreateOrmConstructorFieldNameMap ::= [
    "LONG"      : "uiCreateOrmConstructorFieldNameDefaultTemplate",
    "SERIAL"    : "uiCreateOrmConstructorFieldNameDefaultTemplate",
    "TIMESTAMP" : "uiCreateOrmConstructorFieldNameDefaultTemplate",
-   "TYPE"      : "uiCreateOrmConstructorFieldNameDefaultTemplate", 
    default: key
 ]
 uiCreateOrmConstructorFieldNameDefaultTemplate(relation,field) ::= <%
@@ -893,7 +864,6 @@ uiCreateDisplayFieldLinkToXmlMap ::= [
    "LONG"      : "uiCreateDisplayFieldLinkToXmlDefaultTemplate",
    "SERIAL"    : "uiCreateDisplayFieldLinkToXmlDefaultTemplate",
    "TIMESTAMP" : "uiCreateDisplayFieldLinkToXmlDefaultTemplate",
-   "TYPE"      : "uiCreateDisplayFieldLinkToXmlDefaultTemplate", 
    default: key
 ]
 uiCreateDisplayFieldLinkToXmlDefaultTemplate(relation,field) ::= <%
@@ -928,7 +898,6 @@ uiCreateSetDisplayViewFromOrmObjectMap ::= [
    "LONG"      : "uiCreateSetDisplayViewFromOrmObjectDefaultTemplate",
    "SERIAL"    : "uiCreateSetDisplayViewFromOrmObjectDefaultTemplate",
    "TIMESTAMP" : "uiCreateSetDisplayViewFromOrmObjectDefaultTemplate",
-   "TYPE"      : "uiCreateSetDisplayViewFromOrmObjectDefaultTemplate", 
    default: key
 ]
 uiCreateSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <<
@@ -960,7 +929,6 @@ uiCreateConvertValuesFromViewsToJavaMap ::= [
    "LONG"      : "uiCreateConvertValuesFromViewsToJavaDefaultTemplate",
    "SERIAL"    : "uiCreateConvertValuesFromViewsToJavaDefaultTemplate",
    "TIMESTAMP" : "uiCreateConvertValuesFromViewsToJavaDefaultTemplate",
-   "TYPE"      : "uiCreateConvertValuesFromViewsToJavaDefaultTemplate", 
    default: key
 ]
 uiCreateConvertValuesFromViewsToJavaDefaultTemplate(relation,field) ::= <<
