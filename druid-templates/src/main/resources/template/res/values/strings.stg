@@ -2,7 +2,7 @@ import "dataTypeMaps.stg"
 
 PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
   <directory.path><delimiter>
-  <paths.src_main_resources><delimiter>
+  <paths.src_main_resource><delimiter>
   values<delimiter>
   strings.xml
 %>
@@ -129,7 +129,7 @@ putEditDefualtValues(relation, field) ::= <%
 %>
 
 putEditLabels(relation, field) ::= <%
-\<string name="<relation.name.snake>_edit_label_<field.name.snake>">boolean\</string>
+\<string name="<relation.name.snake>_edit_label_<field.name.snake>"><field.name.bactrian>\</string>
 %>
 
 buildCreateFragmentStrings(relation) ::= <<

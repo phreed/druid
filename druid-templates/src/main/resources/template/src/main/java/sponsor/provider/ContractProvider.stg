@@ -15,6 +15,7 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 // ST:BODY:start
 
+
 package <package(contract)>;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -37,160 +37,160 @@ public class <contract.root.name.bactrian>Provider extends <contract.root.name.b
 
   private static final Logger logger = LoggerFactory.getLogger("<contract.root.name>.provider");
 
-  // Local backend DB
-  <contract.root.name.bactrian>DataDBAdaptor mDB;
+	// Local backend DB
+	<contract.root.name.bactrian>DataDBAdaptor mDB;
 
-  // shorten variable names for easier readability
-  
-  // ST:createShortContentURIforRelations:begin
-  <contract.root.relations: { relation | <createShortContentURIforRelations(relation)> }; separator="\n">
-  // ST:createShortContentURIforRelations:finish
-  
+	// shorten variable names for easier readability
+	
+	// ST:createShortContentURIforRelations:begin
+	<contract.root.relations: { relation | <createShortContentURIforRelations(relation)> }; separator="\n">
+	// ST:createShortContentURIforRelations:finish
+	
   public static String AUTHORITY = <providerClassName(contract)>.AUTHORITY;
-  
-  // ST:createShortURIMatchingTokens:begin
-  <contract.root.relations: { relation | <createShortURIMatchingTokens(relation)> }; separator="\n">
-  // ST:createShortURIMatchingTokens:finish
-  
-          
+	
+	// ST:createShortURIMatchingTokens:begin
+	<contract.root.relations: { relation | <createShortURIMatchingTokens(relation)> }; separator="\n">
+	// ST:createShortURIMatchingTokens:finish
+	
+        	
   private static final UriMatcher uriMatcher = <providerClassName(contract)>.URI_MATCHER;
 
-  @Override
-  public boolean onCreate() {
+	@Override
+	synchronized public boolean onCreate() {
     logger.debug("onCreate()");
-    mDB = new <contract.root.name.bactrian>DataDBAdaptor(getContext());
-    mDB.open();
-    return true;
-  }
+		mDB = new <contract.root.name.bactrian>DataDBAdaptor(getContext());
+		mDB.open();
+		return true;
+	}
 
-  @Override
-  public String getType(Uri uri) {
+	@Override
+	synchronized public String getType(Uri uri) {
     logger.debug("getType()");
-    switch (uriMatcher.match(uri)) {
+		switch (uriMatcher.match(uri)) {
 
-         // ST:createContentTypeReturnsforRelations:begin
-         <contract.root.relations: { relation | <createContentTypeReturnsforRelations(relation)> }; separator="\n">
-         // ST:createContentTypeReturnsforRelations:finish
+	       // ST:createContentTypeReturnsforRelations:begin
+	       <contract.root.relations: { relation | <createContentTypeReturnsforRelations(relation)> }; separator="\n">
+	       // ST:createContentTypeReturnsforRelations:finish
 
-    default:
-      throw new UnsupportedOperationException("URI " + uri
-          + " is not supported.");
-    }
-  }
+		default:
+			throw new UnsupportedOperationException("URI " + uri
+					+ " is not supported.");
+		}
+	}
 
-  @Override
-  public Cursor query(final Uri uri, final String[] projection,
-      final String selection, final String[] selectionArgs,
-      final String sortOrder) {
+	@Override
+	synchronized public Cursor query(final Uri uri, final String[] projection,
+			final String selection, final String[] selectionArgs,
+			final String sortOrder) {
     logger.debug("query()");
-    String modifiedSelection = selection;
-    switch (uriMatcher.match(uri)) {
-    
-         // ST:createPublicQueryforRelations:begin
-         <contract.root.relations: { relation | <createPublicQueryforRelations(relation)> }; separator="\n">
-         // ST:createPublicQueryforRelations:finish
-         
-    default:
-      return null;
-    }
+		String modifiedSelection = selection;
+		switch (uriMatcher.match(uri)) {
+		
+	       // ST:createPublicQueryforRelations:begin
+	       <contract.root.relations: { relation | <createPublicQueryforRelations(relation)> }; separator="\n">
+	       // ST:createPublicQueryforRelations:finish
+	       
+		default:
+			return null;
+		}
 
-  }
+	}
 
-  /*
-   * Private query that does the actual query based on the table
-   */
+	/*
+	 * Private query that does the actual query based on the table
+	 */
 
-  private Cursor query(final Uri uri, final String tableName,
-      final String[] projection, final String selection,
-      final String[] selectionArgs, final String sortOrder) {
+	synchronized private Cursor query(final Uri uri, final String tableName,
+			final String[] projection, final String selection,
+			final String[] selectionArgs, final String sortOrder) {
 
-    SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-    builder.setTables(tableName);
-    return builder.query(mDB.getDB(), projection, selection, selectionArgs,
-        null, null, sortOrder);
-  }
+		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+		builder.setTables(tableName);
+		return builder.query(mDB.getDB(), projection, selection, selectionArgs,
+				null, null, sortOrder);
+	}
 
-  @Override
-  public Uri insert(Uri uri, ContentValues assignedValues) {
+	@Override
+    synchronized public Uri insert(Uri uri, ContentValues assignedValues) {
 
     logger.debug("insert()");
 
-    final int match = uriMatcher.match(uri);
-    switch (match) {
-  
+		final int match = uriMatcher.match(uri);
+		switch (match) {
+	
       // ST:createUpsertForRelations:begin
       <contract.root.relations: { relation | <createUpsertForRelations(relation)> }; separator="\n">
       // ST:createUpsertForRelations:finish
-  
+	
       // breaks intentionally omitted
       <contract.root.relations: { relation | case <relation.name.cobra>_SINGLE_ROW: }; separator="\n">
-      {
-         throw new IllegalArgumentException( "Unsupported URI, unable to insert into specific row: " + uri);
-      }
-      default:
-      {
-         throw new IllegalArgumentException("Unsupported URI: " + uri);
-      }
-    }
-  }
+		   {
+			throw new IllegalArgumentException( "Unsupported URI, unable to insert into specific row: " + uri);
+		   }
+		   default:
+		   {
+			throw new IllegalArgumentException("Unsupported URI: " + uri);
+		   }
+	        }
+	}
 
-  @Override
-  public int delete(Uri uri, String whereClause, String[] whereArgs) {
+	@Override
+	synchronized public int delete(Uri uri, String whereClause, String[] whereArgs) {
     logger.debug("delete()");
 
-    switch (uriMatcher.match(uri)) {
-          // ST:createDeleteforRelations:begin
-          <contract.root.relations: { relation | <createDeleteforRelations(relation)> }; separator="\n">
-          // ST:createDeleteforRelations:finish
+		switch (uriMatcher.match(uri)) {
+	        // ST:createDeleteforRelations:begin
+	        <contract.root.relations: { relation | <createDeleteforRelations(relation)> }; separator="\n">
+	        // ST:createDeleteforRelations:finish
 
-    default:
-      throw new IllegalArgumentException("Unsupported URI: " + uri);
-    }
+		default:
+			throw new IllegalArgumentException("Unsupported URI: " + uri);
+		}
 
-  }
+	}
 
-  /*
-   * Private method to both attempt the delete command, and then to notify of
-   * the changes
-   */
-  private int deleteAndNotify(final Uri uri, final String tableName,
-      final String whereClause, final String[] whereArgs) {
-    int count = mDB.delete(tableName, whereClause, whereArgs);
-    if (count > 0) {
-      getContext().getContentResolver().notifyChange(uri, null);
-    }
-    return count;
-  }
+	/*
+	 * Private method to both attempt the delete command, and then to notify of
+	 * the changes
+	 */
+	private int deleteAndNotify(final Uri uri, final String tableName,
+			final String whereClause, final String[] whereArgs) {
+		int count = mDB.delete(tableName, whereClause, whereArgs);
+		if (count > 0) {
+			getContext().getContentResolver().notifyChange(uri, null);
+		}
+		return count;
+	}
 
-  @Override
-  public int update(Uri uri, ContentValues values, String whereClause,
-      String[] whereArgs) {
+	@Override
+	synchronized public int update(Uri uri, ContentValues values, String whereClause,
+			String[] whereArgs) {
     logger.debug( "update()");
 
-    switch (uriMatcher.match(uri)) {
-    
-    // ST:createUpdateForRelations:begin
-          <contract.root.relations: { relation | <createUpdateForRelations(relation)> }; separator="\n">
-          // ST:createUpdateForRelations:finish
-    
-    default:
-      throw new IllegalArgumentException("Unknown URI " + uri);
-    }
-  }
+		switch (uriMatcher.match(uri)) {
+		
+		// ST:createUpdateForRelations:begin
+	        <contract.root.relations: { relation | <createUpdateForRelations(relation)> }; separator="\n">
+	        // ST:createUpdateForRelations:finish
+		
+		default:
+			throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+	}
 
-  /*
-   * private update function that updates based on parameters, then notifies
-   * change
-   */
-  private int updateAndNotify(final Uri uri, final String tableName,
-      final ContentValues values, final String whereClause,
-      final String[] whereArgs) {
-    int count = mDB.update(tableName, values, whereClause, whereArgs);
-    if (count > 0) {
-      getContext().getContentResolver().notifyChange(uri, null);
-    }
-    return count;
-  }
+	/*
+	 * private update function that updates based on parameters, then notifies
+	 * change
+	 */
+	private int updateAndNotify(final Uri uri, final String tableName,
+			final ContentValues values, final String whereClause,
+			final String[] whereArgs) {
+		int count = mDB.update(tableName, values, whereClause, whereArgs);
+		if (count > 0) {
+			getContext().getContentResolver().notifyChange(uri, null);
+		}
+		return count;
+	}
 }
 >>
 
@@ -210,13 +210,13 @@ case <relation.name.cobra>_SINGLE_ROW: return <providerRelationClassName(contrac
 
 createPublicQueryforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW: {
-  modifiedSelection = modifiedSelection
+	modifiedSelection = modifiedSelection
     + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
-    + uri.getLastPathSegment();
+		+ uri.getLastPathSegment();
 }
 case <relation.name.cobra>_ALL_ROWS: {
   return query(uri, <providerRelationClassName(contract,relation)>.TABLE_NAME,
-    projection, modifiedSelection, selectionArgs, sortOrder);
+		projection, modifiedSelection, selectionArgs, sortOrder);
 }
 >>
 
@@ -257,41 +257,42 @@ case <relation.name.cobra>_ALL_ROWS: {
   }
 <endif>
   final Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
-  getContext().getContentResolver().notifyChange(insertedID, null);
-  return ContentUris.withAppendedId(<relation.name.cobra>_CONTENT_URI, rowID);
-}
+		getContext().getContentResolver().notifyChange(insertedID, null);
+		return ContentUris.withAppendedId(<relation.name.cobra>_CONTENT_URI, rowID);
+	}
 >>
 
 
 createDeleteforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
-  whereClause = whereClause
+	whereClause = whereClause
       + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
-      + uri.getLastPathSegment();
-  // no break here on purpose
+			+ uri.getLastPathSegment();
+	// no break here on purpose
 case <relation.name.cobra>_ALL_ROWS: {
-  return deleteAndNotify(uri,
+	return deleteAndNotify(uri,
       <providerRelationClassName(contract,relation)>.TABLE_NAME, whereClause,
-      whereArgs);
+			whereArgs);
 }
 >>
 
 
+
+
 createUpdateForRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
-  whereClause = whereClause
+	whereClause = whereClause
           + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
-          + uri.getLastPathSegment();
+		      + uri.getLastPathSegment();
 case <relation.name.cobra>_ALL_ROWS: {
-  return updateAndNotify(uri,
+	return updateAndNotify(uri,
       <providerRelationClassName(contract,relation)>.TABLE_NAME, values,
-      whereClause, whereArgs);
+			whereClause, whereArgs);
 
 }
 >>
 
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
-
 providerRelationClassName(contract,relation) ::= <%
 <providerClassName(contract)>.<relation.name.bactrian>
 %>
@@ -299,6 +300,3 @@ providerRelationClassName(contract,relation) ::= <%
 providerClassName(contract) ::= <%
 <contract.root.name.bactrian>ContentDescriptor
 %>
-
-
-

@@ -30,11 +30,12 @@
               <goal>generate</goal>
             </goals>
             <configuration>
+	      <pathSet><src_main_resource>res</src_main_resource></pathSet>
               <templateKey>beta</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
+              <contractFile>${basedir}/contract/all-types.xml</contractFile>
               <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
-              <skelOutputDirectory>${basedir}</skelOutputDirectory>
+              <skelOutputDirectory>${basedir}/target/druid/</skelOutputDirectory>
             </configuration>
           </execution>
 
@@ -45,11 +46,12 @@
               <goal>generate</goal>
             </goals>
             <configuration>
+	      <pathSet><src_main_resource>res</src_main_resource></pathSet>
               <templateKey>alpha</templateKey>
               <artifactCoords>edu.vanderbilt.isis.druid:druid-template:2.0.0</artifactCoords>
-              <contractFile>${basedir}/src/main/druid/all-types.xml</contractFile>
+              <contractFile>${basedir}/contract/all-types.xml</contractFile>
               <baseOutputDirectory>${basedir}/target/druid/</baseOutputDirectory>
-              <skelOutputDirectory>${basedir}</skelOutputDirectory>
+              <skelOutputDirectory>${basedir}/target/druid/</skelOutputDirectory>
             </configuration>
           </execution>
 

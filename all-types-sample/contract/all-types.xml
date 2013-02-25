@@ -9,35 +9,49 @@
     <field type="TEXT" name="a text field" default="" />
     <field type="LONG" name="a long field" default="0" />
     <field type="TIMESTAMP" name="a time field" default="now"/>
-    <field type="BLOB" name="a blob field" abrv="blob"/>
+    <field type="BLOB" name="a blob field" />
     <field type="SHORT" name="a short field" />
-    <field type="INTEGER" name="an integer field" abrv="int"/>
+    <field type="INTEGER" name="an integer field"/>
     <field type="FLOAT" name="a float field" />
     <field type="DOUBLE" name="a double field" />
     <field type="BOOL" name="a boolean field" />
     <field type="FK" name="a foreign key field" />
-    
-    <key>
+
+    <key name="some key">
       <ref field="a text field"/>
       <ref field="a long field"/>
       <ref field="a double field"/>
+      <ref field="a foreign key field"/>
     </key>
     
-    <ui-selection-subset>
+    <key name="ui-listview-row-layout">
       <ref field="a text field"/>
       <ref field="a long field"/>
       <ref field="a double field"/>
-      <ref field="int"/>
-    </ui-selection-subset>
+      <ref field="a foreign key field"/>
+    </key>
+
+    <message encoding="full update">
+      <ref field="a text field" />
+      <ref field="a long field" />
+      <ref field="a time field" />
+      <ref field="a blob field" />
+      <ref field="a short field" />
+      <ref field="a integer field" />
+      <ref field="a float field" />
+      <ref field="a double field" />
+      <ref field="a boolean field" />
+      <ref field="a foreign key field" />
+    </message>
     
     <message encoding="terse">
-      <ref ref="a text field" />
-      <ref ref="a long field" />
+      <ref field="a text field" />
+      <ref field="a long field" />
     </message>
     
     <message encoding="protoBuff">
-      <ref ref="a text field" order="1"/>
-      <ref ref="a long field" order="2"/>
+      <ref field="a text field" order="1"/>
+      <ref field="a long field" order="2"/>
     </message>
     
   </relation>

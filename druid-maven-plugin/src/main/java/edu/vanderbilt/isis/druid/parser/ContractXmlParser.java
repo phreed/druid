@@ -183,7 +183,7 @@ public class ContractXmlParser {
 				}
 			}
 		}
-		final Contract.Relation relation = new Contract.Relation(name,
+		final Contract.Relation relation = new Contract.Relation(logger,name,
 				mode_set, field_set, key_set, message_set);
 		// logger.info("relation element {}", relation);
 		return relation;
@@ -296,9 +296,9 @@ public class ContractXmlParser {
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				final Element currentElement = (Element) currentNode;
 				final String tagName = currentElement.getTagName();
-				if ("field".equals(tagName)) {
+				if ("ref".equals(tagName)) {
 					field_set.add(new Contract.KeyFieldRef(extract_attr_name(
-							currentElement, "ref")));
+							currentElement, "field")));
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 package edu.vanderbilt.isis.druid.generator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -287,6 +288,7 @@ public class Contract {
 		final private List<Key> keys;
 		final private Map<String, Key> keyMap;
 		final private List<Message> messages;
+		final private List<String> dataTypes;
 
 		public Name getName() {
 			return name;
@@ -312,15 +314,57 @@ public class Contract {
 			return this.messages;
 		}
 
-		public Relation(final Name name, final Map<String, Mode> mode,
-				final List<Field> fields, final List<Key> key_set,
-				final List<Message> messages) {
+		public List<String> getDataTypesUsed() {
+			return this.dataTypes;
+		}
+
+		public List<KeyFieldRef> getUIListViewRowLayout() {
+			System.out
+					.println("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n "
+							+ keyMap.size()
+							+ "    "
+							+ keyMap.containsKey("ui-listview-row-layout")
+							+ "   " + keyMap.toString() + " \n\n\n");
+			if (keyMap.containsKey("ui-listview-row-layout")) {
+				Key uiKey = keyMap.get("ui-listview-row-layout");
+				return uiKey.getFields();
+			}
+			return null;
+		}
+
+		public Relation(Logger logger, final Name name,
+				final Map<String, Mode> mode, final List<Field> fields,
+				final List<Key> key_set, final List<Message> messages) {
 			this.name = name;
 			this.mode = mode;
 			for (Field field : fields) {
 				field.setParent(this);
 			}
 			this.fields = fields;
+
+			dataTypes = new ArrayList<String>();
+			for (Field field : fields) {
+				if (dataTypes.contains(field.dtype) == false) {
+					dataTypes.add(field.dtype);
+				}
+			}
+			for (Key key : key_set) {
+				KeyFieldRef lastFieldRef = null;
+				nextRef: for (KeyFieldRef keyFieldRef : key.field_set) {
+					for (Field field : fields) {
+						if (field.name.getNorm().equals(
+								keyFieldRef.getRef().getNorm())) {
+							keyFieldRef.setPredecessorRef(lastFieldRef);
+							lastFieldRef = keyFieldRef;
+							continue nextRef;
+						}
+					}
+					logger.error(
+							"Key {} referenced {} as a field, and it was not declared in this Relation",
+							key, keyFieldRef);
+				}
+			}
+
 			this.keys = key_set;
 			this.keyMap = new HashMap<String, Key>(key_set.size());
 			for (Key key : key_set) {
@@ -506,6 +550,7 @@ public class Contract {
 
 	public static class KeyFieldRef {
 		private final Name ref;
+		private KeyFieldRef predecessor;
 
 		public Name getRef() {
 			return ref;
@@ -519,6 +564,14 @@ public class Contract {
 		public String toString() {
 			final StringBuilder sb = new StringBuilder();
 			return this.toString(sb).toString();
+		}
+
+		public void setPredecessorRef(KeyFieldRef keyFieldRef) {
+			this.predecessor = keyFieldRef;
+		}
+
+		public Name getPredecessorRef() {
+			return predecessor.ref;
 		}
 
 		public StringBuilder toString(final StringBuilder sb) {

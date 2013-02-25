@@ -34,7 +34,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-<item.dataTypes: {dataType | <androidViewDefaultViewTypeImportMap.(dataType)> }; separator="\n">
+<item.DataTypesUsed: {dataType | <androidViewDefaultViewTypeImportMap.(dataType)> }; separator="\n">
 
 import <contract.root.sponsor.base>.<contract.root.name.camel>.R;
 import <contract.root.sponsor.base>.<contract.root.name.camel>.orm.<item.name.bactrian>Data;
@@ -227,4 +227,159 @@ public class <item.name.bactrian>ViewFragment extends Fragment {
 
 package(contract,item) ::= <%
 <contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>
+%>
+
+androidViewDefaultViewTypeImportMap ::= [
+        "SERIAL":"import android.widget.TextView;",
+        "FK"    :"import android.widget.TextView;",
+        "EXCLUSIVE"  :"import android.widget.TextView;",
+        "INCLUSIVE"  :"import android.widget.TextView;",
+        "SHORT":"import android.widget.TextView;",
+        "INTEGER":"import android.widget.TextView;",
+        "BOOL"  :"import android.widget.TextView;",
+        "LONG"  :"import android.widget.TextView;",
+        "TIMESTAMP":"import android.widget.TextView;",
+        "REAL"  :"import android.widget.TextView;",
+        "GUID"  :"import android.widget.TextView;",
+        "TEXT"  :"import android.widget.TextView;",
+        "BLOB"  :"",
+        "FILE"  :"import android.widget.TextView;",
+        "TYPE"  :"import android.widget.TextView;",
+        "FLOAT"  :"import android.widget.TextView;",
+        "DOUBLE":"import android.widget.TextView;",
+        default: key
+]
+
+uiViewDisplayFieldViewToDefaultTemplate(relation,field) ::=  <%
+ <(uiViewDisplayFieldViewToDefaultMap.(field.dtype))(relation,field) > 
+%>
+uiViewDisplayFieldViewToDefaultMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldViewToDefaultBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldViewToDefaultDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldViewToDefaultDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldViewToDefaultDefaultTemplate(relation,field) ::= <<
+<field.name.camel>TV.setText(""+ <javaTypeDefaultMap.(field.dtype)>);
+>>
+uiViewDisplayFieldViewToDefaultBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%> 
+
+
+
+uiViewDisplayFieldDeclarationTemplate(relation,field) ::= <%
+<(uiViewDisplayFieldDeclarationMap.(field.dtype))(relation,field) >
+%>
+uiViewDisplayFieldDeclarationMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldDeclarationBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldDeclarationDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldDeclarationDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldDeclarationDefaultTemplate(relation,field) ::= <<
+TextView <field.name.camel>TV;
+>>
+uiViewDisplayFieldDeclarationBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
+
+
+
+uiViewSetDisplayViewFromOrmObjectTemplate(relation,field) ::= <%
+<(uiViewSetDisplayViewFromOrmObjectMap.(field.dtype))(relation,field) >
+%>
+uiViewSetDisplayViewFromOrmObjectMap ::= [ 
+   "INTEGER"   : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "REAL"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "GUID"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BLOB"      : "uiViewSetDisplayViewFromOrmObjectBLOB",
+   "INCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "BOOL"      : "uiViewSetDisplayViewFromOrmObjectBOOL",
+   "DOUBLE"    : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SHORT"     : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FLOAT"     : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "EXCLUSIVE" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TEXT"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FK"        : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "FILE"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "LONG"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "SERIAL"    : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TIMESTAMP" : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate",
+   "TYPE"      : "uiViewSetDisplayViewFromOrmObjectDefaultTemplate", 
+   default: key
+]
+uiViewSetDisplayViewFromOrmObjectDefaultTemplate(relation,field) ::= <<
+<field.name.camel>TV.setText(<javaMethodTypeMap.(field.dtype)>.valueOf(<relation.name.camel>Data.<field.name.camel>).toString());
+>>
+uiViewSetDisplayViewFromOrmObjectBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
+%>
+uiViewSetDisplayViewFromOrmObjectBOOL(relation,field) ::= << 
+final String <field.name.camel>String;
+if (<relation.name.camel>Data.<field.name.camel> == false){
+    <field.name.camel>String = "False";
+} else {
+    <field.name.camel>String = "True";
+}
+<field.name.camel>TV.setText(<field.name.camel>String);
+>> 
+
+
+uiViewDisplayFieldLinkToXMLTemplate(relation,field) ::= <%
+<(uiViewDisplayFieldLinkToXMLMap.(field.dtype))(relation,field) >
+%>
+uiViewDisplayFieldLinkToXMLMap ::= [ 
+   "INTEGER"   : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "REAL"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "GUID"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "BLOB"      : "uiViewDisplayFieldLinkToXMLBLOB",
+   "INCLUSIVE" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "BOOL"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "DOUBLE"    : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "SHORT"     : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FLOAT"     : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "EXCLUSIVE" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TEXT"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FK"        : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "FILE"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "LONG"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "SERIAL"    : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TIMESTAMP" : "uiViewDisplayFieldLinkToXMLDefaultTemplate",
+   "TYPE"      : "uiViewDisplayFieldLinkToXMLDefaultTemplate", 
+   default: key
+]
+uiViewDisplayFieldLinkToXMLDefaultTemplate(relation,field) ::= <<
+<field.name.camel>TV = (TextView) getView().findViewById(R.id.<relation.name.snake>_view_value_<field.name.snake>);
+>>
+uiViewDisplayFieldLinkToXMLBLOB(relation,field) ::= <%
+// <field.name.snake> omitted, BLOB dataType, unable to generate a reasonable UI in an automated way
 %>
