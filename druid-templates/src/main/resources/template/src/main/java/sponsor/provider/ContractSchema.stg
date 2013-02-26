@@ -6,7 +6,7 @@ PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>
-<contract.root.name.bactrian>ContentDescriptor.java
+<providerClassName(contract)>.java
 %>
 
 SKELETON(contract) ::= <<
@@ -16,6 +16,8 @@ BODY(contract) ::= <<
 // ST:BODY:start
 
 package <package(contract)>;
+
+import android.content.ContentValues;
 
 import android.content.UriMatcher;
 import android.net.Uri;
@@ -31,8 +33,7 @@ import android.provider.BaseColumns;
  *         This note might be moved to a 'Special Thanks' section once one is
  *         created and moved out of future test code.
  */
-public class <contract.root.name.bactrian>ContentDescriptor 
-   extends <contract.root.name.bactrian>ContentDescriptorBase {
+public class <providerClassName(contract)> extends <providerClassName(contract)>Base {
 
 <if(contract.mode.isAmmo)>
   public enum Disposition {
@@ -50,13 +51,12 @@ public class <contract.root.name.bactrian>ContentDescriptor
 
   public static final String ORGANIZATIONAL_NAME = "<contract.root.sponsor>";
   public static final String PROJECT_NAME = "<contract.root.name.snake>";
-  public static final String PROVIDER_NAME = "<contract.root.name.snake>provider";
 
   /**
    * ConentProvider Related Constants
    */
   public static final String AUTHORITY = ORGANIZATIONAL_NAME + "."
-      + PROJECT_NAME + "." + PROVIDER_NAME;
+      + PROJECT_NAME + ".provider";
   private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
   public static final UriMatcher URI_MATCHER = buildUriMatcher();
 
@@ -88,6 +88,22 @@ matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH, <relation.name.bactrian
 matcher.addURI(AUTHORITY, <relation.name.bactrian>.PATH_FOR_ID, <relation.name.bactrian>.PATH_FOR_ID_TOKEN);
 >>
 
+relationKeyClause(sponsor, name, key) ::= <<
+public static final String <key.name.cobra>_KEY_CLAUSE;
+static {
+  <key.name.cobra>_KEY_CLAUSE = new StringBuilder()
+  <key.fields: { field | .append('"').append(Cols.<field.ref.cobra>).append('"').append("=?") }; 
+               separator=".append(\" AND \")\n", anchor="true">
+    .toString();
+};
+
+public static final String[] <key.name.cobra>_KEY_COLUMNS = new String[] {
+  <key.fields: { field | Cols.<field.ref.cobra> };
+               separator=",\n   ", anchor="true">
+};
+
+>>
+
 createRelationMetaData(sponsor,relation, index) ::= <<
 // Define a static class that represents description of stored content
 // entity.
@@ -102,6 +118,7 @@ public static class <relation.name.bactrian> {
   // the token value are used to register path in matcher (see above)
   public static final String PATH = "<relation.name.camel>s";
   public static final int PATH_TOKEN = <index>10;
+
   public static final String PATH_FOR_ID = "<relation.name.camel>/*";
   public static final int PATH_FOR_ID_TOKEN = <index>20;
 
@@ -113,6 +130,12 @@ public static class <relation.name.bactrian> {
 <else>
         public static final String CONTENT_TOPIC = "topic/<sponsor>.<relation.name.snake>";
 <endif>
+
+  // ST:relationKeyClause:inline
+  <relation.keys: { key | 
+    <relationKeyClause(sponsor, relation.name, key)>
+  }; separator="\n", anchor="true">
+  // ST:relationKeyClause:complete
 
   // TODO figure out why 'db' is here...
   // might have been convention of example code I used previously
@@ -134,6 +157,17 @@ public static class <relation.name.bactrian> {
   // ST:getColumnNames:complete
   };
 
+  public static ContentValues initializeWithDefault(final ContentValues assignedValues) {
+     final Long now = Long.valueOf(System.currentTimeMillis());
+     final ContentValues setValues = (assignedValues == null)
+              ? new ContentValues() : assignedValues;
+     <relation.fields: { field | <initializeField(relation,field)> }>
+     if (!setValues.containsKey(Cols._DISPOSITION)) {
+       setValues.put(Cols._DISPOSITION, "LOCAL");
+     }
+     return setValues;
+  }
+
   // a static class to store columns in entity
   public static class Cols {
     public static final String ID = BaseColumns._ID; // convention
@@ -147,6 +181,12 @@ public static class <relation.name.bactrian> {
     // ST:getColumnDeclaration:complete
   }
 }
+>>
+
+initializeField(relation,field) ::= <<
+ if (!setValues.containsKey(Cols.<field.name.cobra>)) {
+      setValues.put(Cols.<field.name.cobra>, <fieldLiteral(field)>);
+  }
 >>
 
 getColumnNames(field) ::= <<
@@ -164,3 +204,6 @@ public static final String <field.name.cobra> = "<field.name.cobra>";
 >>
 
 
+providerClassName(contract) ::= <%
+<contract.root.name.bactrian>Schema
+%>

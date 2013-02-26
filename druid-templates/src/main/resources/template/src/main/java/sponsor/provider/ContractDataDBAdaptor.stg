@@ -271,12 +271,12 @@ public class <contract.root.name.bactrian>DataDBAdaptor {
 >>
 
 createShortVariables(contract,relation) ::= <<
-private static final String <relation.name.bactrian>_KEY_ID = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID;
+private static final String <relation.name.bactrian>_KEY_ID = <contract.root.name.bactrian>Schema.<relation.name.bactrian>.Cols.ID;
 <relation.fields: { field | <createShortVariable(contract,relation,field)> }; separator="\n">
 >>
 
 createShortVariable(contract,relation,field) ::= <%
-private static final String <relation.name.bactrian>_<field.name.bactrian> = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.<field.name.cobra>;
+private static final String <relation.name.bactrian>_<field.name.bactrian> = <contract.root.name.bactrian>Schema.<relation.name.bactrian>.Cols.<field.name.cobra>;
 %>
 
 
@@ -289,7 +289,7 @@ tableCreateVariables(contract,relation,field) ::= <%
 
 
 databaseTableVariableDeclaration(relation) ::= <%
-static final String DATABASE_TABLE_<relation.name.cobra> = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME;
+static final String DATABASE_TABLE_<relation.name.cobra> = <contract.root.name.bactrian>Schema.<relation.name.bactrian>.TABLE_NAME;
 %>
 
 
