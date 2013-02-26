@@ -56,7 +56,7 @@ public class <providerClassName(contract)> extends <providerClassName(contract)>
    * ConentProvider Related Constants
    */
   public static final String AUTHORITY = ORGANIZATIONAL_NAME + "."
-      + PROJECT_NAME + ".provider";
+      + PROJECT_NAME + ".<contract.root.name.snake>provider";
   private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
   public static final UriMatcher URI_MATCHER = buildUriMatcher();
 
