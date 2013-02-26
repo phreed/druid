@@ -28,6 +28,7 @@
       <ref field="a text field"/>
       <ref field="a long field"/>
       <ref field="a double field"/>
+      <ref field="a short field"/>
       <ref field="a foreign key field"/>
     </key>
 
