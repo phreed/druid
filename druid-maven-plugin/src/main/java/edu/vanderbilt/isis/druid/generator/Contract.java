@@ -549,6 +549,10 @@ public class Contract {
 		}
 	}
 
+	/**
+	 * The element referring to one of the specified fields.
+	 *
+	 */
 	public static class KeyFieldRef {
 		private final Name ref;
 		private String dataType;

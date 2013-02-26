@@ -1,9 +1,9 @@
 
 import "template-v1/ammo_content_provider.stg"
 
-PATH(delimiter, directory, contract, isSkeleton) ::= <%
+PATH(delimiter, directory, paths, contract, isSkeleton) ::= <%
 <directory.path><delimiter>
-src<delimiter>
+<paths.src_main_java><delimiter>
 <contract.root.sponsor.path><delimiter>
 provider<delimiter>
 <contract.root.name.bactrian>SchemaBase.java

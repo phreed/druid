@@ -36,7 +36,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 
-import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.<contract.root.name.bactrian>ContentDescriptor;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.<contract.root.name.bactrian>Schema;
 
 /**
  * encapsulation of the ContentProviderClient for a single URI
@@ -62,7 +62,7 @@ public class <contract.root.name.bactrian>Resolver {
 	public ContentProviderResult[] applyBatch(
 			final ArrayList\<ContentProviderOperation> operations)
 			throws RemoteException, OperationApplicationException {
-		return cr.applyBatch(<contract.root.name.bactrian>ContentDescriptor.AUTHORITY, operations);
+		return cr.applyBatch(<contract.root.name.bactrian>Schema.AUTHORITY, operations);
 	}
 
 	/*
@@ -153,7 +153,7 @@ public class <contract.root.name.bactrian>Resolver {
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.orm"
 
 declareRelationURI(relation) ::= <%
-private Uri <relation.name.camel>URI = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
+private Uri <relation.name.camel>URI = <contract.root.name.bactrian>Schema.<relation.name.bactrian>.CONTENT_URI;
 %>
 
 makeBulkInsertForRelation(relation) ::= <<
@@ -179,7 +179,7 @@ public int delete<relation.name.bactrian>Data(final String selection,
 makeInsertOrmForRelation(relation) ::= <<
 public Uri insert(final <relation.name.bactrian>Data <relation.name.camel>Object) throws RemoteException {
 	ContentValues tempCV = <relation.name.camel>Object.getCV();
-	tempCV.remove(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID);
+	tempCV.remove(<contract.root.name.bactrian>Schema.<relation.name.bactrian>.Cols.ID);
 	return cr.insert(<relation.name.camel>URI, tempCV);
 }
 >>
@@ -220,7 +220,7 @@ public int update<relation.name.bactrian>WithID(<relation.name.bactrian>Data dat
 makeDeleteAllWithIDOrmForRelation(relation) ::= <<
 public int deleteAll<relation.name.bactrian>WithRowID(long rowID) throws RemoteException {
    String[] args = { String.valueOf(rowID) };
-   return delete<relation.name.bactrian>Data(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = ? ", args);
+   return delete<relation.name.bactrian>Data(<contract.root.name.bactrian>Schema.<relation.name.bactrian>.Cols.ID + " = ? ", args);
 }
 >>
 
@@ -229,7 +229,7 @@ public <relation.name.bactrian>Data get<relation.name.bactrian>DataViaRowID(fina
 		throws RemoteException {
 	String[] selectionArgs = { String.valueOf(rowID) };
 	ArrayList\<<relation.name.bactrian>Data> results = query<relation.name.bactrian>Data(null,
-			<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + "= ?",
+			<contract.root.name.bactrian>Schema.<relation.name.bactrian>.Cols.ID + "= ?",
 			selectionArgs, null);
 	if (results.size() > 0) {
 		return results.get(0);

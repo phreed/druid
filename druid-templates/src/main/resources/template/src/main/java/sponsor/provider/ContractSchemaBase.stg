@@ -7,7 +7,7 @@ PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
 <contract.root.sponsor.path><delimiter>
 <contract.root.name.camel><delimiter>
 provider<delimiter>
-<contract.root.name.bactrian>ContentDescriptorBase.java
+<contract.root.name.bactrian>SchemaBase.java
 %>
 
 SKELETON(contract) ::= <<
@@ -18,7 +18,7 @@ BODY(contract) ::= <<
 
 package <package(contract)>;
 
-public class <contract.root.name.bactrian>ContentDescriptorBase {
+public class <contract.root.name.bactrian>SchemaBase {
 
    public static final int DATABASE_VERSION = 1;
       

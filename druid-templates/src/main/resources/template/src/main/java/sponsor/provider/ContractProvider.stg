@@ -15,28 +15,27 @@ SKELETON(contract,item) ::= <<
 BODY(contract) ::= <<
 // ST:BODY:start
 
-<if(contract.mode.isAmmo)>
-// this comment appears if ammo is enabled
-<else>
-// this comment appears if ammo is disabled
-<endif>
 
 package <package(contract)>;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
+import android.provider.BaseColumns;
 
-public class <contract.root.name.bactrian>Provider 
-    extends <contract.root.name.bactrian>ProviderBase  {
+public class <contract.root.name.bactrian>Provider extends <contract.root.name.bactrian>ProviderBase  {
 
-	// logger TAG
-	private static final String LOG_TAG = <contract.root.name.bactrian>Provider.class
-			.getCanonicalName();
+  private static final Logger logger = LoggerFactory.getLogger("<contract.root.name>.provider");
 
 	// Local backend DB
 	<contract.root.name.bactrian>DataDBAdaptor mDB;
@@ -47,18 +46,18 @@ public class <contract.root.name.bactrian>Provider
 	<contract.root.relations: { relation | <createShortContentURIforRelations(relation)> }; separator="\n">
 	// ST:createShortContentURIforRelations:finish
 	
-	public static String AUTHORITY = <contract.root.name.bactrian>ContentDescriptor.AUTHORITY;
+  public static String AUTHORITY = <providerClassName(contract)>.AUTHORITY;
 	
 	// ST:createShortURIMatchingTokens:begin
 	<contract.root.relations: { relation | <createShortURIMatchingTokens(relation)> }; separator="\n">
 	// ST:createShortURIMatchingTokens:finish
 	
         	
-	private static final UriMatcher uriMatcher = <contract.root.name.bactrian>ContentDescriptor.URI_MATCHER;
+  private static final UriMatcher uriMatcher = <providerClassName(contract)>.URI_MATCHER;
 
 	@Override
 	synchronized public boolean onCreate() {
-		Log.d(LOG_TAG, "onCreate()");
+    logger.debug("onCreate()");
 		mDB = new <contract.root.name.bactrian>DataDBAdaptor(getContext());
 		mDB.open();
 		return true;
@@ -66,7 +65,7 @@ public class <contract.root.name.bactrian>Provider
 
 	@Override
 	synchronized public String getType(Uri uri) {
-		Log.d(LOG_TAG, "getType()");
+    logger.debug("getType()");
 		switch (uriMatcher.match(uri)) {
 
 	       // ST:createContentTypeReturnsforRelations:begin
@@ -83,7 +82,7 @@ public class <contract.root.name.bactrian>Provider
 	synchronized public Cursor query(final Uri uri, final String[] projection,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
-		Log.d(LOG_TAG, "query()");
+    logger.debug("query()");
 		String modifiedSelection = selection;
 		switch (uriMatcher.match(uri)) {
 		
@@ -112,18 +111,19 @@ public class <contract.root.name.bactrian>Provider
 	}
 
 	@Override
-	synchronized public Uri insert(Uri uri, ContentValues value) {
+    synchronized public Uri insert(Uri uri, ContentValues assignedValues) {
 
-		Log.d(LOG_TAG, "insert()");
+    logger.debug("insert()");
 
 		final int match = uriMatcher.match(uri);
 		switch (match) {
 	
-	           // ST:createInsertforRelations:begin
-	           <contract.root.relations: { relation | <createInsertforRelations(relation)> }; separator="\n">
-	           // ST:createInsertforRelations:finish
+      // ST:createUpsertForRelations:begin
+      <contract.root.relations: { relation | <createUpsertForRelations(relation)> }; separator="\n">
+      // ST:createUpsertForRelations:finish
 	
-   		   <contract.root.relations: { relation | case <relation.name.cobra>_SINGLE_ROW: //no break on purpose}; separator="\n">
+      // breaks intentionally omitted
+      <contract.root.relations: { relation | case <relation.name.cobra>_SINGLE_ROW: }; separator="\n">
 		   {
 			throw new IllegalArgumentException( "Unsupported URI, unable to insert into specific row: " + uri);
 		   }
@@ -136,7 +136,7 @@ public class <contract.root.name.bactrian>Provider
 
 	@Override
 	synchronized public int delete(Uri uri, String whereClause, String[] whereArgs) {
-		Log.d(LOG_TAG, "delete()");
+    logger.debug("delete()");
 
 		switch (uriMatcher.match(uri)) {
 	        // ST:createDeleteforRelations:begin
@@ -153,7 +153,7 @@ public class <contract.root.name.bactrian>Provider
 	 * Private method to both attempt the delete command, and then to notify of
 	 * the changes
 	 */
-	synchronized private int deleteAndNotify(final Uri uri, final String tableName,
+	private int deleteAndNotify(final Uri uri, final String tableName,
 			final String whereClause, final String[] whereArgs) {
 		int count = mDB.delete(tableName, whereClause, whereArgs);
 		if (count > 0) {
@@ -165,7 +165,7 @@ public class <contract.root.name.bactrian>Provider
 	@Override
 	synchronized public int update(Uri uri, ContentValues values, String whereClause,
 			String[] whereArgs) {
-		Log.d(LOG_TAG, "update()");
+    logger.debug( "update()");
 
 		switch (uriMatcher.match(uri)) {
 		
@@ -182,7 +182,7 @@ public class <contract.root.name.bactrian>Provider
 	 * private update function that updates based on parameters, then notifies
 	 * change
 	 */
-	synchronized private int updateAndNotify(final Uri uri, final String tableName,
+	private int updateAndNotify(final Uri uri, final String tableName,
 			final ContentValues values, final String whereClause,
 			final String[] whereArgs) {
 		int count = mDB.update(tableName, values, whereClause, whereArgs);
@@ -195,44 +195,70 @@ public class <contract.root.name.bactrian>Provider
 >>
 
 createShortURIMatchingTokens(relation) ::= <<
-private static final int <relation.name.cobra>_ALL_ROWS = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.PATH_TOKEN;
-private static final int <relation.name.cobra>_SINGLE_ROW = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.PATH_FOR_ID_TOKEN;
+private static final int <relation.name.cobra>_ALL_ROWS = <providerRelationClassName(contract,relation)>.PATH_TOKEN;
+private static final int <relation.name.cobra>_SINGLE_ROW = <providerRelationClassName(contract,relation)>.PATH_FOR_ID_TOKEN;
 >>
 
 createShortContentURIforRelations(relation) ::= <%
-public final static Uri <relation.name.cobra>_CONTENT_URI = <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_URI;
+public final static Uri <relation.name.cobra>_CONTENT_URI = <providerRelationClassName(contract,relation)>.CONTENT_URI;
 %>
 
 createContentTypeReturnsforRelations(relation) ::= <<
-case <relation.name.cobra>_ALL_ROWS: return <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_TYPE_DIR;
-case <relation.name.cobra>_SINGLE_ROW: return <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.CONTENT_ITEM_TYPE;
+case <relation.name.cobra>_ALL_ROWS: return <providerRelationClassName(contract,relation)>.CONTENT_TYPE_DIR;
+case <relation.name.cobra>_SINGLE_ROW: return <providerRelationClassName(contract,relation)>.CONTENT_ITEM_TYPE;
 >>
 
 createPublicQueryforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW: {
 	modifiedSelection = modifiedSelection
-		+ <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+    + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
 		+ uri.getLastPathSegment();
 }
 case <relation.name.cobra>_ALL_ROWS: {
-	return query(uri, <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME,
+  return query(uri, <providerRelationClassName(contract,relation)>.TABLE_NAME,
 		projection, modifiedSelection, selectionArgs, sortOrder);
 }
 >>
 
 
-createInsertforRelations(relation) ::= <<
+createUpsertForRelations(relation) ::= <<
 case <relation.name.cobra>_ALL_ROWS: {
-	value.remove(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID);
-	long rowID = mDB.insert(<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, value);
-	if (rowID > -1) {
-		Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
+  final ContentValues values = <providerRelationClassName(contract,relation)>.initializeWithDefault(assignedValues);
+  values.remove(<providerRelationClassName(contract,relation)>.Cols.ID);
+
+<if(relation.keyMap.update)>
+  final List\<String> selectArgsList = new ArrayList\<String>();
+  for (String item : <providerRelationClassName(contract,relation)>.UPDATE_KEY_COLUMNS) {
+     selectArgsList.add(values.getAsString(item));
+  }
+  final String[] selectArgs = selectArgsList.toArray(new String[0]);
+
+  final long rowID;
+  final int count = mDB.update(<providerRelationClassName(contract,relation)>.TABLE_NAME, values,
+        <providerRelationClassName(contract,relation)>.UPDATE_KEY_CLAUSE, selectArgs);
+  if ( count \< 1 ) {
+     rowID = mDB.insert(<providerRelationClassName(contract,relation)>.TABLE_NAME, values);
+     if (rowID \< 1) {
+        throw new SQLiteException("Failed to insert row into " + uri);
+     }
+  }
+  else {
+     final Cursor cursor = mDB.query(<providerRelationClassName(contract,relation)>.TABLE_NAME, null,
+         <providerRelationClassName(contract,relation)>.UPDATE_KEY_CLAUSE, selectArgs, null);
+     cursor.moveToFirst();
+     rowID = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
+     cursor.close();
+  }
+<else>
+  final long rowID = mDB.insert(<providerRelationClassName(contract,relation)>.TABLE_NAME, values);
+  if (rowID \< 0) {
+    logger.debug( "insert didn't work, return of -1");
+    return null;
+  }
+<endif>
+  final Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
 		getContext().getContentResolver().notifyChange(insertedID, null);
 		return ContentUris.withAppendedId(<relation.name.cobra>_CONTENT_URI, rowID);
-	} else {
-		Log.e(LOG_TAG, "insert didn't work, return of -1");
-	}
-		return null;
 	}
 >>
 
@@ -240,12 +266,12 @@ case <relation.name.cobra>_ALL_ROWS: {
 createDeleteforRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-			+ <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+      + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
 			+ uri.getLastPathSegment();
 	// no break here on purpose
 case <relation.name.cobra>_ALL_ROWS: {
 	return deleteAndNotify(uri,
-			<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, whereClause,
+      <providerRelationClassName(contract,relation)>.TABLE_NAME, whereClause,
 			whereArgs);
 }
 >>
@@ -256,14 +282,21 @@ case <relation.name.cobra>_ALL_ROWS: {
 createUpdateForRelations(relation) ::= <<
 case <relation.name.cobra>_SINGLE_ROW:
 	whereClause = whereClause
-		      + <contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.Cols.ID + " = "
+          + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
 		      + uri.getLastPathSegment();
 case <relation.name.cobra>_ALL_ROWS: {
 	return updateAndNotify(uri,
-			<contract.root.name.bactrian>ContentDescriptor.<relation.name.bactrian>.TABLE_NAME, values,
+      <providerRelationClassName(contract,relation)>.TABLE_NAME, values,
 			whereClause, whereArgs);
 
 }
 >>
 
 package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
+providerRelationClassName(contract,relation) ::= <%
+<providerClassName(contract)>.<relation.name.bactrian>
+%>
+
+providerClassName(contract) ::= <%
+<contract.root.name.bactrian>Schema
+%>
