@@ -58,13 +58,9 @@ public class <item.name.bactrian>DataArrayAdaptor extends ArrayAdapter\< <item.n
 
 			long KEY_ID = item.KEY_ID;
 	               // ST:putDeclaration:start	
-	               <item.fields: { field | <putDeclaration(field)> }; separator="\n">
+	               <item.UIListViewRowLayout: { keyFieldRef | <putDeclaration(keyFieldRef)> }; separator="\n">
 	               // ST:putDeclaration:end
 	               
-	               
-	               
-	
-
 			if (convertView == null) {
 				todoView = new LinearLayout(getContext());
 				String inflater = Context.LAYOUT_INFLATER_SERVICE;
@@ -80,12 +76,12 @@ public class <item.name.bactrian>DataArrayAdaptor extends ArrayAdapter\< <item.n
 	               // ST:putTextViewRowIDDeclarations:end
 	               
 	               // ST:putTextViewDeclarations:start	
-	               <item.fields: { field | <putTextViewDeclarations(item,field)> }; separator="\n">
+	               <item.UIListViewRowLayout: { keyFieldRef | <putTextViewDeclarations(item,keyFieldRef)> }; separator="\n">
 	               // ST:putTextViewDeclarations:end
 	               
 	               KEY_IDTV.setText("" + KEY_ID);
                        // ST:putSetValuesToDisplay:start
-                       <item.fields: { field | <putSetValuesToDisplay(field)> }; separator="\n">
+                       <item.UIListViewRowLayout: { keyFieldRef | <putSetValuesToDisplay(keyFieldRef)> }; separator="\n">
 	               // ST:putSetValuesToDisplay:end
 
 		} catch (Exception e) {
@@ -100,23 +96,20 @@ public class <item.name.bactrian>DataArrayAdaptor extends ArrayAdapter\< <item.n
 >>
 
 
-package(contract,item) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<item.name.camel>"
+package(contract,keyFieldRef) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.ui.<keyFieldRef.name.camel>"
 
-putDeclaration(field) ::= <%
-<if(field.IsInUICols)><javaTypeMap.(field.dtype)> <field.name.camel> = item.<field.name.camel>;
-<else><endif>
+putDeclaration(keyFieldRef) ::= <%
+<javaTypeMap.(keyFieldRef.dataType)> <keyFieldRef.ref.camel> = item.<keyFieldRef.ref.camel>;
 %>
 
 putTextViewRowIDDeclarations(relation) ::= <<
 TextView  KEY_IDTV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_KEY_ID_textView);
 >>
 
-putTextViewDeclarations(relation,field) ::= <%
-<if(field.IsInUICols)>TextView  <field.name.camel>TV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_<field.name.snake>_textView);
-<else><endif>
+putTextViewDeclarations(relation,keyFieldRef) ::= <%
+TextView  <keyFieldRef.ref.camel>TV  = (TextView) todoView.findViewById(R.id.<relation.name.snake>_listview_custom_row_<keyFieldRef.ref.snake>_textView);
 %>
 
-putSetValuesToDisplay(field) ::= <%
-<if(field.IsInUICols)><field.name.camel>TV.setText("" + <field.name.camel>);
-<else><endif>
+putSetValuesToDisplay(keyFieldRef) ::= <%
+<keyFieldRef.ref.camel>TV.setText("" + <keyFieldRef.ref.camel>);
 %>
