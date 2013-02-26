@@ -298,5 +298,5 @@ providerRelationClassName(contract,relation) ::= <%
 %>
 
 providerClassName(contract) ::= <%
-<contract.root.name.bactrian>ContentDescriptor
+<contract.root.name.bactrian>Schema
 %>

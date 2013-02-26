@@ -205,5 +205,5 @@ public static final String <field.name.cobra> = "<field.name.cobra>";
 
 
 providerClassName(contract) ::= <%
-<contract.root.name.bactrian>ContentDescriptor
+<contract.root.name.bactrian>Schema
 %>

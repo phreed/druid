@@ -20,7 +20,7 @@ package <package(contract,item)>;
 
 import java.util.ArrayList;
 // ST:package:inline
-import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.<contract.root.name.bactrian>ContentDescriptor;
+import <contract.root.sponsor.base>.<contract.root.name.camel>.provider.<contract.root.name.bactrian>Schema;
 // ST:package:complete
 
 import android.content.ContentValues;
@@ -66,7 +66,7 @@ public class <item.name.bactrian>Creator {
   public static <item.name.bactrian>Data get<item.name.bactrian>DataFromCursor(Cursor cursor) {
 
    long rowID = cursor.getLong(cursor 
-              .getColumnIndex(<contract.root.name.bactrian>ContentDescriptor.Table1.Cols.ID));
+              .getColumnIndex(<contract.root.name.bactrian>Schema.Table1.Cols.ID));
     // ST:ormCreatorGetFieldFromCursorTemplate:inline
     <item.fields: { field | <ormCreatorGetFieldFromCursorTemplate(field)> }; separator="\n">
     // ST:ormCreatorGetFieldFromCursorTemplate:complete
@@ -85,12 +85,12 @@ package(contract,relation) ::= "<contract.root.sponsor.base>.<contract.root.name
 
 
 ormCreatorputFieldIntoCVDefualtTemplate(field) ::= <<
-rValue.put(<contract.root.name.bactrian>ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>, data.<field.name.camel>);
+rValue.put(<contract.root.name.bactrian>Schema.<item.name.bactrian>.Cols.<field.name.cobra>, data.<field.name.camel>);
 >>
 
 ormCreatorGetFieldFromCursorDefualtTemplate(field) ::= <<
 <javaTypeMap.(field.dtype)> <field.name.camel> = cursor.<androidReadFromCursorMethodMap.(field.dtype)>(cursor 
-        .getColumnIndex(<contract.root.name.bactrian>ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>));
+        .getColumnIndex(<contract.root.name.bactrian>Schema.<item.name.bactrian>.Cols.<field.name.cobra>));
 >>
 
 ormCreatorputFieldIntoCVTemplate(field) ::= << <(ormCreatorputFieldIntoCVMap.(field.dtype))(field) > >>
@@ -125,7 +125,7 @@ ormCreatorGetFieldFromCursorBLOB(field) ::= << <ormCreatorGetFieldFromCursorDefu
 ormCreatorGetFieldFromCursorINCLUSIVE(field) ::= << <ormCreatorGetFieldFromCursorDefualtTemplate(field) > >> 
 ormCreatorGetFieldFromCursorBOOL(field) ::= << 
 int <field.name.camel>Int = cursor.<androidReadFromCursorMethodMap.(field.dtype)>(cursor 
-        .getColumnIndex(<contract.root.name.bactrian>ContentDescriptor.<item.name.bactrian>.Cols.<field.name.cobra>));
+        .getColumnIndex(<contract.root.name.bactrian>Schema.<item.name.bactrian>.Cols.<field.name.cobra>));
 boolean <field.name.camel> = false;
 if ( <field.name.camel>Int == 1 ) {<field.name.camel> = true;}
 >> 
