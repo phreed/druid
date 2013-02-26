@@ -355,6 +355,7 @@ public class Contract {
 						if (field.name.getNorm().equals(
 								keyFieldRef.getRef().getNorm())) {
 							keyFieldRef.setPredecessorRef(lastFieldRef);
+							keyFieldRef.setDataType(field.getDtype());
 							lastFieldRef = keyFieldRef;
 							continue nextRef;
 						}
@@ -550,6 +551,7 @@ public class Contract {
 
 	public static class KeyFieldRef {
 		private final Name ref;
+		private String dataType;
 		private KeyFieldRef predecessor;
 
 		public Name getRef() {
@@ -568,6 +570,14 @@ public class Contract {
 
 		public void setPredecessorRef(KeyFieldRef keyFieldRef) {
 			this.predecessor = keyFieldRef;
+		}
+
+		public void setDataType(String dataType) {
+			this.dataType = dataType;
+		}
+
+		public String getDataType() {
+			return this.dataType;
 		}
 
 		public Name getPredecessorRef() {
