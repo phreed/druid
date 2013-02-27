@@ -296,9 +296,10 @@ public class ContractXmlParser {
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				final Element currentElement = (Element) currentNode;
 				final String tagName = currentElement.getTagName();
-				if ("field".equals(tagName)) {
+				if ("ref".equals(tagName)) {
+				//	System.out.println("\n\n"+tagName+"\n");
 					field_set.add(new Contract.KeyFieldRef(extract_attr_name(
-							currentElement, "ref")));
+							currentElement, "field")));
 				}
 			}
 		}

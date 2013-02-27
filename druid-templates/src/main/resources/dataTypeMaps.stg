@@ -108,6 +108,27 @@ javaTypeDefaultMap ::= [
         "DOUBLE":"0",
         default: key
 ]
+
+contentValuesDefaultInitializationMap ::= [
+        "SERIAL":" \"\" ",
+        "FK"    :"0",
+        "EXCLUSIVE"  :"0",
+        "INCLUSIVE"  :"0",
+        "SHORT":"0",
+        "INTEGER":"0",
+        "BOOL"  :"false",
+        "LONG"  :"0",
+        "TIMESTAMP":"0",
+        "REAL"  :"0",
+        "GUID"  :" \"\" ",
+        "TEXT"  :" \"\" ",
+        "BLOB"  :"new byte[]{}",
+        "FILE"  :" \"\" ",
+        "FLOAT"  :"0",
+        "DOUBLE":"0",
+        default: key
+]
+
 androidWriteParcelMethodMap ::= [
         "SERIAL":"writeString",
         "FK"    :"writeLong",
