@@ -80,7 +80,7 @@ public class <contract.root.name.bactrian>AmmoAdaptor extends  <contract.root.na
         }
 
         @Override
-        public void get(Uri uri, AmmoSyncCallback callback) throws RemoteException {
+        public void getContentValuesPlus(Uri uri, AmmoSyncCallback callback) throws RemoteException {
             final ContentValues payload = new ContentValues();
             final Cursor cursor = this.master.cpc.query(uri, null, null, null, null);
             try {
@@ -100,13 +100,29 @@ public class <contract.root.name.bactrian>AmmoAdaptor extends  <contract.root.na
         }
 
         @Override
-        public void putSmall(Uri uri, byte[] payload, AmmoSyncCallback callback)
+        public void putContentValues(Uri uri, ContentValues payload, AmmoSyncCallback callback)
                 throws RemoteException {
+            final ContentValues payload = new ContentValues();
+            final Cursor cursor = this.master.cpc.query(uri, null, null, null, null);
+            try {
+                final int match = <contract.root.name.bactrian>Schema.URI_MATCHER.match(uri);
+                switch (match) {
+                    <contract.root.relations: 
+                          {relation | <getRelationCase(contract.root.name, relation)>}; 
+                          separator="\n" >
+                }
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            callback.returnContentValues(payload);
             callback.returnFault("not yet implemented by this service");
         }
 
         @Override
-        public void put(Uri uri, ParcelFileDescriptor payload, AmmoSyncCallback callback)
+        public void putContentValuesPlus(Uri uri, ParcelFileDescriptor payload, AmmoSyncCallback callback)
                 throws RemoteException {
             callback.returnFault("not yet implemented by this service");
         }
