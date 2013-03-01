@@ -11,9 +11,6 @@ orm<delimiter>
 %>
 
 
-SKELETON(contract,item) ::= <<
->>
-
 BODY(contract,item) ::= <<
 // ST:BODY:start
 package <package(contract,item)>;

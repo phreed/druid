@@ -1,0 +1,46 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, paths, contract, isSkeleton) ::= <%
+<directory.path><delimiter>
+<paths.src_main_java><delimiter>
+<contract.root.sponsor.path><delimiter>
+<contract.root.name.camel><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>AmmoAdaptorBase.java
+%>
+
+
+BODY(contract) ::= <<
+// ST:BODY:start
+
+package <package(contract)>;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.vu.isis.ammo.provider.AmmoSyncCallback;
+import edu.vu.isis.ammo.provider.AmmoSyncRequest;
+
+import android.app.Service;
+import android.content.ContentProvider;
+import android.content.ContentProviderClient;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
+
+public abstract class <contract.root.name.bactrian>AmmoAdaptorBase extends Service {
+
+  private static final Logger logger = LoggerFactory.getLogger("<contract.root.name>.ammo.adaptor");
+
+}
+>>
+
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
+
+
