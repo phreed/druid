@@ -282,6 +282,7 @@ public class Contract {
 	 * Collect table information.
 	 */
 	public static class Relation {
+	    final private Logger logger;
 		final private Name name;
 		final private Map<String, Mode> mode;
 		final private List<Field> fields;
@@ -318,26 +319,26 @@ public class Contract {
 			return this.dataTypes;
 		}
 
+		/**
+		 * This is probably unnecessary.
+		 */
 		private final static String customRowSpecialMarker = "ui_listview_row_layout";
-
-		public List<KeyFieldRef> getUIListViewRowLayout() {
-			System.out
-					.println("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n "
-							+ keyMap.size()
-							+ "    "
-							+ keyMap.containsKey(customRowSpecialMarker)
-							+ "   " + keyMap.toString() + " \n\n\n");
+		public List<KeyField> getUIListViewRowLayout() {
+			logger.trace("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n {}    {}   \n\n\n",
+							keyMap.size(), keyMap.containsKey(customRowSpecialMarker),
+							keyMap);
 			if (keyMap.containsKey(customRowSpecialMarker)) {
 				Key uiKey = keyMap.get(customRowSpecialMarker);
-				System.out.println("\n" + uiKey.getFields().size() + "\n");
+			    logger.trace("\n {}\n", uiKey.getFields().size());
 				return uiKey.getFields();
 			}
 			return null;
 		}
 
-		public Relation(Logger logger, final Name name,
+		public Relation(final Logger logger, final Name name,
 				final Map<String, Mode> mode, final List<Field> fields,
 				final List<Key> key_set, final List<Message> messages) {
+		    this.logger = logger;
 			this.name = name;
 			this.mode = mode;
 			for (Field field : fields) {
@@ -349,28 +350,6 @@ public class Contract {
 			for (Field field : fields) {
 				if (dataTypes.contains(field.dtype) == false) {
 					dataTypes.add(field.dtype);
-				}
-			}
-			for (Key key : key_set) {
-				KeyFieldRef lastFieldRef = null;
-				System.out.println("\n\n FIELD SIZE:" + key.field_set.size()
-						+ "\n\n");
-				nextRef: for (KeyFieldRef keyFieldRef : key.field_set) {
-					System.out.println("\n\n\nFIELD: "
-							+ keyFieldRef.getRef().getNorm() + "\n");
-					for (Field field : fields) {
-
-						if (field.name.getNorm().equals(
-								keyFieldRef.getRef().getNorm())) {
-							keyFieldRef.setPredecessorRef(lastFieldRef);
-							keyFieldRef.setDataType(field.getDtype());
-							lastFieldRef = keyFieldRef;
-							continue nextRef;
-						}
-					}
-					logger.error(
-							"Key {} referenced {} as a field, and it was not declared in this Relation",
-							key, keyFieldRef);
 				}
 			}
 
@@ -527,17 +506,17 @@ public class Contract {
 	 */
 	public static class Key {
 		private final Name name;
-		private final List<KeyFieldRef> field_set;
+		private final List<KeyField> field_set;
 
 		public Name getName() {
 			return name;
 		}
 
-		public List<KeyFieldRef> getFields() {
+		public List<KeyField> getFields() {
 			return this.field_set;
 		}
 
-		public Key(final Name name, final List<KeyFieldRef> field_set) {
+		public Key(final Name name, final List<KeyField> field_set) {
 			this.name = name;
 			this.field_set = field_set;
 		}
@@ -550,7 +529,7 @@ public class Contract {
 
 		public StringBuilder toString(final StringBuilder sb) {
 			sb.append("<key name='").append(name.norm).append("'>");
-			for (KeyFieldRef field : this.field_set) {
+			for (KeyField field : this.field_set) {
 				field.toString(sb);
 			}
 			return sb.append("</key>");
@@ -561,16 +540,16 @@ public class Contract {
 	 * The element referring to one of the specified fields.
 	 * 
 	 */
-	public static class KeyFieldRef {
+	public static class KeyField {
 		private final Name ref;
 		private String dataType;
-		private KeyFieldRef predecessor;
+		private KeyField predecessor;
 
 		public Name getRef() {
 			return ref;
 		}
 
-		public KeyFieldRef(final Name ref) {
+		public KeyField(final Name ref) {
 			this.ref = ref;
 		}
 
@@ -580,7 +559,7 @@ public class Contract {
 			return this.toString(sb).toString();
 		}
 
-		public void setPredecessorRef(KeyFieldRef keyFieldRef) {
+		public void setPredecessorRef(KeyField keyFieldRef) {
 			this.predecessor = keyFieldRef;
 		}
 
@@ -632,13 +611,18 @@ public class Contract {
 
 	public static class MessageField {
 		private final Name name;
+		private final String type;
 
 		public Name getName() {
-			return name;
+			return this.name;
 		}
+		public String getType() {
+            return this.type;
+        }
 
-		public MessageField(final Name name) {
+		public MessageField(final Name name, String type) {
 			this.name = name;
+			this.type = type;
 		}
 
 		@Override
@@ -648,8 +632,8 @@ public class Contract {
 		}
 
 		public StringBuilder toString(final StringBuilder sb) {
-			return new StringBuilder().append("<field ref='").append(name.norm)
-					.append("' />");
+			return new StringBuilder().append("<field ref='").append(name.norm).append("' ")
+					.append("type='").append(this.type).append("/>");
 		}
 	}
 

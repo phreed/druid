@@ -18,40 +18,40 @@
     <field type="FK" name="a foreign key field" />
 
     <key name="some key">
-      <ref field="a text field"/>
-      <ref field="a long field"/>
-      <ref field="a double field"/>
-      <ref field="a foreign key field"/>
+      <field ref="a text field"/>
+      <field ref="a long field"/>
+      <field ref="a double field"/>
+      <field ref="a foreign key field"/>
     </key>
     
     <key name="ui_listview_row_layout">
-      <ref field="a text field"/>
-      <ref field="a long field"/>
-      <ref field="a double field"/>
-      <ref field="a short field"/>
+      <field ref="a text field"/>
+      <field ref="a long field"/>
+      <field ref="a double field"/>
+      <field ref="a short field"/>
     </key>
 
     <message encoding="full update">
-      <ref field="a text field" />
-      <ref field="a long field" />
-      <ref field="a time field" />
-      <ref field="a blob field" />
-      <ref field="a short field" />
-      <ref field="a integer field" />
-      <ref field="a float field" />
-      <ref field="a double field" />
-      <ref field="a boolean field" />
-      <ref field="a foreign key field" />
+      <field ref="a text field" />
+      <field ref="a long field" />
+      <field ref="a time field" />
+      <field ref="a blob field" />
+      <field ref="a short field" />
+      <field ref="a integer field" />
+      <field ref="a float field" />
+      <field ref="a double field" />
+      <field ref="a boolean field" />
+      <field ref="a foreign key field" />
     </message>
     
     <message encoding="terse">
-      <ref field="a text field" />
-      <ref field="a long field" />
+      <field ref="a text field" />
+      <field ref="a long field" />
     </message>
     
     <message encoding="protoBuff">
-      <ref field="a text field" order="1"/>
-      <ref field="a long field" order="2"/>
+      <field ref="a text field" order="1"/>
+      <field ref="a long field" order="2"/>
     </message>
     
   </relation>

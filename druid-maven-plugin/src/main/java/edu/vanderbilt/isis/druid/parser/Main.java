@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
  */
 class Main {
 
+    @SuppressWarnings("unused")
     private static boolean makeDot = false;
 
     static XMLLexer lexer;
@@ -98,6 +99,7 @@ class Main {
 
             XMLLexer lexer = new XMLLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
+            @SuppressWarnings("unused")
             final XMLParser parser = new XMLParser(tokens);
         } catch (FileNotFoundException ex)
         {
