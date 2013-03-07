@@ -318,15 +318,18 @@ public class Contract {
 			return this.dataTypes;
 		}
 
+		private final static String customRowSpecialMarker = "ui_listview_row_layout";
+
 		public List<KeyFieldRef> getUIListViewRowLayout() {
 			System.out
 					.println("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n "
 							+ keyMap.size()
 							+ "    "
-							+ keyMap.containsKey("ui-listview-row-layout")
+							+ keyMap.containsKey(customRowSpecialMarker)
 							+ "   " + keyMap.toString() + " \n\n\n");
-			if (keyMap.containsKey("ui-listview-row-layout")) {
-				Key uiKey = keyMap.get("ui-listview-row-layout");
+			if (keyMap.containsKey(customRowSpecialMarker)) {
+				Key uiKey = keyMap.get(customRowSpecialMarker);
+				System.out.println("\n" + uiKey.getFields().size() + "\n");
 				return uiKey.getFields();
 			}
 			return null;
@@ -350,8 +353,13 @@ public class Contract {
 			}
 			for (Key key : key_set) {
 				KeyFieldRef lastFieldRef = null;
+				System.out.println("\n\n FIELD SIZE:" + key.field_set.size()
+						+ "\n\n");
 				nextRef: for (KeyFieldRef keyFieldRef : key.field_set) {
+					System.out.println("\n\n\nFIELD: "
+							+ keyFieldRef.getRef().getNorm() + "\n");
 					for (Field field : fields) {
+
 						if (field.name.getNorm().equals(
 								keyFieldRef.getRef().getNorm())) {
 							keyFieldRef.setPredecessorRef(lastFieldRef);
@@ -551,7 +559,7 @@ public class Contract {
 
 	/**
 	 * The element referring to one of the specified fields.
-	 *
+	 * 
 	 */
 	public static class KeyFieldRef {
 		private final Name ref;

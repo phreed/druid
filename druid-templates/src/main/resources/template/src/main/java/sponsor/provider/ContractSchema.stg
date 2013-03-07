@@ -56,7 +56,7 @@ public class <providerClassName(contract)> extends <providerClassName(contract)>
    * ConentProvider Related Constants
    */
   public static final String AUTHORITY = ORGANIZATIONAL_NAME + "."
-      + PROJECT_NAME + ".provider";
+      + PROJECT_NAME + ".<contract.root.name.snake>provider";
   private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
   public static final UriMatcher URI_MATCHER = buildUriMatcher();
 
@@ -132,9 +132,7 @@ public static class <relation.name.bactrian> {
 <endif>
 
   // ST:relationKeyClause:inline
-  <relation.keys: { key | 
-    <relationKeyClause(sponsor, relation.name, key)>
-  }; separator="\n", anchor="true">
+  <relation.keys: { key | <relationKeyClause(sponsor, relation.name, key)> }; separator="\n", anchor="true">
   // ST:relationKeyClause:complete
 
   // TODO figure out why 'db' is here...
@@ -162,9 +160,11 @@ public static class <relation.name.bactrian> {
      final ContentValues setValues = (assignedValues == null)
               ? new ContentValues() : assignedValues;
      <relation.fields: { field | <initializeField(relation,field)> }>
+     <if(contract.mode.isAmmo)>
      if (!setValues.containsKey(Cols._DISPOSITION)) {
        setValues.put(Cols._DISPOSITION, "LOCAL");
      }
+     <endif>
      return setValues;
   }
 
@@ -185,7 +185,7 @@ public static class <relation.name.bactrian> {
 
 initializeField(relation,field) ::= <<
  if (!setValues.containsKey(Cols.<field.name.cobra>)) {
-      setValues.put(Cols.<field.name.cobra>, <fieldLiteral(field)>);
+      setValues.put(Cols.<field.name.cobra>, <contentValuesDefaultInitializationMap.(field.dtype)>);
   }
 >>
 

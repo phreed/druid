@@ -36,19 +36,19 @@ putFieldsForDisplay(relation) ::= <<
      android:textStyle="bold" />
 
 \<!-- ST:putDisplayViews:start -->    
-<relation.UIListViewRowLayout: { KeyFieldRef |<putDisplayViews(relation, KeyFieldRef)> }; separator="\n">
+<relation.UIListViewRowLayout: { keyFieldRef | <putDisplayViews(relation, keyFieldRef)>}; separator="\n">
 \<!-- ST:putDisplayViews:end -->
 >>
 
-putDisplayViews(relation,KeyFieldRef) ::= <<
+putDisplayViews(relation,keyFieldRef) ::= <<
 \<TextView
-     android:id="@+id/<relation.name.snake>_listview_custom_row_<KeyFieldRef.ref.snake>_textView"
+     android:id="@+id/<relation.name.snake>_listview_custom_row_<keyFieldRef.ref.snake>_textView"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:paddingLeft="20dp"
-     android:text="<KeyField.ref.name.snake>"
+     android:text="<keyFieldRef.ref.snake>"
      android:textSize="16sp" 
-     <if(KeyFieldRef.predecessorRef)>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_<KeyFieldRef.predecessorRef.snake>_textView"
+     <if(keyFieldRef.predecessorRef)>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_<keyFieldRef.predecessorRef.snake>_textView"
      <else>android:layout_below="@+id/<relation.name.snake>_listview_custom_row_KEY_ID_textView"
      <endif>
      />
