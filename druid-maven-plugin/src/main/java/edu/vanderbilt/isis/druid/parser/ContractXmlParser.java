@@ -185,6 +185,7 @@ public class ContractXmlParser {
                     mode_set.put(mode.getType(), mode);
                     continue;
                 }
+                logger.warn("unknown relation subelement {}", tagName);
             }
         }
         final Contract.Relation relation = new Contract.Relation(logger, name,
@@ -308,7 +309,9 @@ public class ContractXmlParser {
                     } else {
                         field_set.add(new Contract.KeyField(ref));
                     }
+                    continue;
                 }
+                logger.warn("unknown key sub element {}", tagName);
             }
         }
         final Contract.Key key = new Contract.Key(keyName, field_set);
@@ -332,7 +335,7 @@ public class ContractXmlParser {
      */
     public Contract.Message parseMessage(final Map<String, Field> field_map, final Element xml) {
         logger.trace("message element {}", xml);
-        final Name msgName = extract_attr_name(xml, "name");
+        final Name msgName = extract_attr_name(xml, "encoding");
         final List<Contract.MessageField> field_set = new ArrayList<Contract.MessageField>();
 
         final NodeList nodeList = xml.getChildNodes();
@@ -346,21 +349,23 @@ public class ContractXmlParser {
                     if (!field_map.containsKey(ref.getNorm())) {
                         logger.error("no field matching reference {}", ref);
                     } else {
-                        final String type = xml.getAttribute("type");
+                        final String type = currentElement.getAttribute("type");
                         final Contract.MessageField messageField;
                         if (type.isEmpty()) {
-                            messageField = new Contract.MessageField(ref, field_map.get(
-                                    ref.getNorm()).getDtype());
+                            final Field field = field_map.get(ref.getNorm());
+                            messageField = new Contract.MessageField(ref, field.getDtype());
                         } else {
                             messageField = new Contract.MessageField(ref, type);
                         }
                         field_set.add(messageField);
                     }
+                    continue;
                 }
+                logger.warn("unknown message sub element {}", tagName);
             }
         }
         final Contract.Message message = new Contract.Message(msgName, field_set);
-        logger.debug("key element {}", message);
+        logger.info("message element {}", message);
         return message;
     }
 
@@ -369,7 +374,7 @@ public class ContractXmlParser {
         final int ordinal = Integer.parseInt(xml.getAttribute("value"));
         final Contract.Enumeration enumeration = new Contract.Enumeration(key,
                 ordinal);
-        logger.debug("enumeration element {}", enumeration);
+        logger.info("enumeration element {}", enumeration);
         return enumeration;
     }
 }

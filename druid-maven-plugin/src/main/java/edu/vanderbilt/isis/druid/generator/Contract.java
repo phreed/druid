@@ -632,8 +632,8 @@ public class Contract {
 		}
 
 		public StringBuilder toString(final StringBuilder sb) {
-			return new StringBuilder().append("<field ref='").append(name.norm).append("' ")
-					.append("type='").append(this.type).append("/>");
+			return sb.append("<field ref='").append(this.name.norm).append("' ")
+					.append("type='").append(this.type).append("'/>");
 		}
 	}
 

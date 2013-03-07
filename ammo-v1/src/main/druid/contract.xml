@@ -21,11 +21,13 @@
     </key>
 
     <key name="ui">
+      <frug ref="a text field" />
       <field ref="a text field"/>
       <field ref="a long field"/>
     </key>
     
     <message encoding="terse">
+      <duh ref="a text field" />
       <field ref="a text field" />
       <field ref="a long field" type="INTEGER" />
     </message>

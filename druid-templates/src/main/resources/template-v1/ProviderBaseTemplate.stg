@@ -204,6 +204,10 @@ static {
    uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_data_type", <rel.name.cobra>_META);
    uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_data_type", <rel.name.cobra>_META);
 
+<rel.messages: { msg | 
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_data_type/<msg.name.snake>", <rel.name.cobra>_META_<msg.name.cobra>);
+}; separator="\n", anchor="true">
+
    <helperFieldCursor(rel,contract.root.name)>
    }; separator="\n", anchor="true">
    
