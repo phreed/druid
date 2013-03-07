@@ -15,6 +15,7 @@
     <module>druid-templates</module>
 <!--    <module>location-sample</module> -->
 <!--    <module>all-types-sample</module> -->
+<!--    <module>ammo-v1</module> -->
     <module>archetype</module>
     <module>druid-java-lib</module>
   </modules>
@@ -41,7 +42,7 @@
   <dependencyManagement>
     <dependencies>
 
-   <dependency>
+      <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
         <version>${maven.version}</version>

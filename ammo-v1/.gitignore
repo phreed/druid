@@ -1,5 +1,4 @@
 target/
-src/main/druid/java/edu/vanderbilt/isis/ammo/all_types/provider/
-AllTypesProviderSkel.java
-AllTypesSchemaSkel.java
+*ProviderSkel.java
+*SchemaSkel.java
 
