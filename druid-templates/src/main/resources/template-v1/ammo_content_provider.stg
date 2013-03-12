@@ -804,12 +804,17 @@ case <rel.name.cobra>_META:
    logger.debug("meta","provide <rel.name.cobra> meta data {}",uri);
    return <rel.name.camel>FieldTypeCursor;
 
-<if(rel.messageMap.terse)>
 <rel.messages: {message | <relMessageMatchSetTemplate(rel,message)>}; 
    separator="\n", anchor="true">
-<else>
+
+<if(!rel.messageMap.terse)>
 case <rel.name.cobra>_META_TERSE:
-   logger.debug("meta","provide <rel.name.cobra> meta data {}",uri);
+   logger.debug("meta terse, provide <rel.name.cobra> meta data {}",uri);
+   return <rel.name.camel>FieldTypeCursor;
+<endif>
+<if(!rel.messageMap.json)>
+case <rel.name.cobra>_META_JSON:
+   logger.debug("meta json, provide <rel.name.cobra> meta data {}",uri);
    return <rel.name.camel>FieldTypeCursor;
 <endif>
 
