@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.w3c.dom.NodeList;
@@ -230,6 +231,7 @@ public class Contract {
 		final private Sponsor sponsor;
 		final private List<Relation> relations;
 		final private Map<String, Mode> mode;
+		final public int id;
 
 		public Name getName() {
 			return name;
@@ -249,6 +251,7 @@ public class Contract {
 
 		public Root(final Name name, final Map<String, Mode> mode_set,
 				final String sponsor, List<Relation> relations) {
+		    this.id = UniqueId.generate();
 			this.name = name;
 			this.mode = mode_set;
 			this.sponsor = new Sponsor(sponsor);
@@ -282,26 +285,26 @@ public class Contract {
 	 * Collect table information.
 	 */
 	public static class Relation {
+	    final private Logger logger;
 		final private Name name;
-		final private Map<String, Mode> mode;
-		final private List<Field> fields;
-		final private List<Key> keys;
-		final private Map<String, Key> keyMap;
-		final private List<Message> messages;
-		final private List<String> dataTypes;
+		final public int id;
 
 		public Name getName() {
 			return name;
 		}
-
+		final private Map<String, Mode> mode;
 		public Map<String, Mode> getMode() {
 			return mode;
 		}
 
+        final private List<Field> fields;
+      
 		public List<Field> getFields() {
 			return fields;
 		}
 
+		  final private List<Key> keys;
+	        final private Map<String, Key> keyMap;
 		public List<Key> getKeys() {
 			return this.keys;
 		}
@@ -310,34 +313,42 @@ public class Contract {
 			return this.keyMap;
 		}
 
+        final private List<Message> messages;
+        final private Map<String, Message> messageMap;
 		public List<Message> getMessages() {
 			return this.messages;
 		}
+		
+		public Map<String, Message> getMessageMap() {
+            return this.messageMap;
+        }
 
+        final private List<String> dataTypes;
 		public List<String> getDataTypesUsed() {
 			return this.dataTypes;
 		}
 
+		/**
+		 * This is probably unnecessary.
+		 */
 		private final static String customRowSpecialMarker = "ui_listview_row_layout";
-
-		public List<KeyFieldRef> getUIListViewRowLayout() {
-			System.out
-					.println("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n "
-							+ keyMap.size()
-							+ "    "
-							+ keyMap.containsKey(customRowSpecialMarker)
-							+ "   " + keyMap.toString() + " \n\n\n");
+		public List<KeyField> getUIListViewRowLayout() {
+			logger.trace("\n\n\n called GET UI LIST VIEW ROW LAYOUT \n\n\n {}    {}   \n\n\n",
+							keyMap.size(), keyMap.containsKey(customRowSpecialMarker),
+							keyMap);
 			if (keyMap.containsKey(customRowSpecialMarker)) {
 				Key uiKey = keyMap.get(customRowSpecialMarker);
-				System.out.println("\n" + uiKey.getFields().size() + "\n");
+			    logger.trace("\n {}\n", uiKey.getFields().size());
 				return uiKey.getFields();
 			}
 			return null;
 		}
 
-		public Relation(Logger logger, final Name name,
+		public Relation(final Logger logger, final Name name,
 				final Map<String, Mode> mode, final List<Field> fields,
-				final List<Key> key_set, final List<Message> messages) {
+				final List<Key> key_set, final List<Message> message_set) {
+		    this.id = UniqueId.generate();
+		    this.logger = logger;
 			this.name = name;
 			this.mode = mode;
 			for (Field field : fields) {
@@ -351,35 +362,18 @@ public class Contract {
 					dataTypes.add(field.dtype);
 				}
 			}
-			for (Key key : key_set) {
-				KeyFieldRef lastFieldRef = null;
-				System.out.println("\n\n FIELD SIZE:" + key.field_set.size()
-						+ "\n\n");
-				nextRef: for (KeyFieldRef keyFieldRef : key.field_set) {
-					System.out.println("\n\n\nFIELD: "
-							+ keyFieldRef.getRef().getNorm() + "\n");
-					for (Field field : fields) {
-
-						if (field.name.getNorm().equals(
-								keyFieldRef.getRef().getNorm())) {
-							keyFieldRef.setPredecessorRef(lastFieldRef);
-							keyFieldRef.setDataType(field.getDtype());
-							lastFieldRef = keyFieldRef;
-							continue nextRef;
-						}
-					}
-					logger.error(
-							"Key {} referenced {} as a field, and it was not declared in this Relation",
-							key, keyFieldRef);
-				}
-			}
 
 			this.keys = key_set;
 			this.keyMap = new HashMap<String, Key>(key_set.size());
 			for (Key key : key_set) {
 				this.keyMap.put(key.name.norm, key);
 			}
-			this.messages = messages;
+			
+			this.messages = message_set;
+			this.messageMap = new HashMap<String, Message>(message_set.size());
+            for (Message message : message_set) {
+                this.messageMap.put(message.encoding.norm, message);
+            }
 		}
 
 		@Override
@@ -392,16 +386,19 @@ public class Contract {
 			sb.append("<relation name=").append(name.norm).append(">\n");
 			for (Field field : this.fields) {
 				sb.append(field.toString());
+				sb.append('\n');
 			}
 			for (Key key : this.keys) {
 				sb.append(key.toString());
+				sb.append('\n');
 			}
 			for (Message message : this.messages) {
 				if (message == null)
 					continue;
 				sb.append(message.toString());
+				sb.append('\n');
 			}
-			sb.append("\n</relation>");
+			sb.append("</relation>");
 			return sb;
 		}
 	}
@@ -411,6 +408,7 @@ public class Contract {
 	 * map.
 	 */
 	public static class Mode {
+	    public final int id;
 		private final Name value;
 		private final String type;
 		private final String description;
@@ -429,6 +427,7 @@ public class Contract {
 
 		public Mode(final String type, final Name value,
 				final String description) {
+		    this.id = UniqueId.generate();
 			this.value = value;
 			this.type = type;
 			this.description = description.trim();
@@ -451,6 +450,7 @@ public class Contract {
 	 * A column in a table (relation).
 	 */
 	public static class Field implements Predecessor {
+	    public final int id;
 		private final Name name;
 		private final String dtype;
 		private final String initial;
@@ -493,6 +493,7 @@ public class Contract {
 		public Field(final Name name, final String dtype, final String initial,
 				final String description, final List<Enumeration> enum_set)
 				throws Exception {
+		    this.id = UniqueId.generate();
 			this.name = name;
 			this.dtype = dtype;
 			this.initial = initial;
@@ -526,18 +527,20 @@ public class Contract {
 	 * A named set of field references.
 	 */
 	public static class Key {
+	    public final int id;
 		private final Name name;
-		private final List<KeyFieldRef> field_set;
+		private final List<KeyField> field_set;
 
 		public Name getName() {
 			return name;
 		}
 
-		public List<KeyFieldRef> getFields() {
+		public List<KeyField> getFields() {
 			return this.field_set;
 		}
 
-		public Key(final Name name, final List<KeyFieldRef> field_set) {
+		public Key(final Name name, final List<KeyField> field_set) {
+		    this.id = UniqueId.generate();
 			this.name = name;
 			this.field_set = field_set;
 		}
@@ -550,8 +553,9 @@ public class Contract {
 
 		public StringBuilder toString(final StringBuilder sb) {
 			sb.append("<key name='").append(name.norm).append("'>");
-			for (KeyFieldRef field : this.field_set) {
+			for (KeyField field : this.field_set) {
 				field.toString(sb);
+				sb.append('\n');
 			}
 			return sb.append("</key>");
 		}
@@ -561,16 +565,18 @@ public class Contract {
 	 * The element referring to one of the specified fields.
 	 * 
 	 */
-	public static class KeyFieldRef {
+	public static class KeyField {
+	    public final int id;
 		private final Name ref;
 		private String dataType;
-		private KeyFieldRef predecessor;
+		private KeyField predecessor;
 
 		public Name getRef() {
 			return ref;
 		}
 
-		public KeyFieldRef(final Name ref) {
+		public KeyField(final Name ref) {
+		    this.id = UniqueId.generate();
 			this.ref = ref;
 		}
 
@@ -580,7 +586,7 @@ public class Contract {
 			return this.toString(sb).toString();
 		}
 
-		public void setPredecessorRef(KeyFieldRef keyFieldRef) {
+		public void setPredecessorRef(KeyField keyFieldRef) {
 			this.predecessor = keyFieldRef;
 		}
 
@@ -603,14 +609,19 @@ public class Contract {
 	}
 
 	public static class Message {
+	    public final int id;
 		private final Name encoding;
 		private final List<MessageField> fields;
 
-		public Name getName() {
-			return encoding;
+		public Name getEncoding() {
+			return this.encoding;
 		}
+		public List<MessageField> getFields() {
+            return this.fields;
+        }
 
 		public Message(final Name encoding, final List<MessageField> fields) {
+		    this.id = UniqueId.generate();
 			this.encoding = encoding;
 			this.fields = fields;
 		}
@@ -625,20 +636,28 @@ public class Contract {
 			sb.append("<message encoding='").append(encoding.norm).append("'>");
 			for (MessageField field : this.fields) {
 				field.toString(sb);
+				sb.append('\n');
 			}
 			return sb.append("</message>");
 		}
 	}
 
 	public static class MessageField {
-		private final Name name;
+	    public final int id;
+		private final Name ref;
+		private final String type;
 
-		public Name getName() {
-			return name;
+		public Name getRef() {
+			return this.ref;
 		}
+		public String getType() {
+            return this.type;
+        }
 
-		public MessageField(final Name name) {
-			this.name = name;
+		public MessageField(final Name ref, String type) {
+		    this.id = UniqueId.generate();
+			this.ref = ref;
+			this.type = type;
 		}
 
 		@Override
@@ -648,8 +667,8 @@ public class Contract {
 		}
 
 		public StringBuilder toString(final StringBuilder sb) {
-			return new StringBuilder().append("<field ref='").append(name.norm)
-					.append("' />");
+			return sb.append("<field ref='").append(this.ref.norm).append("' ")
+					.append("type='").append(this.type).append("'/>");
 		}
 	}
 
@@ -657,6 +676,7 @@ public class Contract {
 	 * A column in a table (relation).
 	 */
 	public static class Enumeration {
+	    public final int id;
 		private final Name key;
 		private final int ordinal;
 
@@ -669,6 +689,7 @@ public class Contract {
 		}
 
 		public Enumeration(final Name key, final int ordinal) {
+		    this.id = UniqueId.generate();
 			this.key = key;
 			this.ordinal = ordinal;
 		}
@@ -685,5 +706,17 @@ public class Contract {
 					.append("\"/>\n");
 		}
 	}
+
+	private enum UniqueId {
+	    INSTANCE;
+	    private AtomicInteger id;
+	    private UniqueId() {
+	        this.id = new AtomicInteger(0);
+	    }
+	    private static int generate() {
+	        return UniqueId.INSTANCE.id.incrementAndGet();
+	    }
+	}
+   
 
 }

@@ -53,14 +53,28 @@ protected static HashMap\<String, String> <projectionMap(name=rel.name)>;
    
 /** Uri Matcher tags */
 <contract.root.relations: {rel |
-protected static final int <rel.name.cobra>_BLOB = <i>0;
-protected static final int <rel.name.cobra>_SET = <i>1;
-protected static final int <rel.name.cobra>_ID = <i>2;
-protected static final int <rel.name.cobra>_SERIAL = <i>3;
-protected static final int <rel.name.cobra>_DESERIAL = <i>4;
-protected static final int <rel.name.cobra>_META = <i>5;
-
 private static final MatrixCursor <rel.name.camel>FieldTypeCursor;
+
+protected static final int <rel.name.cobra>_BLOB = <rel.id>10;
+protected static final int <rel.name.cobra>_SET = <rel.id>20;
+protected static final int <rel.name.cobra>_ID = <rel.id>30;
+protected static final int <rel.name.cobra>_SERIAL = <rel.id>40;
+protected static final int <rel.name.cobra>_DESERIAL = <rel.id>50;
+protected static final int <rel.name.cobra>_META = <rel.id>60;
+
+<rel.messages: {message |
+private static final MatrixCursor <rel.name.camel>FieldTypeCursor<message.encoding.bactrian>;
+protected static final int <rel.name.cobra>_META_<message.encoding.cobra> = <message.id>0;
+}; separator="\n", anchor="true">
+
+<if(!rel.messageMap.terse)>
+protected static final int <rel.name.cobra>_META_TERSE = <rel.id>71;
+<endif>
+<if(!rel.messageMap.json)>
+protected static final int <rel.name.cobra>_META_JSON = <rel.id>72;
+<endif>
+
+
 }; separator="\n", anchor="true">
    
 /** Uri matcher */
@@ -194,20 +208,66 @@ public synchronized String getType(Uri uri) {
 static {
    uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
    <contract.root.relations: { rel |
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)>, <rel.name.cobra>_SET);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#", <rel.name.cobra>_ID);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_serial/*", <rel.name.cobra>_SERIAL);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_deserial/*", <rel.name.cobra>_DESERIAL);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_serial", <rel.name.cobra>_SERIAL);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_deserial", <rel.name.cobra>_DESERIAL);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_blob", <rel.name.cobra>_BLOB);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/#/_data_type", <rel.name.cobra>_META);
-   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, <relNameFull(name=rel.name)> + "/_data_type", <rel.name.cobra>_META);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)>, 
+              <rel.name.cobra>_SET);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/#", 
+              <rel.name.cobra>_ID);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/#/_serial/*", 
+              <rel.name.cobra>_SERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/_deserial/*", 
+              <rel.name.cobra>_DESERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/#/_serial", 
+              <rel.name.cobra>_SERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/_deserial", 
+              <rel.name.cobra>_DESERIAL);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/#/_blob", 
+              <rel.name.cobra>_BLOB);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/#/_data_type", 
+              <rel.name.cobra>_META);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+              <relNameFull(name=rel.name)> + "/_data_type", 
+              <rel.name.cobra>_META);
 
    <helperFieldCursor(rel,contract.root.name)>
+
+<rel.messages: { message | 
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/#/_data_type/<message.encoding.snake>", 
+           <rel.name.cobra>_META_<message.encoding.cobra>);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/_data_type/<message.encoding.snake>", 
+           <rel.name.cobra>_META_<message.encoding.cobra>);
    }; separator="\n", anchor="true">
-   
-   <contract.root.relations: { rel |
+
+<if(!rel.messageMap.terse)>
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/#/_data_type/terse", 
+           <rel.name.cobra>_META_TERSE);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/_data_type/terse", 
+           <rel.name.cobra>_META_TERSE);
+<endif>
+<if(!rel.messageMap.json)>
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/#/_data_type/json", 
+           <rel.name.cobra>_META_JSON);
+   uriMatcher.addURI(<schemaNameBase(name=contract.root.name)>.AUTHORITY, 
+           <relNameFull(name=rel.name)> + "/_data_type/json", 
+           <rel.name.cobra>_META_JSON);
+<endif>
+
+<rel.messages: { message | 
+   <helperMessageCursor(rel,message,contract.root.name)> }; separator="\n", anchor="true">
+
+
    <rel.name.camel>ProjectionKey = new String[1];
    <rel.name.camel>ProjectionKey[0] = <relNameBase(name=rel.name)>._ID;
 
@@ -216,7 +276,7 @@ static {
    }; separator="\n", anchor="true">
 }
 
-<helperMethods(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)>
+ <helperMethods(sponsor=contract.root.sponsor, name=contract.root.name, relset=contract.root.relations)>
 
 }
 // end of BODY

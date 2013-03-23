@@ -63,7 +63,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import android.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -657,6 +656,19 @@ helperFieldCursor(rel,name) ::= <<
 }
 >>
 
+helperMessageCursor(rel,message,name) ::= <<
+{
+  <rel.name.camel>FieldTypeCursor<message.encoding.bactrian> = new MatrixCursor(new String[] {
+   <message.fields: { field | <relNameBase(name=rel.name)>.<field.ref.cobra>, }; separator="\n", anchor="true">
+  }, 1);
+
+  final MatrixCursor.RowBuilder row<message.encoding.bactrian> = 
+         <rel.name.camel>FieldTypeCursor<message.encoding.bactrian>.newRow();
+  <message.fields: { field | row<message.encoding.bactrian>.add(<schemaNameBase(name=name)>.<fieldTypeMap.(field.type)>); // <field.ref.cobra> };
+  separator="\n", anchor="true">
+}
+>>
+
 initProjectionMap(rel) ::= <<
 {
    final HashMap\<String, String> columns = new HashMap\<String, String>();
@@ -781,10 +793,30 @@ default:
 }
 >>
 
+relMessageMatchSetTemplate(rel,message) ::= <<
+case <rel.name.cobra>_META_<message.encoding.cobra>:
+   logger.debug("meta","provide <rel.name.cobra> <message.encoding.cobra> meta data {}",uri);
+   return <rel.name.camel>FieldTypeCursor<message.encoding.bactrian>;
+>>
+
 relMatchSetTmpl(rel) ::= <<
 case <rel.name.cobra>_META:
    logger.debug("meta","provide <rel.name.cobra> meta data {}",uri);
    return <rel.name.camel>FieldTypeCursor;
+
+<rel.messages: {message | <relMessageMatchSetTemplate(rel,message)>}; 
+   separator="\n", anchor="true">
+
+<if(!rel.messageMap.terse)>
+case <rel.name.cobra>_META_TERSE:
+   logger.debug("meta terse, provide <rel.name.cobra> meta data {}",uri);
+   return <rel.name.camel>FieldTypeCursor;
+<endif>
+<if(!rel.messageMap.json)>
+case <rel.name.cobra>_META_JSON:
+   logger.debug("meta json, provide <rel.name.cobra> meta data {}",uri);
+   return <rel.name.camel>FieldTypeCursor;
+<endif>
 
 case <rel.name.cobra>_SET:
    qb.setTables(<relNameFull(name=rel.name)>);

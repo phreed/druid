@@ -1,0 +1,332 @@
+import "dataTypeMaps.stg"
+
+PATH(delimiter, directory, paths, contract, isSkeleton, item) ::= <%
+<directory.path><delimiter>
+<paths.src_main_java><delimiter>
+<contract.root.sponsor.path><delimiter>
+<contract.root.name.camel><delimiter>
+provider<delimiter>
+<contract.root.name.bactrian>AmmoAdaptor.java
+%>
+
+SKELETON(contract,item) ::= <<
+>>
+
+BODY(contract) ::= <<
+// ST:BODY:start
+
+
+package <package(contract)>;
+
+/**
+ * This object provides an efficient means for exchanging information
+ * between 
+ * The parent class for performing the work. The child classes implement the
+ * specific communication mechanism.
+ * \<p>
+ * 
+ * Given that, only one content provider is accessed and in the same process,
+ * two fast mechanisms are available for communicating with the content
+ * provider. The local binder and the content provider client.
+ * 
+ */
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.vu.isis.ammo.provider.AmmoSyncCallback;
+import edu.vu.isis.ammo.provider.AmmoSyncRequest;
+
+import android.app.Service;
+import android.content.ContentProvider;
+import android.content.ContentProviderClient;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
+
+public class <contract.root.name.bactrian>AmmoAdaptor extends  <contract.root.name.bactrian>AmmoAdaptorBase {
+
+  private static final Logger logger = LoggerFactory.getLogger("<contract.root.name>.ammo.adaptor");
+  /** this intent action indicates that the bind request is for a local binder */
+    public static final boolean ACTION_LOCAL = false;
+
+    /**
+     * The content provider client object is obtained.
+     */
+    private ContentProviderClient cpc = null;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.cpc = this.getContentResolver().acquireContentProviderClient(
+                <contract.root.name.bactrian>Schema.AUTHORITY);
+    }
+
+    /**
+     * AIDL Stub creation.
+     */
+    private static class AmmoSyncRequestImpl extends AmmoSyncRequest.Stub {
+
+        final <contract.root.name.bactrian>AmmoAdaptor master;
+
+        private AmmoSyncRequestImpl(final <contract.root.name.bactrian>AmmoAdaptor that) {
+            super();
+            this.master = that;
+        }
+
+        @Override
+        public void getContentValuesPlus(Uri uri, AmmoSyncCallback callback) throws RemoteException {
+            final ContentValues payload = new ContentValues();
+            final Cursor cursor = this.master.cpc.query(uri, null, null, null, null);
+            try {
+                final int match = <contract.root.name.bactrian>Schema.URI_MATCHER.match(uri);
+                switch (match) {
+                    <contract.root.relations: 
+                          {relation | <getRelationCase(contract.root.name, relation)>}; 
+                          separator="\n" >
+                }
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            callback.returnContentValues(payload);
+        }
+
+        @Override
+        public void putContentValues(Uri uri, ContentValues payload, AmmoSyncCallback callback)
+                throws RemoteException {
+            final ContentValues payload = new ContentValues();
+            final Cursor cursor = this.master.cpc.query(uri, null, null, null, null);
+            try {
+                final int match = <contract.root.name.bactrian>Schema.URI_MATCHER.match(uri);
+                switch (match) {
+                    <contract.root.relations: 
+                          {relation | <getRelationCase(contract.root.name, relation)>}; 
+                          separator="\n" >
+                }
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            callback.returnContentValues(payload);
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void putContentValuesPlus(Uri uri, ParcelFileDescriptor payload, AmmoSyncCallback callback)
+                throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void getMeta(Uri uri, AmmoSyncCallback callback) throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void encode(Uri uri, String encoding, ContentValues values, AmmoSyncCallback callback)
+                throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void decodeSmall(Uri uri, String encoding, byte[] payload, AmmoSyncCallback callback)
+                throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void decode(Uri uri, String encoding, ParcelFileDescriptor payload,
+                AmmoSyncCallback callback) throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void transcodeSmall(Uri uri, String decoding, String encoding, byte[] payload,
+                AmmoSyncCallback callback) throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+        @Override
+        public void transcode(Uri uri, String decoding, String encoding,
+                ParcelFileDescriptor payload, AmmoSyncCallback callback) throws RemoteException {
+            callback.returnFault("not yet implemented by this service");
+        }
+
+    };
+
+    final private AmmoSyncRequestImpl impl = new AmmoSyncRequestImpl(this);
+
+    /**
+     * The onBind() is called after construction and onCreate().
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+        logger.debug("sync service on bind");
+        if (<contract.root.name.bactrian>AmmoAdaptor.ACTION_LOCAL) {
+            return this.localBinder;
+        }
+        return this.impl;
+    }
+
+    /**
+     * Used when making local connections to the service.
+     */
+    private final IBinder localBinder = new LocalBinder();
+
+    public class LocalBinder extends Binder {
+        <contract.root.name.bactrian>AmmoAdaptor getService() {
+            return <contract.root.name.bactrian>AmmoAdaptor.this;
+        }
+    }
+
+    /**
+     * An exception class used when there is a problem with the download.
+     */
+    public static class FailedDownload extends Exception {
+        private static final long serialVersionUID = 6673968049922918951L;
+
+        final public Uri uri;
+        final public CharSequence msg;
+
+        @Override
+        public String getMessage() {
+            return new StringBuilder().append("uri=\<").append(this.uri)
+                    .append(">").append(" msg=\<").append(this.msg).append(">")
+                    .toString();
+        }
+
+        public FailedDownload(final Uri uri, final CharSequence msg) {
+            super();
+            this.uri = uri;
+            this.msg = msg;
+        }
+    }
+
+}
+>>
+
+getRelationCase(name, relation) ::= <<
+case <name.bactrian>Provider.<relation.name.cobra>_ALL_ROWS:
+    <relation.fields: {field | 
+    payload.put(<name.bactrian>Schema.<relation.name.bactrian>.Cols.<field.name.cobra>, 
+          cursor.getString(cursor.getColumnIndex(<name.bactrian>Schema.<relation.name.bactrian>.Cols.<field.name.cobra>)));
+    }>
+    break;
+>>
+
+createShortURIMatchingTokens(relation) ::= <<
+public static final int <relation.name.cobra>_ALL_ROWS = <providerRelationClassName(contract,relation)>.PATH_TOKEN;
+public static final int <relation.name.cobra>_SINGLE_ROW = <providerRelationClassName(contract,relation)>.PATH_FOR_ID_TOKEN;
+>>
+
+createShortContentURIforRelations(relation) ::= <%
+public final static Uri <relation.name.cobra>_CONTENT_URI = <providerRelationClassName(contract,relation)>.CONTENT_URI;
+%>
+
+createContentTypeReturnsforRelations(relation) ::= <<
+case <relation.name.cobra>_ALL_ROWS: return <providerRelationClassName(contract,relation)>.CONTENT_TYPE_DIR;
+case <relation.name.cobra>_SINGLE_ROW: return <providerRelationClassName(contract,relation)>.CONTENT_ITEM_TYPE;
+>>
+
+createPublicQueryforRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW: {
+	modifiedSelection = modifiedSelection
+    + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
+		+ uri.getLastPathSegment();
+}
+case <relation.name.cobra>_ALL_ROWS: {
+  return query(uri, <providerRelationClassName(contract,relation)>.TABLE_NAME,
+		projection, modifiedSelection, selectionArgs, sortOrder);
+}
+>>
+
+
+createUpsertForRelations(relation) ::= <<
+case <relation.name.cobra>_ALL_ROWS: {
+  final ContentValues values = <providerRelationClassName(contract,relation)>.initializeWithDefault(assignedValues);
+  values.remove(<providerRelationClassName(contract,relation)>.Cols.ID);
+
+<if(relation.keyMap.update)>
+  final List\<String> selectArgsList = new ArrayList\<String>();
+  for (String item : <providerRelationClassName(contract,relation)>.UPDATE_KEY_COLUMNS) {
+     selectArgsList.add(values.getAsString(item));
+  }
+  final String[] selectArgs = selectArgsList.toArray(new String[0]);
+
+  final long rowID;
+  final int count = mDB.update(<providerRelationClassName(contract,relation)>.TABLE_NAME, values,
+        <providerRelationClassName(contract,relation)>.UPDATE_KEY_CLAUSE, selectArgs);
+  if ( count \< 1 ) {
+     rowID = mDB.insert(<providerRelationClassName(contract,relation)>.TABLE_NAME, values);
+     if (rowID \< 1) {
+        throw new SQLiteException("Failed to insert row into " + uri);
+     }
+  }
+  else {
+     final Cursor cursor = mDB.query(<providerRelationClassName(contract,relation)>.TABLE_NAME, null,
+         <providerRelationClassName(contract,relation)>.UPDATE_KEY_CLAUSE, selectArgs, null);
+     cursor.moveToFirst();
+     rowID = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
+     cursor.close();
+  }
+<else>
+  final long rowID = mDB.insert(<providerRelationClassName(contract,relation)>.TABLE_NAME, values);
+  if (rowID \< 0) {
+    logger.debug( "insert didn't work, return of -1");
+    return null;
+  }
+<endif>
+  final Uri insertedID = ContentUris.withAppendedId( <relation.name.cobra>_CONTENT_URI, rowID);
+		getContext().getContentResolver().notifyChange(insertedID, null);
+		return ContentUris.withAppendedId(<relation.name.cobra>_CONTENT_URI, rowID);
+	}
+>>
+
+
+createDeleteforRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW:
+	whereClause = whereClause
+      + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
+			+ uri.getLastPathSegment();
+	// no break here on purpose
+case <relation.name.cobra>_ALL_ROWS: {
+	return deleteAndNotify(uri,
+      <providerRelationClassName(contract,relation)>.TABLE_NAME, whereClause,
+			whereArgs);
+}
+>>
+
+
+
+
+createUpdateForRelations(relation) ::= <<
+case <relation.name.cobra>_SINGLE_ROW:
+	whereClause = whereClause
+          + <providerRelationClassName(contract,relation)>.Cols.ID + " = "
+		      + uri.getLastPathSegment();
+case <relation.name.cobra>_ALL_ROWS: {
+	return updateAndNotify(uri,
+      <providerRelationClassName(contract,relation)>.TABLE_NAME, values,
+			whereClause, whereArgs);
+
+}
+>>
+
+package(contract) ::= "<contract.root.sponsor.base>.<contract.root.name.camel>.provider"
+providerRelationClassName(contract,relation) ::= <%
+<providerClassName(contract)>.<relation.name.bactrian>
+%>
+
+providerClassName(contract) ::= <%
+<contract.root.name.bactrian>Schema
+%>
