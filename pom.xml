@@ -20,8 +20,8 @@
 <!--    <module>location-sample</module> -->
 <!--    <module>all-types-sample</module> -->
 <!--    <module>ammo-v1</module> -->
-    <module>archetype</module>
-    <module>druid-java-lib</module>
+<!--    <module>archetype</module> -->
+<!--    <module>druid-java-lib</module> -->
   </modules>
 
   <properties>
@@ -341,9 +341,9 @@
                 <pluginExecutionFilter>
                   <groupId>org.antlr</groupId>
                   <artifactId> antlr4-maven-plugin </artifactId>
-                  <versionRange> [4.0,) </versionRange>
+                  <versionRange>[4.0,)</versionRange>
                   <goals>
-                    <goal>antlr</goal>
+                    <goal>antlr4</goal>
                   </goals>
                 </pluginExecutionFilter>
                 <action>
