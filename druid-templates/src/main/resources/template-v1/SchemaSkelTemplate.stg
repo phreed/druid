@@ -6,7 +6,11 @@ PATH(delimiter, directory, paths, contract, isSkeleton) ::= <%
 <paths.src_main_java><delimiter>
 <contract.root.sponsor.path><delimiter>
 provider<delimiter>
+<if(isSkeleton)>
 <contract.root.name.bactrian>SchemaSkel.java
+<else>
+<contract.root.name.bactrian>Schema.java
+<endif>
 %>
 
 BODY(contract) ::= <<
